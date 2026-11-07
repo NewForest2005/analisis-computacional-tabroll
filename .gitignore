@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+harmony_outputs/
+*.mp3
+*.wav
+*.flac
+*.ogg
+*.m4a
+*.aiff
+*.aif

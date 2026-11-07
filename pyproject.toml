@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analisis-computacional-tabroll"
+version = "0.1.0"
+description = "Análisis computacional de audio y visualización Tabroll para Angine de Poitrine"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "ipython>=8.0",
+    "librosa>=0.10",
+    "matplotlib>=3.7",
+    "numpy>=1.24",
+    "Pillow>=9.0",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
