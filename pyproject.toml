@@ -7,7 +7,7 @@ name = "analisis-computacional-tabroll"
 version = "0.1.0"
 description = "Análisis computacional de audio y visualización Tabroll para Angine de Poitrine"
 readme = "README.md"
-requires-python = ">=3.10,<3.14"
+requires-python = ">=3.10,<3.13"
 dependencies = [
     "ipython>=8.0",
     "jupyterlab>=4.0",

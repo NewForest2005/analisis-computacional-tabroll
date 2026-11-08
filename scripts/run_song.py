@@ -423,7 +423,7 @@ def run(args) -> int:
     except Exception:
         pass
 
-    images = sorted(str(p.relative_to(run_dir)) for p in (run_dir / "harmony_outputs").glob("*.png")) if (run_dir / "harmony_outputs").is_dir() else []
+    images = sorted(str(p.relative_to(run_dir)) for p in (run_dir / "harmony_outputs").rglob("*.png")) if (run_dir / "harmony_outputs").is_dir() else []
     info = {
         "cancion": audio.stem, "audio": str(audio), "carpeta": run_dir.name, "fecha": datetime.now().isoformat(timespec="seconds"),
         "version_notebook": git_version(), "estado": "ok" if failed is None else ("interrumpida" if error and error.startswith("Corrida interrumpida") else "error"), "celda_con_error": failed,

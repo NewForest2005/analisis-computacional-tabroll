@@ -2,7 +2,7 @@
 
 Repositorio profesional para el análisis computacional de audio y la generación de un piano roll armónico/melódico estilo TheoryTab.
 
-El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Sus 94 celdas de código fueron extraídas en módulos Python independientes dentro de [`src/tabroll/cells`](src/tabroll/cells). Cuando una celda define una función principal, el archivo usa el nombre de esa función; las celdas de configuración, clases o varias funciones usan un nombre descriptivo. El número del nombre es el orden entre las celdas de código (ver [Regenerar los módulos](#regenerar-los-módulos)).
+El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Sus 94 celdas de código fueron extraídas en módulos Python independientes dentro de [`src/tabroll/cells`](src/tabroll/cells). Las celdas que definen una función o clase usan ese nombre como archivo (`find_stem.py`, `scale.py`, `render_song_graphic.py`); las celdas con varias funciones o configuración usan un nombre descriptivo.
 
 ## Estructura
 
@@ -12,6 +12,7 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `docs/architecture.md`: cómo se separan funciones, clases, inicialización, configuración y ejecución.
 - `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook.
 - `scripts/run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
+- `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
 - `tests/`: validaciones estructurales básicas.
 
 ## Instalación
@@ -26,7 +27,7 @@ Demucs es opcional y solo se necesita para separar guitarra y bajo. La ejecució
 
 ### Requisitos en macOS Intel
 
-El proyecto requiere Python 3.10–3.13. En Mac Intel se recomienda Python 3.12, porque algunas versiones de `llvmlite` no ofrecen ruedas binarias para Python 3.14 y `pip` intentaría compilar LLVM localmente. Si `python3 --version` muestra 3.9 o 3.14, instala una versión compatible y crea el entorno con ella:
+El proyecto requiere Python 3.10–3.12. En Mac Intel se recomienda Python 3.12, porque `numpy==1.26.4` no ofrece una combinación compatible con Python 3.13 y algunas versiones de `llvmlite` tampoco ofrecen ruedas binarias para Intel. Si `python3 --version` muestra otra versión, instala una compatible y crea el entorno con ella:
 
 ```bash
 brew install python@3.12
@@ -94,8 +95,6 @@ make run-sarniezz
 Ese objetivo instala Demucs, comprueba FFmpeg y ejecuta el notebook sobre `Angine de Poitrine - Sarniezz (audio officiel).mp3`. Si las pistas correspondientes `_guitar` y `_bass` no existen, Demucs las genera junto al audio. El resultado queda en `outputs/`, con `harmony_outputs/`, gráficos Tabroll, gráficos de ciclos, mapa de capas, `salida.txt`, `resumen.md` y `resumen.json`.
 
 ## Regenerar los módulos
-
-El número del nombre de cada archivo corresponde al orden entre las celdas de código, no al índice absoluto del notebook. Por ejemplo, `005_find_stem.py` proviene de la celda 6 del notebook.
 
 Si se modifica el notebook, regenerar los módulos con:
 

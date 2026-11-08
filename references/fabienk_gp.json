@@ -1,0 +1,3397 @@
+{
+  "format": "Guitar Pro GPIF",
+  "source": "Angine_de_poitrine-Fabienk_Live_on_KEXP.gp",
+  "gp_version": "8.1.5",
+  "title": "FABIENK",
+  "subtitle": "Live on KEXP",
+  "master_bars": [
+    {
+      "number": 1,
+      "time_signature": "7/8",
+      "start_beat": 0.0,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    {
+      "number": 2,
+      "time_signature": "7/8",
+      "start_beat": 3.5,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    {
+      "number": 3,
+      "time_signature": "7/8",
+      "start_beat": 7.0,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "6",
+        "7",
+        "8"
+      ]
+    },
+    {
+      "number": 4,
+      "time_signature": "7/8",
+      "start_beat": 10.5,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "9",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "number": 5,
+      "time_signature": "7/8",
+      "start_beat": 14.0,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "12",
+        "13",
+        "14"
+      ]
+    },
+    {
+      "number": 6,
+      "time_signature": "7/8",
+      "start_beat": 17.5,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "15",
+        "16",
+        "17"
+      ]
+    },
+    {
+      "number": 7,
+      "time_signature": "7/8",
+      "start_beat": 21.0,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "18",
+        "19",
+        "20"
+      ]
+    },
+    {
+      "number": 8,
+      "time_signature": "7/8",
+      "start_beat": 24.5,
+      "duration_beats": 3.5,
+      "bar_ids": [
+        "21",
+        "22",
+        "23"
+      ]
+    }
+  ],
+  "tracks": [
+    {
+      "id": "0",
+      "name": "E.Guitar",
+      "events": [
+        {
+          "master_bar": 1,
+          "bar_id": "0",
+          "voice": 0,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 0.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 71.0
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "0",
+          "voice": 0,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 1.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 71.5
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "0",
+          "voice": 0,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 1.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 72.0
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "0",
+          "voice": 0,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 2.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 72.5
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "0",
+          "voice": 0,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 2.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#6",
+            "midi": 73,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 73.0
+          },
+          "fret": 14,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "3",
+          "voice": 4,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 3.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "3",
+          "voice": 4,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 5.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#5",
+            "midi": 61,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 61.0
+          },
+          "fret": 11,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "3",
+          "voice": 4,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 5.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#5",
+            "midi": 61,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 61.5
+          },
+          "fret": 11,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "3",
+          "voice": 4,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 6.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "6",
+          "voice": 8,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 7.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 71.0
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "6",
+          "voice": 8,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 8.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 71.5
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "6",
+          "voice": 8,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 8.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 72.0
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "6",
+          "voice": 8,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 9.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 72.5
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "6",
+          "voice": 8,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 9.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#6",
+            "midi": 73,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 73.0
+          },
+          "fret": 14,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 10.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 10.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 2,
+          "onset_in_bar": 0.5,
+          "onset_beats": 11.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 62.5
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 3,
+          "onset_in_bar": 0.75,
+          "onset_beats": 11.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#5",
+            "midi": 63,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 63.0
+          },
+          "fret": 13,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 4,
+          "onset_in_bar": 1.0,
+          "onset_beats": 11.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#5",
+            "midi": 63,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 63.5
+          },
+          "fret": 13,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 5,
+          "onset_in_bar": 1.25,
+          "onset_beats": 11.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 7,
+          "onset_in_bar": 1.75,
+          "onset_beats": 12.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 9,
+          "onset_in_bar": 2.25,
+          "onset_beats": 12.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "9",
+          "voice": 12,
+          "beat": 11,
+          "onset_in_bar": 2.75,
+          "onset_beats": 13.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "12",
+          "voice": 16,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 14.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 71.0
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "12",
+          "voice": 16,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 15.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 71.5
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "12",
+          "voice": 16,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 15.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 72.0
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "12",
+          "voice": 16,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 16.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 72.5
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "12",
+          "voice": 16,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 16.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#6",
+            "midi": 73,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 73.0
+          },
+          "fret": 14,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "15",
+          "voice": 20,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 17.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "15",
+          "voice": 20,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 19.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#5",
+            "midi": 61,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 61.0
+          },
+          "fret": 11,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "15",
+          "voice": 20,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 19.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#5",
+            "midi": 61,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 61.5
+          },
+          "fret": 11,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "15",
+          "voice": 20,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 20.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "18",
+          "voice": 24,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 21.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 71.0
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "18",
+          "voice": 24,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 22.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B5",
+            "midi": 71,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 71.5
+          },
+          "fret": 12,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "18",
+          "voice": 24,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 22.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 72.0
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "18",
+          "voice": 24,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 23.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C6",
+            "midi": 72,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 72.5
+          },
+          "fret": 13,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "18",
+          "voice": 24,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 23.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#6",
+            "midi": 73,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 73.0
+          },
+          "fret": 14,
+          "string": 4,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 24.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 24.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 2,
+          "onset_in_bar": 0.5,
+          "onset_beats": 25.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 62.5
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 3,
+          "onset_in_bar": 0.75,
+          "onset_beats": 25.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#5",
+            "midi": 63,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 63.0
+          },
+          "fret": 13,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 4,
+          "onset_in_bar": 1.0,
+          "onset_beats": 25.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#5",
+            "midi": 63,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 63.5
+          },
+          "fret": 13,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 5,
+          "onset_in_bar": 1.25,
+          "onset_beats": 25.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 7,
+          "onset_in_bar": 1.75,
+          "onset_beats": 26.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E5",
+            "midi": 64,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 64.0
+          },
+          "fret": 14,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 9,
+          "onset_in_bar": 2.25,
+          "onset_beats": 26.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "21",
+          "voice": 28,
+          "beat": 11,
+          "onset_in_bar": 2.75,
+          "onset_beats": 27.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D5",
+            "midi": 62,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 62.0
+          },
+          "fret": 12,
+          "string": 2,
+          "articulation": 0
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "name": "E.Bass",
+      "events": [
+        {
+          "master_bar": 1,
+          "bar_id": "1",
+          "voice": 1,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 0.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 35.0
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "1",
+          "voice": 1,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 1.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 35.5
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "1",
+          "voice": 1,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 1.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "1",
+          "voice": 1,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 2.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 36.5
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "1",
+          "voice": 1,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 2.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "4",
+          "voice": 5,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 3.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "E2",
+            "midi": 28,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 28.0
+          },
+          "fret": 0,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "4",
+          "voice": 5,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 5.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "4",
+          "voice": 5,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 5.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 37.5
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "4",
+          "voice": 5,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 6.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 10,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "7",
+          "voice": 9,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 7.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 35.0
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "7",
+          "voice": 9,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 8.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 35.5
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "7",
+          "voice": 9,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 8.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "7",
+          "voice": 9,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 9.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 36.5
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "7",
+          "voice": 9,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 9.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 10.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 10.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 5,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 2,
+          "onset_in_bar": 0.5,
+          "onset_beats": 11.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 38.5
+          },
+          "fret": 5,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 3,
+          "onset_in_bar": 0.75,
+          "onset_beats": 11.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#3",
+            "midi": 39,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 39.0
+          },
+          "fret": 6,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 4,
+          "onset_in_bar": 1.0,
+          "onset_beats": 11.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#3",
+            "midi": 39,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 39.5
+          },
+          "fret": 6,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 5,
+          "onset_in_bar": 1.25,
+          "onset_beats": 11.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 7,
+          "onset_in_bar": 1.75,
+          "onset_beats": 12.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 9,
+          "onset_in_bar": 2.25,
+          "onset_beats": 12.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 5,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "10",
+          "voice": 13,
+          "beat": 11,
+          "onset_in_bar": 2.75,
+          "onset_beats": 13.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "13",
+          "voice": 17,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 14.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 35.0
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "13",
+          "voice": 17,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 15.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 35.5
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "13",
+          "voice": 17,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 15.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "13",
+          "voice": 17,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 16.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 36.5
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "13",
+          "voice": 17,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 16.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "16",
+          "voice": 21,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 17.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "E2",
+            "midi": 28,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 28.0
+          },
+          "fret": 0,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "16",
+          "voice": 21,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 19.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "16",
+          "voice": 21,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 19.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 37.5
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "16",
+          "voice": 21,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 20.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 10,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "19",
+          "voice": 25,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 21.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 35.0
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "19",
+          "voice": 25,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 22.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "B2",
+            "midi": 35,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 35.5
+          },
+          "fret": 7,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "19",
+          "voice": 25,
+          "beat": 3,
+          "onset_in_bar": 1.5,
+          "onset_beats": 22.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "19",
+          "voice": 25,
+          "beat": 4,
+          "onset_in_bar": 2.0,
+          "onset_beats": 23.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C3",
+            "midi": 36,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 36.5
+          },
+          "fret": 8,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "19",
+          "voice": 25,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 23.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C#3",
+            "midi": 37,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 37.0
+          },
+          "fret": 9,
+          "string": 0,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 24.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 24.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 5,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 2,
+          "onset_in_bar": 0.5,
+          "onset_beats": 25.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D3",
+            "midi": 38,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 38.5
+          },
+          "fret": 5,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 3,
+          "onset_in_bar": 0.75,
+          "onset_beats": 25.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#3",
+            "midi": 39,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 39.0
+          },
+          "fret": 6,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 4,
+          "onset_in_bar": 1.0,
+          "onset_beats": 25.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D#3",
+            "midi": 39,
+            "bend_value": 25.0,
+            "bend_destination_value": 25.0,
+            "bend_semitones": 0.5,
+            "midi_with_bend": 39.5
+          },
+          "fret": 6,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 5,
+          "onset_in_bar": 1.25,
+          "onset_beats": 25.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 7,
+          "onset_in_bar": 1.75,
+          "onset_beats": 26.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 9,
+          "onset_in_bar": 2.25,
+          "onset_beats": 26.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "D4",
+            "midi": 50,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 50.0
+          },
+          "fret": 7,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "22",
+          "voice": 29,
+          "beat": 11,
+          "onset_in_bar": 2.75,
+          "onset_beats": 27.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "E3",
+            "midi": 40,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 40.0
+          },
+          "fret": 7,
+          "string": 1,
+          "articulation": 0
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Drums",
+      "events": [
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 3,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 0.0,
+          "duration_beats": 1.0,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 2,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 1.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 3,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 1.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 2,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 1.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 3,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 1.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 2,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 2.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 3,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 2.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 2,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 2.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 1,
+          "bar_id": "2",
+          "voice": 3,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 2.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 7,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 3.5,
+          "duration_beats": 1.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 6,
+          "beat": 1,
+          "onset_in_bar": 1.5,
+          "onset_beats": 5.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 7,
+          "beat": 1,
+          "onset_in_bar": 1.5,
+          "onset_beats": 5.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 6,
+          "beat": 2,
+          "onset_in_bar": 2.0,
+          "onset_beats": 5.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 7,
+          "beat": 2,
+          "onset_in_bar": 2.0,
+          "onset_beats": 5.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 6,
+          "beat": 3,
+          "onset_in_bar": 2.75,
+          "onset_beats": 6.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 2,
+          "bar_id": "5",
+          "voice": 7,
+          "beat": 3,
+          "onset_in_bar": 2.75,
+          "onset_beats": 6.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 11,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 7.0,
+          "duration_beats": 1.0,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 10,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 8.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 11,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 8.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 10,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 8.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 11,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 8.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 10,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 9.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 11,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 9.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 10,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 9.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 3,
+          "bar_id": "8",
+          "voice": 11,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 9.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 14,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 10.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 10.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 10.75,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 14,
+          "beat": 1,
+          "onset_in_bar": 0.5,
+          "onset_beats": 11.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 14,
+          "beat": 2,
+          "onset_in_bar": 0.75,
+          "onset_beats": 11.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 11.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 14,
+          "beat": 4,
+          "onset_in_bar": 1.25,
+          "onset_beats": 11.75,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 3,
+          "onset_in_bar": 1.75,
+          "onset_beats": 12.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 5,
+          "onset_in_bar": 2.25,
+          "onset_beats": 12.75,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 14,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 13.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 4,
+          "bar_id": "11",
+          "voice": 15,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 13.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 19,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 14.0,
+          "duration_beats": 1.0,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 18,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 15.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 19,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 15.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 18,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 15.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 19,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 15.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 18,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 16.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 19,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 16.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 18,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 16.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 5,
+          "bar_id": "14",
+          "voice": 19,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 16.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 23,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 17.5,
+          "duration_beats": 1.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 22,
+          "beat": 1,
+          "onset_in_bar": 1.5,
+          "onset_beats": 19.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 23,
+          "beat": 1,
+          "onset_in_bar": 1.5,
+          "onset_beats": 19.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 22,
+          "beat": 2,
+          "onset_in_bar": 2.0,
+          "onset_beats": 19.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 23,
+          "beat": 2,
+          "onset_in_bar": 2.0,
+          "onset_beats": 19.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 22,
+          "beat": 3,
+          "onset_in_bar": 2.75,
+          "onset_beats": 20.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 6,
+          "bar_id": "17",
+          "voice": 23,
+          "beat": 3,
+          "onset_in_bar": 2.75,
+          "onset_beats": 20.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 27,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 21.0,
+          "duration_beats": 1.0,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 26,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 22.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 27,
+          "beat": 1,
+          "onset_in_bar": 1.0,
+          "onset_beats": 22.0,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 26,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 22.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 27,
+          "beat": 2,
+          "onset_in_bar": 1.5,
+          "onset_beats": 22.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 26,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 23.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 27,
+          "beat": 3,
+          "onset_in_bar": 2.0,
+          "onset_beats": 23.0,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 26,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 23.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 7,
+          "bar_id": "20",
+          "voice": 27,
+          "beat": 4,
+          "onset_in_bar": 2.75,
+          "onset_beats": 23.75,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 30,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 24.5,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 0,
+          "onset_in_bar": 0.0,
+          "onset_beats": 24.5,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 1,
+          "onset_in_bar": 0.25,
+          "onset_beats": 24.75,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 30,
+          "beat": 1,
+          "onset_in_bar": 0.5,
+          "onset_beats": 25.0,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 30,
+          "beat": 2,
+          "onset_in_bar": 0.75,
+          "onset_beats": 25.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 2,
+          "onset_in_bar": 1.0,
+          "onset_beats": 25.5,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 30,
+          "beat": 4,
+          "onset_in_bar": 1.25,
+          "onset_beats": 25.75,
+          "duration_beats": 0.75,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 3,
+          "onset_in_bar": 1.75,
+          "onset_beats": 26.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 5,
+          "onset_in_bar": 2.25,
+          "onset_beats": 26.75,
+          "duration_beats": 0.5,
+          "pitch": {
+            "name": "C-1",
+            "midi": 36,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 36.0
+          },
+          "fret": 36,
+          "string": 0,
+          "articulation": 8
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 30,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 27.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 42,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 42.0
+          },
+          "fret": 42,
+          "string": 4,
+          "articulation": 3
+        },
+        {
+          "master_bar": 8,
+          "bar_id": "23",
+          "voice": 31,
+          "beat": 6,
+          "onset_in_bar": 2.75,
+          "onset_beats": 27.25,
+          "duration_beats": 0.25,
+          "pitch": {
+            "name": "C-1",
+            "midi": 38,
+            "bend_value": 0.0,
+            "bend_destination_value": 0.0,
+            "bend_semitones": 0.0,
+            "midi_with_bend": 38.0
+          },
+          "fret": 38,
+          "string": 3,
+          "articulation": 0
+        }
+      ]
+    }
+  ]
+}

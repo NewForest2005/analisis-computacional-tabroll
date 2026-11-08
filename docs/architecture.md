@@ -14,12 +14,12 @@ notebooks/Tabroll_Angine_de_Poitrine.ipynb
             └── celdas de ejecución y visualización final
 ```
 
-Cada archivo comienza con una descripción que dice de qué celda del notebook viene. El prefijo del nombre es el orden de la celda entre las celdas de código. Por ejemplo:
+Cada módulo comienza únicamente con la descripción de la función o del propósito de la celda. Los módulos de funciones y clases no llevan el número de la celda en el nombre. Por ejemplo:
 
-- `005_find_stem.py`: función `find_stem`.
-- `007_configuracion.py`: configuración de separación de stems.
-- `023_stft_mag.py`: función de análisis espectral.
-- `076_render_song_graphic.py`: función de renderizado.
-- `093_configuracion.py` y `094_configuracion.py`: celdas finales de ejecución/visualización.
+- `find_stem.py`: función `find_stem`.
+- `separar_guitarra_y_bajo_con_demucs.py`: configuración de separación de stems.
+- `stft_mag.py`: función de análisis espectral.
+- `render_song_graphic.py`: función de renderizado.
+- `configuracion_093.py` y `configuracion_094.py`: celdas finales de ejecución/visualización.
 
-Las celdas que contienen varias funciones auxiliares permanecen juntas para no romper el contexto local de la celda original; el inventario completo de sus elementos está en [`cell-index.md`](cell-index.md). Esto mantiene la extracción fiel y permite refactorizarlas posteriormente sin perder trazabilidad.
+Las celdas que contienen varias funciones auxiliares permanecen juntas para no romper el contexto local de la celda original; el inventario completo de sus elementos y el número original de celda están en [`cell-index.md`](cell-index.md). Esto mantiene la extracción fiel sin poner el número en el nombre del módulo.

@@ -41,6 +41,33 @@ def preceding_description(cells: list[dict], index: int) -> str:
     return ""
 
 
+def definitions(source: str) -> list[str]:
+    try:
+        tree = ast.parse(source)
+    except SyntaxError:
+        return []
+    return [
+        node.name
+        for node in tree.body
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+    ]
+
+
+def module_name(order: int, source: str, names: list[str]) -> str:
+    titles = [
+        line.strip()[1:].replace("@title", "").strip()
+        for line in source.splitlines()
+        if line.strip().startswith("# @title")
+    ]
+    if titles:
+        return re.sub(r"^\d+[a-z]?_", "", slug(titles[0]))
+    if len(names) == 1:
+        return names[0].lower().lstrip("_")
+    if names:
+        return f"{names[0].lower().lstrip('_')}_and_helpers"
+    return f"configuracion_{order:03d}"
+
+
 def regenerate(notebook: Path = DEFAULT_NOTEBOOK, output: Path = DEFAULT_OUTPUT) -> int:
     cells = json.loads(notebook.read_text(encoding="utf-8"))["cells"]
     output.mkdir(parents=True, exist_ok=True)
@@ -56,38 +83,15 @@ def regenerate(notebook: Path = DEFAULT_NOTEBOOK, output: Path = DEFAULT_OUTPUT)
             continue
         code_number += 1
         source = clean_jupyter_magics("".join(cell.get("source", [])))
-        try:
-            tree = ast.parse(source)
-        except SyntaxError:
-            tree = ast.parse("")
-        definitions = [
-            node.name
-            for node in tree.body
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
-        ]
-        titles = [
-            line.strip()[1:].replace("@title", "").strip()
-            for line in source.splitlines()
-            if line.strip().startswith("# @title")
-        ]
-        if len(definitions) == 1:
-            base = definitions[0].lower().lstrip("_")
-        elif definitions:
-            base = slug(titles[0]) if titles else f"{definitions[0].lower().lstrip('_')}_and_helpers"
-        else:
-            base = slug(titles[0]) if titles else "configuracion"
-        name = f"{code_number:03d}_{base}"
+        names = definitions(source)
+        name = module_name(code_number, source, names)
         if name in used:
-            name += f"_cell_{index:03d}"
+            name += f"_cell_{code_number:03d}"
         used.add(name)
         description = preceding_description(cells, index)
-        doc = (
-            f'"""Celda {index} del notebook original.'
-            + (f" Descripcion asociada: {description}." if description else "")
-            + "\n\nEste modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.\n\"\"\"\n"
-        )
+        doc = f'"""{description or "Celda de configuración o ejecución."}\n"""\n'
         (output / f"{name}.py").write_text(doc + "\n" + source.rstrip() + "\n", encoding="utf-8")
-        manifest.append((index, name, definitions, description))
+        manifest.append((index, name, names, description))
 
     (output / "__init__.py").write_text('"""Celdas de codigo extraidas del notebook Tabroll."""\n', encoding="utf-8")
     index = [

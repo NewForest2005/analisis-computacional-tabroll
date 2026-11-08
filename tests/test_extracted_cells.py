@@ -19,7 +19,7 @@ def code_cells():
 
 
 def modules():
-    return sorted(CELLS.glob("[0-9][0-9][0-9]_*.py"))
+    return sorted(path for path in CELLS.glob("*.py") if path.name != "__init__.py")
 
 
 def test_source_notebook_is_preserved():
@@ -31,10 +31,14 @@ def test_one_module_per_code_cell():
 
 
 def test_modules_match_the_notebook():
-    for (i, source), path in zip(code_cells(), modules()):
+    for order, (i, source) in enumerate(code_cells(), start=1):
+        names = extract_cells.definitions(extract_cells.clean_jupyter_magics(source))
+        expected = extract_cells.module_name(order, extract_cells.clean_jupyter_magics(source), names)
+        path = CELLS / f"{expected}.py"
+        assert path.is_file(), f"{path.name}: {REGENERATE}"
         text = path.read_text(encoding="utf-8")
-        body = text.split('\n"""\n', 1)[1].strip("\n")
-        assert text.startswith(f'"""Celda {i} del notebook original.'), f"{path.name}: {REGENERATE}"
+        body = text.split('"""\n', 1)[1].strip("\n")
+        assert path.stem == expected, f"{path.name}: {REGENERATE}"
         assert body == extract_cells.clean_jupyter_magics(source).strip("\n").rstrip(), f"{path.name}: {REGENERATE}"
 
 
@@ -44,5 +48,5 @@ def test_extracted_cells_are_valid_python():
 
 
 def test_function_named_modules_exist():
-    names = {path.stem.split("_", 1)[1] for path in modules()}
+    names = {path.stem for path in modules()}
     assert {"find_stem", "separate_stems", "render_song_graphic", "plot_cycle_map"} <= names

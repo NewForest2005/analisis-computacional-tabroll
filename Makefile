@@ -20,7 +20,7 @@ help:
 		'make clean-outputs   Eliminar solo las corridas generadas en outputs/'
 
 check-python:
-	@$(PYTHON) -c 'import sys; v=sys.version_info; assert (3, 10) <= v < (3, 14), "Se requiere Python 3.10, 3.11, 3.12 o 3.13; en Mac Intel se recomienda 3.12"; print("Python", sys.version.split()[0])'
+	@$(PYTHON) -c 'import sys; v=sys.version_info; assert (3, 10) <= v < (3, 13), "Se requiere Python 3.10, 3.11 o 3.12; en Mac Intel se recomienda 3.12"; print("Python", sys.version.split()[0])'
 
 venv: check-python
 	@test -x $(VENV_PYTHON) || $(PYTHON) -m venv $(VENV)
