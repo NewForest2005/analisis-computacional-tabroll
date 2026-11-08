@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def render_cycles(cycles, scale, tonic_midi, bar=4, filename='ciclo'):
 
     style = Style(px_per_beat=PX_PER_BEAT, row_h=ROW_H, header_h=70, strip_h=8, gap=4)

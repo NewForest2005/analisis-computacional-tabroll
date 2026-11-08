@@ -1,8 +1,7 @@
-"""Celda 55 del notebook original. Descripcion asociada: note_grid: mira en qué parte del pulso caen los ataques. Si caen en tercios, el pulso se divide en tres corcheas, como en el 12/8 de Sarniezz, y la cuantización pasa a 1/6 de pulso para que cada corchea quede en su sitio. Si no, deja GRID como está..
+"""Celda 55 del notebook original. Descripcion asociada: **`note_grid`**: mira en qué parte del pulso caen los ataques. Si caen en tercios, el pulso se divide en tres corcheas, como en el 12/8 de Sarniezz, y la cuantización pasa a 1/6 de pulso para que cada corchea quede en su sitio. Si no, deja GRID como está..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def note_grid(onsets_t, pos, grid):
     f = pos(onsets_t) % 1                                                                    # dónde cae cada ataque dentro del pulso

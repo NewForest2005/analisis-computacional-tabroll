@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def fine_scale(sc, tonic_midi):
     chromatic = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B']
     steps = [50.0 * k for k in range(24)]

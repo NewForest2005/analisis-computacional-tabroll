@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def add_guitar_stem(Sh, S, stem, cand, sr, nfft, hop, weight=0.7, split=47.0):
     if stem is None:
         return Sh

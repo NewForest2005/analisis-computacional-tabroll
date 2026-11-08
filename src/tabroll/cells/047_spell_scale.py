@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def spell_scale(tonic_pc, steps_semi):
     best = None
 

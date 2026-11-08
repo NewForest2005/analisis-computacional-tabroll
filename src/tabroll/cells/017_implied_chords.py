@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def implied_chords(measured, roots, lines, offset, pos, sr, hop, n_beats, tonic_midi, sc, g=0.5, min_share=0.15, min_frames=3, bridge=2.0):
 
     beat = np.floor(pos(np.arange(len(lines[0])) * hop / sr)).astype(int)

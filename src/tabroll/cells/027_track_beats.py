@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def track_beats(oenv, fps, bpm, tight=400.0):
     period = 60.0 * fps / bpm
     o = oenv / (oenv.std() + 1e-9)

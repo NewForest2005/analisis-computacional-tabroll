@@ -10,6 +10,7 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `src/tabroll/cells/`: extracción ordenada, una celda de código por archivo.
 - `docs/cell-index.md`: inventario y trazabilidad entre notebook y módulos.
 - `docs/architecture.md`: cómo se separan funciones, clases, inicialización, configuración y ejecución.
+- `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook.
 - `tests/`: validaciones estructurales básicas.
 
 ## Instalación
@@ -34,3 +35,13 @@ pytest
 ```
 
 Los comandos de shell propios de Jupyter se conservan como comentarios en el módulo correspondiente para que todos los archivos `.py` sean sintácticamente válidos.
+
+## Regenerar los módulos
+
+El número del nombre de cada archivo corresponde al orden entre las celdas de código, no al índice absoluto del notebook. Por ejemplo, `005_find_stem.py` proviene de la celda 6 del notebook.
+
+Si se modifica el notebook, regenerar los módulos con:
+
+```bash
+python scripts/extract_cells.py
+```

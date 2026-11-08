@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def chord_lines(M, S, cand, main, thr, sr, n_fft, n_lines=3, rho=1.0, min_db=-15.0, H=10, alpha=0.82):
     Smax = S.max(axis=0) + 1e-9
     lines, M2 = [main], M

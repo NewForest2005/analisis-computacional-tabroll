@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 @dataclass
 class Style:
     px_per_beat: float = 216.0

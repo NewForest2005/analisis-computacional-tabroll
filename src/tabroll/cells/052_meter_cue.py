@@ -1,8 +1,7 @@
-"""Celda 101 del notebook original. Descripcion asociada: meter_cue: mide, pulso a pulso, cuánto se parecen los ataques (sobre todo de la batería) a los de L pulsos después. Donde la canción va en 7/8 se parecen cada 7 corcheas, y donde va en 2/4, cada 4. Así segment_bars sabe qué compás elegir en cada región de una canción que cambia de métrica..
+"""Celda 101 del notebook original. Descripcion asociada: **`meter_cue`**: mide, pulso a pulso, cuánto se parecen los ataques (sobre todo de la batería) a los de L pulsos después. Donde la canción va en 7/8 se parecen cada 7 corcheas, y donde va en 2/4, cada 4. Así segment_bars sabe qué compás elegir en cada región de una canción que cambia de métrica..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def meter_cue(bt, oenv, fps, lengths, win=28):
     w = int(0.05 * fps)

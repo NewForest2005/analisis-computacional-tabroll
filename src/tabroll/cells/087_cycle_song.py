@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def cycle_song(cyc, scale, tonic_midi, bar=4):
 
     p, N, step = cyc.pitch, cyc.slots, 1 / cyc.sub

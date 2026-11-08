@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def harmonic_part(M, kt=7, kf=31):
     H = median_filter(M, size=(1, kt))                                   # lo que se sostiene en el tiempo
     P = median_filter(M, size=(kf, 1))                                   # lo que se abre en frecuencia: golpes

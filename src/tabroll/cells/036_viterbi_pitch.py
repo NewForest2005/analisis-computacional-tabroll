@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def viterbi_pitch(S, cand, thr, jump_cost=0.01, max_jump=96, switch_cost=1.0):
     nC, T = S.shape
     emis = np.log1p(S / (thr + 1e-9))

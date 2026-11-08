@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 KEY_OVERRIDE = None
 FINE_ROWS = True
 TEMPO_OVERRIDE = None
@@ -24,10 +23,7 @@ NFFT_P, HOP_P = 4096, 512
 TARGET_SR = 22050
 
 HAS_DRUMS = True                                                                # False si el audio no trae batería
-GUITAR_STEM = '/content/Sarniezz - Official Audio_guitar.mp3'                   # ruta de la pista guitar de Demucs, sacada de este mismo audio
-BASS_STEM = '/content/Sarniezz - Official Audio_bass.mp3'                                                              # ruta de la pista bass de Demucs, sacada de este mismo audio
-
 y_st, sr = librosa.load(audio_path, sr=TARGET_SR, mono=False)
 y = y_st.mean(axis=0) if y_st.ndim > 1 else y_st
 
-print(f'Duracion: {len(y)/sr:.1f} s | {sr} Hz'); display(Audio(y, rate=sr))
+print(f'Duracion: {len(y)/sr:.1f} s | {sr} Hz')

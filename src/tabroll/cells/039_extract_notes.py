@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def extract_notes(midi, Smax, onsets_t, sr, hop, offset, step):
     g = step / 100.0
     hop_t = hop / sr

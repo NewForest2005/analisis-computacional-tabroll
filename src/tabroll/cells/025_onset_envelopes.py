@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def onset_envelopes(y, sr, hop=256, n_fft=2048):
     P = stft_mag(y, n_fft, hop) ** 2
     fb, centres = mel_bank(sr, n_fft)

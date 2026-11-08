@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def pc_histogram(pitches, weights):
     h = np.zeros(12)
 

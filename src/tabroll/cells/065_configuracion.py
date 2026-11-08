@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 h = 0.5 * pc_histogram(arr[:, 2], arr[:, 1] - arr[:, 0]) + 0.5 * chroma     # notas de la línea + cromagrama
 low = bass[np.isfinite(bass)] - off
 

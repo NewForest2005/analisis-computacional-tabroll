@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def beat_evidence(bt, oenv, olow, fps, H):
     w = int(0.05 * fps)
     bf = np.round(bt * fps).astype(int)

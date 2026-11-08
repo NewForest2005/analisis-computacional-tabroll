@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def tuning_offset(M, midi, sr, n_fft, step, H=6, fmin=120.0, fmax=3000.0, min_conf=0.1):
     df = sr / n_fft
     g = step / 100.0

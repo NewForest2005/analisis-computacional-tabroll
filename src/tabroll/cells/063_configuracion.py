@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 M = stft_mag(y, NFFT_P, HOP_P)
 S, cand = pitch_salience(M, sr, NFFT_P)
 

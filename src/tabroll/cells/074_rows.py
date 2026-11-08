@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def _rows(page_notes, prev, extra=3):
     if not page_notes:
         return prev

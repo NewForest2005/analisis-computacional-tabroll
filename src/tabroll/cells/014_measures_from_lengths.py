@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def measures_from_lengths(lengths: Sequence[float], **kw) -> list[Measure]:
     out, t = [], 0.0
     for L in lengths:

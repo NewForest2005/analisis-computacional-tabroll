@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 VIEW_SECONDS = None
 BEATS_PER_PAGE = 21
 PX_PER_BEAT = 64

@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def make_beat_map(bt):
     idx = np.arange(len(bt), dtype=float)
     ibi0, ibi1 = bt[1] - bt[0], bt[-1] - bt[-2]

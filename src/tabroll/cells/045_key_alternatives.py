@@ -1,8 +1,7 @@
-"""Celda 87 del notebook original.
+"""Celda 87 del notebook original. Descripcion asociada: **`key_alternatives`**: Busca tonalidades con las mismas 7 notas pero otra tónica que el bajo apoya casi igual (al menos el 92 % del puntaje de la elegida). Si encuentra alguna, el cuaderno avisa que la tonalidad es dudosa..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def key_alternatives(h, tonic_pc, mode, near=0.92):
     weight = lambda t, st: h[t] + 0.5 * h[(t + 7) % 12] + 0.3 * h[(t + st[2]) % 12]

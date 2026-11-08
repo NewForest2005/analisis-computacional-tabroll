@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def chord_roots(H, tonic_pc, steps_semi, stay=0.8, off_scale=0.7):
     n = len(H)
     scale_pcs = {(tonic_pc + s) % 12 for s in steps_semi}

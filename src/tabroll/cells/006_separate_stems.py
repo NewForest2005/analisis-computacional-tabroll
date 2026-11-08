@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def separate_stems(audio, kinds=('guitar', 'bass'), model_name='htdemucs_6s'):
     if importlib.util.find_spec('demucs_infer') is None:
         subprocess.run([sys.executable, '-m', 'pip', '-q', 'install', 'demucs-infer'], check=True)

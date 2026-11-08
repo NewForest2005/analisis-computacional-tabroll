@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def stft_mag(x, n_fft, hop):
 
     pad = n_fft // 2

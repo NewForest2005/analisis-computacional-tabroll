@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def place_notes(raw, pos, nb, tonic_midi, grid):
     notes = []
 

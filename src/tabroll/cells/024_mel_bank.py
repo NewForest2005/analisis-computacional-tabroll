@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def mel_bank(sr, n_fft, n=48, fmin=40.0, fmax=9000.0):
     fr = np.linspace(0, sr / 2, n_fft // 2 + 1)
 

@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def segment_bars(e, lengths, cue=None, gamma=1.0):
     beta, switch = 1.0, 0.8
     prior = {4: .45, 7: .15, 3: .12, 2: .08, 6: .08, 5: .06, 8: .08}

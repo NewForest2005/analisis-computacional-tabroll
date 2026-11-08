@@ -1,8 +1,7 @@
-"""Celda 67 del notebook original.
+"""Celda 67 del notebook original. Descripcion asociada: **`guitar_gate`**: Marca los tramos en que la pista guitar de Demucs calla (más de 30 dB por debajo de su nivel normal durante al menos 6 s). Ahí la voz aguda del tabroll no busca notas, porque lo que suena es voz, batería o armónicos del bajo. Los silencios cortos no cuentan, porque Demucs a veces pierde la guitarra un par de segundos aunque siga sonando. Sin `GUITAR_STEM` no hace nada..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def guitar_gate(stem, n_frames, hop, sr, floor_db=-30.0, bridge=1.5, min_gap=6.0):
     on = np.ones(n_frames, bool)

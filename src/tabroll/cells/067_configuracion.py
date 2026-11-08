@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 if FORCE_BAR_BEATS is None:
     lens = segment_bars(beat_evidence(beat_times, oenv, olow, fps, Hb), BAR_LENGTHS, meter_cue(beat_times, oenv, fps, BAR_LENGTHS))
 

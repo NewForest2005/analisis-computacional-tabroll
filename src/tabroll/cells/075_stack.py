@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def _stack(paths, stem, max_h=30000):
     parts, cur, h = [], [], 0
 

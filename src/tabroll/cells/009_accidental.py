@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 # afinacion
 def accidental(k: int, unit: float) -> str:
 

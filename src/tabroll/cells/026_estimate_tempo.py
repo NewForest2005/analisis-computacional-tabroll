@@ -4,7 +4,6 @@ Este modulo conserva el orden y la logica de la celda para facilitar la trazabil
 """
 
 
-
 def estimate_tempo(oenv, fps, lo=60, hi=200):
     x = oenv - oenv.mean()
     n = 1 << (2 * len(x) - 1).bit_length()

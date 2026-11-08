@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 class Timeline:
     def __init__(self, measures: Sequence[Measure], ppb: float, gap: float):
 

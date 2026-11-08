@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 onsets = detect_onsets(oenv, fps)
 raw_bass = extract_notes(bass, Sbass, onsets, sr, HOP_P, off, MICRO_STEP)
 raw_high = extract_notes(np.where(guitar_gate(stem, len(melody), HOP_P, sr), melody, np.nan), Shigh, onsets, sr, HOP_P, off, MICRO_STEP)

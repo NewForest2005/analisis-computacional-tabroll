@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def _fill(ax, x, y, w, h, cols, z, period):
     c_lo, c_hi, f = cols
     base = Rectangle((x, y), w, h, fc=c_lo, ec="none", zorder=z)

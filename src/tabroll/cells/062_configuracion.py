@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 oenv, olow = onset_envelopes(y, sr); fps = sr / 256
 
 tempo = TEMPO_OVERRIDE or estimate_tempo(oenv, fps)

@@ -1,8 +1,7 @@
-"""Celda 171 del notebook original. Descripcion asociada: cycle_bar: devuelve el compás que domina dentro de un ciclo, es decir, el más frecuente entre los compases que empiezan en él. Así cada ciclo se cuenta y se dibuja con su propio compás y no con el más común de toda la canción..
+"""Celda 171 del notebook original. Descripcion asociada: **`cycle_bar`**: Devuelve el compás que domina dentro de un ciclo, es decir, el más frecuente entre los compases que empiezan en él. Así cada ciclo se cuenta y se dibuja con su propio compás y no con el más común de toda la canción..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def cycle_bar(cyc, lens, bt, default):
 

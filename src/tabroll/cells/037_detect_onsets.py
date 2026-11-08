@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def detect_onsets(oenv, fps):
     z = oenv - uniform_filter1d(oenv, int(fps), mode='nearest')
     z = z / (z.std() + 1e-9)

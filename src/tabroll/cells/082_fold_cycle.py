@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def fold_cycle(S, cand, line, offset, cyc, sr, hop, beat, sub, voice='grave', anchor=None, top=55.0, split=47.0, rho=0.45, octave=0.8, weak=0.8, alone=0.6, floor=0.3, g=0.5, stereo=False):
 
     dt = hop / sr

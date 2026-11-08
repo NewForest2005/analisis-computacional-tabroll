@@ -1,8 +1,7 @@
-"""Celda 177 del notebook original. Descripcion asociada: layer_changes:.
+"""Celda 177 del notebook original. Descripcion asociada: **`layer_changes`**: Compara cada instante de la pista guitar con el mismo instante una vuelta de loop antes. Si aparece sonido que antes no estaba, entró una capa; si desaparece, salió. Devuelve esos cambios y el nivel de la guitarra para la fila “Capas” del mapa..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def layer_changes(x, period, sr, hop, n_fft, win=2.0, thr=0.3, quiet=0.08, lo=150.0, hi=4000.0):
     M = stft_mag(x, n_fft, hop)

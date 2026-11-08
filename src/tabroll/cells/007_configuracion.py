@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 SEPARATE = True          # False = no separar; usa solo las pistas _guitar y _bass que hayas subido con la canción
 DOWNLOAD_STEMS = True    # descarga las pistas para subirlas la próxima vez y no tener que separar de nuevo
 

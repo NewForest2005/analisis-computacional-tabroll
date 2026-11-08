@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 # @title 0) Librerias
 from __future__ import annotations
 
@@ -31,7 +30,7 @@ from scipy.ndimage import uniform_filter1d, median_filter, maximum_filter1d
 
 import librosa
 from collections import Counter
-from IPython.display import Audio, display
+from IPython.display import display
 
 from PIL import Image
 from IPython.display import Image as IPyImage, display

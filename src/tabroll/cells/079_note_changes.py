@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def note_changes(line, offset, cyc, sr, hop, g=0.5):
     dt = hop / sr
     a, b = int(cyc.start / dt), int(cyc.end / dt)

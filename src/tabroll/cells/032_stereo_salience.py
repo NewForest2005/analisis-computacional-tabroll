@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def stereo_salience(S, M, stereo, cand, sr, nfft, hop, drums=True, split=47.0, min_side=0.01):
     if stereo.ndim == 1:
         return S

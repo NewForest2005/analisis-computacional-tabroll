@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 # @title 1) Subir el audio
 
 try:
@@ -16,7 +15,7 @@ except ImportError:
 BASE_DIR = Path('/content') if IN_COLAB_HARMONY else Path.cwd()
 
 if IN_COLAB_HARMONY:
-    print('Sube la canción y, si la tienes, su pista guitar de Demucs.')
+    print('Sube la canción y, si las tienes, sus pistas _guitar y _bass de Demucs.')
 
     for filename, data in files.upload().items():
         (BASE_DIR / filename).write_bytes(data)

@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def cycle_subdivision(line, offset, cycles, sr, hop, beat, options=(1, 2, 3, 4, 6), keep=0.75):
     fit = np.zeros(len(options))
     total = 0

@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def sec_at(beat):
     if beat < 0:
         return float(beat_times[0] + beat * spb)

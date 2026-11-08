@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def chroma_profile(M, sr, n_fft, fmin=60.0, fmax=2000.0, offset=0.0):
     f = np.arange(M.shape[0]) * sr / n_fft
     sel = (f >= fmin) & (f <= fmax)

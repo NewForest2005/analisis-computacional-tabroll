@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def beat_histograms(track, weight, pos, sr, hop, n_beats):
     H = np.zeros((n_beats, 12))
     t = np.arange(len(track)) * hop / sr

@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 beat = (beat_times[-1] - beat_times[0]) / (len(beat_times) - 1)
 
 lines_v = {'Voz grave': bass, 'Voz aguda': melody}

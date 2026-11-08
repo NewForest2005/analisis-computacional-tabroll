@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def parse_scl(text: str) -> tuple[list[float], float]:
     lines = [l.strip() for l in text.splitlines() if not l.lstrip().startswith("!")]
     count = int(lines[1].split()[0])

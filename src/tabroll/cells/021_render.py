@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def render(song: Song, path: Optional[str] = None, view: Optional[tuple[float, float]] = None, rows: Optional[tuple[int, int]] = None, playhead: Optional[float] = None, style: Optional[Style] = None):
 
     st = style or Style()

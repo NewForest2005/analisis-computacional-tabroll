@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def drop_echoes(lines, offset, near=9, min_frames=3):
     T = len(lines[0])
     pcs = [np.where(np.isfinite(l), np.round((np.nan_to_num(l) - offset) * 2).astype(int) % 24, -1) for l in lines]

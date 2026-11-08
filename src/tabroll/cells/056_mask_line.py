@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def mask_line(M, line, sr, n_fft, width=3, n_harm=64):
     M2 = M.copy()
     df = sr / n_fft

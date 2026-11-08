@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 raw_notes = extract_notes(midi, Smax, detect_onsets(oenv, fps), sr, HOP_P, off, MICRO_STEP)
 
 if not raw_notes:

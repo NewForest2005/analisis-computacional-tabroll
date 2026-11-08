@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def find_cycles(line, offset, sr, hop, win_s=30.0, step_s=5.0, max_s=16.0, min_s=1.0, min_score=0.55, near=0.06, tau=0.5, g=0.5, tol=2, min_turns=2):
 
     dt = hop / sr

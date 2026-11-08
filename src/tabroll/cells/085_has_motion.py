@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def has_motion(cyc):
 
     p = cyc.pitch[np.isfinite(cyc.pitch)]

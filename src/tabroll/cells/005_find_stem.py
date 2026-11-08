@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def find_stem(audio, kind):
     hits = [p for p in BASE_DIR.rglob('*') if p.is_file() and p.suffix.lower() in audio_ext and p.stem.startswith(f'{audio.stem}_{kind}')]
     return max(hits, key=lambda p: p.stat().st_mtime) if hits else None

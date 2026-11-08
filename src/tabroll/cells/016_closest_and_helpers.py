@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 _THIRDS = {"sus2": 200, "min": 300, "neu": 350, "maj": 400, "sus4": 500}
 _FIFTHS = {"dim": 600, "perf": 700, "aug": 800}
 _SEVENTHS = {"h7": 969, "7": 1000, "M7": 1100}

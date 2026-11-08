@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def pieces(onset: float, dur: float, measures: Sequence[Measure]) -> list[tuple[float, float]]:
 
     end, out = onset + dur, []

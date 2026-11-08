@@ -1,8 +1,7 @@
-"""Celda 175 del notebook original. Descripcion asociada: loop_period:.
+"""Celda 175 del notebook original. Descripcion asociada: **`loop_period`**: Toma el periodo de los ciclos que más tiempo cubren en la canción. Es la duración exacta de la vuelta del looper..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def loop_period(groups):
     by = {}

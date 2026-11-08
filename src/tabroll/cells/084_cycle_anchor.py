@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def cycle_anchor(cyc, prev, others, gap=2.0, min_score=0.8):
 
     best = max(others, key=lambda o: min(cyc.end, o.end) - max(cyc.start, o.start), default=None)

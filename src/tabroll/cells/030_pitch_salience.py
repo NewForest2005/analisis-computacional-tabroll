@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def pitch_salience(M, sr, n_fft, m_lo=26.0, m_hi=100.0, step_c=25.0, H=10, alpha=0.82, gamma=0.7, gamma_max=64.0):
     df = sr / n_fft
     Lm = np.log1p(M * 20.0)

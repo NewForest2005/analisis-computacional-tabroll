@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def name_cycles(cycles, min_match=0.6):
     known = []
 

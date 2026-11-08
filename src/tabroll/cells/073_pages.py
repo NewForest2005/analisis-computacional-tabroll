@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def _pages(ms):
     out, cur, tot = [], [], 0
 

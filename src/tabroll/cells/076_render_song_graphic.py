@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_harmony', show=True):
 
     end_s = len(y) / sr if duration_s is None else min(start_s + float(duration_s), len(y) / sr)

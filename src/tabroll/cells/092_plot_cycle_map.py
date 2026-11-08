@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def plot_cycle_map(groups, duration, filename='mapa_ciclos', layers=None):
 
     rows = len(groups) + (layers is not None)

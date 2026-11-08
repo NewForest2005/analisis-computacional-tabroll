@@ -1,8 +1,7 @@
-"""Celda 157 del notebook original. Descripcion asociada: smooth_path.
+"""Celda 157 del notebook original. Descripcion asociada: **`smooth_path`**: Elige la nota de cada casilla del ciclo buscando una línea continua. Prefiere la nota más fuerte de cada casilla, pero cobra los saltos de más de un tono (0.05 por semitono). Como el ciclo da la vuelta, el final se une con el principio..
 
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
-
 
 def smooth_path(F, notes, cost=0.05, free=2.0):
     E = np.log(np.maximum(F / (F.max(axis=0) + 1e-9), 1e-3))                    # qué tan cerca está cada nota de la más fuerte de su casilla

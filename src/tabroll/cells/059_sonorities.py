@@ -3,7 +3,6 @@
 Este modulo conserva el orden y la logica de la celda para facilitar la trazabilidad.
 """
 
-
 def sonorities(lines, offset, pos, sr, hop, n_beats, tonic_midi, step, g=0.5, keep=0.5, min_beats=1.0, bridge=0.5):
     n_slots = int(round(n_beats / step))
     n_pcs = int(round(12 / g))
