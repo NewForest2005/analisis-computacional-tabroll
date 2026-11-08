@@ -1,7 +1,7 @@
 """Corre el notebook completo sobre una canción y guarda todo en outputs/.
 
-    python scripts/run_song.py "ruta/Cancion.mp3"
-    python scripts/run_song.py "ruta/Cancion.mp3" --preset fabienk
+    python scripts/run_song.py Fabienk
+    python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
     python scripts/run_song.py "ruta/Cancion.mp3" --sin-pistas --set GRID=0.5 --nombre prueba-grid
     python scripts/run_song.py --presets
 
@@ -38,6 +38,7 @@ ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK = ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb"
 OUTPUTS = ROOT / "outputs"
 AUDIO_EXT = {".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aiff", ".aif"}
+AUDIO_FOLDER = "Angine de Poitrine Audios"
 MARKER = ".corrida"
 
 
@@ -56,6 +57,40 @@ def without_magics(source: str) -> str:
 def slug(text: str) -> str:
     text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     return re.sub(r"[^A-Za-z0-9]+", "_", text).strip("_").lower()
+
+
+def name_key(text: str) -> str:
+    """Normaliza mayúsculas y tildes para seleccionar canciones por nombre."""
+    return "".join(ch for ch in unicodedata.normalize("NFKD", str(text).casefold()) if not unicodedata.combining(ch))
+
+
+def find_song(selector: str) -> Path:
+    """Resuelve una ruta o una parte del nombre dentro de la carpeta de audios."""
+    candidate = Path(selector).expanduser()
+    if candidate.is_file():
+        return candidate.resolve()
+
+    folder = ROOT / AUDIO_FOLDER
+    if not folder.is_dir():
+        raise SystemExit(f"No existe la carpeta de audios: {folder}")
+    is_stem = lambda p: re.search(r"(^|_)(guitar|bass|other|drums|vocals|piano)( \(\d+\))?$", p.stem.lower())
+    found = [p for p in folder.rglob("*") if p.is_file() and not p.name.startswith(".") and p.suffix.lower() in AUDIO_EXT and not is_stem(p)]
+    key = name_key(selector)
+    hits = [p for p in found if key in name_key(p.relative_to(folder))]
+    if len(hits) > 1:
+        exact = [p for p in hits if key in (name_key(p.name), name_key(p.stem))]
+        hits = exact or hits
+    if len(hits) > 1:
+        official = [p for p in hits if re.search(r"off?ici(al|el)", name_key(p.stem))]
+        hits = official or hits
+    if len(hits) > 1:
+        preferred = [p for p in hits if name_key(p.stem).startswith(key) and "official audio" in name_key(p.stem)]
+        hits = preferred if len(preferred) == 1 else hits
+    if len(hits) != 1:
+        listed = "\n  ".join(str(p.relative_to(folder)) for p in (hits or sorted(found)))
+        detail = "coincide con varios audios" if hits else "no coincide con ningún audio"
+        raise SystemExit(f"'{selector}' {detail}. Opciones:\n  {listed}")
+    return hits[0].resolve()
 
 
 def find_presets(cells: list[tuple[int, str]]) -> dict[str, tuple[int, list[str]]]:
@@ -119,9 +154,10 @@ def apply_changes(cells: list[tuple[int, str]], preset: str | None, changes: dic
 # ---------------------------------------------------------------- archivos
 
 def find_stem(audio: Path, kind: str) -> Path | None:
-    hits = [p for p in audio.parent.iterdir()
-            if p.is_file() and p.suffix.lower() in AUDIO_EXT and p.stem.startswith(f"{audio.stem}_{kind}")]
-    return max(hits, key=lambda p: p.stat().st_mtime) if hits else None
+    key = name_key(f"{audio.stem}_{kind}")
+    hits = [p for p in audio.parent.rglob("*")
+            if p.is_file() and not p.name.startswith(".") and p.suffix.lower() in AUDIO_EXT and name_key(p.stem).startswith(key)]
+    return max(hits, key=lambda p: (p.parent == audio.parent, p.stat().st_mtime)) if hits else None
 
 
 def link_or_copy(src: Path, dest: Path) -> None:
@@ -290,9 +326,9 @@ def write_markdown(path: Path, info: dict) -> None:
 # ---------------------------------------------------------------- corrida
 
 def run(args) -> int:
-    audio = Path(args.audio).expanduser().resolve()
-    if not audio.is_file() or audio.suffix.lower() not in AUDIO_EXT:
-        raise SystemExit(f"No encuentro un audio en {audio} (extensiones: {', '.join(sorted(AUDIO_EXT))}).")
+    audio = find_song(args.audio)
+    if audio.suffix.lower() not in AUDIO_EXT:
+        raise SystemExit(f"No encuentro un audio válido en {audio} (extensiones: {', '.join(sorted(AUDIO_EXT))}).")
 
     changes = {}
     for item in args.set:
@@ -302,8 +338,6 @@ def run(args) -> int:
         changes[name.strip()] = value.strip()
     if args.sin_pistas:
         changes.setdefault("SEPARATE", "False")
-
-    cells = apply_changes(load_code_cells(), args.preset, changes)
 
     run_dir = make_run_dir(Path(args.salidas).resolve(), audio, args.nombre)
     link_or_copy(audio, run_dir / audio.name)
@@ -316,6 +350,13 @@ def run(args) -> int:
         if src:
             link_or_copy(src, run_dir / f"{audio.stem}_{kind}{src.suffix}")
         used[kind] = src
+
+    # El notebook debe encontrar exactamente la copia de esta corrida, no elegir
+    # otra canción por fecha dentro de la carpeta general de audios.
+    changes.setdefault("SONG", repr(audio.stem))
+    changes.setdefault("BASE_DIR", f"Path({str(run_dir)!r})")
+    changes.setdefault("AUDIO_FOLDER", repr("."))
+    cells = apply_changes(load_code_cells(), args.preset, changes)
 
     print(f"Corrida en {run_dir.relative_to(ROOT) if run_dir.is_relative_to(ROOT) else run_dir}")
     print(f"Pistas: guitarra {used['guitar'] or 'ninguna'} | bajo {used['bass'] or 'ninguna'}\n")
@@ -414,7 +455,7 @@ def main(argv=None) -> int:
             stream.reconfigure(errors="replace")
 
     p = argparse.ArgumentParser(description="Corre el notebook sobre una canción y guarda los resultados en outputs/.")
-    p.add_argument("audio", nargs="?", help="ruta de la canción (.mp3, .wav, .flac, ...)")
+    p.add_argument("audio", nargs="?", help="ruta del audio o parte de su nombre dentro de Angine de Poitrine Audios/")
     p.add_argument("--guitar", help="pista de guitarra (si no se da, se busca <canción>_guitar.* junto a la canción)")
     p.add_argument("--bass", help="pista de bajo (si no se da, se busca <canción>_bass.* junto a la canción)")
     p.add_argument("--sin-pistas", action="store_true", help="analizar solo la mezcla: no usa pistas ni corre Demucs")

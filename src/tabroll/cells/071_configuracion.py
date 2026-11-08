@@ -6,7 +6,8 @@ Este modulo conserva el orden y la logica de la celda para facilitar la trazabil
 VIEW_SECONDS = None
 BEATS_PER_PAGE = 21
 PX_PER_BEAT = 64
-OUTPUT_DIR = BASE_DIR / 'harmony_outputs'; OUTPUT_DIR.mkdir(exist_ok=True)
+OUTPUT_DIR = BASE_DIR / 'harmony_outputs' / audio_path.stem; OUTPUT_DIR.mkdir(parents=True, exist_ok=True)   # una carpeta por canción
+for old in OUTPUT_DIR.glob('*.png'): old.unlink()                                                           # las imágenes de la vez anterior se reemplazan
 
 view_scale = fine_scale(scale, tonic_midi) if FINE_ROWS else scale
 view_chords = [replace(c, numeral=c.numeral or label_chord(c, scale)[0], name=c.name or label_chord(c, scale)[1]) for c in chords]

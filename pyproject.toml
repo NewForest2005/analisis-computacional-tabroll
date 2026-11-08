@@ -7,15 +7,17 @@ name = "analisis-computacional-tabroll"
 version = "0.1.0"
 description = "Análisis computacional de audio y visualización Tabroll para Angine de Poitrine"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.14"
 dependencies = [
     "ipython>=8.0",
     "jupyterlab>=4.0",
-    "librosa>=0.10",
-    "matplotlib>=3.7",
-    "numpy>=1.24",
+    "librosa==0.10.2.post1",
+    "matplotlib==3.9.4",
+    "numpy==1.26.4",
+    "numba==0.62.1",
+    "llvmlite==0.45.1",
     "Pillow>=9.0",
-    "scipy>=1.10",
+    "scipy==1.14.1",
 ]
 
 [project.optional-dependencies]

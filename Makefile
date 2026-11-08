@@ -1,6 +1,6 @@
 SHELL := /bin/sh
 
-PYTHON ?= python3
+PYTHON ?= $(shell if command -v python3.12 >/dev/null 2>&1; then command -v python3.12; else command -v python3; fi)
 VENV ?= .venv
 VENV_PYTHON := $(VENV)/bin/python
 
@@ -20,7 +20,7 @@ help:
 		'make clean-outputs   Eliminar solo las corridas generadas en outputs/'
 
 check-python:
-	@$(PYTHON) -c 'import sys; v=sys.version_info; assert v >= (3, 10), "Se requiere Python 3.10 o superior"; print("Python", sys.version.split()[0])'
+	@$(PYTHON) -c 'import sys; v=sys.version_info; assert (3, 10) <= v < (3, 14), "Se requiere Python 3.10, 3.11, 3.12 o 3.13; en Mac Intel se recomienda 3.12"; print("Python", sys.version.split()[0])'
 
 venv: check-python
 	@test -x $(VENV_PYTHON) || $(PYTHON) -m venv $(VENV)
@@ -43,6 +43,7 @@ extract:
 check: install
 	$(VENV_PYTHON) scripts/extract_cells.py
 	$(VENV_PYTHON) -m compileall -q src scripts tests
+	$(VENV_PYTHON) -m pip check
 
 test: install
 	$(VENV_PYTHON) -m pytest -q

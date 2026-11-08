@@ -26,12 +26,14 @@ Demucs es opcional y solo se necesita para separar guitarra y bajo. La ejecució
 
 ### Requisitos en macOS Intel
 
-El proyecto requiere Python 3.10 o más nuevo. Si `python3 --version` muestra 3.9, instala una versión compatible y crea el entorno con ella:
+El proyecto requiere Python 3.10–3.13. En Mac Intel se recomienda Python 3.12, porque algunas versiones de `llvmlite` no ofrecen ruedas binarias para Python 3.14 y `pip` intentaría compilar LLVM localmente. Si `python3 --version` muestra 3.9 o 3.14, instala una versión compatible y crea el entorno con ella:
 
 ```bash
 brew install python@3.12
 /usr/local/bin/python3.12 -m venv .venv
 ```
+
+En Mac Intel se fija un conjunto compatible: `numpy==1.26.4`, `librosa==0.10.2.post1`, `scipy==1.14.1`, `matplotlib==3.9.4`, `numba==0.62.1` y `llvmlite==0.45.1`. Esta combinación evita que Torch/Demucs intente usar NumPy 2.x y conserva ruedas binarias para macOS Intel.
 
 FFmpeg solo es necesario para Demucs: los MP3 pueden leerse sin él, pero Demucs lo usa para leer y guardar las pistas separadas.
 
@@ -48,10 +50,11 @@ La extracción conserva el orden de ejecución del notebook. Para reproducir el 
 ## Correr una canción desde la terminal
 
 ```bash
-python scripts/run_song.py "ruta/Cancion.mp3"
+python scripts/run_song.py Fabienk
+python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
 ```
 
-Corre todas las celdas del notebook sobre esa canción, sin abrir Jupyter, y guarda la corrida en `outputs/<fecha>_<hora>_<canción>/`:
+Se puede indicar una ruta o una parte del nombre dentro de `Angine de Poitrine Audios/`. Corre todas las celdas del notebook sobre esa canción, sin abrir Jupyter, y guarda la corrida en `outputs/<fecha>_<hora>_<canción>/`:
 
 - `harmony_outputs/`: tabroll por páginas, imagen completa, mapa de ciclos y ciclos.
 - `salida.txt`: todo lo que imprime el notebook, los avisos y el tiempo de cada celda.

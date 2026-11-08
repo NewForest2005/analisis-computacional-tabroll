@@ -13,4 +13,6 @@ harmony_outputs/
 *.aiff
 *.aif
 .DS_Store
+Angine de Poitrine Audios/
+.ipynb_checkpoints/
 outputs/
