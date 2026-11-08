@@ -12,3 +12,5 @@ harmony_outputs/
 *.m4a
 *.aiff
 *.aif
+.DS_Store
+outputs/

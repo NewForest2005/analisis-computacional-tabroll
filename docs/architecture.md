@@ -14,7 +14,7 @@ notebooks/Tabroll_Angine_de_Poitrine.ipynb
             └── celdas de ejecución y visualización final
 ```
 
-Cada archivo comienza con una descripción y conserva el número de la celda original en el prefijo del nombre. Por ejemplo:
+Cada archivo comienza con una descripción que dice de qué celda del notebook viene. El prefijo del nombre es el orden de la celda entre las celdas de código. Por ejemplo:
 
 - `005_find_stem.py`: función `find_stem`.
 - `007_configuracion.py`: configuración de separación de stems.
