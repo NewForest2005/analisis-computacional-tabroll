@@ -1,4 +1,4 @@
-"""2) Altura: línea dominante, bajo y dos líneas de voz aguda. `melody` sigue buscando ciclos; `melody_n` conserva la octava de la guitarra para las notas del tabroll.
+"""Guía opcional con el GP. Con `GUIAR_CON_GP = False` (el valor por defecto), el `.gp` oficial no interviene en la línea melódica. Solo se usa después, en `run_song.py`, para evaluar y dibujar. Con `True` se reproduce la versión guiada, que sirve únicamente como comparación.
 """
 
 from tabroll.cells.find_cycles import find_cycles
@@ -32,6 +32,116 @@ if True:
                 out[:, t] = S[:, indices].mean(axis=1)
         return out
 
+    def source_activity(stem, n_frames, sr, hop):
+        """Actividad robusta de la guitarra, usada como evidencia de fuente."""
+        if stem is None:
+            return np.ones(n_frames, dtype=float)
+        values = np.asarray(stem, dtype=float).reshape(-1)
+        needed = n_frames * hop
+        values = np.pad(values, (0, max(needed - len(values), 0)))[:needed]
+        rms = np.sqrt(np.mean(values.reshape(n_frames, hop) ** 2, axis=1))
+        reference = np.percentile(rms, 90) + 1e-9
+        return np.clip(rms / reference, 0.0, 1.0)
+
+    def effect_ambiguity(S):
+        """Marca cuadros con varias alturas fuertes, posibles efectos o capas superpuestas."""
+        values = np.maximum(np.asarray(S, dtype=float), 0.0)
+        up = np.vstack([np.zeros_like(values[:1]), values[:-1]])
+        down = np.vstack([values[1:], np.zeros_like(values[-1:])])
+        local = np.where((values >= up) & (values >= down), values, 0.0)
+        order = np.argsort(-local, axis=0)[:8]
+        result = np.zeros(values.shape[1], dtype=float)
+        for t in range(values.shape[1]):
+            peak = local[order[0, t], t] + 1e-9
+            selected = []
+            for row in order[:, t]:
+                if local[row, t] < 0.62 * peak:
+                    break
+                pitch = cand[row]
+                if all(abs(pitch - other) >= 1.5 for other in selected):
+                    selected.append(pitch)
+            result[t] = np.clip((len(selected) - 1) / 3.0, 0.0, 1.0)
+        return result
+
+    def source_aware_melody(S, cand, cycles, stem, sr, hop):
+        """Elige la línea con consenso, actividad de guitarra y continuidad de fuente."""
+        consensus = cycle_consensus(S, cycles, sr, hop)
+        activity = source_activity(stem, consensus.shape[1], sr, hop)
+        ambiguity = effect_ambiguity(consensus)
+        weighted = consensus * (0.45 + 0.55 * activity)[None, :]
+        threshold = np.percentile(weighted.max(axis=0), 55)
+        path = viterbi_pitch(weighted, cand, threshold, jump_cost=0.018, switch_cost=1.15)
+        for t in range(1, len(path) - 1):
+            current = path[t]
+            if not np.isfinite(current) or activity[t] < 0.25:
+                continue
+            if ambiguity[t] >= 0.67:
+                continue
+            if abs(current - path[t - 1]) < 11.5 or abs(current - path[t - 1]) > 12.5:
+                continue
+            peers = cand[np.abs(np.abs(cand - current) - 12.0) <= 0.2]
+            if not len(peers):
+                continue
+            peer = float(peers[np.argmax([weighted[np.argmin(np.abs(cand - p)), t] for p in peers])])
+            current_row = int(np.argmin(np.abs(cand - current)))
+            peer_row = int(np.argmin(np.abs(cand - peer)))
+            current_score = weighted[current_row, t]
+            peer_score = weighted[peer_row, t]
+            if peer_score < 0.85 * current_score:
+                continue
+            before, after = path[t - 1], path[t + 1]
+            current_cost = abs(current - before) + abs(after - current)
+            peer_cost = abs(peer - before) + abs(after - peer)
+            if peer_cost + 0.25 < current_cost:
+                path[t] = peer
+        return path, ambiguity
+
+    def _cycle_repeat_score(line, cycles, sr, hop):
+        """Acuerdo de la línea con la misma fase de vueltas vecinas del ciclo."""
+        values = np.asarray(line, dtype=float)
+        score = np.full(len(values), np.nan, dtype=float)
+        fps = sr / hop
+        for group in cycles.values():
+            for cycle in group:
+                a = max(0, int(cycle.start * fps))
+                b = min(len(values), int(cycle.end * fps))
+                period = max(1, int(round(cycle.period * fps)))
+                for t in range(a, b):
+                    peers = [j for j in (t - period, t + period) if a <= j < b]
+                    if np.isfinite(values[t]) and peers:
+                        matches = [abs(values[t] - values[j]) <= 0.3 for j in peers if np.isfinite(values[j])]
+                        if matches:
+                            score[t] = float(np.mean(matches))
+        return score
+
+    def melodic_24edo_score(line, cycles, sr, hop):
+        """Combina movimiento conjunto y repetición de la línea en 24-EDO."""
+        values = np.asarray(line, dtype=float)
+        continuity = np.full(len(values), np.nan, dtype=float)
+        finite = np.isfinite(values[:-1]) & np.isfinite(values[1:])
+        steps = np.abs(np.diff(values) * 2.0)
+        continuity[:-1] = np.where(finite, np.exp(-np.maximum(steps - 3.0, 0.0) / 3.0), np.nan)
+        repeat = _cycle_repeat_score(values, cycles, sr, hop)
+        return np.nanmean(np.vstack([continuity, repeat]), axis=0)
+
+    def harmonic_12edo_score(melody_line, bass_line):
+        """Puntúa si la relación simultánea cae en la subrejilla 12-EDO."""
+        melody_values = np.asarray(melody_line, dtype=float)
+        bass_values = np.asarray(bass_line, dtype=float)
+        score = np.full(len(melody_values), np.nan, dtype=float)
+        valid = np.isfinite(melody_values) & np.isfinite(bass_values)
+        interval_24 = np.rint(np.abs(melody_values - bass_values) * 2.0).astype(int)
+        score[valid] = (interval_24[valid] % 2 == 0).astype(float)
+        return score
+
+    def microtonal_residual_score(line):
+        """Distancia normalizada de la línea respecto a la rejilla de 12-EDO."""
+        values = np.asarray(line, dtype=float)
+        score = np.full(len(values), np.nan, dtype=float)
+        valid = np.isfinite(values)
+        score[valid] = np.minimum(np.abs(values[valid] - np.rint(values[valid])) * 2.0, 1.0)
+        return score
+
 M = stft_mag(y, NFFT_P, HOP_P)
 S, cand = pitch_salience(M, sr, NFFT_P)
 
@@ -64,8 +174,15 @@ Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
 selector_salience = Sn[ishigh].copy()                                      # entrada pitch-específica para select_melody_track
 selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
-melody_n = viterbi_pitch(cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P), cand[ishigh],
-                         np.percentile(Snote, 55))                            # línea de las notas del tabroll, con consenso entre vueltas
+melody_n_baseline = viterbi_pitch(cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P), cand[ishigh],
+                                  np.percentile(Snote, 55))                    # referencia sin selección adicional
+melody_n, effect_ambiguity_n = source_aware_melody(Sn[ishigh], cand[ishigh], cycles_n, stem, sr, HOP_P)
+melodic_24edo = melodic_24edo_score(melody_n, cycles_n, sr, HOP_P)
+harmonic_12edo = harmonic_12edo_score(melody_n, bass)
+microtonal_residual = microtonal_residual_score(melody_n)
+melodic_24edo_baseline = melodic_24edo_score(melody_n_baseline, cycles_n, sr, HOP_P)
+harmonic_12edo_baseline = harmonic_12edo_score(melody_n_baseline, bass)
+microtonal_residual_baseline = microtonal_residual_score(melody_n_baseline)
 
 # La línea estructural para ciclos conserva la línea acústica fuera del
 # fragmento GP, pero dentro del fragmento alineado favorece la pista de
@@ -86,7 +203,7 @@ try:
     reference_root = next((d for d in (Path.cwd(), *Path.cwd().parents) if (d / 'references').is_dir()), None)
     song_key = str(SONG).upper()
     reference_name = next((filename for title, filename in reference_files.items() if title in song_key), None)
-    if reference_root is not None and reference_name is not None:
+    if GUIAR_CON_GP and reference_root is not None and reference_name is not None:
         reference = json.loads((reference_root / 'references' / reference_name).read_text(encoding='utf-8'))
         gp_alignment = align_gp_audio(reference, selector_salience, selector_candidates, [], [], float(tempo),
                                       melody=np.asarray(melody_n, dtype=float), sr=sr, hop=HOP_P,
@@ -102,9 +219,8 @@ try:
             [], candidates=selector_candidates, sr=sr, hop=HOP_P,
             switch_penalty=0.35, preferred_track=preferred)
         active = np.array([track != 'silence' for track in melody_track_path])
-        if GUIAR_CON_GP:
-            melody[active] = selected[active]
-        print(f"Línea estructural GP: {preferred} | offset {gp_alignment['offset_s']:.2f} s | "
+        melody[active] = selected[active]
+        print(f"Línea estructural GP (solo comparación): {preferred} | offset {gp_alignment['offset_s']:.2f} s | "
               f"tempo local {gp_alignment['tempo_local_bpm']:.2f} BPM | acierto {gp_alignment['score']:.3f}")
 except (OSError, KeyError, ValueError, ImportError) as exc:
     print(f'Aviso: no se pudo guiar melody con el GP ({type(exc).__name__}: {exc})')
@@ -121,7 +237,11 @@ if True:
 pn, vn = top_peaks(Sn[ishigh], cand[ishigh])
 ph, vh = top_peaks(Sh[ishigh], cand[ishigh])
 line_candidates = dict(pitch_n=pn, val_n=vn, pitch_h=ph, val_h=vh,
-                       snote=Snote.astype(np.float32), shigh=Shigh.astype(np.float32))
+                       snote=Snote.astype(np.float32), shigh=Shigh.astype(np.float32),
+                       effect_ambiguity=effect_ambiguity_n.astype(np.float32),
+                       melodic_24edo=melodic_24edo.astype(np.float32),
+                       harmonic_12edo=harmonic_12edo.astype(np.float32),
+                       microtonal_residual=microtonal_residual.astype(np.float32))
 
 del Sn
 

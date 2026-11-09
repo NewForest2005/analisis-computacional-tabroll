@@ -64,7 +64,7 @@
 | 117 | [`analizar_el_audio_y_preparar_el_modelo_harmony.py`](../src/tabroll/cells/analizar_el_audio_y_preparar_el_modelo_harmony.py) | `configuracion / ejecucion` | Sin descripcion en markdown |
 | 119 | [`configuracion_061.py`](../src/tabroll/cells/configuracion_061.py) | `configuracion / ejecucion` | Ajustes de inicializacion: |
 | 121 | [`configuracion_062.py`](../src/tabroll/cells/configuracion_062.py) | `configuracion / ejecucion` | 1)  Pulso real de la grabación: los compases se miden en pulsos reales, no en una rejilla fija desde t=0. |
-| 123 | [`configuracion_063.py`](../src/tabroll/cells/configuracion_063.py) | `configuracion / ejecucion` | 2) Altura: línea dominante, bajo y dos líneas de voz aguda. `melody` sigue buscando ciclos; `melody_n` conserva la octava de la guitarra para las notas del tabroll. |
+| 123 | [`configuracion_063.py`](../src/tabroll/cells/configuracion_063.py) | `configuracion / ejecucion` | Guía opcional con el GP. Con `GUIAR_CON_GP = False` (el valor por defecto), el `.gp` oficial no interviene en la línea melódica. Solo se usa después, en `run_song.py`, para evaluar y dibujar. Con `True` se reproduce la versión guiada, que sirve únicamente como comparación. |
 | 125 | [`configuracion_064.py`](../src/tabroll/cells/configuracion_064.py) | `configuracion / ejecucion` | 3) Notas: cada ataque o cambio de altura inicia una nota; alturas cuantizadas a pasos de MICRO_STEP cents. |
 | 127 | [`configuracion_065.py`](../src/tabroll/cells/configuracion_065.py) | `configuracion / ejecucion` | 4) Tonalidad y modo detectados en cada canción -> escala de 7 grados como en Hooktheory. |
 | 129 | [`norm.py`](../src/tabroll/cells/norm.py) | `_norm` | 5) Evidencia por pulso (qué clases de altura suenan): bajo y melodía. |
