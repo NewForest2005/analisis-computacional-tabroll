@@ -1,6 +1,6 @@
 # Análisis Computacional — Tabroll para Angine de Poitrine
 
-Repositorio profesional para el análisis computacional de audio y la generación de un piano roll armónico/melódico estilo TheoryTab.
+En este repositorio se encuentra el código fundamental para el análisis computacional de audio y la generación de un piano roll armónico/melódico estilo TheoryTab.
 
 El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Sus 94 celdas de código fueron extraídas en módulos Python independientes dentro de [`src/tabroll/cells`](src/tabroll/cells). Las celdas que definen una función o clase usan ese nombre como archivo (`find_stem.py`, `scale.py`, `render_song_graphic.py`); las celdas con varias funciones o configuración usan un nombre descriptivo.
 
