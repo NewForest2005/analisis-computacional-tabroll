@@ -68,6 +68,7 @@ def _pitch_evidence(
     hop: int,
     tolerance: float,
     scale: float,
+    pitch_rows: np.ndarray | None = None,
 ) -> float:
     if not len(times):
         return 0.0
@@ -75,7 +76,10 @@ def _pitch_evidence(
     available = salience.shape[1] if salience is not None and salience.ndim == 2 else melody_length
     indices = np.clip(np.rint(times * sr / hop).astype(int), 0, max(0, available - 1))
     if salience is not None and salience.ndim == 2 and salience.shape[0] == len(candidates):
-        rows = np.abs(candidates[:, None] - pitches[None, :]).argmin(axis=0)
+        # `pitch_rows` is invariant across every tempo/offset hypothesis.
+        # Computing the candidates×events distance matrix inside every
+        # hypothesis is prohibitively expensive for full GP scores.
+        rows = pitch_rows if pitch_rows is not None else np.abs(candidates[:, None] - pitches[None, :]).argmin(axis=0)
         values = np.maximum(salience[rows, indices], 0.0)
         return float(np.mean(np.clip(values / scale, 0.0, 1.0)))
     if melody is None or not len(melody):
@@ -98,11 +102,15 @@ def _evaluate(
     hop: int,
     onset_tolerance: float,
     salience_scale: float,
+    pitch_rows: np.ndarray | None = None,
 ) -> tuple[float, float, float]:
     seconds_per_beat = 60.0 / tempo
     expected = np.array([offset + float(event["onset_beats"]) * seconds_per_beat for event in events])
     pitches = np.array([float(event["pitch"]) for event in events])
-    pitch_score = _pitch_evidence(salience, melody, candidates, expected, pitches, sr, hop, 0.75, salience_scale)
+    pitch_score = _pitch_evidence(
+        salience, melody, candidates, expected, pitches, sr, hop, 0.75,
+        salience_scale, pitch_rows,
+    )
     guitar_mask = np.array(["bass" not in str(event["track"]).casefold() for event in events])
     bass_mask = ~guitar_mask
     guitar_score = _onset_score(expected[guitar_mask], guitar_onsets, onset_tolerance)
@@ -124,6 +132,7 @@ def _search(
     hop: int,
     onset_tolerance: float,
     salience_scale: float,
+    pitch_rows: np.ndarray | None = None,
 ) -> tuple[float, float, float, float, float]:
     best = (-np.inf, float(tempos[0]), float(offsets[0]), 0.0, 0.0)
     for tempo in tempos:
@@ -131,7 +140,7 @@ def _search(
             score, pitch_score, onset_score = _evaluate(
                 events, float(offset), float(tempo), salience, melody, candidates,
                 guitar_onsets, bass_onsets, sr, hop, onset_tolerance,
-                salience_scale,
+                salience_scale, pitch_rows,
             )
             if score > best[0]:
                 best = (score, float(tempo), float(offset), pitch_score, onset_score)
@@ -174,17 +183,23 @@ def align_gp_audio(
         n_frames = S.shape[1] if S is not None and S.ndim == 2 else (len(melody_array) if melody_array is not None else 0)
         audio_duration_s = n_frames * hop / sr
     salience_scale = float(np.percentile(np.maximum(S, 0.0), 90) + 1e-9) if S is not None and S.size else 1.0
+    pitches = np.array([float(event["pitch"]) for event in events])
+    pitch_rows = None
+    if S is not None and S.ndim == 2 and S.shape[0] == len(cand):
+        # This mapping depends only on the GP pitches and the salience grid,
+        # never on the tempo or offset being tested.
+        pitch_rows = np.abs(cand[:, None] - pitches[None, :]).argmin(axis=0)
 
     coarse_tempos = np.linspace(tempo_bpm * (1 - tempo_span), tempo_bpm * (1 + tempo_span), 13)
     reference_duration = max(float(event["onset_beats"]) + float(event["duration_beats"]) for event in events) * 60 / min(coarse_tempos)
     max_offset = max(0.0, float(audio_duration_s) - reference_duration)
     coarse_offsets = np.arange(0.0, max_offset + 0.125, 0.25)
-    best = _search(events, coarse_tempos, coarse_offsets, S, melody_array, cand, guitar, bass, sr, hop, onset_tolerance, salience_scale)
+    best = _search(events, coarse_tempos, coarse_offsets, S, melody_array, cand, guitar, bass, sr, hop, onset_tolerance, salience_scale, pitch_rows)
 
     _, best_tempo, best_offset, _, _ = best
     fine_tempos = np.arange(best_tempo - 1.0, best_tempo + 1.0001, 0.05)
     fine_offsets = np.arange(max(0.0, best_offset - 0.35), min(max_offset, best_offset + 0.35) + 0.010, 0.02)
-    best = _search(events, fine_tempos, fine_offsets, S, melody_array, cand, guitar, bass, sr, hop, onset_tolerance, salience_scale)
+    best = _search(events, fine_tempos, fine_offsets, S, melody_array, cand, guitar, bass, sr, hop, onset_tolerance, salience_scale, pitch_rows)
     score, tempo, offset, pitch_score, onset_score = best
     seconds_per_beat = 60.0 / tempo
     aligned_events = []

@@ -113,7 +113,15 @@ def _rhythm_duration(rhythm: ET.Element) -> float:
         duration = NOTE_VALUES[name]
     except KeyError as exc:
         raise ValueError(f"Ritmo Guitar Pro no soportado: {name!r}") from exc
-    return duration * (1.5 if rhythm.find("AugmentationDot") is not None else 1.0)
+    dot = rhythm.find("AugmentationDot")
+    if dot is not None:
+        dots = int(dot.attrib.get("count", "1"))
+        duration *= 2.0 - 0.5 ** dots
+    for tag in ("PrimaryTuplet", "SecondaryTuplet"):
+        tuplet = rhythm.find(tag)
+        if tuplet is not None:
+            duration *= float(tuplet.attrib["den"]) / float(tuplet.attrib["num"])
+    return duration
 
 
 def _read_root(path: Path) -> ET.Element:
