@@ -1,6 +1,10 @@
 """**`Scale`**: Escala musical en cents.
 """
 
+from dataclasses import dataclass
+from typing import Optional
+import numpy as np
+
 @dataclass
 class Scale:
     steps: list[float]

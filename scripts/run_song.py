@@ -387,6 +387,9 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
             "cand_ishigh": array_values("selector_candidates"),
             "melody": array_values("melody"),
             "melody_n": array_values("melody_n"),
+            "cycles_n": {voice: [{"start_s": round(float(c.start), 3), "end_s": round(float(c.end), 3),
+                                  "period_s": round(float(c.period), 4)} for c in cs]
+                         for voice, cs in (ns.get("cycles_n") or {}).items()},
             "raw_high": events("raw_high"),
             "raw_bass": events("raw_bass"),
             "onsets_h_s": [round(float(value), 5) for value in ns.get("onsets_h", [])],

@@ -1,6 +1,37 @@
 """2) Altura: línea dominante, bajo y dos líneas de voz aguda. `melody` sigue buscando ciclos; `melody_n` conserva la octava de la guitarra para las notas del tabroll.
 """
 
+from tabroll.cells.find_cycles import find_cycles
+
+GUIAR_CON_GP = False   # el .gp oficial solo sirve para evaluar y graficar; nunca construye la línea
+
+if True:
+    def cycle_consensus(S, cycles, sr, hop, turns=3, min_period=2.0):
+        """Promedia la saliencia con cuadros equivalentes de vueltas vecinas."""
+        T = S.shape[1]
+        fps = sr / hop
+        per = np.zeros(T)
+        lo = np.zeros(T, int)
+        hi = np.zeros(T, int)
+        for c in (c for group in cycles.values() for c in group):
+            if c.period < min_period:
+                continue
+            a, b = int(c.start * fps), min(int(c.end * fps), T)
+            if a >= b:
+                continue
+            update = c.period > per[a:b]
+            per[a:b] = np.where(update, c.period, per[a:b])
+            lo[a:b] = np.where(update, a, lo[a:b])
+            hi[a:b] = np.where(update, b, hi[a:b])
+        out = S.copy()
+        for t in np.flatnonzero(per > 0):
+            period_frames = per[t] * fps
+            indices = [t] + [j for k in range(-turns, turns + 1) if k
+                             for j in [int(round(t + k * period_frames))] if lo[t] <= j < hi[t]]
+            if len(indices) >= 3:
+                out[:, t] = S[:, indices].mean(axis=1)
+        return out
+
 M = stft_mag(y, NFFT_P, HOP_P)
 S, cand = pitch_salience(M, sr, NFFT_P)
 
@@ -25,13 +56,16 @@ Sh = add_guitar_stem(Sh, S, stem, cand, sr, NFFT_P, HOP_P)
 
 Shigh = Sh[ishigh].max(axis=0); thr_h = np.percentile(Shigh, 55)
 melody = viterbi_pitch(Sh[ishigh], cand[ishigh], thr_h)                    # línea de la voz aguda para buscar ciclos
+cycles_n = {'Voz grave': find_cycles(bass, off, sr, HOP_P, min_turns=2),
+            'Voz aguda': find_cycles(melody, off, sr, HOP_P, min_turns=3)}         # los mismos ciclos que calcula la celda de ciclos
 
 Sn = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, gamma=0.0)   # conserva la octava de la guitarra
 Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
 selector_salience = Sn[ishigh].copy()                                      # entrada pitch-específica para select_melody_track
 selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
-melody_n = viterbi_pitch(Sn[ishigh], cand[ishigh], np.percentile(Snote, 55))  # línea de las notas del tabroll
+melody_n = viterbi_pitch(cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P), cand[ishigh],
+                         np.percentile(Snote, 55))                            # línea de las notas del tabroll, con consenso entre vueltas
 
 # La línea estructural para ciclos conserva la línea acústica fuera del
 # fragmento GP, pero dentro del fragmento alineado favorece la pista de
@@ -68,7 +102,8 @@ try:
             [], candidates=selector_candidates, sr=sr, hop=HOP_P,
             switch_penalty=0.35, preferred_track=preferred)
         active = np.array([track != 'silence' for track in melody_track_path])
-        melody[active] = selected[active]
+        if GUIAR_CON_GP:
+            melody[active] = selected[active]
         print(f"Línea estructural GP: {preferred} | offset {gp_alignment['offset_s']:.2f} s | "
               f"tempo local {gp_alignment['tempo_local_bpm']:.2f} BPM | acierto {gp_alignment['score']:.3f}")
 except (OSError, KeyError, ValueError, ImportError) as exc:

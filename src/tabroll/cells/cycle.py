@@ -1,6 +1,10 @@
 """**`Cycle`**: Patrón de notas que se repite en una voz durante un tramo de la canción.
 """
 
+from dataclasses import dataclass
+from typing import Optional
+import numpy as np
+
 @dataclass
 class Cycle:
     start: float
