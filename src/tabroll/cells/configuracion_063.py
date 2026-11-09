@@ -1,4 +1,4 @@
-"""Guía opcional con el GP. Con `GUIAR_CON_GP = False` (el valor por defecto), el `.gp` oficial no interviene en la línea melódica. Solo se usa después, en `run_song.py`, para evaluar y dibujar. Con `True` se reproduce la versión guiada, que sirve únicamente como comparación.
+"""2) Altura: línea dominante, bajo y dos líneas de voz aguda. `melody` sigue buscando ciclos; `melody_n` conserva la octava de la guitarra para las notas del tabroll.
 """
 
 from tabroll.cells.find_cycles import find_cycles
@@ -32,18 +32,7 @@ if True:
                 out[:, t] = S[:, indices].mean(axis=1)
         return out
 
-    def source_activity(stem, n_frames, sr, hop):
-        """Actividad robusta de la guitarra, usada como evidencia de fuente."""
-        if stem is None:
-            return np.ones(n_frames, dtype=float)
-        values = np.asarray(stem, dtype=float).reshape(-1)
-        needed = n_frames * hop
-        values = np.pad(values, (0, max(needed - len(values), 0)))[:needed]
-        rms = np.sqrt(np.mean(values.reshape(n_frames, hop) ** 2, axis=1))
-        reference = np.percentile(rms, 90) + 1e-9
-        return np.clip(rms / reference, 0.0, 1.0)
-
-    def effect_ambiguity(S):
+    def effect_ambiguity(S, candidates):
         """Marca cuadros con varias alturas fuertes, posibles efectos o capas superpuestas."""
         values = np.maximum(np.asarray(S, dtype=float), 0.0)
         up = np.vstack([np.zeros_like(values[:1]), values[:-1]])
@@ -57,44 +46,11 @@ if True:
             for row in order[:, t]:
                 if local[row, t] < 0.62 * peak:
                     break
-                pitch = cand[row]
+                pitch = candidates[row]
                 if all(abs(pitch - other) >= 1.5 for other in selected):
                     selected.append(pitch)
             result[t] = np.clip((len(selected) - 1) / 3.0, 0.0, 1.0)
         return result
-
-    def source_aware_melody(S, cand, cycles, stem, sr, hop):
-        """Elige la línea con consenso, actividad de guitarra y continuidad de fuente."""
-        consensus = cycle_consensus(S, cycles, sr, hop)
-        activity = source_activity(stem, consensus.shape[1], sr, hop)
-        ambiguity = effect_ambiguity(consensus)
-        weighted = consensus * (0.45 + 0.55 * activity)[None, :]
-        threshold = np.percentile(weighted.max(axis=0), 55)
-        path = viterbi_pitch(weighted, cand, threshold, jump_cost=0.018, switch_cost=1.15)
-        for t in range(1, len(path) - 1):
-            current = path[t]
-            if not np.isfinite(current) or activity[t] < 0.25:
-                continue
-            if ambiguity[t] >= 0.67:
-                continue
-            if abs(current - path[t - 1]) < 11.5 or abs(current - path[t - 1]) > 12.5:
-                continue
-            peers = cand[np.abs(np.abs(cand - current) - 12.0) <= 0.2]
-            if not len(peers):
-                continue
-            peer = float(peers[np.argmax([weighted[np.argmin(np.abs(cand - p)), t] for p in peers])])
-            current_row = int(np.argmin(np.abs(cand - current)))
-            peer_row = int(np.argmin(np.abs(cand - peer)))
-            current_score = weighted[current_row, t]
-            peer_score = weighted[peer_row, t]
-            if peer_score < 0.85 * current_score:
-                continue
-            before, after = path[t - 1], path[t + 1]
-            current_cost = abs(current - before) + abs(after - current)
-            peer_cost = abs(peer - before) + abs(after - peer)
-            if peer_cost + 0.25 < current_cost:
-                path[t] = peer
-        return path, ambiguity
 
     def _cycle_repeat_score(line, cycles, sr, hop):
         """Acuerdo de la línea con la misma fase de vueltas vecinas del ciclo."""
@@ -174,9 +130,10 @@ Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
 selector_salience = Sn[ishigh].copy()                                      # entrada pitch-específica para select_melody_track
 selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
-melody_n_baseline = viterbi_pitch(cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P), cand[ishigh],
-                                  np.percentile(Snote, 55))                    # referencia sin selección adicional
-melody_n, effect_ambiguity_n = source_aware_melody(Sn[ishigh], cand[ishigh], cycles_n, stem, sr, HOP_P)
+consenso_n = cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P)
+melody_n_baseline = viterbi_pitch(consenso_n, cand[ishigh], np.percentile(Snote, 55))
+melody_n = melody_n_baseline                     # la selección extra no mejora de forma estable
+effect_ambiguity_n = effect_ambiguity(consenso_n, cand[ishigh])
 melodic_24edo = melodic_24edo_score(melody_n, cycles_n, sr, HOP_P)
 harmonic_12edo = harmonic_12edo_score(melody_n, bass)
 microtonal_residual = microtonal_residual_score(melody_n)
