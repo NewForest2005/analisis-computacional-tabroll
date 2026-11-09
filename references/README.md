@@ -20,3 +20,14 @@ Los JSON generados desde Guitar Pro (`*_gp.json`) conservan dos conceptos:
 el `ConcertPitch` que Guitar Pro guarda como altura sonora MIDI. Para alinear
 con el audio se debe usar `midi_with_bend` directamente; no hay que restar otra
 octava a ese campo.
+
+## Partituras corregidas para la evaluación
+
+`sarniezz_partitura.py` y `fabienk_partitura.py` son las transcripciones de Andrew Kahler desplegadas nota a nota,
+con las correcciones hechas de oído y comprobadas contra la grabación oficial (9-nov-2026; la lista está en la
+cabecera de cada archivo). Junto con `mata_zyklek_loops.py` son las referencias que usa
+`src/tabroll/evaluation/melodia.py`. Las alturas están ESCRITAS: guitarras y bajos suenan una octava abajo
+(`TRANSPOSE`).
+
+`alineaciones/*.json` guarda, para cada canción, el camino DTW entre la partitura y el audio oficial. Está calculado
+sobre ese audio, así que con otra versión de la grabación hay que recalcularlo. Ver `docs/evaluacion_melodia.md`.

@@ -13,6 +13,7 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     resumen.json       lo mismo en formato estructurado, para comparar corridas
     line_diagnostics.json  entradas y líneas de altura para comparar con el GP
     line_candidates.npz    cinco candidatos de altura por cuadro para probar reglas
+    evaluacion_melodia.json (+ _por_seccion.csv)  medición contra la partitura corregida (Mata Zyklek, Sarniezz, Fabienk)
 
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
@@ -426,6 +427,11 @@ def write_markdown(path: Path, info: dict) -> None:
          + (" (creadas con Demucs)" if info["pistas"]["creadas_con_demucs"] else ""),
          f"- Preset: {info['preset'] or 'ninguno'} | cambios: {', '.join(f'{k}={v}' for k, v in info['cambios'].items()) or 'ninguno'}",
          f"- Tiempo: {info['tiempo_s']} s" + (f" | RAM máxima: {info['ram_max_mb']} MB" if info.get("ram_max_mb") else ""), ""]
+    ev = info.get("evaluacion_melodia")
+    if ev:
+        L += ["## Evaluación contra la partitura corregida", "",
+              f"- Melodía principal: {ev['principal']} (sin octava {ev['principal_sin_octava']}) | nota más aguda: {ev['mas_aguda']} | bajo: {ev['bajo']}",
+              f"- Tiempo medible: {ev['tiempo_medible']} %. Detalle por sección en `evaluacion_melodia_por_seccion.csv`.", ""]
 
     if r:
         L += ["## Resultado", ""]
@@ -578,6 +584,15 @@ def run(args) -> int:
     except Exception as e:                                                           # el resumen nunca debe tumbar la corrida
         info["avisos"].append(f"No se pudo armar el resumen completo: {type(e).__name__}: {e}")
     save_line_diagnostics(ns, run_dir / "line_diagnostics.json")
+    try:                                                                             # medición contra las partituras corregidas (si la canción tiene)
+        if str(ROOT / "src") not in sys.path:
+            sys.path.insert(0, str(ROOT / "src"))
+        from tabroll.evaluation.melodia import evaluate_run, song_key
+        ev = evaluate_run(run_dir, song_key(audio.stem))
+        if ev:
+            info["evaluacion_melodia"] = {k: round(ev[k], 1) for k in ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")}
+    except Exception as e:                                                           # la evaluación nunca debe tumbar la corrida
+        info["avisos"].append(f"No se pudo evaluar contra la partitura: {type(e).__name__}: {e}")
     (run_dir / "resumen.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     write_markdown(run_dir / "resumen.md", info)
 
