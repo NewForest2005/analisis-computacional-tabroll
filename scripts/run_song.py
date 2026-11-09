@@ -12,6 +12,7 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     resumen.md         tempo, tonalidad, compases, ciclos y capas, para leer o pegar en el chat
     resumen.json       lo mismo en formato estructurado, para comparar corridas
     line_diagnostics.json  entradas y líneas de altura para comparar con el GP
+    line_candidates.npz    cinco candidatos de altura por cuadro para probar reglas
 
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
@@ -321,7 +322,7 @@ def aligned_reference_events(ns: dict) -> tuple[str | None, dict | None]:
 
 
 def save_line_diagnostics(ns: dict, path: Path) -> bool:
-    """Guarda las líneas de altura necesarias para comparar con una referencia."""
+    """Guarda líneas, ataques y candidatos necesarios para comparar referencias."""
     try:
         import numpy as np
 
@@ -374,11 +375,13 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
             except Exception as exc:
                 reference = {"method": "alignment-error", "error": f"{type(exc).__name__}: {exc}"}
         data = {
-            "format": "tabroll-line-diagnostics-v1",
+            "format": "tabroll-line-diagnostics-v2",
             "sample_rate": sr,
             "hop": hop,
             "frame_times_s": [round(float(value), 5) for value in np.arange(n_frames) * hop / sr] if sr and hop else [],
             "tempo_bpm": round(float(ns["tempo"]), 5) if "tempo" in ns else None,
+            "off": round(float(ns["off"]), 5) if "off" in ns else None,
+            "micro_step": ns.get("MICRO_STEP"),
             "selector_salience": matrix_values("selector_salience"),
             "Snote": array_values("Snote"),
             "cand_ishigh": array_values("selector_candidates"),
@@ -392,6 +395,12 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
             "gp_alignment": reference,
         }
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        candidates = ns.get("line_candidates")
+        if candidates is not None:
+            extra = {name: np.asarray(value) for name, value in candidates.items()}
+            if "gate_h" in ns:
+                extra["gate_h"] = np.asarray(ns["gate_h"], dtype=bool)
+            np.savez_compressed(path.with_name("line_candidates.npz"), **extra)
         return True
     except Exception as exc:
         print(f"No se pudo guardar line_diagnostics.json: {type(exc).__name__}: {exc}")

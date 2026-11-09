@@ -5,7 +5,8 @@ onsets = detect_onsets(oenv, fps)
 onsets_b = onsets if bass_stem is None else detect_onsets(onset_envelopes(bass_stem, sr)[1], fps, height=0.6, win=0.3)   # ataques graves de la pista bass
 raw_bass = extract_notes(bass, Sbass, onsets_b, sr, HOP_P, off, MICRO_STEP)
 onsets_h = onsets if stem is None else detect_onsets(onset_envelopes(stem, sr)[0], fps, height=0.3, win=0.3)   # ataques de la guitarra sola
-raw_high = extract_notes(np.where(guitar_gate(stem, len(melody_n), HOP_P, sr), melody_n, np.nan), Snote, onsets_h, sr, HOP_P, off, MICRO_STEP)
+gate_h = guitar_gate(stem, len(melody_n), HOP_P, sr)                       # tramos en que la guitarra suena
+raw_high = extract_notes(np.where(gate_h, melody_n, np.nan), Snote, onsets_h, sr, HOP_P, off, MICRO_STEP)
 notes = sorted(place_notes(raw_bass, pos, nb, tonic_midi, GRID) + place_notes(raw_high, pos, nb, tonic_midi, GRID), key=lambda n: n.onset)
 
 song = Song(scale, notes, chords, measures)

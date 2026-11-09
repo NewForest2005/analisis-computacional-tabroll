@@ -118,6 +118,8 @@ def select_melody_track(
     pitch_tolerance: float = 0.75,
     switch_penalty: float = 0.18,
     silence_penalty: float = 0.08,
+    preferred_track: str | None = None,
+    preferred_bonus: float = 0.22,
 ) -> tuple[np.ndarray, list[str], np.ndarray]:
     """Selecciona una línea melódica condicionada por la partitura.
 
@@ -145,6 +147,9 @@ def select_melody_track(
         Pista elegida por frame, o ``"silence"``.
     confidence:
         Confianza 0–1 basada en la separación entre las dos mejores opciones.
+    preferred_track:
+        Pista favorecida mientras tiene una nota activa en la referencia GP.
+        Cuando deja de estar activa, las demás pistas siguen disponibles.
     """
     S = np.asarray(salience, dtype=float)
     cand = np.asarray(candidates, dtype=float).reshape(-1)
@@ -188,6 +193,10 @@ def select_melody_track(
                     emission += 0.10 * bass_activity[frame]
                 elif "guitar" in state.track.lower():
                     emission += 0.10 * guitar_activity[frame]
+                if preferred_track and state.track == preferred_track:
+                    # The reference track anchors the structural line only
+                    # while it is active; it is not a global hard constraint.
+                    emission += preferred_bonus
                 source_evidence = bass_activity[frame] if "bass" in state.track.lower() else guitar_activity[frame]
                 if pitch_evidence <= 1e-9 and source_evidence <= 1e-9:
                     emission -= 0.20
