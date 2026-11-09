@@ -28,7 +28,9 @@ melody = viterbi_pitch(Sh[ishigh], cand[ishigh], thr_h)                    # lí
 
 Sn = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, gamma=0.0)   # conserva la octava de la guitarra
 Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
-Snote = Sn[ishigh].max(axis=0)
+selector_salience = Sn[ishigh].copy()                                      # entrada pitch-específica para select_melody_track
+selector_candidates = cand[ishigh].copy()
+Snote = selector_salience.max(axis=0)
 melody_n = viterbi_pitch(Sn[ishigh], cand[ishigh], np.percentile(Snote, 55))  # línea de las notas del tabroll
 
 del Sn

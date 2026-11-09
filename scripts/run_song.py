@@ -11,6 +11,7 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     salida.txt         todo lo que imprime el notebook, los avisos y el tiempo de cada celda
     resumen.md         tempo, tonalidad, compases, ciclos y capas, para leer o pegar en el chat
     resumen.json       lo mismo en formato estructurado, para comparar corridas
+    line_diagnostics.json  entradas y líneas de altura para comparar con el GP
 
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
@@ -277,6 +278,48 @@ def summary(ns: dict) -> dict:
     return plain(out)
 
 
+def aligned_reference_events(ns: dict) -> tuple[str | None, dict | None]:
+    """Carga la referencia GP y la lleva a segundos usando el tempo de la corrida."""
+    audio_name = str(ns.get("audio_path", "")).casefold()
+    reference_name = next((name for key, name in (("sarniezz", "sarniezz_gp.json"),
+                                                   ("mata", "mata_zyklek_gp.json"),
+                                                   ("fabienk", "fabienk_gp.json"))
+                          if key in audio_name), None)
+    if reference_name is None:
+        return None, None
+    reference_path = ROOT / "references" / reference_name
+    if not reference_path.is_file() or "tempo" not in ns:
+        return reference_name, None
+
+    reference = json.loads(reference_path.read_text(encoding="utf-8"))
+    seconds_per_beat = 60.0 / float(ns["tempo"])
+    events = []
+    for track in reference.get("tracks", []):
+        if "drum" in track.get("name", "").casefold():
+            continue
+        for event in track.get("events", []):
+            pitch = event.get("pitch", {})
+            start = float(event["onset_beats"]) * seconds_per_beat
+            end = start + float(event["duration_beats"]) * seconds_per_beat
+            events.append({
+                "track": track["name"],
+                "master_bar": event["master_bar"],
+                "onset_beats": event["onset_beats"],
+                "duration_beats": event["duration_beats"],
+                "start_s": round(start, 5),
+                "end_s": round(end, 5),
+                "midi_written": pitch.get("midi_with_bend"),
+                "midi_audio": round(float(pitch["midi_with_bend"]), 5),
+            })
+    return reference_name, {
+        "method": "tempo-only",
+        "offset_s": 0.0,
+        "tempo_bpm": round(float(ns["tempo"]), 5),
+        "source": reference_name,
+        "events": events,
+    }
+
+
 def save_line_diagnostics(ns: dict, path: Path) -> bool:
     """Guarda las líneas de altura necesarias para comparar con una referencia."""
     try:
@@ -298,15 +341,55 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
                     result.append({"start_s": round(t0, 5), "end_s": round(t1, 5), "midi": round(pitch, 5)})
             return result
 
+        def matrix_values(name):
+            if name not in ns:
+                return None
+            matrix = np.asarray(ns[name], dtype=float)
+            if matrix.ndim != 2:
+                return None
+            return [[None if not np.isfinite(value) else round(float(value), 5) for value in row] for row in matrix]
+
+        sr = int(ns.get("sr", 0))
+        hop = int(ns.get("HOP_P", 0))
+        selector = np.asarray(ns.get("selector_salience", []), dtype=float)
+        n_frames = selector.shape[1] if selector.ndim == 2 else len(ns.get("melody_n", []))
+        reference_name, reference = aligned_reference_events(ns)
+        if reference_name and "tempo" in ns and selector.ndim == 2 and "selector_candidates" in ns:
+            try:
+                from tabroll.reference.align_gp_audio import align_gp_audio
+
+                reference_data = json.loads((ROOT / "references" / reference_name).read_text(encoding="utf-8"))
+                reference = align_gp_audio(
+                    reference_data,
+                    selector,
+                    np.asarray(ns["selector_candidates"], dtype=float),
+                    ns.get("onsets_h", []),
+                    ns.get("onsets_b", []),
+                    float(ns["tempo"]),
+                    melody=np.asarray(ns.get("melody_n", []), dtype=float),
+                    sr=sr,
+                    hop=hop,
+                    audio_duration_s=len(ns.get("y", [])) / sr if sr else None,
+                )
+            except Exception as exc:
+                reference = {"method": "alignment-error", "error": f"{type(exc).__name__}: {exc}"}
         data = {
             "format": "tabroll-line-diagnostics-v1",
-            "sample_rate": int(ns.get("sr", 0)),
-            "hop": int(ns.get("HOP_P", 0)),
+            "sample_rate": sr,
+            "hop": hop,
+            "frame_times_s": [round(float(value), 5) for value in np.arange(n_frames) * hop / sr] if sr and hop else [],
             "tempo_bpm": round(float(ns["tempo"]), 5) if "tempo" in ns else None,
+            "selector_salience": matrix_values("selector_salience"),
+            "Snote": array_values("Snote"),
+            "cand_ishigh": array_values("selector_candidates"),
             "melody": array_values("melody"),
             "melody_n": array_values("melody_n"),
             "raw_high": events("raw_high"),
             "raw_bass": events("raw_bass"),
+            "onsets_h_s": [round(float(value), 5) for value in ns.get("onsets_h", [])],
+            "onsets_b_s": [round(float(value), 5) for value in ns.get("onsets_b", [])],
+            "gp_reference": reference_name,
+            "gp_alignment": reference,
         }
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         return True

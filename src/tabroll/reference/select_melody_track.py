@@ -63,11 +63,9 @@ def _events_by_track(score_events: Any, tempo_bpm: float | None) -> dict[str, li
             if start is None or pitch is None:
                 continue
             start, pitch = float(start), float(pitch)
-            # GP guitar/bass events are written one octave above their audio.
+            # Events from score.gpif already contain ConcertPitch MIDI.
             if _event_value(event, "audio_pitch", default=None) is not None:
                 pitch = float(_event_value(event, "audio_pitch"))
-            elif not bool(_event_value(event, "is_audio_pitch", default=False)):
-                pitch -= 12.0
             end = float(end) if end is not None else start + max(float(duration or 0.0), 0.05)
             normalized.append(_State(str(name), pitch, start, max(end, start + 0.01)))
         output[str(name)] = sorted(normalized, key=lambda item: (item.start, item.end))

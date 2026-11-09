@@ -14,3 +14,9 @@ La referencia conserva las excepciones conocidas del audio oficial: la figura r�
 Sarniezz: la última nota del primer compás del riff es Re#+. El archivo
 MusicXML la escribe como Mi medio bemol, su equivalente enarmónico en cuartos
 de tono.
+
+Los JSON generados desde Guitar Pro (`*_gp.json`) conservan dos conceptos:
+`pitch.name` es el nombre visual de la partitura y `pitch.midi_with_bend` es
+el `ConcertPitch` que Guitar Pro guarda como altura sonora MIDI. Para alinear
+con el audio se debe usar `midi_with_bend` directamente; no hay que restar otra
+octava a ese campo.

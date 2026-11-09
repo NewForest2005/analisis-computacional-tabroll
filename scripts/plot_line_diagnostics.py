@@ -24,8 +24,8 @@ REFERENCE_TRACKS = {
 
 
 def _audio_pitch(event: dict) -> float:
-    """Las guitarras y bajos del GP suenan una octava debajo de lo escrito."""
-    return float(event["pitch"]["midi_with_bend"]) - 12.0
+    """Devuelve la altura sonora MIDI almacenada por GPIF como ConcertPitch."""
+    return float(event["pitch"]["midi_with_bend"])
 
 
 def _draw_events(ax, events, seconds_per_beat, color, label, alpha=0.65, linewidth=4):
