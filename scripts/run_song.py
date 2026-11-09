@@ -277,6 +277,44 @@ def summary(ns: dict) -> dict:
     return plain(out)
 
 
+def save_line_diagnostics(ns: dict, path: Path) -> bool:
+    """Guarda las líneas de altura necesarias para comparar con una referencia."""
+    try:
+        import numpy as np
+
+        def array_values(name):
+            if name not in ns:
+                return None
+            values = np.asarray(ns[name], dtype=float).reshape(-1)
+            return [None if not np.isfinite(value) else round(float(value), 5) for value in values]
+
+        def events(name):
+            result = []
+            for event in ns.get(name, []) or []:
+                if len(event) < 3:
+                    continue
+                t0, t1, pitch = (float(value) for value in event[:3])
+                if np.isfinite(t0) and np.isfinite(t1) and np.isfinite(pitch):
+                    result.append({"start_s": round(t0, 5), "end_s": round(t1, 5), "midi": round(pitch, 5)})
+            return result
+
+        data = {
+            "format": "tabroll-line-diagnostics-v1",
+            "sample_rate": int(ns.get("sr", 0)),
+            "hop": int(ns.get("HOP_P", 0)),
+            "tempo_bpm": round(float(ns["tempo"]), 5) if "tempo" in ns else None,
+            "melody": array_values("melody"),
+            "melody_n": array_values("melody_n"),
+            "raw_high": events("raw_high"),
+            "raw_bass": events("raw_bass"),
+        }
+        path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        return True
+    except Exception as exc:
+        print(f"No se pudo guardar line_diagnostics.json: {type(exc).__name__}: {exc}")
+        return False
+
+
 def write_markdown(path: Path, info: dict) -> None:
     r = info.get("resultado", {})
     L = [f"# {info['cancion']}", "",
@@ -437,6 +475,7 @@ def run(args) -> int:
         info["resultado"] = summary(ns)
     except Exception as e:                                                           # el resumen nunca debe tumbar la corrida
         info["avisos"].append(f"No se pudo armar el resumen completo: {type(e).__name__}: {e}")
+    save_line_diagnostics(ns, run_dir / "line_diagnostics.json")
     (run_dir / "resumen.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     write_markdown(run_dir / "resumen.md", info)
 
