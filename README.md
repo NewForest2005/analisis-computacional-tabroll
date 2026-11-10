@@ -51,9 +51,12 @@ La extracción conserva el orden de ejecución del notebook. Para reproducir el 
 ## Correr una canción desde la terminal
 
 ```bash
-python scripts/run_song.py Fabienk
-python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
+.venv/bin/python scripts/run_song.py Fabienk
+.venv/bin/python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
 ```
+
+Si se ejecuta con `python3` global y existe `.venv`, el script se reinicia automáticamente usando el entorno del
+proyecto. También se puede activar el entorno antes: `source .venv/bin/activate` y después usar `python`.
 
 Se puede indicar una ruta o una parte del nombre dentro de `Angine de Poitrine Audios/`. Corre todas las celdas del notebook sobre esa canción, sin abrir Jupyter, y guarda la corrida en `outputs/<fecha>_<hora>_<canción>/`:
 

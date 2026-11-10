@@ -132,7 +132,10 @@ selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
 consenso_n = cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P)
 melody_n_baseline = viterbi_pitch(consenso_n, cand[ishigh], np.percentile(Snote, 55))
-melody_n = melody_n_baseline                     # la selección extra no mejora de forma estable
+registro_n = (float(np.nanmedian(melody_n_baseline)) if np.isfinite(melody_n_baseline).any()
+              else float(np.median(cand[ishigh])))                         # registro típico de la melodía en esta canción
+atraccion_n = 0.7 + 0.3 * np.exp(-0.5 * ((cand[ishigh] - registro_n) / 12.0) ** 2)   # atracción suave a ese registro, no a lo más agudo
+melody_n = viterbi_pitch(consenso_n * atraccion_n[:, None], cand[ishigh], np.percentile(Snote, 55))
 effect_ambiguity_n = effect_ambiguity(consenso_n, cand[ishigh])
 melodic_24edo = melodic_24edo_score(melody_n, cycles_n, sr, HOP_P)
 harmonic_12edo = harmonic_12edo_score(melody_n, bass)

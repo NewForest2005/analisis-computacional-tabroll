@@ -14,6 +14,8 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     line_diagnostics.json  entradas y líneas de altura para comparar con el GP
     line_candidates.npz    cinco candidatos de altura por cuadro para probar reglas
     evaluacion_melodia.json (+ _por_seccion.csv)  medición contra la partitura corregida (Mata Zyklek, Sarniezz, Fabienk)
+    armonia.json       armonía por compás en 24-EDO (fundamental, calidad, grado, bajo, confianza) y su resumen
+    evaluacion_armonia.json (+ _por_compas.csv)  armonía medida contra la partitura corregida
 
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
@@ -43,6 +45,26 @@ OUTPUTS = ROOT / "outputs"
 AUDIO_EXT = {".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aiff", ".aif"}
 AUDIO_FOLDER = "Angine de Poitrine Audios"
 MARKER = ".corrida"
+
+
+def use_project_python() -> None:
+    """Reinicia la corrida con el entorno del proyecto cuando existe.
+
+    Permite que `python3 scripts/run_song.py ...` funcione aunque `python3`
+    sea el Python global y las dependencias estén instaladas en `.venv`.
+    """
+    project_python = ROOT / ".venv" / "bin" / "python"
+    if not project_python.is_file() or Path(sys.executable).resolve() == project_python.resolve():
+        return
+    try:
+        import importlib.util
+        has_matplotlib = importlib.util.find_spec("matplotlib") is not None
+    except (ImportError, ModuleNotFoundError):
+        has_matplotlib = False
+    compatible = sys.version_info[:2] in {(3, 10), (3, 11), (3, 12)} and has_matplotlib
+    if not compatible:
+        print(f"Usando el entorno del proyecto: {project_python}")
+        os.execv(str(project_python), [str(project_python), str(Path(__file__).resolve()), *sys.argv[1:]])
 
 
 # ---------------------------------------------------------------- notebook
@@ -418,6 +440,16 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
         return False
 
 
+def save_harmony(ns: dict, path: Path) -> bool:
+    """Guarda la armonía por compás (24-EDO) y su resumen, si el cuaderno la calculó."""
+    if "armonia" not in ns:
+        return False
+    data = {"formato": "tabroll-armonia-24edo-v1", "tonica_pc24": plain(ns.get("tonic_pc24")),
+            "resumen": plain(ns.get("armonia_resumen")), "compases": plain(ns["armonia"])}
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    return True
+
+
 def write_markdown(path: Path, info: dict) -> None:
     r = info.get("resultado", {})
     L = [f"# {info['cancion']}", "",
@@ -432,6 +464,18 @@ def write_markdown(path: Path, info: dict) -> None:
         L += ["## Evaluación contra la partitura corregida", "",
               f"- Melodía principal: {ev['principal']} (sin octava {ev['principal_sin_octava']}) | nota más aguda: {ev['mas_aguda']} | bajo: {ev['bajo']}",
               f"- Tiempo medible: {ev['tiempo_medible']} %. Detalle por sección en `evaluacion_melodia_por_seccion.csv`.", ""]
+    ar = info.get("armonia")
+    if ar:
+        L += ["## Armonía (24-EDO, por compás)", "",
+              f"- {ar['compases']} compases; confiable el {ar['tiempo_confiable']} % del tiempo",
+              "- Fundamentales más usadas (por grado, ponderadas por confianza): "
+              + ", ".join(f"{g} {v} %" for g, v in ar["fundamentales_principales"].items()), ""]
+    ea = info.get("evaluacion_armonia")
+    if ea:
+        L += ["## Armonía contra la partitura corregida", "",
+              f"- Fundamental: {ea['fundamental']} % | con calidad: {ea['fundamental_y_calidad']} % | bajo: {ea['bajo']} %",
+              f"- Compases confiables: {ea['tiempo_confiable']} % del tiempo; ahí la fundamental acierta {ea['fundamental_confiables']} % "
+              f"(en el resto, {ea['fundamental_resto']} %). Detalle en `evaluacion_armonia_por_compas.csv`.", ""]
 
     if r:
         L += ["## Resultado", ""]
@@ -584,6 +628,12 @@ def run(args) -> int:
     except Exception as e:                                                           # el resumen nunca debe tumbar la corrida
         info["avisos"].append(f"No se pudo armar el resumen completo: {type(e).__name__}: {e}")
     save_line_diagnostics(ns, run_dir / "line_diagnostics.json")
+    has_harmony = save_harmony(ns, run_dir / "armonia.json")                         # para cualquier canción, tenga partitura o no
+    if has_harmony and ns.get("armonia_resumen"):
+        res = ns["armonia_resumen"]
+        top = sorted(res["fundamentales_por_grado"].items(), key=lambda kv: -kv[1])[:5]
+        info["armonia"] = {"tiempo_confiable": res["tiempo_confiable"], "compases": res["compases"],
+                           "fundamentales_principales": {g: round(100 * v, 1) for g, v in top if v > 0}}
     try:                                                                             # medición contra las partituras corregidas (si la canción tiene)
         if str(ROOT / "src") not in sys.path:
             sys.path.insert(0, str(ROOT / "src"))
@@ -591,6 +641,12 @@ def run(args) -> int:
         ev = evaluate_run(run_dir, song_key(audio.stem))
         if ev:
             info["evaluacion_melodia"] = {k: round(ev[k], 1) for k in ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")}
+        if has_harmony:
+            from tabroll.evaluation.armonia import evaluate_run as evaluate_harmony
+            ea = evaluate_harmony(run_dir, song_key(audio.stem))
+            if ea and ea.get("compases_medidos"):
+                info["evaluacion_armonia"] = {k: ea[k] for k in ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiable",
+                                                                  "fundamental_confiables", "fundamental_resto")}
     except Exception as e:                                                           # la evaluación nunca debe tumbar la corrida
         info["avisos"].append(f"No se pudo evaluar contra la partitura: {type(e).__name__}: {e}")
     (run_dir / "resumen.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -606,6 +662,7 @@ def run(args) -> int:
 
 
 def main(argv=None) -> int:
+    use_project_python()
     for stream in (sys.stdout, sys.stderr):                                          # en una consola de Windows, ♯ o ♭ no deben romper la corrida
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(errors="replace")
