@@ -54,7 +54,46 @@ que saldría de las notas verdaderas.
 - **`tiempo_confiable`**, **`fundamental_confiables`** y **`fundamental_resto`**: si la confianza sirve, la fundamental
   acierta mucho más en los compases confiables que en el resto.
 
+## Paso 2: centro, modo y capas del círculo
+
+- **Centro (`center24_by_layer`).** Usa la medida de tres partes de Piston para la música sin dominante. En cada capa
+  (bajo y voz aguda) suma, con el mismo peso:
+  - **Tiempo:** la nota que más tiempo suena.
+  - **Bordes de vuelta:** la que más aparece al principio y al final de cada vuelta.
+  - **Regresos:** la que más vuelve después de alejarse.
+
+  El centro de la canción combina las dos capas, con el bajo al doble de peso. `margen` (0 a 1) dice cuánto le gana a
+  la segunda candidata: por debajo de 0.1, el centro es dudoso.
+- **Qué centro se usa.** Por defecto (`CENTRO = 'cuaderno'`), la tónica de la celda de tonalidad. Coincide con la
+  tónica de oído del autor en las cinco canciones (Mata Zyklek Sol, Sarniezz Mi, Fabienk Mi, Uztp Mi, Yor Zarad Sol).
+  La medida de 24-EDO por capa queda como dato y como centro de cada capa. `CENTRO = 'auto'` usa esa medida, y una
+  nota (`'E'`, `'D+'`) fija el centro a mano. Los grados se cuentan desde el centro elegido, y `run_song.py` compara
+  ese centro con la tónica de oído.
+- **Modo (`mode24`).** Los grados 2, 3, 6 y 7, cada uno en su versión menor, neutra o mayor (por ejemplo «♭2+, 3,
+  ♭6+, ♭7»). No se fuerza un nombre de 12 tonos.
+- **Capas (`harmony_layers`).** Se calculan con los compases confiables.
+  - Sin depender del centro: `movimientos`, `cambios_por_compas` y `calidades`. Los movimientos son fuerte (4.ª/5.ª),
+    débil (3.ª/6.ª), color (2.ª, 7.ª, tritono), deslizamiento (¼ de tono) e intermedio (intervalos neutros, incluida
+    la 3.ª neutra).
+  - Desde el centro: `transiciones` entre grados.
+- **Ciclos.** `armonia.json` guarda en `resumen.ciclos` los ciclos que usó la armonía, para que la evaluación mida
+  con los mismos.
+- **`chord24`.** Los empates exactos (por ejemplo, Re sus2 y La sus4 tienen las mismas notas) se resuelven igual en
+  cualquier máquina.
+
+La evaluación agrega:
+- `centro_partitura`: la misma medida de centro, aplicada al bajo y a la melodía principal de la partitura.
+- Movimientos y calidades del cuaderno frente a los de la partitura, con su distancia de Jensen-Shannon (0 = iguales).
+
+## Paso 3: el círculo armónico
+
+Las celdas del paso 3 calculan el círculo de la canción y dibujan `circulo_armonico.png` en `harmony_outputs`.
+`run_song.py` guarda además `circulo.json`. El círculo tiene 24 posiciones contadas desde la tónica, perfiles del
+bajo, voz aguda y fundamentales, fundamentales por ciclo, transiciones, movimientos, calidades y ritmo armónico.
+`scripts/comparar_circulos.py` calcula distancias entre círculos de 0 a 1 y valida audio frente a partitura, mitades
+de una canción y canciones cercanas.
+
 ## Lo que todavía no hace
 
-Lo que sigue pertenece a los pasos siguientes de la estrategia: la tónica en 24-EDO (hoy se toma la del cuaderno, de 12
-clases), las séptimas, las notas extrañas, las cadencias y el círculo.
+Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su
+  cadencia más fuerte, el tipo de cadencia, las séptimas, y la figura y las distancias del círculo.

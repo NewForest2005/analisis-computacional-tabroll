@@ -19,10 +19,11 @@ def chord24(Pb, Pm, wm=0.6, lam=0.5, beta=0.5, gamma=0.02, tau=0.05):
         for r in range(24):
             fit = C[[(r + i) % 24 for i in iv]].sum()
             S[r, j] = (1 + lam) * fit - lam + beta * b[r] - gamma * (len(iv) - 2)
+    S = np.round(S, 9)                                                         # empates exactos iguales en cualquier máquina
     best = S.max(axis=1)
     r0 = int(best.argmax())
     p = np.exp((best - best.max()) / tau)
     p = p / p.sum()
     return dict(fundamental=r0, calidad=list(CHORDS24)[int(S[r0].argmax())], p_fundamental=float(p[r0]),
-                alternativa=int(np.argsort(-best)[1]), bajo=int(b.argmax()) if tb > 0 else None,
+                alternativa=int(np.argsort(-best)[1]), bajo=int(np.round(b, 9).argmax()) if tb > 0 else None,
                 claridad_bajo=float(b.max()) if tb > 0 else 0.0)

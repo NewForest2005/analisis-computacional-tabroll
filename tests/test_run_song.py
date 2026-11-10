@@ -47,3 +47,30 @@ def test_notebook_is_not_modified():
     before = (ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb").read_bytes()
     run_song.apply_changes(run_song.load_code_cells(), "fabienk", {"GRID": "0.5"})
     assert (ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb").read_bytes() == before
+
+
+def test_tee_ignores_a_closed_log(tmp_path):
+    import io
+    log = open(tmp_path / "salida.txt", "w", encoding="utf-8")
+    console = io.StringIO()
+    tee = run_song.Tee(console, log)
+    tee.write("antes\n")
+    log.close()
+    tee.write("después\n")
+    tee.flush()
+    assert console.getvalue() == "antes\ndespués\n"
+    assert (tmp_path / "salida.txt").read_text(encoding="utf-8") == "antes\n"
+
+
+def test_failed_evaluation_keeps_the_other_and_saves_the_error(tmp_path, monkeypatch):
+    import tabroll.evaluation.armonia as A
+    import tabroll.evaluation.melodia as M
+
+    def boom(*a, **k):
+        raise ValueError("I/O operation on closed file.")
+    monkeypatch.setattr(A, "evaluate_run", boom)
+    monkeypatch.setattr(M, "evaluate_run", lambda run, song: {k: 50.0 for k in run_song.MELODY_KEYS})
+    found, avisos = run_song.evaluate_against_score(tmp_path, "Fabienk", has_harmony=True)
+    assert found == {"evaluacion_melodia": {k: 50.0 for k in run_song.MELODY_KEYS}}
+    assert any("la armonía" in a and "error_evaluacion.txt" in a for a in avisos)
+    assert "ValueError" in (tmp_path / "error_evaluacion.txt").read_text(encoding="utf-8")

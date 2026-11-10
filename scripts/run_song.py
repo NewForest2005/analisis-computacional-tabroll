@@ -16,6 +16,8 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     evaluacion_melodia.json (+ _por_seccion.csv)  medición contra la partitura corregida (Mata Zyklek, Sarniezz, Fabienk)
     armonia.json       armonía por compás en 24-EDO (fundamental, calidad, grado, bajo, confianza) y su resumen
     evaluacion_armonia.json (+ _por_compas.csv)  armonía medida contra la partitura corregida
+    circulo.json       círculo armónico en 24-EDO (capas para comparar estilos); la figura va en harmony_outputs
+    error_evaluacion.txt   solo si la evaluación contra la partitura falló: el error completo
 
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
@@ -222,17 +224,21 @@ def git_version() -> str:
 
 
 class Tee:
+    """Copia lo que imprime el cuaderno a la consola y a salida.txt. Si alguna librería se quedó con esta salida y escribe
+    después de cerrar salida.txt, el texto va solo a la consola en vez de tumbar lo que se esté haciendo."""
     def __init__(self, *streams):
         self.streams = streams
 
     def write(self, text):
         for s in self.streams:
-            s.write(text)
+            if not getattr(s, "closed", False):
+                s.write(text)
         return len(text)
 
     def flush(self):
         for s in self.streams:
-            s.flush()
+            if not getattr(s, "closed", False):
+                s.flush()
 
 
 # ---------------------------------------------------------------- resumen
@@ -450,6 +456,44 @@ def save_harmony(ns: dict, path: Path) -> bool:
     return True
 
 
+MELODY_KEYS = ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")
+HARMONY_KEYS = ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiable", "fundamental_confiables",
+                "fundamental_resto", "centro_partitura", "distancia_movimientos", "distancia_calidades")
+
+
+def evaluate_against_score(run_dir: Path, name: str, has_harmony: bool) -> tuple[dict, list[str]]:
+    """Mide melodía y armonía por separado; guarda errores completos sin tumbar el resumen."""
+    if str(ROOT / "src") not in sys.path:
+        sys.path.insert(0, str(ROOT / "src"))
+    found, avisos, errors = {}, [], []
+
+    def melody():
+        from tabroll.evaluation.melodia import evaluate_run, song_key
+        ev = evaluate_run(run_dir, song_key(name))
+        return {k: round(ev[k], 1) for k in MELODY_KEYS} if ev else None
+
+    def harmony():
+        from tabroll.evaluation.armonia import evaluate_run
+        from tabroll.evaluation.melodia import song_key
+        ea = evaluate_run(run_dir, song_key(name)) if has_harmony else None
+        return {k: ea.get(k) for k in HARMONY_KEYS} if ea and ea.get("compases_medidos") else None
+
+    for key, what, step in (("evaluacion_melodia", "la melodía", melody), ("evaluacion_armonia", "la armonía", harmony)):
+        try:
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("default")
+                r = step()
+            avisos += sorted({f"{w.category.__name__} al evaluar {what}: {w.message}" for w in caught})
+            if r:
+                found[key] = r
+        except Exception as e:
+            errors.append(f"# Evaluación de {what}\n\n{traceback.format_exc()}")
+            avisos.append(f"No se pudo evaluar {what} contra la partitura: {type(e).__name__}: {e} (detalle en error_evaluacion.txt)")
+    if errors:
+        (run_dir / "error_evaluacion.txt").write_text("\n".join(errors), encoding="utf-8")
+    return found, avisos
+
+
 def write_markdown(path: Path, info: dict) -> None:
     r = info.get("resultado", {})
     L = [f"# {info['cancion']}", "",
@@ -468,6 +512,13 @@ def write_markdown(path: Path, info: dict) -> None:
     if ar:
         L += ["## Armonía (24-EDO, por compás)", "",
               f"- {ar['compases']} compases; confiable el {ar['tiempo_confiable']} % del tiempo",
+              f"- Centro: {ar.get('centro')} (bajo {ar.get('centro_bajo')}, voz aguda {ar.get('centro_aguda')}; tónica de 12 clases "
+              f"{ar.get('tonica_12_clases')}) | modo: {ar.get('modo')}"
+              + (f" | tónica de oído: {ar['tonica_de_oido']} ({'coincide' if ar.get('centro_coincide_con_el_oido') else 'NO coincide'})"
+                 if ar.get("tonica_de_oido") else ""),
+              "- Movimientos de la fundamental: " + ", ".join(f"{k} {round(100 * v)} %" for k, v in (ar.get("movimientos") or {}).items())
+              + f" | cambios por compás: {ar.get('cambios_por_compas')}",
+              "- Círculo armónico: `circulo.json` y la figura `circulo_armonico.png` en `harmony_outputs`",
               "- Fundamentales más usadas (por grado, ponderadas por confianza): "
               + ", ".join(f"{g} {v} %" for g, v in ar["fundamentales_principales"].items()), ""]
     ea = info.get("evaluacion_armonia")
@@ -475,7 +526,9 @@ def write_markdown(path: Path, info: dict) -> None:
         L += ["## Armonía contra la partitura corregida", "",
               f"- Fundamental: {ea['fundamental']} % | con calidad: {ea['fundamental_y_calidad']} % | bajo: {ea['bajo']} %",
               f"- Compases confiables: {ea['tiempo_confiable']} % del tiempo; ahí la fundamental acierta {ea['fundamental_confiables']} % "
-              f"(en el resto, {ea['fundamental_resto']} %). Detalle en `evaluacion_armonia_por_compas.csv`.", ""]
+              f"(en el resto, {ea['fundamental_resto']} %). Detalle en `evaluacion_armonia_por_compas.csv`.",
+              f"- Centro de la partitura (misma medida): {ea.get('centro_partitura')} | distancia de movimientos: "
+              f"{ea.get('distancia_movimientos')} | de calidades: {ea.get('distancia_calidades')} (0 = iguales)", ""]
 
     if r:
         L += ["## Resultado", ""]
@@ -562,6 +615,7 @@ def run(args) -> int:
     log = open(run_dir / "salida.txt", "w", encoding="utf-8")
     start = time.time()
     previous = Path.cwd()
+    std_streams = (sys.stdout, sys.stderr)
 
     with warnings.catch_warnings(record=True) as caught, contextlib.redirect_stdout(Tee(sys.stdout, log)):
         warnings.simplefilter("default")
@@ -585,6 +639,7 @@ def run(args) -> int:
                     times[i] = round(time.time() - t, 1)
         finally:
             os.chdir(previous)
+    sys.stdout, sys.stderr = std_streams
 
     total = round(time.time() - start, 1)
     avisos = sorted({f"{w.category.__name__} ({Path(w.filename).name.strip('<>')}, línea {w.lineno}): {w.message}" for w in caught})
@@ -629,26 +684,29 @@ def run(args) -> int:
         info["avisos"].append(f"No se pudo armar el resumen completo: {type(e).__name__}: {e}")
     save_line_diagnostics(ns, run_dir / "line_diagnostics.json")
     has_harmony = save_harmony(ns, run_dir / "armonia.json")                         # para cualquier canción, tenga partitura o no
+    if ns.get("circulo"):
+        (run_dir / "circulo.json").write_text(json.dumps(plain(ns["circulo"]), ensure_ascii=False, indent=1), encoding="utf-8")
     if has_harmony and ns.get("armonia_resumen"):
         res = ns["armonia_resumen"]
         top = sorted(res["fundamentales_por_grado"].items(), key=lambda kv: -kv[1])[:5]
         info["armonia"] = {"tiempo_confiable": res["tiempo_confiable"], "compases": res["compases"],
-                           "fundamentales_principales": {g: round(100 * v, 1) for g, v in top if v > 0}}
-    try:                                                                             # medición contra las partituras corregidas (si la canción tiene)
-        if str(ROOT / "src") not in sys.path:
-            sys.path.insert(0, str(ROOT / "src"))
-        from tabroll.evaluation.melodia import evaluate_run, song_key
-        ev = evaluate_run(run_dir, song_key(audio.stem))
-        if ev:
-            info["evaluacion_melodia"] = {k: round(ev[k], 1) for k in ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")}
-        if has_harmony:
-            from tabroll.evaluation.armonia import evaluate_run as evaluate_harmony
-            ea = evaluate_harmony(run_dir, song_key(audio.stem))
-            if ea and ea.get("compases_medidos"):
-                info["evaluacion_armonia"] = {k: ea[k] for k in ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiable",
-                                                                  "fundamental_confiables", "fundamental_resto")}
-    except Exception as e:                                                           # la evaluación nunca debe tumbar la corrida
-        info["avisos"].append(f"No se pudo evaluar contra la partitura: {type(e).__name__}: {e}")
+                           "fundamentales_principales": {g: round(100 * v, 1) for g, v in top if v > 0},
+                           "centro": res.get("centro"), "centro_bajo": res.get("centro_bajo"), "centro_aguda": res.get("centro_aguda"),
+                           "tonica_12_clases": res.get("tonica_cuaderno"), "modo": (res.get("modo") or {}).get("nombre"),
+                           "movimientos": (res.get("capas") or {}).get("movimientos"),
+                           "cambios_por_compas": (res.get("capas") or {}).get("cambios_por_compas")}
+        try:
+            if str(ROOT / "src") not in sys.path:
+                sys.path.insert(0, str(ROOT / "src"))
+            from tabroll.evaluation.armonia import ear_tonic
+            oido = ear_tonic(audio.stem)
+            if oido:
+                info["armonia"].update(tonica_de_oido=oido, centro_coincide_con_el_oido=(oido == res.get("centro")))
+        except Exception as e:
+            info["avisos"].append(f"No se pudo comparar el centro con la tónica de oído: {type(e).__name__}: {e}")
+    found, more = evaluate_against_score(run_dir, audio.stem, has_harmony)
+    info.update(found)
+    info["avisos"] += more
     (run_dir / "resumen.json").write_text(json.dumps(info, ensure_ascii=False, indent=2), encoding="utf-8")
     write_markdown(run_dir / "resumen.md", info)
 
