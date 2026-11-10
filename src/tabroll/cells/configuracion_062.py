@@ -1,20 +1,27 @@
-"""1)  Pulso real de la grabación: los compases se miden en pulsos reales, no en una rejilla fija desde t=0.
+"""Ajustes de inicializacion:
 """
 
-oenv, olow = onset_envelopes(y, sr); fps = sr / 256
+KEY_OVERRIDE = None
+FINE_ROWS = True
+TEMPO_OVERRIDE = None
+BAR_LENGTHS = (2, 3, 4, 5, 6, 7, 8)
+FORCE_BAR_BEATS = None
+BEAT_DIV = 1
+GRID = 0.25
+MICRO_STEP = 50
+NFFT_P, HOP_P = 4096, 512
 
-tempo = TEMPO_OVERRIDE or estimate_tempo(oenv, fps)
-beat_times = track_beats(oenv, fps, tempo)
+# Para Fabienk (7/8 y 2/4):
+# BAR_LENGTHS, BEAT_DIV, GRID = (7, 5, 4, 2), 2, 0.5
 
-if BEAT_DIV > 1:                                                                             # pulso más fino que el seguido (en 7/8, corcheas)
-    beat_times = np.interp(np.arange((len(beat_times) - 1) * BEAT_DIV + 1) / BEAT_DIV, np.arange(len(beat_times)), beat_times)
+# Para Mata Zyklek (5/8 y 2/4, provisional hasta ver la partitura), quita el # de la línea siguiente:
+# BAR_LENGTHS, BEAT_DIV, GRID = (5, 4, 2), 2, 0.5
 
-if len(beat_times) < 8:                                                                      # audio muy corto: grid de tempo constante
-    beat_times = np.arange(0.0, len(y) / sr, 60.0 / tempo)
 
-if len(beat_times) < 4:
-    raise ValueError('El audio es demasiado corto para analizarlo.')
+TARGET_SR = 22050
 
-spb = float(np.median(np.diff(beat_times))); tempo = 60.0 / spb
-pos = make_beat_map(beat_times); nb = len(beat_times)
-GRID = note_grid(detect_onsets(oenv, fps), pos, GRID)                                       # en 6/8 o 12/8 las notas van a tercios de pulso
+HAS_DRUMS = True                                                                # False si el audio no trae batería
+y_st, sr = librosa.load(audio_path, sr=TARGET_SR, mono=False)
+y = y_st.mean(axis=0) if y_st.ndim > 1 else y_st
+
+print(f'Duracion: {len(y)/sr:.1f} s | {sr} Hz')

@@ -70,3 +70,24 @@ y de `references/fabienk_partitura.py`. Mata Zyklek usa `references/mata_zyklek_
 El resultado depende de las pistas de guitarra y bajo. El mismo código dio 57.2 en Mata Zyklek con unas pistas de
 Demucs y 61.6 con otras. Para comparar versiones del cuaderno hay que usar siempre las mismas pistas, y en la tesis
 conviene indicar qué separación se usó.
+
+## Notas sueltas (`drop_loose_notes`)
+
+Por cada nota de la melodía principal, en las corridas del paso 3, el cuaderno detectaba 1.3 a 1.5 notas. Entre 43 y
+64 % de las notas detectadas no estaban en la melodía principal: unas eran de otras capas del looper y la mayoría eran
+pedazos cortos que deja `extract_notes`, que corta una nota nueva en cada ataque y en cada cambio de altura.
+
+`drop_loose_notes` quita las notas de hasta 3 cuadros (menos de 80 ms) que no reaparecen a la misma altura una vuelta
+antes y una vuelta después del ciclo que las contiene. Se eligió así porque en las tres canciones, entre esas notas,
+solo 6 a 24 % eran aciertos; las notas cortas que sí vuelven en las dos vueltas vecinas aciertan mucho más y se quedan.
+Se aplica a las dos voces (`scripts/limpiar_notas.py`).
+
+| | Melodía principal | Bajo |
+|---|---|---|
+| Mata Zyklek | 63.7 → 66.8 | 78.7 → 82.9 |
+| Sarniezz | 43.4 → 46.2 | 75.3 → 78.7 |
+| Fabienk | 44.0 → 45.4 | 63.8 → 69.3 |
+
+Se probaron otras reglas y se descartaron. Unir notas seguidas de la misma altura borra re-ataques reales del riff. La
+saliencia no distingue un re-ataque de un corte. Las notas de otra capa no se distinguen por cuántas vueltas llevan
+sonando. Quitarlas pide separar la capa en el audio, que es un paso aparte.

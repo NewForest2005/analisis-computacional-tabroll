@@ -20,6 +20,7 @@ Cada módulo comienza únicamente con la descripción de la función o del prop�
 - `separar_guitarra_y_bajo_con_demucs.py`: configuración de separación de stems.
 - `stft_mag.py`: función de análisis espectral.
 - `render_song_graphic.py`: función de renderizado.
-- `configuracion_093.py` y `configuracion_094.py`: celdas finales de ejecución/visualización.
+- Las dos celdas finales de ejecución y visualización (el tabroll y los ciclos). Su número cambia cuando se agregan
+  celdas antes; el nombre actual está en [`cell-index.md`](cell-index.md).
 
 Las celdas que contienen varias funciones auxiliares permanecen juntas para no romper el contexto local de la celda original; el inventario completo de sus elementos y el número original de celda están en [`cell-index.md`](cell-index.md). Esto mantiene la extracción fiel sin poner el número en el nombre del módulo.

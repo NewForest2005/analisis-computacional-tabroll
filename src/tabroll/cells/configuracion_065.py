@@ -1,13 +1,9 @@
-"""4) Tonalidad y modo detectados en cada canción -> escala de 7 grados como en Hooktheory.
+"""3) Notas: cada ataque o cambio de altura inicia una nota; alturas cuantizadas a pasos de MICRO_STEP cents.
 """
 
-h = 0.5 * pc_histogram(arr[:, 2], arr[:, 1] - arr[:, 0]) + 0.5 * chroma     # notas de la línea + cromagrama
-low = bass[np.isfinite(bass)] - off
+raw_notes = extract_notes(midi, Smax, detect_onsets(oenv, fps), sr, HOP_P, off, MICRO_STEP)
 
-hb = pc_histogram(low, np.ones(len(low)))                                  # dónde reposa el bajo
+if not raw_notes:
+    raise ValueError('No se detectaron notas en el audio.')
 
-tonic_pc, mode = parse_key(KEY_OVERRIDE) if KEY_OVERRIDE else detect_key(h, hb)
-key_alts = [] if KEY_OVERRIDE else key_alternatives(hb, tonic_pc, mode)
-
-steps = MODES[mode]
-scale, tonic_midi = make_scale(tonic_pc, mode)
+arr = np.array(raw_notes)
