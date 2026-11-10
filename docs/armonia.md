@@ -103,6 +103,21 @@ la celda que fija el backend ni abre ventanas. `python scripts/comparar_circulos
 reescribe `circulo.json` y la figura de corridas ya hechas sin correr el cuaderno. La comparación se guarda por defecto
 en `outputs/comparacion_circulos.json`.
 
+**Ajuste 2 (`src/tabroll/evaluation/circulo.py`).** En la distancia combinada, transiciones y movimientos pesan según
+los cambios de fundamental del círculo que tiene menos: nada con menos de 5, n/20 entre 5 y 20, y completo desde 20
+(`peso_cambios` en cada distancia). Con pocos cambios esas capas son sobre todo ruido de muestreo:
+`scripts/ruido_cambios.py` saca dos muestras de n cambios de una misma canción y mide cuánto difieren.
+
+| Cambios | Transiciones | Movimientos |
+|---:|---:|---:|
+| 6 | 0.28 | 0.12 |
+| 10 | 0.19 | 0.07 |
+| 20 | 0.11 | 0.03 |
+| 40 | 0.06 | 0.02 |
+
+Con 6 cambios, como en Uztp y Yor Zarad, el ruido supera la distancia entre un audio y su partitura (alrededor de 0.1).
+Llegar al peso completo en 20, en 40 para transiciones y 13 para movimientos, o pesar n/(n+10) da casi lo mismo.
+
 ## Lo que todavía no hace
 
 Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su

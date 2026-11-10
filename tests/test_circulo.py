@@ -73,3 +73,14 @@ def test_refresh_rewrites_circle_and_figure_of_a_run(tmp_path):
     c = json.loads((tmp_path / "circulo.json").read_text(encoding="utf-8"))
     assert png.exists() and c["formato"].endswith("v2") and c["cancion"] == "Prueba" and c["centro"] == "E"
 
+
+
+def test_transitions_and_movements_weigh_by_their_changes():
+    from tabroll.evaluation.circulo import change_weight
+    assert change_weight(4) == 0 and change_weight(6) == 0.3 and change_weight(20) == change_weight(80) == 1
+    few_a = harmony_circle([bar(k, 0 if k % 2 else 14) for k in range(1, 8)], 0)      # 6 cambios 1 ↔ 5
+    few_b = harmony_circle([bar(k, 0 if k % 2 else 3) for k in range(1, 8)], 0)       # 6 cambios 1 ↔ ♭2+
+    d = circle_distance(few_a, few_b)
+    assert d["peso_cambios"] == 0.3 and d["transiciones"] == d["movimientos"] == 1.0
+    others = [v for k, v in d.items() if k not in ("transiciones", "movimientos", "combinada", "peso_cambios") and v is not None]
+    assert abs(d["combinada"] - (sum(others) + 0.3 * 2) / (len(others) + 0.6)) < 2e-3
