@@ -1,4 +1,4 @@
-"""**`harmony_circle`**: Calcula las capas del círculo armónico a partir de la armonía por compás y del centro. Todo queda normalizado: cada perfil suma 1, y las transiciones también.
+"""**`harmony_circle`**: Calcula las capas del círculo armónico a partir de la armonía por compás y del centro. Todo queda normalizado: cada perfil suma 1, y las transiciones también. En `fundamentales_por_ciclo` cada ciclo distinto del bajo cuenta una vez, y los compases sin ciclo cuentan juntos como un ciclo más.
 """
 
 import numpy as np
@@ -10,6 +10,7 @@ def harmony_circle(bars, center_pc24, min_conf=0.5):
     rel = lambda v: np.roll(np.asarray(v, float), -center_pc24)
     norm = lambda v: (v / v.sum()).round(4).tolist() if v.sum() > 0 else [0.0] * 24
     dur = lambda b: b['fin_s'] - b['inicio_s']
+    SIN_CICLO = 'sin ciclo'
     ok = [b for b in bars if b.get('fundamental_pc24') is not None and b.get('confianza', 0) >= min_conf]
     bajo, aguda, fund = np.zeros(24), np.zeros(24), np.zeros(24)
     for b in bars:
@@ -19,7 +20,7 @@ def harmony_circle(bars, center_pc24, min_conf=0.5):
     for b in ok:
         r = (b['fundamental_pc24'] - center_pc24) % 24
         fund[r] += dur(b) * b['confianza']
-        grupos.setdefault(b.get('ciclo_bajo') or f"compás {b['compas']}", np.zeros(24))[r] += dur(b)
+        grupos.setdefault(b.get('ciclo_bajo') or SIN_CICLO, np.zeros(24))[r] += dur(b)   # los compases sin ciclo van juntos
     por_ciclo = sum((g / g.sum() for g in grupos.values()), np.zeros(24))
     trans = np.zeros((24, 24))
     mov = dict.fromkeys(['fuerte', 'débil', 'color', 'deslizamiento', 'intermedio'], 0.0)
@@ -39,10 +40,13 @@ def harmony_circle(bars, center_pc24, min_conf=0.5):
     for b in ok:
         cal[b['calidad']] = cal.get(b['calidad'], 0.0) + dur(b)
     total = sum(dur(b) for b in bars) or 1.0
-    return dict(formato='tabroll-circulo-24edo-v1', centro_pc24=int(center_pc24), posiciones=names,
+    t_ok = sum(dur(b) for b in ok)
+    sin_ciclo = float(grupos[SIN_CICLO].sum()) if SIN_CICLO in grupos else 0.0
+    return dict(formato='tabroll-circulo-24edo-v2', centro_pc24=int(center_pc24), posiciones=names,
                 perfil_bajo=norm(bajo), perfil_aguda=norm(aguda), fundamentales=norm(fund), fundamentales_por_ciclo=norm(por_ciclo),
                 transiciones=(trans / max(trans.sum(), 1)).round(4).tolist(),
                 movimientos={k: round(v / max(cambios, 1), 3) for k, v in mov.items()},
                 calidades={k: round(v / (sum(cal.values()) or 1), 3) for k, v in sorted(cal.items(), key=lambda kv: -kv[1])},
-                cambios_por_compas=round(cambios / max(pares, 1), 3), cambios=cambios, ciclos_distintos=len(grupos),
+                cambios_por_compas=round(cambios / max(pares, 1), 3), cambios=cambios, ciclos_distintos=len(set(grupos) - {SIN_CICLO}),
+                tiempo_sin_ciclo=round(100 * sin_ciclo / t_ok, 1) if t_ok else 0.0,
                 tiempo_confiable=round(100 * sum(dur(b) for b in ok) / total, 1))

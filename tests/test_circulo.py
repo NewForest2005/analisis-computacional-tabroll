@@ -30,6 +30,13 @@ def test_each_distinct_cycle_counts_once():
     assert c["fundamentales_por_ciclo"][0] == c["fundamentales_por_ciclo"][14] == 0.5
 
 
+def test_bars_without_cycle_count_together_as_one_more_cycle():
+    bars = [bar(k, 0, label="A") for k in range(1, 10)] + [bar(k, 14, label=None) for k in range(10, 40)]
+    c = harmony_circle(bars, 0)
+    assert c["fundamentales_por_ciclo"][0] == c["fundamentales_por_ciclo"][14] == 0.5
+    assert c["ciclos_distintos"] == 1 and abs(c["tiempo_sin_ciclo"] - 100 * 30 / 39) < 0.1
+
+
 def test_distances():
     a, b = np.zeros(24), np.zeros(24)
     a[0], b[12] = 1, 1
@@ -37,4 +44,32 @@ def test_distances():
     c1 = harmony_circle([bar(k, 0) for k in range(1, 9)], 0)
     c2 = harmony_circle([bar(k, 14) for k in range(1, 9)], 0)
     assert circle_distance(c1, c1)["combinada"] == 0 and circle_distance(c1, c2)["combinada"] > 0.1
+
+
+def test_figure_does_not_need_pyplot_or_a_window(tmp_path):
+    import subprocess
+    import sys
+    from pathlib import Path
+    code = (
+        "import sys; from tabroll.cells.draw_harmony_circle import draw_harmony_circle\n"
+        "from tabroll.cells.harmony_circle import harmony_circle\n"
+        "bars = [dict(compas=k, inicio_s=float(k), fin_s=k + 1.0, fundamental_pc24=k % 2 * 14, calidad='5', confianza=1.0,\n"
+        "             perfil_bajo=[1.0] + [0.0] * 23, perfil_aguda=[1.0] + [0.0] * 23) for k in range(8)]\n"
+        f"p = draw_harmony_circle(harmony_circle(bars, 0), r'{tmp_path / 'c.png'}')\n"
+        "assert p.stat().st_size > 1000 and 'matplotlib.pyplot' not in sys.modules\n")
+    env = {"MPLBACKEND": "macosx", "PATH": "", "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src"),
+           "MPLCONFIGDIR": str(tmp_path)}
+    r = subprocess.run([sys.executable, "-c", code], env=env, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+
+
+def test_refresh_rewrites_circle_and_figure_of_a_run(tmp_path):
+    import json
+    from tabroll.evaluation.circulo import refresh_run
+    bars = [bar(k, 8 if k % 2 else 22) for k in range(1, 9)]
+    (tmp_path / "armonia.json").write_text(json.dumps(dict(compases=bars, resumen=dict(centro="E", modo=dict(nombre="2, ♭3, 6, ♭7")))), encoding="utf-8")
+    (tmp_path / "resumen.json").write_text(json.dumps(dict(cancion="Prueba")), encoding="utf-8")
+    png = refresh_run(tmp_path)
+    c = json.loads((tmp_path / "circulo.json").read_text(encoding="utf-8"))
+    assert png.exists() and c["formato"].endswith("v2") and c["cancion"] == "Prueba" and c["centro"] == "E"
 

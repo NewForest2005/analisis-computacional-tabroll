@@ -93,6 +93,16 @@ bajo, voz aguda y fundamentales, fundamentales por ciclo, transiciones, movimien
 `scripts/comparar_circulos.py` calcula distancias entre círculos de 0 a 1 y valida audio frente a partitura, mitades
 de una canción y canciones cercanas.
 
+**Ajuste 1 (`scripts/ajustar_circulo.py`).** En `fundamentales_por_ciclo` cada ciclo distinto del bajo cuenta una
+vez, y los compases sin ciclo cuentan juntos como un ciclo más. Antes cada compás suelto contaba como un ciclo entero, y
+en Mata Zyklek 30 compases sueltos pesaban más que sus tres ciclos. El círculo guarda también `tiempo_sin_ciclo`.
+Pesar cada ciclo por sus vueltas se probó y quedó descartado: acerca la capa a `fundamentales` y empeora Mata Zyklek.
+
+**Ajuste 1b.** `draw_harmony_circle` arma la figura con `matplotlib.figure.Figure`, sin pyplot, así que no depende de
+la celda que fija el backend ni abre ventanas. `python scripts/comparar_circulos.py outputs/<carpetas> --actualizar`
+reescribe `circulo.json` y la figura de corridas ya hechas sin correr el cuaderno. La comparación se guarda por defecto
+en `outputs/comparacion_circulos.json`.
+
 ## Lo que todavía no hace
 
 Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su

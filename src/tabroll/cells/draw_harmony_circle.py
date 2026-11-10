@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 
 def draw_harmony_circle(circle, path, title=None):
-    import matplotlib.pyplot as plt
+    from matplotlib.figure import Figure        # sin pyplot: no abre ventanas ni depende del backend
     from matplotlib.lines import Line2D
     from matplotlib.patches import Circle, Patch, PathPatch, Wedge
     from matplotlib.path import Path as MPath
@@ -14,7 +14,8 @@ def draw_harmony_circle(circle, path, title=None):
     ang = lambda k: np.pi / 2 - 2 * np.pi * k / 24                          # tónica arriba, en el sentido del reloj
     f, b = np.asarray(circle['fundamentales']), np.asarray(circle['perfil_bajo'])
     fm, bm = max(f.max(), 1e-9), max(b.max(), 1e-9)
-    fig, ax = plt.subplots(figsize=(7, 7.8), facecolor=SURF)
+    fig = Figure(figsize=(7, 7.8), facecolor=SURF)
+    ax = fig.add_subplot()
     ax.set_facecolor(SURF)
     ax.add_patch(Circle((0, 0), 1.0, fill=False, lw=1, color=GRID))
     for k in range(24):
@@ -44,5 +45,4 @@ def draw_harmony_circle(circle, path, title=None):
                        Line2D([], [], color=TRANS, lw=2, label='Cambios de fundamental')],
               loc='upper right', bbox_to_anchor=(1.02, 1.0), frameon=False, fontsize=8.5, labelcolor=INK)
     fig.savefig(path, dpi=150, bbox_inches='tight', facecolor=SURF)
-    plt.close(fig)
     return Path(path)

@@ -93,17 +93,44 @@ def score_circles(song: str, bars: list[dict], raw_high, center_pc24: int) -> tu
     return (harmony_circle(det, center_pc24), harmony_circle(ref, center_pc24)) if det else None
 
 
+def run_circle(d: Path) -> tuple[dict, int, dict] | None:
+    """Recalcula el círculo de una corrida desde su armonia.json."""
+    d = Path(d)
+    if not (d / "armonia.json").exists():
+        return None
+    H = json.loads((d / "armonia.json").read_text(encoding="utf-8"))
+    res = H.get("resumen") or {}
+    center = PC24.index(res["centro"]) if res.get("centro") in PC24 else int(H.get("tonica_pc24") or 0)
+    return harmony_circle(H["compases"], center), center, H
+
+
+def refresh_run(d: Path) -> Path | None:
+    """Reescribe circulo.json y circulo_armonico.png sin correr el cuaderno."""
+    from tabroll.cells.draw_harmony_circle import draw_harmony_circle
+    d = Path(d)
+    rc = run_circle(d)
+    if rc is None:
+        return None
+    c, center, H = rc
+    res = H.get("resumen") or {}
+    info = json.loads((d / "resumen.json").read_text(encoding="utf-8")) if (d / "resumen.json").exists() else {}
+    c.update(cancion=info.get("cancion") or d.name, centro=PC24[center], modo=(res.get("modo") or {}).get("nombre", ""))
+    (d / "circulo.json").write_text(json.dumps(c, ensure_ascii=False, indent=1), encoding="utf-8")
+    png = next(d.glob("harmony_outputs/*/circulo_armonico.png"), None) or d / "harmony_outputs" / "circulo_armonico.png"
+    png.parent.mkdir(parents=True, exist_ok=True)
+    return draw_harmony_circle(c, png)
+
+
 def compare_runs(run_dirs: list[Path]) -> dict:
     """Círculos de varias corridas, distancias entre ellas y las pruebas de validación."""
     circles, halves, vs_score = {}, {}, {}
     for d in map(Path, run_dirs):
-        if not (d / "armonia.json").exists():
+        rc = run_circle(d)
+        if rc is None:
             continue
-        H = json.loads((d / "armonia.json").read_text(encoding="utf-8"))
-        bars, res = H["compases"], H.get("resumen") or {}
         name = d.name
-        center = PC24.index(res["centro"]) if res.get("centro") in PC24 else int(H.get("tonica_pc24") or 0)
-        circles[name] = harmony_circle(bars, center)
+        circles[name], center, H = rc
+        bars = H["compases"]
         h = len(bars) // 2
         halves[name] = circle_distance(harmony_circle(bars[:h], center), harmony_circle(bars[h:], center))
         song = M.song_key(name)
