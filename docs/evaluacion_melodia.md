@@ -68,6 +68,7 @@ y de `references/fabienk_partitura.py`. Mata Zyklek usa `references/mata_zyklek_
 ## Advertencia sobre las pistas separadas
 
 El resultado depende de las pistas de guitarra y bajo. El mismo código dio 57.2 en Mata Zyklek con unas pistas de
+
 Demucs y 61.6 con otras. Para comparar versiones del cuaderno hay que usar siempre las mismas pistas, y en la tesis
 conviene indicar qué separación se usó.
 
@@ -91,3 +92,22 @@ Se aplica a las dos voces (`scripts/limpiar_notas.py`).
 Se probaron otras reglas y se descartaron. Unir notas seguidas de la misma altura borra re-ataques reales del riff. La
 saliencia no distingue un re-ataque de un corte. Las notas de otra capa no se distinguen por cuántas vueltas llevan
 sonando. Quitarlas pide separar la capa en el audio, que es un paso aparte.
+
+## Separar por capas del looper (probado y descartado)
+
+Se probaron dos formas de aprovechar el looper para elegir la melodía principal, con diagnósticos sobre la partitura
+alineada (`scripts/diagnostico_repeticion.py`, `diagnostico_capas.py`, `diagnostico_seleccion.py`) y sobre el audio
+(`scripts/diagnostico_edad_audio.py`).
+
+- REPET (Rafii y Pardo, 2013) a la vuelta del looper no sirve: la melodía se repite en cada vuelta igual que el riff,
+  y con una mediana de 5 vueltas solo entre 1 y 18 % de sus notas quedaría en primer plano. La excepción son tramos
+  como «Melodía Fabien» (75 %), donde la frase dura más que el ciclo.
+- Elegir la capa más nueva funcionaría con una transcripción perfecta (elección de 83 a 97 % en Mata Zyklek, de 54 a
+  89 % en Fabienk y de 70 a 77 % en Sarniezz), pero no medida en el audio. Allí la melodía es el pico más fuerte en
+  74–86 % de los cuadros donde hay que elegir, y el más nuevo en 65–71 %. En un cuadro suelto solo aparece entre los
+  picos en 32–43 % de los cuadros; el cuaderno la recupera mejor (44–68 %) porque promedia vueltas (`cycle_consensus`).
+  Con un peso de edad en la voz aguda, la melodía principal bajó en Mata Zyklek (66.8 → 60.4–65.3) y en Fabienk
+  (45.4 → 40.8–44.2).
+
+Conclusión: el looper ayuda a recuperar la melodía promediando vueltas, no a separarla. El cuello de botella es que
+en muchos cuadros la melodía no aparece en la saliencia.
