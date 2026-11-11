@@ -111,3 +111,20 @@ alineada (`scripts/diagnostico_repeticion.py`, `diagnostico_capas.py`, `diagnost
 
 Conclusión: el looper ayuda a recuperar la melodía promediando vueltas, no a separarla. El cuello de botella es que
 en muchos cuadros la melodía no aparece en la saliencia.
+
+## Estéreo y Basic Pitch (probados y descartados)
+
+- Estéreo (`scripts/diagnostico_canales.py`): con la saliencia de cada canal de la pista de guitarra (izquierda,
+  derecha, lados) la melodía aparece entre los picos de un cuadro en 1-2 puntos más que en mono; juntando izquierda y
+  derecha, 3-6 puntos más, en parte por mirar el doble de picos. No la destapa: sigue tapada en el 50-65 % de los
+  cuadros.
+- Basic Pitch (Bittner y otros, ICASSP 2022; `scripts/diagnostico_basic_pitch.py`, `basic_pitch_notas.py`,
+  `diagnostico_fusion.py`): con el ajuste de notas cortas encuentra 36 / 47 / 48 % de la melodía (Sarniezz / Mata
+  Zyklek / Fabienk), menos que el cuaderno (51 / 69 / 49 %). Junto con el cuaderno recupera 7-14 puntos más, pero esas
+  notas caen sobre todo donde el cuaderno tiene otra altura (58-93 %), no en huecos (7-10 %). Ninguna regla para
+  juntarlas (huecos, re-ataques, reemplazo) mejora la medida principal. Su contorno no sirve para cuartos de tono; la
+  altura tiene que salir de nuestra saliencia. Basic Pitch necesita Python 3.10-3.11, así que corre en un entorno
+  aparte (`.venv-bp`).
+
+Con la limpieza de notas sueltas, la melodía principal queda en 66.8 / 46.2 / 45.4. Ni la estructura del looper, ni el
+estéreo, ni una red general separan la melodía de las otras capas en esta banda.

@@ -15,6 +15,7 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
     line_candidates.npz    cinco candidatos de altura por cuadro para probar reglas
     evaluacion_melodia.json (+ _por_seccion.csv)  medición contra la partitura corregida (Mata Zyklek, Sarniezz, Fabienk)
     armonia.json       armonía por compás en 24-EDO (fundamental, calidad, grado, bajo, confianza) y su resumen
+    armonia_por_compas.csv  por compás: cifrado, función, inversión y papel de la voz aguda
     evaluacion_armonia.json (+ _por_compas.csv)  armonía medida contra la partitura corregida
     circulo.json       círculo armónico en 24-EDO (capas para comparar estilos); la figura va en harmony_outputs
     error_evaluacion.txt   solo si la evaluación contra la partitura falló: el error completo
@@ -28,6 +29,7 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import csv
 import json
 import os
 import re
@@ -446,13 +448,24 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
         return False
 
 
+ROLE_COLUMNS = ("compas", "inicio_s", "fin_s", "fundamental", "calidad", "grado", "cifrado", "funcion_corta", "funcion",
+                "matiz", "bajo", "inversion", "cifra_bajo", "nota_aguda", "papel_aguda", "aguda_en_acorde", "confianza",
+                "ciclo_bajo", "ciclo_aguda")
+
+
 def save_harmony(ns: dict, path: Path) -> bool:
-    """Guarda la armonía por compás (24-EDO) y su resumen, si el cuaderno la calculó."""
+    """Guarda la armonía por compás (24-EDO) y su resumen, si el cuaderno la calculó, y una tabla por compás con
+    cifrado, función, inversión y papel de la voz aguda."""
     if "armonia" not in ns:
         return False
+    rows = plain(ns["armonia"])
     data = {"formato": "tabroll-armonia-24edo-v1", "tonica_pc24": plain(ns.get("tonic_pc24")),
-            "resumen": plain(ns.get("armonia_resumen")), "compases": plain(ns["armonia"])}
+            "resumen": plain(ns.get("armonia_resumen")), "compases": rows}
     path.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
+    with open(path.with_name("armonia_por_compas.csv"), "w", newline="", encoding="utf-8") as fh:
+        wr = csv.DictWriter(fh, fieldnames=ROLE_COLUMNS, extrasaction="ignore")
+        wr.writeheader()
+        wr.writerows(rows)
     return True
 
 

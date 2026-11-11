@@ -13,6 +13,7 @@ else:
     tonic_pc24 = PC24_NAMES.index(CENTRO)
 
 armonia = harmony_by_bar(raw_bass, raw_high, beat_times, lens, cycles, tonic_pc24)
+armonia = chord_roles(armonia, tonic_pc24)                                   # cifrado, función, inversión y voz aguda
 armonia_resumen = harmony_summary(armonia, tonic_pc24)
 armonia_resumen.update(
     centro=PC24_NAMES[tonic_pc24], regla_centro=CENTRO,
@@ -31,3 +32,10 @@ print(f"         {len(armonia)} compases | confiable el {armonia_resumen['tiempo
       "fundamentales: " + ', '.join(f'{g} {100 * v:.0f}%' for g, v in grados if v > 0))
 print(f"         movimientos: " + ', '.join(f'{k} {100 * v:.0f}%' for k, v in capas['movimientos'].items()) +
       f" | cambios por compás {capas['cambios_por_compas']:.2f}")
+
+armonia_resumen['funciones'] = roles_summary(armonia)
+fx = armonia_resumen['funciones']
+print('         funciones: ' + ', '.join(f'{k} {v:.0f}%' for k, v in fx['funciones'].items()) +
+      f" | voz aguda dentro del acorde: {fx['aguda_en_acorde']}%")
+print('         inversiones: ' + ', '.join(f'{k} {v:.0f}%' for k, v in fx['inversiones'].items()))
+print('         cifrados: ' + ', '.join(f'{k} {v:.0f}%' for k, v in list(fx['cifrados'].items())[:6]))
