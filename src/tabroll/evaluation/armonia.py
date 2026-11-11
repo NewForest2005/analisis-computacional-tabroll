@@ -16,6 +16,12 @@ tramos medibles (la misma alineación que la evaluación de la melodía). Las me
   frente al centro que eligió el cuaderno.
 - capas: los movimientos de la fundamental y las calidades en los compases medidos, del cuaderno frente a la partitura,
   con su distancia de Jensen-Shannon (0 = iguales, 1 = sin nada en común).
+- funciones: la función de cada compás (`chord_roles`, con el centro del cuaderno) en el cuaderno y en la partitura.
+  `funcion` es la parte del tiempo en que coinciden (también en los confiables), y `distancia_funciones` compara cómo se
+  reparte el tiempo entre tónica, subdominante, dominante y neutra. `eje` y `distancia_ejes` hacen lo mismo con los ejes
+  de Lendvai.
+- progresiones: `chord_progressions` sobre todos los compases medidos, del cuaderno y de la partitura: qué parte de los
+  cambios va por quintas, qué tan usuales son en la tabla de Piston, los vaivenes y las progresiones con nombre.
 """
 from __future__ import annotations
 
@@ -27,6 +33,8 @@ import numpy as np
 
 from tabroll.cells.chord24 import chord24
 from tabroll.cells.center24_by_layer import center24_by_layer
+from tabroll.cells.chord_progressions import chord_progressions
+from tabroll.cells.chord_roles import chord_roles
 from tabroll.cells.harmony_layers import harmony_layers
 from tabroll.cells.notetable import NoteTable
 from tabroll.evaluation import melodia as M
@@ -64,8 +72,26 @@ def _js(p: dict, q: dict) -> float | None:
     return round(0.5 * kl(a, m) + 0.5 * kl(b, m), 3)
 
 
+def _shares(rows: list[dict], key: str) -> dict:
+    """Parte del tiempo (en %) de cada valor de `key`, de mayor a menor."""
+    acc = {}
+    for x in rows:
+        if x.get(key) is not None:
+            acc[x[key]] = acc.get(x[key], 0.0) + x["fin_s"] - x["inicio_s"]
+    tot = sum(acc.values()) or 1.0
+    return {k: round(100 * v / tot, 1) for k, v in sorted(acc.items(), key=lambda kv: -kv[1])}
+
+
+def _progressions(rows: list[dict], menor: bool) -> dict:
+    """Resumen de progresiones de todos los compases dados, en la forma corta que guarda la evaluación."""
+    p = chord_progressions(rows, menor=menor)[1]["todos"]
+    return dict(cambios=p["cambios"], por_quintas=p["por_quintas"], uso_piston=p["uso_piston"], ejes=p["ejes"],
+                vaivenes=p["vaivenes"],
+                con_nombre={k: v["veces"] for k, v in p["con_nombre"].items()}, frecuentes=p["frecuentes"][:5])
+
+
 def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycles: dict | None = None,
-             resumen: dict | None = None) -> dict:
+             resumen: dict | None = None, tonic_pc24: int | None = None) -> dict:
     al = M.Alignment(song)
     gu, ba = M.mapped(al, al.ref["guitars"]), M.mapped(al, al.ref["basses"])
     sh = M.calib(M.top_line(gu), M._notes(raw_high))                  # mismo desfase que la evaluación de la melodía
@@ -117,6 +143,25 @@ def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycle
              calidades_cuaderno=ld["calidades"], calidades_partitura=lr["calidades"],
              distancia_calidades=_js(ld["calidades"], lr["calidades"]),
              cambios_por_compas_cuaderno=ld["cambios_por_compas"], cambios_por_compas_partitura=lr["cambios_por_compas"])
+    if tonic_pc24 is None and resumen and resumen.get("centro") in PC24:
+        tonic_pc24 = PC24.index(resumen["centro"])
+    if tonic_pc24 is not None:                                          # funciones y progresiones con el centro del cuaderno
+        modo = ((resumen or {}).get("modo") or {}).get("nombre") or ""
+        menor = "♭3" in [x.strip() for x in modo.split(",")]
+        fd, fr = chord_roles(det, tonic_pc24), chord_roles(ref, tonic_pc24)
+        for x, a, b in zip(rows, fd, fr):
+            x.update(cifrado=a["cifrado"], funcion=a["funcion"], ref_cifrado=b["cifrado"], ref_funcion=b["funcion"],
+                     ok_funcion=a["funcion"] == b["funcion"], eje=a["eje"], ref_eje=b["eje"], ok_eje=a["eje"] == b["eje"])
+        ok_fn = np.array([x["ok_funcion"] for x in rows], float)
+        ok_ej = np.array([x["ok_eje"] for x in rows], float)
+        ej_d, ej_r = _shares(fd, "eje"), _shares(fr, "eje")
+        prog_d, prog_r = _progressions(fd, menor), _progressions(fr, menor)
+        fn_d, fn_r = _shares(fd, "funcion"), _shares(fr, "funcion")
+        r.update(funcion=pct(ok_fn), funcion_confiables=pct(ok_fn, conf), funciones_cuaderno=fn_d, funciones_partitura=fn_r,
+                 distancia_funciones=_js(fn_d, fn_r), por_quintas_cuaderno=prog_d["por_quintas"],
+                 por_quintas_partitura=prog_r["por_quintas"], progresiones_cuaderno=prog_d, progresiones_partitura=prog_r,
+                 eje=pct(ok_ej), eje_confiables=pct(ok_ej, conf), ejes_cuaderno=ej_d, ejes_partitura=ej_r,
+                 distancia_ejes=_js(ej_d, ej_r))
     r["compases"] = rows
     return r
 
@@ -131,7 +176,7 @@ def evaluate_run(run_dir: Path, song: str | None = None, write: bool = True) -> 
     J = json.loads((run_dir / "line_diagnostics.json").read_text(encoding="utf-8"))
     cycles = (H.get("resumen") or {}).get("ciclos") or {                  # los mismos ciclos que usó la armonía del cuaderno
         v: [dict(start=c["start_s"], end=c["end_s"], period=c["period_s"]) for c in cs] for v, cs in (J.get("cycles_n") or {}).items()}
-    r = evaluate(song, H["compases"], J["raw_high"], cycles=cycles, resumen=H.get("resumen"))
+    r = evaluate(song, H["compases"], J["raw_high"], cycles=cycles, resumen=H.get("resumen"), tonic_pc24=H.get("tonica_pc24"))
     if write:
         detail = r.pop("compases", [])
         (run_dir / "evaluacion_armonia.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")

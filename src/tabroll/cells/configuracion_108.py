@@ -39,3 +39,18 @@ print('         funciones: ' + ', '.join(f'{k} {v:.0f}%' for k, v in fx['funcion
       f" | voz aguda dentro del acorde: {fx['aguda_en_acorde']}%")
 print('         inversiones: ' + ', '.join(f'{k} {v:.0f}%' for k, v in fx['inversiones'].items()))
 print('         cifrados: ' + ', '.join(f'{k} {v:.0f}%' for k, v in list(fx['cifrados'].items())[:6]))
+
+modo_menor = '♭3' in [x.strip() for x in armonia_resumen['modo']['nombre'].split(',')]
+armonia, armonia_resumen['progresiones'] = chord_progressions(armonia, menor=modo_menor)
+print('         grados: ' + ', '.join(f'{k} {v:.0f}%' for k, v in list(fx['nombres_grado'].items())[:5]))
+print('         ejes de Lendvai: ' + ', '.join(f'{k} {v:.0f}%' for k, v in fx['ejes'].items()))
+for clave, titulo in (('confiables', 'compases confiables'), ('todos', 'todos los compases')):
+    pr = armonia_resumen['progresiones'][clave]
+    print(f"         progresiones, {titulo} ({pr['compases']}): {pr['cambios']} cambios, {pr['por_quintas']:.0f}% por quintas | "
+          'tabla de Piston: ' + ', '.join(f'{k} {v:.0f}%' for k, v in pr['uso_piston'].items()))
+    print('           por ejes: ' + ', '.join(f'{k} {v:.0f}%' for k, v in pr['ejes'].items()) + ' | pasos: ' +
+          ', '.join(f'{k} ×{v}' for k, v in pr['pasos_de_eje'].items()))
+    print('           más frecuentes: ' + ', '.join(f'{p} ×{n}' for p, n in pr['frecuentes'][:5]))
+    nombradas = [f"{k} ×{v['veces']}" for k, v in pr['con_nombre'].items()] + [f'vaivén {k} ×{v}' for k, v in pr['vaivenes'].items()]
+    if nombradas:
+        print('           con nombre: ' + ', '.join(nombradas))

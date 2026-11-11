@@ -448,9 +448,10 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
         return False
 
 
-ROLE_COLUMNS = ("compas", "inicio_s", "fin_s", "fundamental", "calidad", "grado", "cifrado", "funcion_corta", "funcion",
-                "matiz", "bajo", "inversion", "cifra_bajo", "nota_aguda", "papel_aguda", "aguda_en_acorde", "confianza",
-                "ciclo_bajo", "ciclo_aguda")
+ROLE_COLUMNS = ("compas", "inicio_s", "fin_s", "fundamental", "calidad", "grado", "cifrado", "nombre_grado",
+                "clase_grado", "funcion_corta", "funcion", "funcion_texto", "matiz", "eje", "rama", "bajo", "inversion",
+                "cifra_bajo", "nota_aguda", "papel_aguda", "aguda_en_acorde", "progresion", "movimiento", "uso_piston",
+                "eje_cambio", "paso_eje", "confianza", "ciclo_bajo", "ciclo_aguda")
 
 
 def save_harmony(ns: dict, path: Path) -> bool:
@@ -471,7 +472,8 @@ def save_harmony(ns: dict, path: Path) -> bool:
 
 MELODY_KEYS = ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")
 HARMONY_KEYS = ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiable", "fundamental_confiables",
-                "fundamental_resto", "centro_partitura", "distancia_movimientos", "distancia_calidades")
+                "fundamental_resto", "centro_partitura", "distancia_movimientos", "distancia_calidades", "funcion",
+                "funcion_confiables", "distancia_funciones", "por_quintas_cuaderno", "por_quintas_partitura")
 
 
 def evaluate_against_score(run_dir: Path, name: str, has_harmony: bool) -> tuple[dict, list[str]]:
@@ -541,7 +543,12 @@ def write_markdown(path: Path, info: dict) -> None:
               f"- Compases confiables: {ea['tiempo_confiable']} % del tiempo; ahí la fundamental acierta {ea['fundamental_confiables']} % "
               f"(en el resto, {ea['fundamental_resto']} %). Detalle en `evaluacion_armonia_por_compas.csv`.",
               f"- Centro de la partitura (misma medida): {ea.get('centro_partitura')} | distancia de movimientos: "
-              f"{ea.get('distancia_movimientos')} | de calidades: {ea.get('distancia_calidades')} (0 = iguales)", ""]
+              f"{ea.get('distancia_movimientos')} | de calidades: {ea.get('distancia_calidades')} (0 = iguales)",
+              f"- Función igual a la partitura: {ea.get('funcion')} % del tiempo (en los confiables, {ea.get('funcion_confiables')} %) | "
+              f"distancia de funciones: {ea.get('distancia_funciones')} | cambios por quintas: partitura {ea.get('por_quintas_partitura')} %, "
+              f"cuaderno {ea.get('por_quintas_cuaderno')} %",
+              f"- Mismo eje de Lendvai que la partitura: {ea.get('eje')} % del tiempo (en los confiables, {ea.get('eje_confiables')} %) | "
+              f"distancia de ejes: {ea.get('distancia_ejes')}", ""]
 
     if r:
         L += ["## Resultado", ""]

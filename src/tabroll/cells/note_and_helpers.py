@@ -16,6 +16,7 @@ class Chord:
     numeral: Optional[str] = None
     name: Optional[str] = None
     annot: Optional[str] = None
+    annot_color: Optional[str] = None
 
 
 @dataclass

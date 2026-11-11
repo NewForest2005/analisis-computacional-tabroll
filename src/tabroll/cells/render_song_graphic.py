@@ -1,7 +1,7 @@
-"""**`render_song_graphic`**: Dibuja la canción o un tramo (`start_s`, `duration_s`) por páginas, las guarda en `OUTPUT_DIR` y devuelve sus rutas.
+"""**`render_song_graphic`**: Dibuja la canción o un tramo (`start_s`, `duration_s`) por páginas, las guarda en `OUTPUT_DIR` y devuelve sus rutas. `chords` cambia los acordes de la franja; si no se da, usa `view_chords`.
 """
 
-def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_harmony', show=True):
+def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_harmony', show=True, chords=None):
 
     end_s = len(y) / sr if duration_s is None else min(start_s + float(duration_s), len(y) / sr)
     b0, b1 = float(pos(max(0.0, float(start_s)))), float(pos(end_s))
@@ -19,7 +19,7 @@ def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_h
         a, b = pm[0].start, pm[-1].start + pm[-1].beats
         page_notes = [nt for nt in song.notes if nt.onset < b and nt.onset + nt.dur > a]
 
-        page_chords = [c for c in view_chords if c.onset < b and c.onset + c.dur > a]
+        page_chords = [c for c in (view_chords if chords is None else chords) if c.onset < b and c.onset + c.dur > a]
 
         path = OUTPUT_DIR / f'{filename}_p{k:02d}.png'
         fig = render(Song(view_scale, page_notes, page_chords, pm), str(path), rows=rows, style=style)

@@ -1,4 +1,4 @@
-"""**`roles_summary`**: Reparto del tiempo de los compases confiables por función, inversión, cifrado y papel de la voz aguda (en %, de mayor a menor), y qué parte de la voz aguda cae dentro del acorde, ponderada por la duración de cada compás.
+"""**`roles_summary`**: Reparto del tiempo de los compases confiables por función (familia y con su calidad), nombre y clase del grado, inversión, cifrado, papel de la voz aguda y eje de Lendvai (en %, de mayor a menor), y qué parte de la voz aguda cae dentro del acorde, ponderada por la duración de cada compás.
 """
 
 def roles_summary(armonia, min_conf=0.5):
@@ -15,7 +15,8 @@ def roles_summary(armonia, min_conf=0.5):
 
     en = [(r['aguda_en_acorde'], dur(r)) for r in ok if r.get('aguda_en_acorde') is not None]
     peso = sum(w for _, w in en)
-    return dict(funciones=share('funcion'), inversiones=share('inversion'), cifrados=share('cifrado'),
-                papeles_aguda=share('papel_aguda'),
+    return dict(funciones=share('funcion'), funciones_detalle=share('funcion_texto'), nombres_grado=share('nombre_grado'),
+                clases_grado=share('clase_grado'), inversiones=share('inversion'), cifrados=share('cifrado'),
+                papeles_aguda=share('papel_aguda'), ejes=share('eje'),
                 aguda_en_acorde=round(sum(a * w for a, w in en) / peso, 1) if peso else None,
                 compases_confiables=len(ok))

@@ -118,7 +118,104 @@ los cambios de fundamental del círculo que tiene menos: nada con menos de 5, n/
 Con 6 cambios, como en Uztp y Yor Zarad, el ruido supera la distancia entre un audio y su partitura (alrededor de 0.1).
 Llegar al peso completo en 20, en 40 para transiciones y 13 para movimientos, o pesar n/(n+10) da casi lo mismo.
 
+## Paso 4: grados, funciones y progresiones
+
+Celdas `chord_roles`, `roles_summary` y `chord_progressions` (scripts `agregar_funciones.py` y
+`funciones_y_progresiones.py`). Las columnas nuevas van en `armonia_por_compas.csv` y los resúmenes en `armonia.json`
+(`funciones` y `progresiones`).
+
+- **Cifrado y grado.** Números romanos sobre el centro: mayúscula para mayor, minúscula para menor, «+» sube un cuarto
+  de tono, «aum» aumentado, «n» tercera neutra, «5» sin tercera, «°» disminuido, más sus2 y sus4. Cada grado lleva su
+  nombre (tónica, supertónica, mediante, subdominante, dominante, superdominante, subtónica o sensible, con «rebajada»
+  o «elevada» cuando hace falta) y su clase según Piston (cap. 5): tonales I, IV y V; casi tonal II; modales III y VI;
+  el VII se absorbe en el V. Los grados de cuarto de tono se nombran como neutros: supertónica neutra (♭2+), mediante
+  neutra (♭3+), superdominante neutra (♭6+), séptimo grado neutro (♭7+); los demás, «alta» o «baja».
+- **Función.** Familias de Riemann y Piston, escritas con la calidad del acorde: «subdominante menor», «dominante
+  menor (modal, sin sensible)». Criterios del proyecto:
+  - ♭III, III y VI son **tónica relativa**, como en Riemann. Piston los trata como grados modales sin función propia;
+    en canciones con mucho ♭III, como Sarniezz (42 % del tiempo), esto sube la parte de tónica. Si más adelante
+    conviene, se pasan a «modal, sin función» en la tabla `GRADOS`.
+  - ♭VII es **dominante modal** (subtónica, sin sensible): la dominante de los modos que evitan la sensible.
+  - II mayor es dominante de la dominante (V/V). El V menor o sin tercera es dominante modal, sin sensible.
+  - ♭II es la napolitana, ♭VI la mixtura y ♯IV el tritono, que queda sin función.
+  - Los grados de cuarto de tono tienen función **neutra**: Piston deja fuera las escalas microtonales (p. 474).
+- **Inversión.** Dónde cae el bajo respecto del acorde: fundamental, 1.ª inversión (6), 2.ª inversión (6/4), séptima en
+  el bajo (4/2) o bajo fuera del acorde. Un bajo a un cuarto de tono de una nota del acorde cuenta como esa nota y se
+  marca «(bajo a 1/4 de tono)»: en Sarniezz, el bajo detectado en D#+ es el Mi de la partitura.
+- **Voz aguda.** La nota que más suena en el compás, qué es dentro del acorde y qué parte de su tiempo cae en notas del
+  acorde.
+- **Progresión.** En cada cambio de fundamental entre compases confiables: la progresión («♭III → ♭VII»), el movimiento
+  de la fundamental según Piston (pp. 22-24: quinta abajo, quinta arriba, tercera abajo, tercera arriba, segunda,
+  tritono o microtonal) y qué tan usual es según su tabla de progresiones (pp. 21-22), leída por número de grado (♭VII
+  como VII). Si el modo tiene ♭3 se agregan los añadidos del menor (p. 45). Un cambio con un grado de cuarto de tono
+  queda como «microtonal» y «fuera de la tabla».
+
+El resumen de progresiones sale dos veces, uno al lado del otro: con los compases confiables y con todos los compases.
+Cada uno da qué parte de los cambios va por quintas, las progresiones más frecuentes, las progresiones con nombre y los
+vaivenes entre dos acordes; las columnas de cada compás salen de los confiables. Hacen falta los dos: en Mata Zyklek el
+vaivén ♭II+5 ↔ ♭VII de los primeros compases, que la partitura confirma, tiene confianza entre 0.14 y 0.44 y solo aparece
+con todos los compases; en Sarniezz, en cambio, los compases poco confiables agregan cambios microtonales que la partitura
+no tiene. Las progresiones con nombre salen de la lista de progresiones de Wikipedia y se reconocen por las fundamentales,
+sin mirar la calidad. Las cuartas están incluidas: subir una cuarta es bajar una quinta («quinta abajo») y bajar una
+cuarta es subir una quinta («quinta arriba»). Una canción que casi no se mueve por quintas, o que se mueve por grados de
+cuarto de tono, se aparta del círculo de quintas: es un indicio de lo que la banda hace distinto.
+
+**Contra la partitura** (`evaluacion_armonia.json`): la función de cada compás en el cuaderno y en la partitura, con el
+mismo centro, y las progresiones de los dos en todos los compases medidos. Medido sobre las corridas `funciones2`:
+
+| Canción | Misma función | En los confiables | Distancia de funciones | Por quintas: partitura / cuaderno |
+|---|---:|---:|---:|---:|
+| Sarniezz | 66.0 % | 90.4 % | 0.039 | 67 / 72 % |
+| Mata Zyklek | 98.1 % | 98.8 % | 0.001 | 25 / 33 % |
+| Fabienk | 82.9 % | 83.5 % | 0.015 | 45 / 55 % |
+
+La función coincide casi lo mismo que la fundamental: los errores vienen de la fundamental de `chord24`, no del
+etiquetado.
+
+## Paso 4b: ejes de Lendvai
+
+Lendvai, en su análisis de Bartók, agrupa las 12 clases por terceras menores en tres ejes. Medido en semitonos sobre el
+centro, el eje es el grado módulo 3. Cada eje tiene una rama principal (polo y contrapolo, a un tritono) y una
+secundaria; un polo puede reemplazar a su contrapolo sin cambiar de función.
+
+| Eje | Rama principal (polo, contrapolo) | Rama secundaria |
+|---|---|---|
+| Tónica | I, ♯IV | VI, ♭III |
+| Subdominante | IV, VII | II, ♭VI |
+| Dominante | V, ♭II | III, ♭VII |
+
+**Extensión a 24-EDO (propuesta del proyecto, no de Lendvai).** Un grado de cuarto de tono cae entre dos ejes vecinos.
+Como la tercera menor tiene 6 cuartos de tono, esos grados forman tres ejes neutros: T–D (1+, ♭3+, ♯4+, 6+), D–S (♭2+,
+3+, 5+, ♭7+) y S–T (2+, 4+, ♭6+, 7+).
+
+El eje y la función de Riemann y Piston solo difieren en cuatro grados: III y ♭II son D para Lendvai, VII es S y ♯IV es
+T. En el tabroll24 el eje se escribe solo cuando no coincide con la función («D sens. · eje S»).
+
+Cada cambio de fundamental se clasifica como adelante (T→S→D→T, como V-I, I-IV o IV-V), atrás (como I-V o IV-I),
+dentro del mismo eje (sustitución por tercera menor o tritono), en el mismo eje neutro o microtonal.
+
+Lo que ya muestra: en Sarniezz, el 24 % de los cambios de la partitura queda dentro del eje de tónica (I ↔ ♭III, Mi ↔
+Sol), una sustitución y no un movimiento por quintas; el cuaderno no lo ve porque lee ese Mi mayor como VII. Las
+canciones con cuartos de tono se mueven entre un eje de Lendvai y uno neutro (Mata Zyklek D ↔ D–S, Yor Zarad T ↔ D–S).
+
+## Paso 5: tabroll con la armonía en 24-EDO
+
+`tabroll24_pNN.png` y `tabroll24_completo.png`, en la misma carpeta de imágenes que el tabroll (celdas `harmony_labels`
+y la última del cuaderno). Es el mismo tabroll, con la franja de acordes de `armonia` en lugar de la de 12 clases:
+
+- **Cifrado.** Números romanos sobre el centro, con la convención del tabroll: sus2, sus4 y 5 abajo; n, ° y aum arriba;
+  «+» sube un cuarto de tono.
+- **Inversión.** Bajo cifrado: ⁶ primera inversión, ⁶₄ segunda, ⁴₂ séptima en el bajo. Si la calidad ya ocupa un índice,
+  la cifra va arriba (6/4).
+- **Nombre.** Debajo del compás, con las notas en 24-EDO y barra para el bajo cuando no es la fundamental: G/D, Dsus2/D♯+.
+- **Función.** Debajo del cifrado, en su color: T tónica (dorado), S subdominante (azul), D dominante (rojo), N neutra
+  (lila); en minúscula si el acorde es menor, con su matiz corto (rel., modal, sens., V/V, nap., mixt., tt).
+- **Confianza.** Los compases de baja confianza van entre paréntesis, como los acordes deducidos del tabroll de 12 clases.
+- Las barras de la franja tienen el color del grado de la fundamental, como las filas.
+
+Si `CENTRO` no es 'cuaderno', los romanos cuentan desde el centro y los colores desde la tónica del tabroll.
+
 ## Lo que todavía no hace
 
 Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su
-  cadencia más fuerte, el tipo de cadencia, las séptimas, y la figura y las distancias del círculo.
+  cadencia más fuerte, las séptimas, y la figura y las distancias del círculo.

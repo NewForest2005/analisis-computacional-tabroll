@@ -146,11 +146,13 @@ def render(song: Song, path: Optional[str] = None, view: Optional[tuple[float, f
                 continue
 
             cx, cy = (x0 + x1) / 2, strip_top + st.strip_h / 2
-            fs = max(6.5, min(26.0, 0.95 * w / max(_plain_len(numeral), 1)))
-            ax.text(cx, cy - (4 if ch.annot else 0), _mathtext(numeral), color="#e9e9ec", fontsize=fs, ha="center", va="center", zorder=8)
+            fs = max(6.5, min(18.0 if ch.annot else 26.0, 0.95 * w / max(_plain_len(numeral), 1)))
+            ax.text(cx, cy - (10 if ch.annot else 0), _mathtext(numeral), color="#e9e9ec", fontsize=fs, ha="center", va="center", zorder=8)
 
-            if ch.annot:
-                ax.text(cx, cy + 0.9 * fs + 3, ch.annot, color="#9a9aa0", fontsize=6.5, ha="center", va="center", zorder=8)
+            if ch.annot:                                                 # debajo del cifrado, sobre la barra inferior
+                ax.text(cx, strip_top + st.strip_h - st.bar_h - 7, ch.annot, color=ch.annot_color or "#9a9aa0",
+                        fontsize=max(5.5, min(8.0, 1.6 * w / max(len(ch.annot), 1))), fontweight="bold", ha="center",
+                        va="center", zorder=8)
 
             nfs = max(6.5, min(15.0, 1.0 * w / max(_plain_len(name), 1)))
             label = f"$\\mathsf{{{name}}}$" if re.search(r"[_^]\{", name) else name
