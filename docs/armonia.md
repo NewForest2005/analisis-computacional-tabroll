@@ -215,6 +215,42 @@ y la última del cuaderno). Es el mismo tabroll, con la franja de acordes de `ar
 
 Si `CENTRO` no es 'cuaderno', los romanos cuentan desde el centro y los colores desde la tónica del tabroll.
 
+## Paso 6: notas columna
+
+Celdas `melodic_columns` y `columns_summary`, y la celda que las aplica, antes del tabroll24. En cada compás (un cuadro
+del tabroll):
+
+- **Columnas de pulso.** En cada pulso, la nota de la voz aguda con más peso y el bajo que suena en ese momento («1 D3/D2
+  · 2 E3/E2 …»). El peso combina cuatro reglas de preferencia, a la manera de la reducción de Lerdahl y Jackendoff: dónde
+  cae el ataque, si es nota del acorde del compás, cuánto dura y si es un punto alto o bajo del contorno. Los pesos
+  (`PESOS`) son fijos y no se ajustan con la partitura.
+- **Columna principal.** La de más peso del compás: nota aguda, bajo, intervalo entre los dos, qué es la nota en el
+  acorde y en qué pulso cae.
+- **Arco.** La forma de la voz aguda en el compás: arco (sube y baja), valle, asciende, desciende o plano, con su cumbre
+  y su ámbito.
+- **Resumen.** En los compases confiables: qué es la columna en el acorde, intervalo con el bajo, arcos, pulsos y, en cada
+  ciclo de la voz aguda, su columna y su arco más frecuentes.
+
+Que la columna caiga dentro del acorde (99-100 %) dice poco, porque el acorde sale de las mismas notas. La evaluación
+aplica la misma regla a la melodía principal y al bajo de la partitura:
+
+| Canción | Misma nota principal | Entre las columnas de pulso | Mismo bajo | Misma nota del acorde | Mismo arco |
+|---|---:|---:|---:|---:|---:|
+| Sarniezz | 31 % | 57 % | 33 % | 32 % | 59 % |
+| Mata Zyklek | 63 % | 83 % | 81 % | 64 % | 53 % |
+| Fabienk | 37 % | 68 % | 29 % | 36 % | 35 % |
+
+La nota de la partitura suele estar entre las columnas de pulso del cuaderno aunque no sea la principal: la regla elige
+otra, sobre todo cuando la fundamental o el ritmo del cuaderno difieren. La partitura mide qué tan estable es la regla
+frente a los errores de transcripción, no si elige bien musicalmente. Lo que sí confirma: la guitarra dobla al bajo en
+unísono u octava buena parte del tiempo (38-73 % de las columnas de la partitura), y el resto se apoya en quintas y
+terceras.
+
+En el tabroll24, la columna principal de cada compás va marcada con anillos dorados en la nota aguda y en el bajo,
+unidos por una línea; las columnas de los demás pulsos, con un anillo blanco fino. En Sarniezz se ve que la guitarra y
+el bajo tocan la misma línea a una octava; en el ciclo E de Yor Zarad la columna es G♯+ sobre G♯+, un grado de cuarto
+de tono que sostiene el arco.
+
 ## Lo que todavía no hace
 
 Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su

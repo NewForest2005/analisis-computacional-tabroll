@@ -1,7 +1,8 @@
-"""**`render_song_graphic`**: Dibuja la canción o un tramo (`start_s`, `duration_s`) por páginas, las guarda en `OUTPUT_DIR` y devuelve sus rutas. `chords` cambia los acordes de la franja; si no se da, usa `view_chords`.
+"""**`render_song_graphic`**: Dibuja la canción o un tramo (`start_s`, `duration_s`) por páginas, las guarda en `OUTPUT_DIR` y devuelve sus rutas. `chords` cambia los acordes de la franja (si no se da, usa `view_chords`) y `columns` agrega notas columna.
 """
 
-def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_harmony', show=True, chords=None):
+def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_harmony', show=True, chords=None,
+                        columns=None):
 
     end_s = len(y) / sr if duration_s is None else min(start_s + float(duration_s), len(y) / sr)
     b0, b1 = float(pos(max(0.0, float(start_s)))), float(pos(end_s))
@@ -22,7 +23,9 @@ def render_song_graphic(start_s=0.0, duration_s=VIEW_SECONDS, filename='angine_h
         page_chords = [c for c in (view_chords if chords is None else chords) if c.onset < b and c.onset + c.dur > a]
 
         path = OUTPUT_DIR / f'{filename}_p{k:02d}.png'
-        fig = render(Song(view_scale, page_notes, page_chords, pm), str(path), rows=rows, style=style)
+        page_columns = [c for c in (columns or []) if a <= c['onset'] < b]
+        fig = render(Song(view_scale, page_notes, page_chords, pm), str(path), rows=rows, style=style,
+                     columns=page_columns)
 
         plt.close(fig); paths.append(path)
 

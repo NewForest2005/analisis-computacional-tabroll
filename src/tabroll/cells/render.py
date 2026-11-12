@@ -1,7 +1,8 @@
-"""**`render`**: Dibuja la canción y devuelve la figura.
+"""**`render`**: Dibuja la canción y devuelve la figura. `columns` (opcional) son notas columna: un anillo en la nota aguda y otro en el bajo, unidos por una línea; la principal de cada compás va en dorado.
 """
 
-def render(song: Song, path: Optional[str] = None, view: Optional[tuple[float, float]] = None, rows: Optional[tuple[int, int]] = None, playhead: Optional[float] = None, style: Optional[Style] = None):
+def render(song: Song, path: Optional[str] = None, view: Optional[tuple[float, float]] = None, rows: Optional[tuple[int, int]] = None, playhead: Optional[float] = None, style: Optional[Style] = None,
+           columns: Optional[list] = None):
 
     st = style or Style()
     sc, n, ms = song.scale, song.scale.n, song.measures
@@ -120,6 +121,27 @@ def render(song: Song, path: Optional[str] = None, view: Optional[tuple[float, f
             if x1 < st.left - 8 or x0 > W:
                 continue
             _fill(ax, x0, ymid(row) - (st.row_h - 2) / 2, x1 - x0, st.row_h - 2, cols, 4, st.stripe_period)
+
+    # notas columna: anillo en la nota aguda y en el bajo, unidos por una línea (la principal, en dorado)
+    for c in columns or []:
+        x = X(c["onset"]) + st.row_h * 0.6
+        if x < st.left or x > W:
+            continue
+        ys = []
+        for cents in (c["cents"], c.get("bajo")):
+            if cents is not None:
+                r, _ = sc.locate(cents)
+                if lo - 0.5 <= r <= hi + 0.5:
+                    ys.append(ymid(r))
+        if not ys:
+            continue
+        if c.get("principal"):
+            if len(ys) == 2 and abs(ys[0] - ys[1]) > 1:
+                ax.plot([x, x], ys, color=GOLD, lw=2.0, alpha=0.9, zorder=9, solid_capstyle="round")
+            ax.scatter([x] * len(ys), ys, s=(st.row_h * 0.62) ** 2, facecolors="none", edgecolors=GOLD, linewidths=2.0, zorder=9.5)
+        else:
+            ax.scatter([x], ys[:1], s=(st.row_h * 0.5) ** 2, facecolors="none", edgecolors="#f2f2f2", linewidths=0.9,
+                       alpha=0.8, zorder=9.5)
 
     # Franja de acordes + nombres
     for ch in song.chords:

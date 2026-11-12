@@ -20,6 +20,17 @@ tramos medibles (la misma alineación que la evaluación de la melodía). Las me
   `funcion` es la parte del tiempo en que coinciden (también en los confiables), y `distancia_funciones` compara cómo se
   reparte el tiempo entre tónica, subdominante, dominante y neutra. `eje` y `distancia_ejes` hacen lo mismo con los ejes
   de Lendvai.
+- columnas: `melodic_columns` con las notas del cuaderno (voz aguda y bajo) y con las de la partitura (melodía principal
+  y bajo), cada una con su acorde. `columna_aguda` y `columna_bajo` son la parte del tiempo en que coincide la clase de
+  la columna principal (sin la octava), `columna_en_pulsos` si la de la partitura está entre las columnas de pulso del
+  cuaderno, `columna_papel` si es la misma nota del acorde y `arco` si tiene la misma forma.
+- melodía: `melodic_figures` con la voz aguda del cuaderno y la melodía principal de la partitura, en los compases
+  medidos y cada una con su acorde: intervalos microtonales, notas extrañas y la distancia entre los repartos de
+  intervalos, giros, espectro y tipos de notas extrañas.
+- patrones: `cycle_patterns` con las mismas vueltas de cada ciclo, solo las que caen enteras en compases medidos, con
+  las notas del cuaderno y con las de la partitura. `patron_f` dice cuánto se parecen los dos patrones de cada letra
+  (medida F sobre las notas, por clase y con una casilla de tolerancia, ponderada por vueltas); `acoge_cuaderno` y
+  `acoge_partitura`, cuánto se acoge cada vuelta a su patrón en cada caso.
 - progresiones: `chord_progressions` sobre todos los compases medidos, del cuaderno y de la partitura: qué parte de los
   cambios va por quintas, qué tan usuales son en la tabla de Piston, los vaivenes y las progresiones con nombre.
 """
@@ -28,6 +39,7 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 
@@ -35,7 +47,10 @@ from tabroll.cells.chord24 import chord24
 from tabroll.cells.center24_by_layer import center24_by_layer
 from tabroll.cells.chord_progressions import chord_progressions
 from tabroll.cells.chord_roles import chord_roles
+from tabroll.cells.cycle_patterns import cycle_patterns
 from tabroll.cells.harmony_layers import harmony_layers
+from tabroll.cells.melodic_columns import melodic_columns
+from tabroll.cells.melodic_figures import melodic_figures
 from tabroll.cells.notetable import NoteTable
 from tabroll.evaluation import melodia as M
 
@@ -91,7 +106,7 @@ def _progressions(rows: list[dict], menor: bool) -> dict:
 
 
 def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycles: dict | None = None,
-             resumen: dict | None = None, tonic_pc24: int | None = None) -> dict:
+             resumen: dict | None = None, tonic_pc24: int | None = None, raw_bass=None, spb: float | None = None) -> dict:
     al = M.Alignment(song)
     gu, ba = M.mapped(al, al.ref["guitars"]), M.mapped(al, al.ref["basses"])
     sh = M.calib(M.top_line(gu), M._notes(raw_high))                  # mismo desfase que la evaluación de la melodía
@@ -162,6 +177,89 @@ def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycle
                  por_quintas_partitura=prog_r["por_quintas"], progresiones_cuaderno=prog_d, progresiones_partitura=prog_r,
                  eje=pct(ok_ej), eje_confiables=pct(ok_ej, conf), ejes_cuaderno=ej_d, ejes_partitura=ej_r,
                  distancia_ejes=_js(ej_d, ej_r))
+    if raw_bass is not None and spb:                                    # notas columna del cuaderno y de la partitura
+        medidos = {x["compas"]: x for x in rows}
+        nb = [b for b in bars if b["compas"] in medidos]
+        lens = [max(1, round((b["fin_s"] - b["inicio_s"]) / spb)) for b in nb]
+        cd = melodic_columns(nb, M._notes(raw_bass), M._notes(raw_high), lens)
+        lead = [(n["t"] + sh, n["te"] + sh, n["p"]) for n in M.lead_line(al, song)]
+        low = [(n["t"] + sh, n["te"] + sh, n["p"]) for n in M.top_line(ba, low=True)]
+        refs = [dict(b, fundamental_pc24=medidos[b["compas"]]["ref_fundamental_pc24"],
+                     calidad=medidos[b["compas"]]["ref_calidad"]) for b in nb]
+        cr = melodic_columns(refs, low, lead, lens)
+        clase = lambda n: n.rstrip("-0123456789") if n else None             # sin la octava
+        papel = lambda c: (c.get("columna_papel") or "sin acorde").split(" (")[0]
+        for a, b in zip(cd, cr):
+            medidos[a["compas"]].update(
+                columna=a["columna"], ref_columna=b["columna"], arco=a["arco"], ref_arco=b["arco"],
+                ok_columna_aguda=a["columna"] is not None and clase(a["columna_aguda"]) == clase(b["columna_aguda"]),
+                ok_columna_bajo=a["columna"] is not None and clase(a["columna_bajo"]) == clase(b["columna_bajo"]),
+                ok_columna_en_pulsos=b["columna"] is not None
+                and clase(b["columna_aguda"]) in {clase(c["aguda"]) for c in a["columnas_pulso"]},
+                ok_columna_papel=a["columna"] is not None and papel(a) == papel(b),
+                ok_arco=a["arco"] is not None and a["arco"] == b["arco"])
+        ok = {k: np.array([x.get(k, False) for x in rows], float)
+              for k in ("ok_columna_aguda", "ok_columna_en_pulsos", "ok_columna_bajo", "ok_columna_papel", "ok_arco")}
+        pap_d = _shares([dict(c, papel=papel(c)) for c in cd if c["columna"]], "papel")
+        pap_r = _shares([dict(c, papel=papel(c)) for c in cr if c["columna"]], "papel")
+        r.update(columna_aguda=pct(ok["ok_columna_aguda"]), columna_en_pulsos=pct(ok["ok_columna_en_pulsos"]),
+                 columna_bajo=pct(ok["ok_columna_bajo"]),
+                 columna_papel=pct(ok["ok_columna_papel"]), arco=pct(ok["ok_arco"]),
+                 papeles_columna_cuaderno=pap_d, papeles_columna_partitura=pap_r, distancia_papeles=_js(pap_d, pap_r),
+                 intervalos_columna_cuaderno=_shares([c for c in cd if c["columna"]], "columna_intervalo"),
+                 intervalos_columna_partitura=_shares([c for c in cr if c["columna"]], "columna_intervalo"),
+                 arcos_cuaderno=_shares([c for c in cd if c["columna"]], "arco"),
+                 arcos_partitura=_shares([c for c in cr if c["columna"]], "arco"))
+        if tonic_pc24 is not None:                                      # figuras melódicas del cuaderno y de la partitura
+            dentro = lambda notas: [n for n in notas if any(b["inicio_s"] <= n[0] < b["fin_s"] for b in nb)]
+            _, md = melodic_figures([dict(b, confianza=1.0) for b in nb], dentro(M._notes(raw_high)), lens, tonic_pc24)
+            _, mr = melodic_figures([dict(b, confianza=1.0) for b in refs], dentro(lead), lens, tonic_pc24)
+            corto = lambda m: {k: m[k] for k in ("notas", "grado_conjunto", "saltos", "repetidas", "microtonales",
+                                                 "espectro_microtonal", "extranas", "intervalos", "giros", "espectro",
+                                                 "tipos_extranas")}
+            r.update(microtonales_cuaderno=md["microtonales"], microtonales_partitura=mr["microtonales"],
+                     extranas_cuaderno=md["extranas"], extranas_partitura=mr["extranas"],
+                     distancia_intervalos=_js(md["intervalos"], mr["intervalos"]), distancia_giros=_js(md["giros"], mr["giros"]),
+                     distancia_espectro=_js(md["espectro"], mr["espectro"]),
+                     distancia_extranas=_js(md["tipos_extranas"], mr["tipos_extranas"]),
+                     melodia_cuaderno=corto(md), melodia_partitura=corto(mr))
+        pats = (resumen or {}).get("patrones")
+        if pats and tonic_pc24 is not None:                             # patrones de ciclo del cuaderno y de la partitura
+            ciclos = {v: [SimpleNamespace(label=l, start=a, end=b, period=P) for l, d in ps.items() for a, b, P in d["segmentos"]]
+                      for v, ps in pats.items()}
+            todos = [max(1, round((b["fin_s"] - b["inicio_s"]) / spb)) for b in bars]
+            dentro = lambda t0, t1: all(b["compas"] in medidos for b in bars if b["inicio_s"] < t1 - 0.05 and b["fin_s"] > t0 + 0.05)
+            con_ref = [dict(b, fundamental_pc24=medidos[b["compas"]]["ref_fundamental_pc24"], calidad=medidos[b["compas"]]["ref_calidad"])
+                       if b["compas"] in medidos else b for b in bars]
+            _, pd_ = cycle_patterns(bars, ciclos, {"Voz aguda": M._notes(raw_high), "Voz grave": M._notes(raw_bass)}, todos,
+                                    tonic_pc24, dentro=dentro)
+            _, pr_ = cycle_patterns(con_ref, ciclos, {"Voz aguda": lead, "Voz grave": low}, todos, tonic_pc24, dentro=dentro)
+
+            def parecido(a, b):                                         # medida F entre las notas de dos patrones
+                usadas, ok = set(), 0
+                for s, p in a:
+                    for j, (t, q) in enumerate(b):
+                        if j not in usadas and abs(s - t) <= 1 and round(2 * p) % 24 == round(2 * q) % 24:
+                            usadas.add(j)
+                            ok += 1
+                            break
+                return 2 * ok / (len(a) + len(b)) if a and b else 0.0
+
+            comp, peso = {}, []
+            for v in pd_:
+                for l in pd_[v]:
+                    if l in pr_.get(v, {}):
+                        d, rr = pd_[v][l], pr_[v][l]
+                        f = parecido(d["patron_notas"], rr["patron_notas"])
+                        comp.setdefault(v, {})[l] = dict(vueltas=d["vueltas"], patron_f=round(100 * f, 1), acoge_cuaderno=d["acoge"],
+                                                         acoge_partitura=rr["acoge"])
+                        peso.append((d["vueltas"], f, d["acoge"], rr["acoge"]))
+            if peso:
+                w = np.array([x[0] for x in peso], float)
+                r.update(patron_f=round(100 * float(np.average([x[1] for x in peso], weights=w)), 1),
+                         acoge_cuaderno=round(float(np.average([x[2] for x in peso], weights=w)), 1),
+                         acoge_partitura=round(float(np.average([x[3] for x in peso], weights=w)), 1),
+                         patrones_comparados=comp)
     r["compases"] = rows
     return r
 
@@ -176,7 +274,8 @@ def evaluate_run(run_dir: Path, song: str | None = None, write: bool = True) -> 
     J = json.loads((run_dir / "line_diagnostics.json").read_text(encoding="utf-8"))
     cycles = (H.get("resumen") or {}).get("ciclos") or {                  # los mismos ciclos que usó la armonía del cuaderno
         v: [dict(start=c["start_s"], end=c["end_s"], period=c["period_s"]) for c in cs] for v, cs in (J.get("cycles_n") or {}).items()}
-    r = evaluate(song, H["compases"], J["raw_high"], cycles=cycles, resumen=H.get("resumen"), tonic_pc24=H.get("tonica_pc24"))
+    r = evaluate(song, H["compases"], J["raw_high"], cycles=cycles, resumen=H.get("resumen"), tonic_pc24=H.get("tonica_pc24"),
+                 raw_bass=J.get("raw_bass"), spb=60.0 / J["tempo_bpm"] if J.get("tempo_bpm") else None)
     if write:
         detail = r.pop("compases", [])
         (run_dir / "evaluacion_armonia.json").write_text(json.dumps(r, ensure_ascii=False, indent=2), encoding="utf-8")

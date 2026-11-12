@@ -451,7 +451,9 @@ def save_line_diagnostics(ns: dict, path: Path) -> bool:
 ROLE_COLUMNS = ("compas", "inicio_s", "fin_s", "fundamental", "calidad", "grado", "cifrado", "nombre_grado",
                 "clase_grado", "funcion_corta", "funcion", "funcion_texto", "matiz", "eje", "rama", "bajo", "inversion",
                 "cifra_bajo", "nota_aguda", "papel_aguda", "aguda_en_acorde", "progresion", "movimiento", "uso_piston",
-                "eje_cambio", "paso_eje", "confianza", "ciclo_bajo", "ciclo_aguda")
+                "eje_cambio", "paso_eje", "confianza", "ciclo_bajo", "ciclo_aguda", "columna", "columna_papel",
+                "columna_intervalo", "columna_pulso", "columnas", "arco", "cumbre", "ambito_st", "giro_principal",
+                "salto_mayor", "notas_extranas", "acoge_aguda", "motivo_aguda", "acoge_bajo", "motivo_bajo")
 
 
 def save_harmony(ns: dict, path: Path) -> bool:
@@ -473,7 +475,11 @@ def save_harmony(ns: dict, path: Path) -> bool:
 MELODY_KEYS = ("principal", "principal_sin_octava", "mas_aguda", "bajo", "tiempo_medible")
 HARMONY_KEYS = ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiable", "fundamental_confiables",
                 "fundamental_resto", "centro_partitura", "distancia_movimientos", "distancia_calidades", "funcion",
-                "funcion_confiables", "distancia_funciones", "por_quintas_cuaderno", "por_quintas_partitura")
+                "funcion_confiables", "distancia_funciones", "por_quintas_cuaderno", "por_quintas_partitura", "eje",
+                "eje_confiables", "distancia_ejes", "columna_aguda", "columna_en_pulsos", "columna_bajo", "columna_papel",
+                "arco", "distancia_papeles", "microtonales_cuaderno", "microtonales_partitura", "extranas_cuaderno",
+                "extranas_partitura", "distancia_intervalos", "distancia_giros", "distancia_espectro", "distancia_extranas",
+                "patron_f", "acoge_cuaderno", "acoge_partitura")
 
 
 def evaluate_against_score(run_dir: Path, name: str, has_harmony: bool) -> tuple[dict, list[str]]:
@@ -548,7 +554,16 @@ def write_markdown(path: Path, info: dict) -> None:
               f"distancia de funciones: {ea.get('distancia_funciones')} | cambios por quintas: partitura {ea.get('por_quintas_partitura')} %, "
               f"cuaderno {ea.get('por_quintas_cuaderno')} %",
               f"- Mismo eje de Lendvai que la partitura: {ea.get('eje')} % del tiempo (en los confiables, {ea.get('eje_confiables')} %) | "
-              f"distancia de ejes: {ea.get('distancia_ejes')}", ""]
+              f"distancia de ejes: {ea.get('distancia_ejes')}",
+              f"- Notas columna contra la partitura: misma nota principal {ea.get('columna_aguda')} % (entre las columnas de pulso, "
+              f"{ea.get('columna_en_pulsos')} %) | mismo bajo {ea.get('columna_bajo')} % | misma nota del acorde {ea.get('columna_papel')} % | "
+              f"mismo arco {ea.get('arco')} % | distancia de papeles: {ea.get('distancia_papeles')}",
+              f"- Melodía contra la partitura: intervalos microtonales {ea.get('microtonales_cuaderno')} / {ea.get('microtonales_partitura')} %, "
+              f"notas extrañas {ea.get('extranas_cuaderno')} / {ea.get('extranas_partitura')} % (cuaderno / partitura) | distancias: "
+              f"intervalos {ea.get('distancia_intervalos')}, giros {ea.get('distancia_giros')}, espectro {ea.get('distancia_espectro')}, "
+              f"notas extrañas {ea.get('distancia_extranas')}",
+              f"- Patrones de ciclo contra la partitura: parecido de los patrones {ea.get('patron_f')} % | las vueltas se acogen "
+              f"{ea.get('acoge_cuaderno')} % (cuaderno) y {ea.get('acoge_partitura')} % (partitura)", ""]
 
     if r:
         L += ["## Resultado", ""]
