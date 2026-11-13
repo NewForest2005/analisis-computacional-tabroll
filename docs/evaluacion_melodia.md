@@ -140,3 +140,38 @@ estéreo, ni una red general separan la melodía de las otras capas en esta band
 - Ninguna celda del cuaderno lee la partitura ni nombra una canción, salvo la que la elige
   (`tests/test_reproducibilidad.py`). Se quitaron el bloque guiado por el `.gp` de la celda de la línea, que estaba
   apagado, y los presets de Fabienk y Mata Zyklek de la celda de ajustes.
+
+## Paso 3, primera ronda: altura de la línea (probado y descartado, 13-nov-2026)
+
+Réplica de la celda de la línea fuera del cuaderno (las mismas funciones, con las pistas de semilla 0): reproduce la F
+guardada con ±0.9 puntos en la voz aguda y exacta en el bajo. Cada cambio se mide en las tres canciones con partitura
+y solo se adopta si sube en las tres. Cambio en puntos de F (Sarniezz / Mata Zyklek / Fabienk):
+
+| Cambio | Resultado |
+|---|---|
+| Voto entre vueltas para el cuarto de tono | arregla 1 / 17 / 5 errores, rompe 6 / 4 / 0 aciertos |
+| Altura fina por el pico de cada armónico | −0.1 / −0.2 / +0.1 |
+| Bajar una octava cuando suenan los armónicos de la nota grave | −0.4 / +0.2 / +0.6 |
+| Piso de la voz aguda en 45 (hoy 47) | −2.9 / −1.6 / −1.6 |
+| Atracción al registro más ancha o local | −0.3 a −0.9 / −2.7 a −3.8 / +0.2 a +0.5 |
+| Umbral de ataques de la guitarra 0.2 (hoy 0.3) | −0.4 / 0.0 / −0.2 |
+| Nota del bajo cuando la guitarra lo dobla | −0.5 / −2.4 / −0.2 |
+| Bajo: ataques de banda completa | +0.5 / +2.3 / −1.1 |
+
+- Los errores de cuarto de tono se repiten igual en todas las vueltas. En el 74-83 % de ellos, el pico de la pista
+  de guitarra está más cerca de la altura que leyó el cuaderno que de la partitura (mediana: 34-45 cents desde la
+  partitura). Se concentran en pocas notas: apuntan a la referencia.
+- En Fabienk, el 10 % de la melodía está por debajo de MIDI 47, donde la guitarra dobla al bajo; ahí la voz aguda
+  toma un armónico. Bajar el piso hace caer la línea una octava en todas las canciones.
+- En el bajo, el error mayor son los re-ataques perdidos (9-11 % en Mata Zyklek y Fabienk). Elegir por canción los
+  ataques que dejan más notas regulares entre vueltas acierta en las tres, pero por márgenes de 7 a 24 notas: queda
+  como candidato para la prueba ciega.
+
+## Paso 4: la saliencia doble, una sola vez
+
+En la celda de la línea, `stereo_salience` se llama dos veces, con `gamma 0.7` y `0.0`. Las dos llamadas repetían la
+STFT del canal lateral y los dos `harmonic_part`, que no dependen de `gamma`. Ahora la segunda llamada los reusa. En mi
+copia, con Mata Zyklek, las dos llamadas pasan de 78 s a 40 s, y las saliencias salen idénticas, elemento por elemento.
+
+`cache` (un diccionario) guarda lo que no depende de `gamma`: el canal lateral ya filtrado y la saliencia del central.
+Dos llamadas con la misma canción y el mismo `cache` dan lo mismo que sin él, pero la segunda es mucho más rápida.

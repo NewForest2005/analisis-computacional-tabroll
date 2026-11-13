@@ -115,7 +115,8 @@ chroma = chroma_profile(M, sr, NFFT_P, offset=off)                         # per
 
 ishigh = cand >= 47.0                                                      # voz aguda: desde B2
 
-Sh = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS)
+cache_sal = {}                                                             # lo que comparten las dos saliencias
+Sh = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, cache=cache_sal)
 Sh = add_guitar_stem(Sh, S, stem, cand, sr, NFFT_P, HOP_P)
 
 Shigh = Sh[ishigh].max(axis=0); thr_h = np.percentile(Shigh, 55)
@@ -123,8 +124,9 @@ melody = viterbi_pitch(Sh[ishigh], cand[ishigh], thr_h)                    # lí
 cycles_n = {'Voz grave': find_cycles(bass, off, sr, HOP_P, min_turns=2),
             'Voz aguda': find_cycles(melody, off, sr, HOP_P, min_turns=3)}         # los mismos ciclos que calcula la celda de ciclos
 
-Sn = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, gamma=0.0)   # conserva la octava de la guitarra
+Sn = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, gamma=0.0, cache=cache_sal)   # conserva la octava de la guitarra
 Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
+del cache_sal
 selector_salience = Sn[ishigh].copy()                                      # run_song.py la guarda en line_diagnostics.json
 selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
