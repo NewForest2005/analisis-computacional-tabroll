@@ -31,6 +31,9 @@ tramos medibles (la misma alineación que la evaluación de la melodía). Las me
   las notas del cuaderno y con las de la partitura. `patron_f` dice cuánto se parecen los dos patrones de cada letra
   (medida F sobre las notas, por clase y con una casilla de tolerancia, ponderada por vueltas); `acoge_cuaderno` y
   `acoge_partitura`, cuánto se acoge cada vuelta a su patrón en cada caso.
+- centros por tramo: `local_centers` en los compases medidos, con las notas del cuaderno y con las de la partitura y
+  los mismos ciclos. `centro_local` es la parte de los compases cuyo tramo tiene el mismo centro en los dos; en
+  `centro_local_seguros`, solo los tramos que son seguros en los dos.
 - progresiones: `chord_progressions` sobre todos los compases medidos, del cuaderno y de la partitura: qué parte de los
   cambios va por quintas, qué tan usuales son en la tabla de Piston, los vaivenes y las progresiones con nombre.
 """
@@ -48,6 +51,7 @@ from tabroll.cells.center24_by_layer import center24_by_layer
 from tabroll.cells.chord_progressions import chord_progressions
 from tabroll.cells.chord_roles import chord_roles
 from tabroll.cells.cycle_patterns import cycle_patterns
+from tabroll.cells.local_centers import local_centers
 from tabroll.cells.harmony_layers import harmony_layers
 from tabroll.cells.melodic_columns import melodic_columns
 from tabroll.cells.melodic_figures import melodic_figures
@@ -260,6 +264,19 @@ def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycle
                          acoge_cuaderno=round(float(np.average([x[2] for x in peso], weights=w)), 1),
                          acoge_partitura=round(float(np.average([x[3] for x in peso], weights=w)), 1),
                          patrones_comparados=comp)
+        cic = (resumen or {}).get("ciclos")
+        if cic and tonic_pc24 is not None:                              # centros por tramo del cuaderno y de la partitura
+            _, cd3 = local_centers(nb, M._notes(raw_bass), M._notes(raw_high), cic, tonic_pc24)
+            _, cr3 = local_centers(nb, low, lead, cic, tonic_pc24)
+            pares = list(zip(cd3["tramos"], cr3["tramos"]))
+            if pares:
+                igual = lambda ps: round(100.0 * sum(a["compases"] for a, b in ps if a["centro"] == b["centro"])
+                                         / (sum(a["compases"] for a, _ in ps) or 1), 1)
+                seguros = [(a, b) for a, b in pares if a["seguro"] and b["seguro"]]
+                r.update(centro_local=igual(pares), centro_local_seguros=igual(seguros) if seguros else None,
+                         tramos_comparados=[dict(inicio=a["inicio"], fin=a["fin"], ciclo=a["ciclo"], compases=a["compases"],
+                                                 cuaderno=a["centro"] + ("" if a["seguro"] else "?"),
+                                                 partitura=b["centro"] + ("" if b["seguro"] else "?")) for a, b in pares])
     r["compases"] = rows
     return r
 

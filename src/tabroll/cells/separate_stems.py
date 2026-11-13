@@ -1,10 +1,11 @@
-"""separate_stems: separa la canción con la red neuronal Demucs (modelo htdemucs_6s, el que tiene pista de guitarra) y guarda la guitarra y el bajo como Canción_guitar.mp3 y Canción_bass.mp3 junto a la canción. La primera vez instala demucs-infer y descarga el modelo.
+"""separate_stems: separa la canción con la red neuronal Demucs (modelo htdemucs_6s, el que tiene pista de guitarra) y guarda la guitarra y el bajo como Canción_guitar.mp3 y Canción_bass.mp3 junto a la canción. La primera vez instala demucs-infer y descarga el modelo. Demucs desplaza el audio una cantidad al azar antes de separar; con `semilla` fija (0 por defecto), dos separaciones del mismo audio en la misma máquina dan las mismas pistas.
 """
 
-def separate_stems(audio, kinds=('guitar', 'bass'), model_name='htdemucs_6s'):
+def separate_stems(audio, kinds=('guitar', 'bass'), model_name='htdemucs_6s', semilla=0):
     if importlib.util.find_spec('demucs_infer') is None:
         subprocess.run([sys.executable, '-m', 'pip', '-q', 'install', 'demucs-infer'], check=True)
 
+    import random
     import torch
     from demucs_infer.pretrained import get_model
     from demucs_infer.apply import apply_model
@@ -18,6 +19,8 @@ def separate_stems(audio, kinds=('guitar', 'bass'), model_name='htdemucs_6s'):
     ref = wav.mean(0)
     wav = (wav - ref.mean()) / ref.std()                                                   # la misma normalización que usa Demucs
 
+    random.seed(semilla)                                                                  # Demucs desplaza el audio al azar antes de separar:
+    torch.manual_seed(semilla)                                                            # con la semilla fija, las pistas salen siempre iguales
     with torch.no_grad():
         out = apply_model(model, wav[None], device=device)[0].cpu()
     out = out * ref.std() + ref.mean()

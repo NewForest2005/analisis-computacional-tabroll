@@ -69,3 +69,26 @@ de tono arriba; en el de Fabienk (ciclo B), la octava y un cuarto de tono bajo l
 
 En la partitura las vueltas tampoco se repiten iguales: la variación entre vueltas es real, no solo error de
 transcripción. «Cambia el acorde» sale mucho, pero en parte es ruido de la detección de acordes.
+
+## Paso M3: centros por tramo
+
+Celda `local_centers` y la celda que la aplica, antes del tabroll24. La canción se corta en tramos: los ciclos del bajo
+y los huecos entre ellos, de al menos 4 compases. En cada tramo, el centro se mide con la misma regla que el de la
+canción (`center24_by_layer`) y el modo con `mode24`. Cada centro se compara con el de la canción y con el del tramo
+anterior: mismo centro, quinta, tercera, segunda, tritono o microtonal; las terceras menores y el tritono llevan «mismo
+eje de Lendvai». Un tramo con margen menor que 0.1 queda como dudoso. Por compás: `tramo` y `centro_local`.
+
+| Canción | Centro | Lo que muestran los tramos |
+|---|---|---|
+| Sarniezz | E | Los tramos B giran sobre D (♭7) y el C sobre G (♭3): E solo ocupa el 6 % de los tramos |
+| Mata Zyklek | G | La intro está centrada en G♯+ (♭2+); el tramo C va a D y vuelve a G por quinta |
+| Fabienk | E | Sin centro claro por tramo (márgenes menores que 0.1) |
+| Utzp | E | La intro está sobre B (5) y entra a E por quinta abajo |
+| Yor Zarad | G | Desde 4:56 hasta el final el centro está en G♯+ (♭2+) |
+
+Contra la partitura, el centro por tramo coincide en el 89 % de los compases de Sarniezz (100 % en los tramos seguros) y
+en el 87 % de los de Mata Zyklek (90 %); en Fabienk ningún tramo es seguro. La partitura confirma el tramo en D de
+Sarniezz y la intro en G♯+ de Mata Zyklek.
+
+A gran escala, la armonía resuelve como una cadencia de dominante a tónica entre tramos (Utzp, Mata Zyklek) o se desplaza
+a un centro de cuarto de tono (Mata Zyklek, Yor Zarad), fuera del círculo de quintas.

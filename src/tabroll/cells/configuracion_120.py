@@ -1,13 +1,11 @@
-"""Tabroll con la armonía en 24-EDO: `tabroll24_pNN.png` por página y `tabroll24_completo.png` en la carpeta de imágenes. Las notas columna van marcadas: la principal de cada compás con anillos dorados en la nota aguda y en el bajo, unidos por una línea; las de los demás pulsos, con un anillo blanco fino. `MOSTRAR_TABROLL24 = True` muestra aquí cada página.
+"""Centros por tramo de la canción: agrega el tramo y su centro a cada compás de `armonia` y el resumen a `armonia_resumen['centros_locales']`.
 """
 
-MOSTRAR_TABROLL24 = False                                              # las imágenes se guardan siempre
-
-acordes24 = [Chord(song.measures[e['compas'] - 1].start, song.measures[e['compas'] - 1].beats, e['tones'],
-                   numeral=e['numeral'], name=e['name'], annot=e['annot'], annot_color=e['annot_color'])
-             for e in harmony_labels(armonia, tonic_midi) if e['compas'] <= len(song.measures)]
-columnas24 = [dict(onset=round(float(pos(c['t'])) / GRID) * GRID, cents=(c['midi'] - tonic_midi) * 100.0,
-                   bajo=None if c['bajo_midi'] is None else (c['bajo_midi'] - tonic_midi) * 100.0,
-                   principal=c['pulso'] == r['columna_pulso'])
-              for r in armonia for c in r.get('columnas_pulso') or []]
-tabroll24 = render_song_graphic(filename='tabroll24', show=MOSTRAR_TABROLL24, chords=acordes24, columns=columnas24)
+armonia, armonia_resumen['centros_locales'] = local_centers(armonia, raw_bass, raw_high, cycles, tonic_pc24)
+cl = armonia_resumen['centros_locales']
+print(f"Centros por tramo (ciclos de la {cl['voz'].lower()}): el centro de la canción ocupa el {cl['centro_estable']:.0f}% | "
+      f"{cl['modulaciones']} cambios de centro seguros, {cl['tramos_dudosos']} tramos dudosos")
+for x in cl['tramos']:
+    print(f"  {x['inicio']}–{x['fin']} {x['ciclo']:2s} centro {x['centro']}{'' if x['seguro'] else '?'} ({x['grado']}: "
+          f"{x['respecto_del_centro']}) | modo {x['modo']} | margen {x['margen']:.2f}" +
+          (f" | desde el anterior: {x['desde_el_anterior']}" if x['desde_el_anterior'] else ''))

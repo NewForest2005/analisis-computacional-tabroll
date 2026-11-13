@@ -1,7 +1,7 @@
 """Corre el notebook completo sobre una canción y guarda todo en outputs/.
 
     python scripts/run_song.py Fabienk
-    python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
+    python scripts/run_song.py "Mata Zyklek" --set "BAR_LENGTHS=(5, 4, 2)"
     python scripts/run_song.py "ruta/Cancion.mp3" --sin-pistas --set GRID=0.5 --nombre prueba-grid
     python scripts/run_song.py --presets
 
@@ -30,6 +30,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import csv
+import hashlib
 import json
 import os
 import re
@@ -214,6 +215,17 @@ def prune(base: Path, keep: int, current: Path) -> list[Path]:
     for p in old:
         shutil.rmtree(p)
     return old
+
+
+def huella(path) -> str | None:
+    """SHA-256 del archivo: dos corridas con la misma huella usaron exactamente el mismo audio o la misma pista."""
+    if not path:
+        return None
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
 
 
 def git_version() -> str:
@@ -453,7 +465,8 @@ ROLE_COLUMNS = ("compas", "inicio_s", "fin_s", "fundamental", "calidad", "grado"
                 "cifra_bajo", "nota_aguda", "papel_aguda", "aguda_en_acorde", "progresion", "movimiento", "uso_piston",
                 "eje_cambio", "paso_eje", "confianza", "ciclo_bajo", "ciclo_aguda", "columna", "columna_papel",
                 "columna_intervalo", "columna_pulso", "columnas", "arco", "cumbre", "ambito_st", "giro_principal",
-                "salto_mayor", "notas_extranas", "acoge_aguda", "motivo_aguda", "acoge_bajo", "motivo_bajo")
+                "salto_mayor", "notas_extranas", "acoge_aguda", "motivo_aguda", "acoge_bajo", "motivo_bajo", "tramo",
+                "centro_local")
 
 
 def save_harmony(ns: dict, path: Path) -> bool:
@@ -479,7 +492,7 @@ HARMONY_KEYS = ("fundamental", "fundamental_y_calidad", "bajo", "tiempo_confiabl
                 "eje_confiables", "distancia_ejes", "columna_aguda", "columna_en_pulsos", "columna_bajo", "columna_papel",
                 "arco", "distancia_papeles", "microtonales_cuaderno", "microtonales_partitura", "extranas_cuaderno",
                 "extranas_partitura", "distancia_intervalos", "distancia_giros", "distancia_espectro", "distancia_extranas",
-                "patron_f", "acoge_cuaderno", "acoge_partitura")
+                "patron_f", "acoge_cuaderno", "acoge_partitura", "centro_local", "centro_local_seguros")
 
 
 def evaluate_against_score(run_dir: Path, name: str, has_harmony: bool) -> tuple[dict, list[str]]:
@@ -517,11 +530,14 @@ def evaluate_against_score(run_dir: Path, name: str, has_harmony: bool) -> tuple
 
 def write_markdown(path: Path, info: dict) -> None:
     r = info.get("resultado", {})
+    hu = {k: (v or "—")[:12] for k, v in (info["pistas"].get("sha256") or {}).items()}
     L = [f"# {info['cancion']}", "",
          f"- Corrida: `{info['carpeta']}` ({info['fecha']}), notebook {info['version_notebook']}",
          f"- Estado: **{info['estado']}**" + (f" en la celda {info['celda_con_error']}" if info.get("celda_con_error") is not None else ""),
          f"- Pistas: guitarra `{info['pistas']['guitarra'] or 'ninguna'}`, bajo `{info['pistas']['bajo'] or 'ninguna'}`"
          + (" (creadas con Demucs)" if info["pistas"]["creadas_con_demucs"] else ""),
+         f"- Huellas SHA-256 (primeros 12 caracteres): mezcla `{hu.get('mezcla', '—')}`, guitarra `{hu.get('guitarra', '—')}`, "
+         f"bajo `{hu.get('bajo', '—')}`",
          f"- Preset: {info['preset'] or 'ninguno'} | cambios: {', '.join(f'{k}={v}' for k, v in info['cambios'].items()) or 'ninguno'}",
          f"- Tiempo: {info['tiempo_s']} s" + (f" | RAM máxima: {info['ram_max_mb']} MB" if info.get("ram_max_mb") else ""), ""]
     ev = info.get("evaluacion_melodia")
@@ -563,7 +579,10 @@ def write_markdown(path: Path, info: dict) -> None:
               f"intervalos {ea.get('distancia_intervalos')}, giros {ea.get('distancia_giros')}, espectro {ea.get('distancia_espectro')}, "
               f"notas extrañas {ea.get('distancia_extranas')}",
               f"- Patrones de ciclo contra la partitura: parecido de los patrones {ea.get('patron_f')} % | las vueltas se acogen "
-              f"{ea.get('acoge_cuaderno')} % (cuaderno) y {ea.get('acoge_partitura')} % (partitura)", ""]
+              f"{ea.get('acoge_cuaderno')} % (cuaderno) y {ea.get('acoge_partitura')} % (partitura)",
+              f"- Centros por tramo contra la partitura: mismo centro en el {ea.get('centro_local')} % de los compases "
+              + (f"(en los tramos seguros, {ea['centro_local_seguros']} %)" if ea.get('centro_local_seguros') is not None
+                 else "(ningún tramo es seguro en el cuaderno y en la partitura a la vez)"), ""]
 
     if r:
         L += ["## Resultado", ""]
@@ -704,13 +723,15 @@ def run(args) -> int:
         pass
 
     images = sorted(str(p.relative_to(run_dir)) for p in (run_dir / "harmony_outputs").rglob("*.png")) if (run_dir / "harmony_outputs").is_dir() else []
+    stems = {kind: used[kind] or (run_dir / created[kind] if kind in created else None) for kind in ("guitar", "bass")}
     info = {
         "cancion": audio.stem, "audio": str(audio), "carpeta": run_dir.name, "fecha": datetime.now().isoformat(timespec="seconds"),
         "version_notebook": git_version(), "estado": "ok" if failed is None else ("interrumpida" if error and error.startswith("Corrida interrumpida") else "error"), "celda_con_error": failed,
         "error": error, "preset": args.preset, "cambios": changes,
         "pistas": {"guitarra": (used["guitar"].name if used["guitar"] else created.get("guitar")),
                    "bajo": (used["bass"].name if used["bass"] else created.get("bass")),
-                   "creadas_con_demucs": bool(created)},
+                   "creadas_con_demucs": bool(created),
+                   "sha256": {"mezcla": huella(audio), "guitarra": huella(stems["guitar"]), "bajo": huella(stems["bass"])}},
         "tiempo_s": total, "ram_max_mb": ram, "resultado": {}, "imagenes": images, "avisos": avisos,
     }
     try:

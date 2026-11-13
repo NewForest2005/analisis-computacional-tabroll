@@ -3,8 +3,6 @@
 
 from tabroll.cells.find_cycles import find_cycles
 
-GUIAR_CON_GP = False   # el .gp oficial solo sirve para evaluar y graficar; nunca construye la línea
-
 if True:
     def cycle_consensus(S, cycles, sr, hop, turns=3, min_period=2.0):
         """Promedia la saliencia con cuadros equivalentes de vueltas vecinas."""
@@ -127,7 +125,7 @@ cycles_n = {'Voz grave': find_cycles(bass, off, sr, HOP_P, min_turns=2),
 
 Sn = stereo_salience(S, M, y_st, cand, sr, NFFT_P, HOP_P, HAS_DRUMS, gamma=0.0)   # conserva la octava de la guitarra
 Sn = add_guitar_stem(Sn, S, stem, cand, sr, NFFT_P, HOP_P, gamma=0.0)
-selector_salience = Sn[ishigh].copy()                                      # entrada pitch-específica para select_melody_track
+selector_salience = Sn[ishigh].copy()                                      # run_song.py la guarda en line_diagnostics.json
 selector_candidates = cand[ishigh].copy()
 Snote = selector_salience.max(axis=0)
 consenso_n = cycle_consensus(Sn[ishigh], cycles_n, sr, HOP_P)
@@ -143,47 +141,6 @@ microtonal_residual = microtonal_residual_score(melody_n)
 melodic_24edo_baseline = melodic_24edo_score(melody_n_baseline, cycles_n, sr, HOP_P)
 harmonic_12edo_baseline = harmonic_12edo_score(melody_n_baseline, bass)
 microtonal_residual_baseline = microtonal_residual_score(melody_n_baseline)
-
-# La línea estructural para ciclos conserva la línea acústica fuera del
-# fragmento GP, pero dentro del fragmento alineado favorece la pista de
-# referencia mientras esta tenga actividad.
-melody = melody.copy()
-gp_alignment = None
-melody_track_path = []
-melody_confidence = np.zeros(len(melody), dtype=float)
-reference_files = {
-    'SARNIEZZ': 'sarniezz_gp.json',
-    'MATA ZYKLEK': 'mata_zyklek_gp.json',
-    'FABIENK': 'fabienk_gp.json',
-}
-try:
-    import json
-    from tabroll.reference.align_gp_audio import align_gp_audio
-    from tabroll.reference.select_melody_track import select_melody_track
-    reference_root = next((d for d in (Path.cwd(), *Path.cwd().parents) if (d / 'references').is_dir()), None)
-    song_key = str(SONG).upper()
-    reference_name = next((filename for title, filename in reference_files.items() if title in song_key), None)
-    if GUIAR_CON_GP and reference_root is not None and reference_name is not None:
-        reference = json.loads((reference_root / 'references' / reference_name).read_text(encoding='utf-8'))
-        gp_alignment = align_gp_audio(reference, selector_salience, selector_candidates, [], [], float(tempo),
-                                      melody=np.asarray(melody_n, dtype=float), sr=sr, hop=HOP_P,
-                                      audio_duration_s=len(y) / sr)
-        grouped = {}
-        for event in gp_alignment['events']:
-            grouped.setdefault(str(event['track']), []).append(event)
-        title_key = next(title for title in reference_files if title in song_key)
-        preferred = {'SARNIEZZ': 'E.Guitar I', 'MATA ZYKLEK': 'E.Guitar III', 'FABIENK': 'E.Guitar'}[title_key]
-        selected, melody_track_path, melody_confidence = select_melody_track(
-            selector_salience, stem, bass_stem,
-            {'tracks': [{'name': name, 'events': events} for name, events in grouped.items()]},
-            [], candidates=selector_candidates, sr=sr, hop=HOP_P,
-            switch_penalty=0.35, preferred_track=preferred)
-        active = np.array([track != 'silence' for track in melody_track_path])
-        melody[active] = selected[active]
-        print(f"Línea estructural GP (solo comparación): {preferred} | offset {gp_alignment['offset_s']:.2f} s | "
-              f"tempo local {gp_alignment['tempo_local_bpm']:.2f} BPM | acierto {gp_alignment['score']:.3f}")
-except (OSError, KeyError, ValueError, ImportError) as exc:
-    print(f'Aviso: no se pudo guiar melody con el GP ({type(exc).__name__}: {exc})')
 
 if True:
     def top_peaks(S, cand, k=5):

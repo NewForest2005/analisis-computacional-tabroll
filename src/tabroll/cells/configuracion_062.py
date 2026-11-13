@@ -11,13 +11,6 @@ GRID = 0.25
 MICRO_STEP = 50
 NFFT_P, HOP_P = 4096, 512
 
-# Para Fabienk (7/8 y 2/4):
-# BAR_LENGTHS, BEAT_DIV, GRID = (7, 5, 4, 2), 2, 0.5
-
-# Para Mata Zyklek (5/8 y 2/4, provisional hasta ver la partitura), quita el # de la línea siguiente:
-# BAR_LENGTHS, BEAT_DIV, GRID = (5, 4, 2), 2, 0.5
-
-
 TARGET_SR = 22050
 
 HAS_DRUMS = True                                                                # False si el audio no trae batería

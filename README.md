@@ -42,7 +42,7 @@ FFmpeg solo es necesario para Demucs: los MP3 pueden leerse sin él, pero Demucs
 brew install ffmpeg
 ```
 
-Demucs funciona sin GPU. En un Mac Intel se ejecuta por CPU y puede tardar varios minutos por canción; las pistas quedan guardadas junto al audio y no se vuelven a separar en ejecuciones posteriores.
+Demucs funciona sin GPU. En un Mac Intel se ejecuta por CPU y puede tardar varios minutos por canción; las pistas quedan guardadas junto al audio y no se vuelven a separar en ejecuciones posteriores. La separación usa una semilla fija: dos separaciones del mismo audio en la misma máquina dan las mismas pistas.
 
 ## Uso
 
@@ -52,7 +52,7 @@ La extracción conserva el orden de ejecución del notebook. Para reproducir el 
 
 ```bash
 .venv/bin/python scripts/run_song.py Fabienk
-.venv/bin/python scripts/run_song.py "Mata Zyklek" --preset mata_zyklek
+.venv/bin/python scripts/run_song.py "Mata Zyklek" --set "BAR_LENGTHS=(5, 4, 2)"
 ```
 
 Si se ejecuta con `python3` global y existe `.venv`, el script se reinicia automáticamente usando el entorno del
@@ -64,12 +64,13 @@ Se puede indicar una ruta o una parte del nombre dentro de `Angine de Poitrine A
 - `salida.txt`: todo lo que imprime el notebook, los avisos y el tiempo de cada celda.
 - `resumen.md`: tempo, tonalidad, compases, ciclos y capas, para leer o pegar en el chat.
 - `resumen.json`: lo mismo en formato estructurado, para comparar corridas.
+  Guarda la huella SHA-256 de la mezcla y de las dos pistas (`pistas.sha256`): dos corridas con las mismas huellas usaron exactamente el mismo audio.
 
 Las pistas `<canción>_guitar` y `<canción>_bass` se buscan junto a la canción. Si no están, Demucs las crea y quedan guardadas junto a la canción para la próxima vez. El notebook no se modifica: los cambios se aplican solo a esa corrida.
 
 | Opción | Para qué |
 |---|---|
-| `--preset fabienk` | Aplica un preset de la celda de ajustes (`--presets` los lista). |
+| `--preset nombre` | Aplica un preset de la celda de ajustes, si la trae; hoy no trae ninguno (`--presets` los lista). |
 | `--set GRID=0.5` | Cambia una variable del notebook en esa corrida; se puede repetir. |
 | `--guitar ruta --bass ruta` | Usa pistas con otro nombre o en otra carpeta. |
 | `--sin-pistas` | Analiza solo la mezcla: no usa pistas ni corre Demucs. |

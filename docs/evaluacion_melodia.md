@@ -128,3 +128,15 @@ en muchos cuadros la melodía no aparece en la saliencia.
 
 Con la limpieza de notas sueltas, la melodía principal queda en 66.8 / 46.2 / 45.4. Ni la estructura del looper, ni el
 estéreo, ni una red general separan la melodía de las otras capas en esta banda.
+
+## Reproducibilidad (paso 1 del plan de trabajo)
+
+- Con las mismas pistas, el cuaderno da el mismo resultado. Entre 8 y 12 corridas de cada canción del 11 de noviembre,
+  con distintas versiones del cuaderno, dieron las mismas notas, la misma F y la misma tabla por compás.
+- Demucs era el único paso al azar: con `shifts=1` desplaza el audio entre 0 y 0.5 s antes de separar. Con el mismo
+  código, Mata Zyklek dio 57.2 con unas pistas y 61.6 con otras. `separate_stems` fija ahora la semilla (`semilla=0`).
+- Cada corrida guarda en `resumen.json` (`pistas.sha256`) la huella de la mezcla y de las dos pistas, y `resumen.md`
+  muestra sus primeros 12 caracteres. Dos corridas con las mismas huellas usaron exactamente el mismo audio.
+- Ninguna celda del cuaderno lee la partitura ni nombra una canción, salvo la que la elige
+  (`tests/test_reproducibilidad.py`). Se quitaron el bloque guiado por el `.gp` de la celda de la línea, que estaba
+  apagado, y los presets de Fabienk y Mata Zyklek de la celda de ajustes.

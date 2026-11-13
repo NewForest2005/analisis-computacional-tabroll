@@ -14,18 +14,26 @@ def settings_cell(cells):
     return next(source for _, source in cells if source.startswith("KEY_OVERRIDE"))
 
 
-def test_presets_come_from_the_notebook():
-    assert {"fabienk", "mata_zyklek"} <= set(run_song.find_presets(run_song.load_code_cells()))
+AJUSTES = [(0, "KEY_OVERRIDE = None\nBAR_LENGTHS = (2, 3, 4)\nBEAT_DIV = 1\nGRID = 0.25\n\n"
+               "# Para Prueba (7/8 y 2/4):\n# BAR_LENGTHS, BEAT_DIV, GRID = (7, 2), 2, 0.5\n")]
+
+
+def test_the_notebook_has_no_song_presets():
+    assert run_song.find_presets(run_song.load_code_cells()) == {}
+
+
+def test_presets_come_from_the_settings_cell():
+    assert set(run_song.find_presets(AJUSTES)) == {"prueba"}
 
 
 def test_preset_uncomments_its_line():
-    source = settings_cell(run_song.apply_changes(run_song.load_code_cells(), "fabienk", {}))
-    assert "\nBAR_LENGTHS, BEAT_DIV, GRID = (7, 5, 4, 2), 2, 0.5" in source
+    source = settings_cell(run_song.apply_changes(AJUSTES, "prueba", {}))
+    assert "\nBAR_LENGTHS, BEAT_DIV, GRID = (7, 2), 2, 0.5" in source
     compile(source, "ajustes", "exec")
 
 
 def test_set_goes_after_the_last_assignment():
-    lines = settings_cell(run_song.apply_changes(run_song.load_code_cells(), "fabienk", {"GRID": "1 / 3"})).splitlines()
+    lines = settings_cell(run_song.apply_changes(AJUSTES, "prueba", {"GRID": "1 / 3"})).splitlines()
     preset = next(j for j, line in enumerate(lines) if line.startswith("BAR_LENGTHS, BEAT_DIV, GRID ="))
     assert lines[preset + 1].startswith("GRID = 1 / 3")
 
@@ -45,7 +53,7 @@ def test_unknown_variable_or_preset_is_rejected():
 
 def test_notebook_is_not_modified():
     before = (ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb").read_bytes()
-    run_song.apply_changes(run_song.load_code_cells(), "fabienk", {"GRID": "0.5"})
+    run_song.apply_changes(run_song.load_code_cells(), None, {"GRID": "0.5"})
     assert (ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb").read_bytes() == before
 
 
