@@ -21,8 +21,8 @@ def test_mata_reference_has_complete_bar_map():
 
 def test_mata_reference_contains_all_loop_patterns():
     reference = load_reference()
-    assert len(reference.L) == 34
-    assert len(reference.notes(reference.GUITARS + reference.BASSES)) == 6141
+    assert len(reference.L) == 35
+    assert len(reference.notes(reference.GUITARS + reference.BASSES)) == 6142
 
 
 def test_written_pitch_is_one_octave_above_audio_pitch():

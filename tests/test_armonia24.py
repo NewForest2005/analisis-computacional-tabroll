@@ -41,3 +41,20 @@ def test_folding_sums_the_turns_of_a_cycle():
 def test_short_notes_do_not_count():
     t = NoteTable([(0.0, 0.05, 61.0), (0.0, 1.0, 60.0)])
     assert t.profile(0.0, 1.0, min_dur=0.1)[2] == 0.0
+
+
+def test_full_references_are_read_and_compared():
+    from tabroll.evaluation import armonia as A
+    from tabroll.evaluation import melodia as M
+    assert A._notas_completas("cancion_sin_archivo", "completa") is None
+    for song in ("mata_zyklek", "sarniezz", "fabienk"):
+        notas = A._notas_completas(song, "completa")
+        assert notas and {p for a, b, p, parte in notas} and all(b > a for a, b, p, parte in notas)
+        assert any(parte == "Gx" for a, b, p, parte in notas)
+        assert A._notas_completas(song, "guitar_pro")
+    # con la partitura como «cuaderno», la referencia corregida acierta siempre su propia fundamental
+    al = M.Alignment("mata_zyklek")
+    lead = [(n["t"], n["te"], n["p"]) for n in M.lead_line(al, "mata_zyklek")]
+    r0 = A.evaluate("mata_zyklek", [], lead)
+    assert r0["compases_medidos"] == 0
+    assert A.compare_references("mata_zyklek", [], lead) is None

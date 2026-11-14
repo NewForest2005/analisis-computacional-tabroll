@@ -1,0 +1,22 @@
+archivo,parte,que,cancion,t_audio,repeticiones
+01_sar_3m04s.mp3,1,P1 pos 13,sarniezz,184.52,-0.5;+0.0;+0.5
+02_sar_1m11s.mp3,1,P1 pos 28,sarniezz,71.26,-0.5;+0.5;+0.0
+03_sar_3m14s.mp3,1,P1 pos 25,sarniezz,194.88,+0.0;+0.5;-0.5
+04_sar_1m08s.mp3,1,P1 pos 13,sarniezz,68.68,+0.0;-0.5;+0.5
+05_sar_1m13s.mp3,1,P1 pos 42,sarniezz,73.68,+0.5;-0.5;+0.0
+06_mata_2m59s.mp3,1,control Fa3 del Corte,mata_zyklek,179.17,-0.5;+0.0;+0.5
+07_sar_2m33s.mp3,1,P1 pos 25,sarniezz,153.5,+0.5;+0.0;-0.5
+08_sar_2m34s.mp3,1,P1 pos 28,sarniezz,154.02,-0.5;+0.0;+0.5
+09_sar_3m15s.mp3,1,P1 pos 28,sarniezz,195.39,+0.0;-0.5;+0.5
+10_sar_1m10s.mp3,1,P1 pos 25,sarniezz,70.75,-0.5;+0.0;+0.5
+11_sar_2m06s.mp3,1,P1 pos 13,sarniezz,126.58,+0.5;+0.0;-0.5
+12_mata_3m08s.mp3,2,C3 Re antes del silencio (c. 120),mata_zyklek,188.38,con Re;partitura
+13_sar_1m17s.mp3,2,C1 acorde pos 19,sarniezz,77.99,Do#+Sol;Do#+Re+Sol;partitura
+14_sar_3m10s.mp3,2,C4 fase de la frase 2 (guitarra 2),sarniezz,190.5,3 corcheas después;partitura;3 corcheas antes
+15_sar_1m59s.mp3,2,C1 acorde pos 19,sarniezz,119.34,partitura;Do#+Sol;Do#+Re+Sol
+16_sar_3m06s.mp3,2,C4 fase de la frase 2 (guitarra 2),sarniezz,186.0,3 corcheas antes;partitura;3 corcheas después
+17_fab_0m51s.mp3,2,"C5 lick al unísono (Z pos 3, guitarra 1)",fabienk,51.96,"actual: guitarra 1 Re#, guitarra 2 Re#+¼;las dos Re#;las dos Re#+¼"
+18_fab_1m14s.mp3,2,C2 notas de la guitarra 1 en «Corrido otra vez»,fabienk,74.9,sin la guitarra 1;partitura
+19_fab_1m18s.mp3,2,C2 notas de la guitarra 1 en «Corrido otra vez»,fabienk,78.21,partitura;sin la guitarra 1
+20_mata_1m39s.mp3,2,C3 Re antes del silencio (c. 64),mata_zyklek,99.02,partitura;con Re
+21_fab_1m21s.mp3,2,"C5 lick al unísono (Z pos 3, guitarra 1)",fabienk,81.48,"actual: guitarra 1 Re#, guitarra 2 Re#+¼;las dos Re#+¼;las dos Re#"

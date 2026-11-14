@@ -251,6 +251,52 @@ unidos por una línea; las columnas de los demás pulsos, con un anillo blanco f
 el bajo tocan la misma línea a una octava; en el ciclo E de Yor Zarad la columna es G♯+ sobre G♯+, un grado de cuarto
 de tono que sostiene el arco.
 
+## Referencia de acordes completa (todas las pistas de la partitura)
+
+Hasta aquí la armonía se medía contra las pistas corregidas de oído (dos guitarras y el bajo en Sarniezz y Fabienk).
+`references/completas/` trae, para Sarniezz, Mata Zyklek y Fabienk, las notas de TODAS las pistas de la partitura de
+Guitar Pro (guitarras I a VI y bajo), ya en el tiempo de la grabación oficial. Solo sirve para evaluar.
+
+Cómo se armó (scripts en `trabajo/trabajo_14nov_c.zip`, carpeta `fa/`):
+
+1. Alturas, cuerdas, trastes, ligados y bends: de la tablatura de los PDF por pista. Tiempos: de los WAV que Guitar Pro
+   exporta por pista. Entre el 82 % y el 88 % de las notas tiene su ataque medido en el WAV; el resto se interpola entre
+   sus vecinas.
+2. El render se alinea con la grabación por DTW (croma de cuartos de tono) y el mapa se afina con las notas que
+   comparte con la referencia corregida.
+3. Comprobación: de las notas de la referencia corregida, también están en Guitar Pro (misma altura, ±75 ms) el 92 % en
+   Mata Zyklek, el 70 % en Fabienk y el 57 % en Sarniezz. Sin contar la octava: 96 %, 80 % y 77 %.
+
+Archivos por canción:
+
+- `<canción>.csv` (**completa**): las notas corregidas de oído, que mandan, más las notas de guitarra de Guitar Pro que
+  no tienen cerca (±75 ms) una nota corregida de la misma clase o a menos de un tono. El bajo de Guitar Pro no entra:
+  el bajo es una sola voz y ya está corregido. Tampoco entran las notas que el autor quitó de oído.
+- `<canción>_guitar_pro.csv`: todas las pistas de Guitar Pro, sin corregir.
+- `<canción>.json`: los tramos de la grabación donde el mapa de Guitar Pro es regular.
+
+`compare_references` (en `src/tabroll/evaluation/armonia.py`) mide la armonía del cuaderno contra las tres referencias
+y dice cuánto coinciden entre sí. `evaluar` y `run_song.py` lo guardan en `evaluacion_armonia_referencias.json` y
+`evaluacion_armonia_referencias_por_compas.csv`. Con las corridas `_repro` y las referencias de la segunda ronda:
+
+| | Fundamental: corregida | completa | Guitar Pro sola | Fund. y calidad: corregida | completa | Guitar Pro sola |
+|---|---:|---:|---:|---:|---:|---:|
+| Mata Zyklek | 95.4 | 95.4 | 93.8 | 49.4 | 52.6 | 54.0 |
+| Sarniezz | 57.5 | 58.6 | 37.8 | 47.3 | 51.6 | 34.6 |
+| Fabienk | 81.6 | 82.9 | 58.8 | 63.4 | 64.1 | 40.1 |
+
+Acuerdo de las referencias entre sí (misma fundamental por compás): corregida y completa, 100 %, 92.6 % y 97.0 %;
+corregida y Guitar Pro sola, 95.4 %, 49.5 % y 75.5 %.
+
+Lectura: añadir las demás pistas cambia la fundamental de la referencia en pocos compases (0 %, 7 % y 3 %) y la calidad
+en algunos más; la precisión del cuaderno sube entre 0 y 1.3 puntos en fundamental y entre 0.7 y 4.3 en calidad. La
+partitura de Guitar Pro sola solo es fiable en Mata Zyklek. En Sarniezz y Fabienk se aparta de la corregida (es otra
+transcripción, la de Fabienk es de la versión en vivo, y sus duraciones salen del render), así que no se usa como
+criterio: queda como comprobación.
+
+Falta: medir por pulso y los cambios de acorde, la matriz de confusión de grados, y la tabla de acordes de la partitura
+en sus propios compases.
+
 ## Lo que todavía no hace
 
 Lo que sigue pertenece a los pasos siguientes de la estrategia: las notas extrañas, el inicio de cada ciclo por su

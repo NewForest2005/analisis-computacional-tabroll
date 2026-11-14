@@ -281,6 +281,85 @@ def evaluate(song: str, bars: list[dict], raw_high, min_conf: float = 0.5, cycle
     return r
 
 
+def _notas_completas(song: str, cual: str):
+    """Notas (inicio, fin, altura, parte) de references/completas, ya en tiempo de la grabación; None si no hay archivo."""
+    f = M.REFS / "completas" / (f"{song}.csv" if cual == "completa" else f"{song}_guitar_pro.csv")
+    if not f.exists():
+        return None
+    with open(f, encoding="utf-8") as fh:
+        return [(float(r["inicio_s"]), float(r["fin_s"]), float(r["altura"]), r["parte"]) for r in csv.DictReader(fh)]
+
+
+def compare_references(song: str, bars: list[dict], raw_high, min_conf: float = 0.5) -> dict | None:
+    """La armonía del cuaderno frente a tres referencias, compás por compás y con la misma función (`chord24`):
+    - corregida: las pistas corregidas de oído (la de siempre);
+    - completa: la corregida más las notas de las demás pistas de la partitura de Guitar Pro (references/completas);
+    - guitar_pro: todas las pistas de la partitura de Guitar Pro, sin corregir, solo donde su mapa es regular.
+    También dice cuánto coinciden las referencias entre sí: es el techo de lo que se puede pedir al cuaderno."""
+    comp, gp = _notas_completas(song, "completa"), _notas_completas(song, "guitar_pro")
+    if comp is None:
+        return None
+    al = M.Alignment(song)
+    gu, ba = M.mapped(al, al.ref["guitars"]), M.mapped(al, al.ref["basses"])
+    sh = M.calib(M.top_line(gu), M._notes(raw_high))
+    spans = [(float(al.t(t0)) + sh, float(al.t(t1)) + sh) for t0, t1, nm, kn in al.ref["sections"] if kn]
+    meta = M.REFS / "completas" / f"{song}.json"
+    tramos = json.loads(meta.read_text(encoding="utf-8")).get("tramos_guitar_pro", []) if meta.exists() else []
+    es_bajo = lambda parte: parte.startswith("B")
+    tablas = {"corregida": (NoteTable([(n["t"] + sh, n["te"] + sh, n["p"]) for n in gu]),
+                            NoteTable([(n["t"] + sh, n["te"] + sh, n["p"]) for n in ba]))}
+    # completa: las notas corregidas tal cual (así el bajo y sus empates no cambian) más las añadidas («Gx») del archivo
+    extra = [(a + sh, b + sh, p) for a, b, p, parte in comp if parte == "Gx"]
+    tablas["completa"] = (NoteTable([(n["t"] + sh, n["te"] + sh, n["p"]) for n in gu] + extra), tablas["corregida"][1])
+    if gp:
+        tablas["guitar_pro"] = (NoteTable([(a + sh, b + sh, p) for a, b, p, parte in gp if not es_bajo(parte)]),
+                                NoteTable([(a + sh, b + sh, p) for a, b, p, parte in gp if es_bajo(parte)]))
+    rows = []
+    for b in bars:
+        t0, t1 = b["inicio_s"], b["fin_s"]
+        if b.get("fundamental_pc24") is None or not any(a <= t0 + 0.05 and t1 - 0.05 <= e for a, e in spans):
+            continue
+        row = dict(compas=b["compas"], inicio_s=t0, fin_s=t1, detectada=b["fundamental"], calidad=b["calidad"],
+                   bajo=b.get("bajo"), confianza=b["confianza"])
+        for nombre, (G, B) in tablas.items():
+            if nombre == "guitar_pro" and not any(a + sh <= t0 + 0.05 and t1 - 0.05 <= e + sh for a, e in tramos):
+                continue
+            Pb = B.profile(t0, t1)
+            ref = chord24(Pb, G.profile(t0, t1))
+            if ref is None:
+                continue
+            bass = _tied_max(Pb)
+            row.update({f"{nombre}_fundamental": PC24[ref["fundamental"]], f"{nombre}_calidad": ref["calidad"],
+                        f"{nombre}_bajo": "/".join(PC24[k] for k in bass),
+                        f"ok_fundamental_{nombre}": b["fundamental_pc24"] == ref["fundamental"],
+                        f"ok_calidad_{nombre}": b["fundamental_pc24"] == ref["fundamental"] and b["calidad"] == ref["calidad"],
+                        f"ok_bajo_{nombre}": b.get("bajo_pc24") in bass if bass else b.get("bajo_pc24") is None})
+        rows.append(row)
+    if not rows:
+        return None
+
+    def pct(key, sel=lambda x: True):
+        xs = [x for x in rows if key in x and sel(x)]
+        w = sum(x["fin_s"] - x["inicio_s"] for x in xs)
+        return round(100 * sum((x["fin_s"] - x["inicio_s"]) * bool(x[key]) for x in xs) / w, 1) if w else None
+
+    r = dict(cancion=song, compases=len(rows))
+    for nombre in tablas:
+        n = sum(1 for x in rows if f"ok_fundamental_{nombre}" in x)
+        r[nombre] = dict(compases=n, fundamental=pct(f"ok_fundamental_{nombre}"), fundamental_y_calidad=pct(f"ok_calidad_{nombre}"),
+                         bajo=pct(f"ok_bajo_{nombre}"),
+                         fundamental_confiables=pct(f"ok_fundamental_{nombre}", lambda x: x["confianza"] >= min_conf))
+    for a, b in (("corregida", "completa"), ("corregida", "guitar_pro"), ("completa", "guitar_pro")):
+        if a in tablas and b in tablas:
+            for x in rows:
+                if f"{a}_fundamental" in x and f"{b}_fundamental" in x:
+                    x[f"igual_{a}_{b}"] = x[f"{a}_fundamental"] == x[f"{b}_fundamental"]
+                    x[f"igual_calidad_{a}_{b}"] = x[f"igual_{a}_{b}"] and x[f"{a}_calidad"] == x[f"{b}_calidad"]
+            r[f"acuerdo_{a}_{b}"] = dict(fundamental=pct(f"igual_{a}_{b}"), fundamental_y_calidad=pct(f"igual_calidad_{a}_{b}"))
+    r["compases_detalle"] = rows
+    return r
+
+
 def evaluate_run(run_dir: Path, song: str | None = None, write: bool = True) -> dict | None:
     """Evalúa una corrida con armonia.json y line_diagnostics.json; guarda evaluacion_armonia.json y su .csv."""
     run_dir = Path(run_dir)
@@ -301,4 +380,19 @@ def evaluate_run(run_dir: Path, song: str | None = None, write: bool = True) -> 
                 wr = csv.DictWriter(fh, fieldnames=list(detail[0]))
                 wr.writeheader()
                 wr.writerows(detail)
+    try:                                                                # referencias completas (solo si están los archivos)
+        rc = compare_references(song, H["compases"], J["raw_high"])
+    except Exception as exc:                                            # no tumba la evaluación de siempre
+        rc = dict(cancion=song, error=f"{type(exc).__name__}: {exc}")
+    if rc:
+        detalle = rc.pop("compases_detalle", [])
+        r["referencias"] = rc
+        if write:
+            (run_dir / "evaluacion_armonia_referencias.json").write_text(json.dumps(rc, ensure_ascii=False, indent=2), encoding="utf-8")
+            if detalle:
+                campos = sorted({k for x in detalle for k in x}, key=lambda k: (k not in ("compas", "inicio_s", "fin_s"), k))
+                with open(run_dir / "evaluacion_armonia_referencias_por_compas.csv", "w", newline="", encoding="utf-8") as fh:
+                    wr = csv.DictWriter(fh, fieldnames=campos)
+                    wr.writeheader()
+                    wr.writerows(detalle)
     return r

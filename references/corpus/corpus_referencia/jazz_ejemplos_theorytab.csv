@@ -1,0 +1,217 @@
+obra,tonica,escala,pulso,duracion,grado,tipo,aplicado,prestado,agregados,inversion
+Autumn Leaves,D,minor,5,4,4,séptima,,,,0
+Autumn Leaves,D,minor,9,4,7,séptima,,,,0
+Autumn Leaves,D,minor,13,4,3,séptima,,,,0
+Autumn Leaves,D,minor,17,4,6,séptima,,,,0
+Autumn Leaves,D,minor,21,4,2,séptima,,,,0
+Autumn Leaves,D,minor,25,4,5,séptima,,major,,0
+Autumn Leaves,D,minor,29,4,1,tríada,,,6,0
+Autumn Leaves,D,minor,33,2,1,séptima,,,,0
+Autumn Leaves,D,minor,35,2,4,séptima,5,,,0
+Autumn Leaves,D,minor,37,4,4,séptima,,,,0
+Autumn Leaves,D,minor,41,4,7,séptima,,,,0
+Autumn Leaves,D,minor,45,4,3,séptima,,,,0
+Autumn Leaves,D,minor,49,4,6,séptima,,,,0
+Autumn Leaves,D,minor,53,4,2,séptima,,,,0
+Autumn Leaves,D,minor,57,4,5,séptima,,major,,0
+Autumn Leaves,D,minor,61,4,1,tríada,,,6,0
+Blues de 12 compases (Bessie Smith),E,major,5,4,1,tríada,,,,0
+Blues de 12 compases (Bessie Smith),E,major,9,4,4,séptima,,dorian,,0
+Blues de 12 compases (Bessie Smith),E,major,13,8,1,tríada,,,,0
+Blues de 12 compases (Bessie Smith),E,major,21,8,4,séptima,,dorian,,0
+Blues de 12 compases (Bessie Smith),E,major,29,8,1,tríada,,,,0
+Blues de 12 compases (Bessie Smith),E,major,37,8,5,séptima,,,,0
+Blues de 12 compases (Bessie Smith),E,major,45,8,1,tríada,,,,0
+So What (Miles Davis),D,dorian,5.5,1.25,2,séptima,,,4,0
+So What (Miles Davis),D,dorian,6.75,0.25,1,séptima,,,4,0
+So What (Miles Davis),D,dorian,11.5,1.25,2,séptima,,,4,0
+So What (Miles Davis),D,dorian,12.75,0.25,1,séptima,,,4,0
+So What (Miles Davis),D,dorian,17.5,1.25,2,séptima,,,4,0
+So What (Miles Davis),D,dorian,18.75,0.25,1,séptima,,,4,0
+So What (Miles Davis),D,dorian,23.5,1.25,2,séptima,,,4,0
+So What (Miles Davis),D,dorian,24.75,0.25,1,séptima,,,4,0
+Giant Steps (John Coltrane),B,major,1,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,3,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,5,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,7,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,9,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,11,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,13,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,17,2,2,novena,,,,0
+Giant Steps (John Coltrane),G,major,19,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,21,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,23,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,25,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,27,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,29,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,33,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,35,2,5,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,37,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,41,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,43,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,45,4,1,novena,,,,0
+Giant Steps (John Coltrane),B,major,49,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,51,2,5,trecena,,,,0
+Giant Steps (John Coltrane),B,major,53,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,57,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,59,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,61,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,65,2,2,séptima,,,4,0
+Giant Steps (John Coltrane),B,major,67,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,69,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,71,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,73,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,75,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,77,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,81,2,2,novena,,,,0
+Giant Steps (John Coltrane),G,major,83,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,85,2,1,novena,,,6,0
+Giant Steps (John Coltrane),Eb,major,87,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,89,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,91,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,93,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,97,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,99,2,5,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,101,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,105,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,107,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,109,4,1,novena,,,,0
+Giant Steps (John Coltrane),B,major,113,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,115,2,5,trecena,,,,0
+Giant Steps (John Coltrane),B,major,117,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,121,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,123,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,125,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,129,2,2,séptima,,,4,0
+Giant Steps (John Coltrane),B,major,131,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,133,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,135,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,137,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,139,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,141,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,145,2,2,novena,,,,0
+Giant Steps (John Coltrane),G,major,147,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,149,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,151,2,5,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,153,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,155,2,5,trecena,,,,0
+Giant Steps (John Coltrane),B,major,157,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,161,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,163,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,165,4,1,novena,,,,0
+Giant Steps (John Coltrane),G,major,169,2,2,novena,,,,0
+Giant Steps (John Coltrane),G,major,171,2,5,trecena,,,,0
+Giant Steps (John Coltrane),G,major,173,4,1,novena,,,,0
+Giant Steps (John Coltrane),B,major,177,2,2,novena,,,,0
+Giant Steps (John Coltrane),B,major,179,2,5,trecena,,,,0
+Giant Steps (John Coltrane),B,major,181,4,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,185,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,187,2,5,trecena,,,,0
+Giant Steps (John Coltrane),Eb,major,189,4,1,novena,,,,0
+Giant Steps (John Coltrane),B,major,193,2,2,novena,,,,0
+Giant Steps (John Coltrane),B,major,195,2,5,trecena,,,,0
+Giant Steps (John Coltrane),B,major,197,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,199,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,201,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,203,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,205,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,209,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,211,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,213,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,215,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,217,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,219,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,221,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,225,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,227,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,229,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,233,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,235,2,5,novena,,,,0
+Giant Steps (John Coltrane),G,major,237,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,241,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,243,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,245,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,249,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,251,2,5,oncena,,,,0
+Giant Steps (John Coltrane),Eb,major,253,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,257,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,259,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,261,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,263,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,265,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,267,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,269,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,273,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,275,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,277,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,279,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,281,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,283,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,285,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,289,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,291,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,293,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,297,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,299,2,5,novena,,,,0
+Giant Steps (John Coltrane),G,major,301,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,305,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,307,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,309,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,313,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,315,2,5,oncena,,,,0
+Giant Steps (John Coltrane),Eb,major,317,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,321,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,323,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,325,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,327,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,329,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,331,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,333,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,337,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,339,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,341,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,343,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,345,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,347,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,349,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,353,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,355,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,357,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,361,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,363,2,5,novena,,,,0
+Giant Steps (John Coltrane),G,major,365,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,369,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,371,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,373,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,377,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,379,2,5,oncena,,,,0
+Giant Steps (John Coltrane),Eb,major,381,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,385,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,387,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,389,2,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,391,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,393,2,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,395,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,397,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,401,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,403,2,5,séptima,,,,0
+Giant Steps (John Coltrane),G,major,405,2,1,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,407,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,409,2,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,411,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,413,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,417,2,2,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,419,2,5,novena,,,,0
+Giant Steps (John Coltrane),Eb,major,421,4,1,séptima,,,,0
+Giant Steps (John Coltrane),G,major,425,2,2,séptima,,,,0
+Giant Steps (John Coltrane),G,major,427,2,5,novena,,,,0
+Giant Steps (John Coltrane),G,major,429,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,433,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,435,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,437,4,1,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,441,2,2,séptima,,,,0
+Giant Steps (John Coltrane),Eb,major,443,2,5,oncena,,,,0
+Giant Steps (John Coltrane),Eb,major,445,4,1,séptima,,,,0
+Giant Steps (John Coltrane),B,major,449,2,2,séptima,,,,0
+Giant Steps (John Coltrane),B,major,451,2,5,séptima,,,,0
+Giant Steps (John Coltrane),B,major,453,2,1,séptima,,,,0

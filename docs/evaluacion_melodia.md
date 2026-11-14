@@ -199,6 +199,57 @@ El bajo no cambia. Los comentarios de esta ronda dieron cuatro correcciones cand
 notas de la guitarra 1 de Fabienk que no se oyen, un Re de Mata Zyklek antes de un silencio y la fase de la frase 2 de
 Sarniezz en los c. 43-51. Van a una segunda ronda con la misma regla.
 
+## Arbitraje a ciegas, segunda ronda (14-nov)
+
+Fueron 21 clips con la síntesis más corta. La regla se fijó antes de escuchar: en la parte 1, una posición cambia si al
+menos 2 de sus 3 clips eligen la misma altura distinta de la partitura; en la parte 2, una corrección se aplica si sus
+dos clips eligen la misma versión distinta de la partitura. Siempre con seguridad media o alta. Los dos controles (Do#¼
+de la posición 42 de Sarniezz y el Fa del Corte de Mata Zyklek) salieron bien.
+
+| Canción | Qué se juzgó | Clips | Resultado |
+|---|---|---|---|
+| Sarniezz | Frase 1, posición 13: Fa# | 3 | Fa#¼ en 2 (alta): cambia |
+| Sarniezz | Frase 1, posición 25: La¼ | 3 | La# en 2 (alta): cambia |
+| Sarniezz | Frase 1, posición 28: La¼ | 3 | La# en 3 (alta): cambia |
+| Sarniezz | Acorde largo de la posición 19 | 2 | La partitura en los dos: se queda |
+| Sarniezz | Fase de la frase 2 de la guitarra 2 (c. 43-51) | 2 | La partitura en los dos: se queda |
+| Fabienk | Notas de la guitarra 1 en «Corrido otra vez» | 2 | «Sin la guitarra 1» en los dos (alta): se quitan |
+| Fabienk | Giro al unísono (Z posición 3 de la guitarra 1) | 2 | «Las dos en Re#» en los dos (media): Z se queda en Re# |
+| Mata Zyklek | Re antes del silencio, c. 120 y c. 64 | 1 + 1 | Ninguna versión: no se añade |
+
+Dos cosas que salen de esta ronda y no estaban en la regla:
+
+- En Fabienk, «las dos en Re#» contradice los tres clips de la primera ronda, que dieron Re#¼ para el patrón W de la
+  guitarra 2 en los mismos pasajes. Se deja como estaba (W en Re#¼, Z en Re#) y la posición 3 de W queda en duda. Con W
+  en Re#, la melodía principal de Fabienk baja de 46.2 a 45.6.
+- En el c. 64 de Mata Zyklek, el autor oye un Fa agudo donde la partitura tiene silencio. La altura medida en la pista
+  de guitarra lo confirma (Fa4 sonoro durante cerca de pulso y medio), y se añadió a la guitarra 3. En el c. 232 la
+  pista muestra lo mismo, pero no se ha oído aparte y no se tocó.
+
+Con los cambios (pistas de Demucs con semilla 0):
+
+| | Melodía principal antes | Después | Más aguda antes | Después |
+|---|---|---|---|---|
+| Mata Zyklek | 66.5 | 66.4 | 62.9 | 62.8 |
+| Sarniezz | 44.2 | 44.9 | 35.0 | 35.3 |
+| Fabienk | 46.0 | 46.2 | 39.0 | 40.2 |
+
+El bajo no cambia (83.0, 78.6 y 69.2).
+
+## Yor Zarad: la referencia hecha a ciegas
+
+`references/yor_zarad_partitura.py` y `yor_zarad_notas.csv` son la primera referencia armada sin mirar ninguna salida
+del cuaderno. Las alturas salen de la tablatura de los PDF de Guitar Pro y los tiempos, de los WAV que Guitar Pro
+exporta por pista (la cabecera del archivo lo explica). El autor la verificó de oído con 20 clips y eligió a ciegas
+entre versiones en 6 clips más; los cambios están en la cabecera.
+
+- La melodía principal de cada sección la eligió el autor. En «C: riff con el bajo» es el bajo, y en «H: entra la
+  guitarra 3» y en el Outro son dos guitarras: `MELODIA_PRINCIPAL` acepta ahora una tupla de partes (cuenta la nota más
+  aguda de su unión) y también una parte de bajo.
+- `NO_MEDIBLE` deja fuera los compases donde el autor oye algo distinto y no quedó fijado qué: 48-49, 94-99, 108 y
+  200-201. La alineación deja fuera, además, los c. 163-168. Se mide el 98 % del resto.
+- La medida se hace una sola vez, con la corrida que ya existe del cuaderno congelado (`*_repro`), y se anota aquí.
+
 ## Paso 4: la saliencia doble, una sola vez
 
 En la celda de la línea, `stereo_salience` se llama dos veces, con `gamma 0.7` y `0.0`. Las dos llamadas repetían la

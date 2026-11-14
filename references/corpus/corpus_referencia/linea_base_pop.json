@@ -1,0 +1,113 @@
+{
+ "fuente": "Hooktheory (gráficos del usuario: «The most popular keys by scale», «The most popular chord in C Major»)",
+ "tonica_por_modo_pct": {
+  "mayor": {
+   "C": 16,
+   "D": 12,
+   "G": 12,
+   "A": 10,
+   "E": 9,
+   "F": 9,
+   "Eb": 7,
+   "Bb": 6,
+   "Db": 5,
+   "F#": 5,
+   "B": 5,
+   "Ab": 4
+  },
+  "menor": {
+   "C": 12,
+   "A": 12,
+   "D": 11,
+   "E": 11,
+   "G": 8,
+   "B": 8,
+   "C#": 7,
+   "F": 7,
+   "F#": 7,
+   "D#": 6,
+   "G#": 5,
+   "Bb": 5
+  },
+  "dorico": {
+   "D": 17,
+   "E": 11,
+   "A": 11,
+   "F": 10,
+   "C": 9,
+   "G": 9,
+   "B": 7,
+   "F#": 6,
+   "C#": 5,
+   "Eb": 5,
+   "G#": 5,
+   "Bb": 4
+  },
+  "mixolidio": {
+   "A": 14,
+   "C": 13,
+   "E": 13,
+   "G": 13,
+   "D": 12,
+   "B": 6,
+   "C#": 5,
+   "Eb": 5,
+   "F": 5,
+   "F#": 5,
+   "Bb": 5,
+   "Ab": 4
+  }
+ },
+ "nota_tonicas": "Do mayor: la etiqueta dice 10 %, la barra mide 16 %",
+ "acordes_en_do_mayor_pct": {
+  "C": 14.9,
+  "F": 11.6,
+  "G": 10.6,
+  "Am": 6.91,
+  "Dm": 2.53,
+  "Em": 1.98,
+  "C/E": 1.7,
+  "Dm7": 1.38,
+  "G/B": 1.31,
+  "G7": 1.19,
+  "Bb": 1.12,
+  "C/G": 1.11,
+  "Am7": 1.05
+ },
+ "raiz_pct": {
+  "I": 27.7,
+  "V": 21.3,
+  "IV": 19.8,
+  "vi": 13.1,
+  "ii": 7.7,
+  "iii": 6.0,
+  "bVII": 1.6,
+  "bVI": 1.4,
+  "bIII": 0.6
+ },
+ "bajo_pct": {
+  "1": 25.0,
+  "5": 20.7,
+  "4": 18.4,
+  "6": 12.6,
+  "2": 7.5,
+  "3": 7.4,
+  "b6": 2.8,
+  "7": 2.7,
+  "b7": 1.8
+ },
+ "funcion_pct": {
+  "T": 43,
+  "S": 28,
+  "D": 25,
+  "(D)": 5
+ },
+ "categorias_pct": {
+  "I IV V vi en estado fundamental": 62,
+  "invertidos": 13,
+  "con séptima": 12,
+  "prestados": 5.5,
+  "aplicados": 4.8,
+  "sus": 2.2
+ }
+}

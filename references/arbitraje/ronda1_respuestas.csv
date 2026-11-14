@@ -1,0 +1,26 @@
+archivo;cancion;minuto;eleccion;seguridad;comentario
+01_sar_1m21s.mp3;Sarniezz;1:21;1;Alta;
+02_mata_1m26s.mp3;Mata Zyklek;1:26;1;Alta;
+03_sar_2m01s.mp3;Sarniezz;2:01;3;Alta;
+04_fab_2m32s.mp3;Mata Zyklek;2:32;1;Alta;Figura ritmica en el C# B A B C# A B, hazlas un poco mas estacato, no tan continuas
+05_mata_2m55s.mp3;Mata Zyklek;2:55;1;Alta;
+06_mata_2m32s.mp3;Mata Zyklek;2:32;3;Alta;
+07_sar_1m33s.mp3;Sarniezz;1:33;3;Alta;
+08_fab_1m18s.mp3;Fabienk;1:18;3;Alta;C# agudo agudo en la segunda parte del ciclo en cada repeticion, nota equivocada en el audio de la derecha (no se esuchca nunca en el de la izquierda)
+09_mata_2m49s.mp3;Mata Zyklek;2:49;1;Alta;
+10_sar_1m36s.mp3;Sarniezz;1:36;3;Alta;G y C# al tiempo en la nota larga en vez de F#
+11_fab_0m50s.mp3;Fabienk;0:50;2;Alta;Aunque son voces mezcladas, suena identico en ambos oidos.
+12_fab_0m20s.mp3;Fabienk;0:20;2;Baja;"En la izquierda casi no suena; en la derecha suena la melodia que creo esta sonando muy pasito para orilo en la izquierda, solo se alcanza a escuchar el final del ciclo de la intro."
+13_sar_2m00s.mp3;Sarniezz;2:00;3;Alta;G y C# al tiempo en la nota larga en vez de F#
+14_sar_3m12s.mp3;Sarniezz;3:12;2;Baja;"El que suena a la izquierda es el correcto, habiamos dicho que era algo asi (me corriges igual): Correccion (agrupare para separar los silencios, los silencios son de corchea):
+
+[G# (corchea)]  [G# (corchea) B (corchea) G# (corchea) D (corchea)]  [C# (corchea) C1/4 (corchea) C (corchea) B1/4 (corchea) B (corchea) B1/4 (semicorchea) B (semicorchea) G# (corchea) B (corchea) G# (corchea) C# (corchea) C1/4 (corchea) E (corchea) B1/4 (corchea) B (corchea) D (corchea) D (corchea) B]"
+15_sar_1m43s.mp3;Sarniezz;1:43;2;Alta;G y C# al tiempo en la nota larga en vez de F#
+16_mata_3m07s.mp3;Mata Zyklek;3:07;3;Alta;Hace falta un ultimo D antes del silencio que despues retoma el otro ciclo que viene siendo como F G 1/4 G# g#1/4 G (el que ya teniamos correcto, me refiero)
+17_mata_3m04s.mp3;Mata Zyklek;3:04;2;Alta;
+18_mata_3m08s.mp3;Mata Zyklek;3:08;2;Alta;Hace falta un ultimo D antes del silencio que despues retoma el otro ciclo que viene siendo como F G 1/4 G# g#1/4 G (el que ya teniamos correcto, me refiero)
+19_sar_2m11s.mp3;Sarniezz;2:11;3;Alta;Revisa la parte de asender y descender de cuartos de tono, no la alcanzo a distinguir bien en la derecha pero seguro esta bien.
+20_sar_1m27s.mp3;Sarniezz;1:27;3;Alta;
+21_sar_3m09s.mp3;Sarniezz;3:09;2;Baja;"El que suena a la izquierda es el correcto, habiamos dicho que era algo asi (me corriges igual): Correccion (agrupare para separar los silencios, los silencios son de corchea):
+
+[G# (corchea)]  [G# (corchea) B (corchea) G# (corchea) D (corchea)]  [C# (corchea) C1/4 (corchea) C (corchea) B1/4 (corchea) B (corchea) B1/4 (semicorchea) B (semicorchea) G# (corchea) B (corchea) G# (corchea) C# (corchea) C1/4 (corchea) E (corchea) B1/4 (corchea) B (corchea) D (corchea) D (corchea) B]"

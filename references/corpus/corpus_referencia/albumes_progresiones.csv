@@ -1,0 +1,122 @@
+album,artista,anio,n,tema,modo,acordes,acordes_base,bajo_grados,n_acordes,con_septima,invertidos,prestados,aplicados,sus_add
+30,Adele,2021,1,Strangers By Nature,mayor,V⁷/iii I iv I iii iv I V⁷/ii ii IV V⁷ I,V/iii I iv I iii iv I V/ii ii IV V I,7 1 4 1 3 4 1 6 2 4 5 1,12,3,0,0,2,0
+30,Adele,2021,2,Easy On Me,mayor,I vi V I ii I IV,I vi V I ii I IV,1 6 5 1 2 1 4,7,0,0,0,0,0
+30,Adele,2021,3,My Little Love,mayor,iii ii I IV,iii ii I IV,3 2 1 4,4,0,0,0,0,0
+30,Adele,2021,4,Cry Your Heart Out,menor,i ♯vii vii ♯vii i,i ♯vii vii ♯vii i,6  5  6,5,0,0,0,0,0
+30,Adele,2021,5,Oh My God,menor,i VII VI VII,i VII VI VII,6 5 4 5,4,0,0,0,0,0
+30,Adele,2021,6,Can I Get It,menor,VI i VII,VI i VII,4 6 5,3,0,0,0,0,0
+30,Adele,2021,7,I Drink Wine,mayor,I V vi IV I V,I V vi IV I V,1 5 6 4 1 5,6,0,0,0,0,0
+30,Adele,2021,8,All Night Parking Ft. Erroll Garner,mayor,I vi ii V⁷ I V⁷/ii ii V⁷,I vi ii V I V/ii ii V,1 6 2 5 1 6 2 5,8,3,0,0,1,0
+30,Adele,2021,9,Woman Like Me,menor,i VI V⁷,i VI V,6 4 3,3,1,0,0,0,0
+30,Adele,2021,10,Hold On,mayor,I V vi iv,I V vi iv,1 5 6 4,4,0,0,0,0,0
+30,Adele,2021,11,To Be Loved,mayor,I V IV V vi I IV iv,I V IV V vi I IV iv,1 5 4 5 6 1 4 4,8,0,0,0,0,0
+30,Adele,2021,12,Love Is A Game,mayor,I I⁷ V⁷/IV vi ii I V,I I V/IV vi ii I V,1 1 1 6 2 1 5,7,2,0,0,1,0
+Everything to Everyone,Reneé Rapp,2022,1,Everything To Everyone (Intro),mayor,I IV⁷ vi⁷ IV⁷,I IV vi IV,1 4 6 4,4,3,0,0,0,0
+Everything to Everyone,Reneé Rapp,2022,2,In The Kitchen,mayor,I VII IV⁶ iv^6_(min)^ ^(add6),I ♭VII IV iv,,4,0,2,1,0,1
+Everything to Everyone,Reneé Rapp,2022,3,Colorado,mayor,vi⁷ IV I V vi⁷ IV I,vi IV I V vi IV I,6 4 1 5 6 4 1,7,2,0,0,0,0
+Everything to Everyone,Reneé Rapp,2022,4,Don’T Tell My Mom,mayor,I V IV^(add9),I V IV,1 5 4,3,0,0,0,0,1
+Everything to Everyone,Reneé Rapp,2022,5,What Can I Do,mayor,I I⁷ I^(add6) I IV⁷ IV_sus4 IV⁷ IV^7_sus2,I I I I IV IV IV IV,1 1 1 1 4 4 4 4,8,4,0,0,0,3
+Everything to Everyone,Reneé Rapp,2022,6,Too Well,menor,i III VII IV,i III VII IV,2 4 1 5,4,0,0,0,0,0
+Everything to Everyone,Reneé Rapp,2022,7,Moon,mayor,I iii⁷ IV⁷_(min) iv ii°⁶_(min),I iii IV iv ii°,1 3 4 4 4,5,2,1,2,0,0
+Everything to Everyone,Reneé Rapp,2022,8,Bruises,mayor,I vi⁷ I^6_5 IV_sus2 vi⁷ I^6_4 IV^7_sus2 I⁶ V^6_4 sus4 V^(add11),I vi I IV vi I IV I V V,1 6 3 4 6 5 4 3 2 5,10,4,4,0,0,4
+Gettin' Old,Luke Combs,2023,1,Growin’ Up And Gettin’ Old,mayor,I IV I V vi V IV V I,I IV I V vi V IV V I,1 4 1 5 6 5 4 5 1,9,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,2,Hannah Ford Road,mayor,I vii° IV vii°,I vii° IV vii°,1 7 4 7,4,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,3,Back 40 Back,mayor,I V vi iii IV I IV vi V,I V vi iii IV I IV vi V,1 5 6 3 4 1 4 6 5,9,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,4,You Found Yours,mayor,I IV⁷ V I IV⁷ V vi⁷ I IV⁷ V I,I IV V I IV V vi I IV V I,1 4 5 1 4 5 6 1 4 5 1,11,4,0,0,0,0
+Gettin' Old,Luke Combs,2023,5,"The Beer, The Band, And The Barstool",mayor,IV I IV⁶ I^64 V I iii^64 vi IV I^64 V IV,IV I IV I V I iii vi IV I V IV,4 1 6 5 5 1 7 6 4 5 5 4,12,0,4,0,0,0
+Gettin' Old,Luke Combs,2023,6,Still,mayor,I_(mix) v⁷ IV IV⁷ I_(mix) v⁷ IV IV⁷ ii I⁶ IV I v_(mix)^43 IV^64 IV⁶ I^64,I v IV IV I v IV IV ii I IV I v IV IV I,1 5 4 4 1 5 4 4 2 3 4 1 2 1 6 5,16,5,5,3,0,0
+Gettin' Old,Luke Combs,2023,7,See Me Now,mayor,I V⁶ vi⁷ IV vi⁷ V⁶ IV V I,I V vi IV vi V IV V I,1 7 6 4 6 7 4 5 1,9,2,2,0,0,0
+Gettin' Old,Luke Combs,2023,8,Joe,mayor,IV I IV V IV I vi⁷ IV V I,IV I IV V IV I vi IV V I,4 1 4 5 4 1 6 4 5 1,10,1,0,0,0,0
+Gettin' Old,Luke Combs,2023,9,A Song Was Born,mayor,IV V vi V IV,IV V vi V IV,4 5 6 5 4,5,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,10,My Song Will Never Die,mayor,IV I V I IV I V I,IV I V I IV I V I,4 1 5 1 4 1 5 1,8,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,11,Where The Wild Things Are,mayor,vi⁷ IV⁷ I V IV⁷ I⁶ ii V I,vi IV I V IV I ii V I,6 4 1 5 4 3 2 5 1,9,3,1,0,0,0
+Gettin' Old,Luke Combs,2023,12,Love You Anyway,mayor,IV I V vi V I,IV I V vi V I,4 1 5 6 5 1,6,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,13,Take You With Me,mayor,IV I vi V IV ii I,IV I vi V IV ii I,4 1 6 5 4 2 1,7,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,14,Fast Car,mayor,IV I vi V IV vi V,IV I vi V IV vi V,4 1 6 5 4 6 5,7,0,0,0,0,0
+Gettin' Old,Luke Combs,2023,15,Tattoo On A Sunburn,mayor,I ii⁷ IV I ii⁷ I,I ii IV I ii I,1 2 4 1 2 1,6,2,0,0,0,0
+Gettin' Old,Luke Combs,2023,16,5 Leaf Clover,mayor,I V⁶ vi IV V I V⁶ vi V IV V I,I V vi IV V I V vi V IV V I,1 7 6 4 5 1 7 6 5 4 5 1,12,0,2,0,0,0
+Gettin' Old,Luke Combs,2023,17,Fox In The Henhouse,mayor,I ♭VII_(mix)_(mix) I V⁷ I ♭VII_(mix) IV V ♭III_(min) IV I,I ♭VII I V I ♭VII IV V ♭III IV I,,11,1,0,3,0,0
+Gettin' Old,Luke Combs,2023,18,The Part,mayor,IV^(add9) I^(add9) V⁶ vi⁷ V IV^(add9) I^(add9) V⁶ IV^(add9) I⁶ ii⁷ V,IV I V vi V IV I V IV I ii V,4 1 7 6 5 4 1 7 4 3 2 5,12,2,3,0,0,5
+Happier Than Ever,Billie Eilish,2021,1,Getting Older,mayor,I vi V IV V,I vi V IV V,1 6 5 4 5,5,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,2,I Didn’T Change My Number,menor,i iv,i iv,6 2,2,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,3,Billie Bossa Nova,menor,iv V⁷/iv i,iv V/iv i,2 6 2,3,1,0,0,1,0
+Happier Than Ever,Billie Eilish,2021,4,My Future,mayor,I V⁷/IV IV iv,I V/IV IV iv,1 4 1 4,4,1,0,0,1,0
+Happier Than Ever,Billie Eilish,2021,5,Oxytocin,mayor,I,I,1,1,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,6,Goldwing,menor,VI iv i,VI iv i,4 2 6,3,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,7,Lost Cause,menor,i VII VI V⁷,i VII VI V,4 5 4 3,4,1,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,8,Halley’S Comet,mayor,I V⁶/vi vi IV I V IV V⁷/vi vi II ii ♭VI I,I V/vi vi IV I V IV V/vi vi II ii ♭VI I,1 3 6 4 1 5 4 3 6 2 2 5 1,13,1,1,0,2,0
+Happier Than Ever,Billie Eilish,2021,9,Not My Responsibility,menor,i V ii,i V ii,6 5 2,3,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,10,Overheated,mayor,iv v,iv v,2 6,2,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,11,Everybody Dies,menor,VI VII III i VI VII i,VI VII III i VI VII i,4 6 1 6 4 5 6,7,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,12,Your Power,mayor,IV vi iii,IV vi iii,4 6 3,3,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,13,Nda,menor,i III iv i III VI v_sus4 i,i III iv i III VI v i,6 1 2 6 1 4 3 6,8,0,0,0,0,1
+Happier Than Ever,Billie Eilish,2021,14,Therefore I Am,menor,i V i,i V i,6 3 6,3,0,0,0,0,0
+Happier Than Ever,Billie Eilish,2021,15,Happier Than Ever,mayor,I V⁷/vi vi ii V,I V/vi vi ii V,1 3 6 2 5,5,1,0,0,1,0
+Happier Than Ever,Billie Eilish,2021,16,Male Fantasy,menor,ii vi V VI ii vi V,ii vi V VI ii vi V,2 6 5 4 2 6 5,7,0,0,0,0,0
+Midnights,Taylor Swift,2022,1,Lavender Haze,mayor,IV V ii,IV V ii,4 5 2,3,0,0,0,0,0
+Midnights,Taylor Swift,2022,2,Maroon,mayor,IV_sus2 I vi V,IV I vi V,4 1 6 5,4,0,0,0,0,1
+Midnights,Taylor Swift,2022,3,Anti-Hero,mayor,IV⁷ I V vi^7,IV I V vi,4 1 5 6,4,2,0,0,0,0
+Midnights,Taylor Swift,2022,4,Snow On The Beach Feat. Lana Del Rey,mayor,vi⁷ IV^(add9) I⁶ V^(add11),vi IV I V,6 4 3 5,4,1,1,0,0,2
+Midnights,Taylor Swift,2022,5,"You’Re On Your Own, Kid",mayor,IV V I vi,IV V I vi,4 5 1 6,4,0,0,0,0,0
+Midnights,Taylor Swift,2022,6,Midnight Rain,mayor,IV I V vi,IV I V vi,4 1 5 6,4,0,0,0,0,0
+Midnights,Taylor Swift,2022,7,Question...?,mayor,I_sus2 vi⁷ ii⁷_sus4 I^6_4 V_sus4,I vi ii I V,1 6 2 5 5,5,2,1,0,0,3
+Midnights,Taylor Swift,2022,8,Vigilante Sh*T,menor,III VII i,III VII i,4 1 2,3,0,0,0,0,0
+Midnights,Taylor Swift,2022,9,Bejeweled,mayor,I ii vi V,I ii vi V,1 2 6 5,4,0,0,0,0,0
+Midnights,Taylor Swift,2022,10,Labyrinth,mayor,I IV^(add9) vi IV^(add9),I IV vi IV,1 4 6 4,4,0,0,0,0,2
+Midnights,Taylor Swift,2022,11,Karma,mayor,I VII IV,I ♭VII IV,5 4 1,3,0,0,0,0,0
+Midnights,Taylor Swift,2022,12,Sweet Nothing,mayor,IV^(add9) V I vi,IV V I vi,4 5 1 6,4,0,0,0,0,1
+Midnights,Taylor Swift,2022,13,Mastermind,mayor,vi⁷ IV V I,vi IV V I,6 4 5 1,4,1,0,0,0,0
+Montero,Lil Nas X,2021,1,Montero (Call Me By Your Name),mayor,V vi V,V vi V,5 6 5,3,0,0,0,0,0
+Montero,Lil Nas X,2021,2,Dead Right Now,mayor,I ii,I ii,1 2,2,0,0,0,0,0
+Montero,Lil Nas X,2021,3,Industry Baby (Feat. Jack Harlow),mayor,I vii° I vi V I,I vii° I vi V I,1 7 1 6 5 1,6,0,0,0,0,0
+Montero,Lil Nas X,2021,4,Thats What I Want,mayor,vi iii vii° I vi iii vii° V,vi iii vii° I vi iii vii° V,6 3 7 1 6 3 7 5,8,0,0,0,0,0
+Montero,Lil Nas X,2021,5,Scoop (Feat. Doja Cat),mayor,I ii,I ii,1 2,2,0,0,0,0,0
+Montero,Lil Nas X,2021,6,One Of Me (Feat. Elton John),mayor,vi IV I,vi IV I,6 4 1,3,0,0,0,0,0
+Montero,Lil Nas X,2021,7,Lost In The Citadel,mayor,I iii vi IV V vi,I iii vi IV V vi,1 3 6 4 5 6,6,0,0,0,0,0
+Montero,Lil Nas X,2021,8,Dolla Sign Slime (Feat. Megan Thee Stallion),mayor,I IV V,I IV V,1 4 5,3,0,0,0,0,0
+Montero,Lil Nas X,2021,9,Tales Of Dominica,mayor,I IV iii V⁷,I IV iii V,1 4 3 5,4,1,0,0,0,0
+Montero,Lil Nas X,2021,10,Sun Goes Down,mayor,I vi⁷ iii IV,I vi iii IV,1 6 3 4,4,1,0,0,0,0
+Montero,Lil Nas X,2021,11,Void,mayor,I iii^6_4 ♭VII_(mix) vi^(add11),I iii ♭VII vi,,4,0,1,1,0,1
+Montero,Lil Nas X,2021,12,Dont Want It,mayor,I vi vii° I,I vi vii° I,1 6 7 1,4,0,0,0,0,0
+Montero,Lil Nas X,2021,13,Life After Salem,mayor,I vi⁷ V iii⁷ V⁷,I vi V iii V,1 6 5 3 5,5,3,0,0,0,0
+Montero,Lil Nas X,2021,14,Am I Dreaming (Feat. Miley Cyrus),mayor,I V⁷/vi IV_(min) iv,I V/vi IV iv,1 3 4 4,4,1,0,1,1,0
+Solar Power,Lorde,2021,1,The Path,mayor,IV I V,IV I V,4 1 5,3,0,0,0,0,0
+Solar Power,Lorde,2021,2,Solar Power,mayor,VII IV I,♭VII IV I,4 1 5,3,0,0,0,0,0
+Solar Power,Lorde,2021,3,California,mayor,V IV vi IV I V IV,V IV vi IV I V IV,5 4 6 4 1 5 4,7,0,0,0,0,0
+Solar Power,Lorde,2021,4,Stoned At The Nail Salone,mayor,IV I V,IV I V,4 1 5,3,0,0,0,0,0
+Solar Power,Lorde,2021,5,Fallen Fruit,menor,i VI i VI V⁷,i VI i VI V,6 4 6 4 3,5,1,0,0,0,0
+Solar Power,Lorde,2021,6,Secrets From A Girl (Who’S Seen It All),mayor,V IV,V IV,5 4,2,0,0,0,0,0
+Solar Power,Lorde,2021,7,The Man With The Axe,mayor,IV I iii IV iv I,IV I iii IV iv I,4 1 3 4 4 1,6,0,0,0,0,0
+Solar Power,Lorde,2021,8,Dominoes,mayor,ii IV I,ii IV I,2 4 1,3,0,0,0,0,0
+Solar Power,Lorde,2021,9,Big Star,mayor,I IV vi I IV,I IV vi I IV,1 4 6 1 4,5,0,0,0,0,0
+Solar Power,Lorde,2021,10,Leader Of A New Regime,mayor,IV V⁷/vi vi V⁷/V IV V⁷/vi I V ♭VII IV V⁷/vi I V vi V⁷/V IV V⁷/vi I,IV V/vi vi V/V IV V/vi I V ♭VII IV V/vi I V vi V/V IV V/vi I,4 3 6 2 4 3 1 5  4 3 1 5 6 2 4 3 1,18,6,0,0,6,0
+Solar Power,Lorde,2021,11,Mood Ring,menor,i III VI III i III VII VI i,i III VI III i III VII VI i,6 1 4 1 6 1 5 4 6,9,0,0,0,0,0
+Solar Power,Lorde,2021,12,Oceanic Feeling,mayor,vi V vi I vi V vi IV I,vi V vi I vi V vi IV I,6 5 6 1 6 5 6 4 1,9,0,0,0,0,0
+− (Subtract),Ed Sheeran,2023,1,Boat,mayor,IV^(add9) I V IV^(add9) vi^4_3 V^6_4 I V IV^(add9),IV I V IV vi V I V IV,4 1 5 4 3 2 1 5 4,9,1,2,0,0,3
+− (Subtract),Ed Sheeran,2023,2,Salt Water,mayor,I IV⁷ I V⁷,I IV I V,1 4 1 5,4,2,0,0,0,0
+− (Subtract),Ed Sheeran,2023,3,Eyes Closed,mayor,I I^4_2 vi IV,I I vi IV,1 7 6 4,4,1,1,0,0,0
+− (Subtract),Ed Sheeran,2023,4,Life Goes On,mayor,I vi⁷ IV I V I vi⁷ V vi⁷ V IV⁷ vi^6_4 V⁷ I,I vi IV I V I vi V vi V IV vi V I,1 6 4 1 5 1 6 5 6 5 4 3 5 1,14,5,1,0,0,0
+− (Subtract),Ed Sheeran,2023,5,Dusty,mayor,I V vi⁷ IV,I V vi IV,1 5 6 4,4,1,0,0,0,0
+− (Subtract),Ed Sheeran,2023,6,End Of Youth,mayor,vi I^6_4 IV V I IV ii I⁶ IV^(add9),vi I IV V I IV ii I IV,6 5 4 5 1 4 2 3 4,9,0,2,0,0,1
+− (Subtract),Ed Sheeran,2023,7,Colourblind,mayor,I iii⁷ vi V IV I V ii I⁶ IV V,I iii vi V IV I V ii I IV V,1 3 6 5 4 1 5 2 3 4 5,11,1,1,0,0,0
+− (Subtract),Ed Sheeran,2023,8,Curtains,mayor,IV⁷ I vi V IV⁷ I II_(lyd),IV I vi V IV I II,4 1 6 5 4 1 2,7,2,0,1,0,0
+− (Subtract),Ed Sheeran,2023,9,Borderline,mayor,IV I V,IV I V,4 1 5,3,0,0,0,0,0
+− (Subtract),Ed Sheeran,2023,10,Spark,mayor,vi V IV I⁶,vi V IV I,6 5 4 3,4,0,1,0,0,0
+− (Subtract),Ed Sheeran,2023,11,Vega,mayor,V vi I V IV,V vi I V IV,5 6 1 5 4,5,0,0,0,0,0
+− (Subtract),Ed Sheeran,2023,12,Sycamore,mayor,IV^(add9) I V,IV I V,4 1 5,3,0,0,0,0,1
+− (Subtract),Ed Sheeran,2023,13,No Strings,mayor,I ii⁷ iii IV^(add9) vi V IV^(add9),I ii iii IV vi V IV,1 2 3 4 6 5 4,7,1,0,0,0,2
+− (Subtract),Ed Sheeran,2023,14,The Hills Of Aberfeldy,mayor,IV I V IV V vi⁷ ii⁷ I IV,IV I V IV V vi ii I IV,4 1 5 4 5 6 2 1 4,9,2,0,0,0,0
+Think Later,Tate McRae,2023,1,Cut My Hair,mayor,IV vi⁷ I vii°,IV vi I vii°,4 6 1 7,4,1,0,0,0,0
+Think Later,Tate McRae,2023,2,Greedy,mayor,vi IV I vii°,vi IV I vii°,6 4 1 7,4,0,0,0,0,0
+Think Later,Tate McRae,2023,3,Run For The Hills,mayor,ii^11 IV^(add9) I V,ii IV I V,2 4 1 5,4,1,0,0,0,1
+Think Later,Tate McRae,2023,4,Hurt My Feelings,mayor,I iii vii° V,I iii vii° V,1 3 7 5,4,0,0,0,0,0
+Think Later,Tate McRae,2023,5,Grave,mayor,I ii vi IV I ii I vi V,I ii vi IV I ii I vi V,1 2 6 4 1 2 1 6 5,9,0,0,0,0,0
+Think Later,Tate McRae,2023,6,Stay Done,mayor,I I^4_2 IV_sus2,I I IV,1 7 4,3,1,1,0,0,1
+Think Later,Tate McRae,2023,7,Exes,mayor,I⁷ V⁷ vi⁷ IV,I V vi IV,1 5 6 4,4,3,0,0,0,0
+Think Later,Tate McRae,2023,8,We'Re Not Alike,mayor,vi I iii V,vi I iii V,6 1 3 5,4,0,0,0,0,0
+Think Later,Tate McRae,2023,9,Calgary,mayor,vi vii° I,vi vii° I,6 7 1,3,0,0,0,0,0
+Think Later,Tate McRae,2023,10,Messier,mayor,I iii⁷ vi IV,I iii vi IV,1 3 6 4,4,1,0,0,0,0
+Think Later,Tate McRae,2023,11,Think Later,mayor,I ii⁷,I ii,1 2,2,1,0,0,0,0
+Think Later,Tate McRae,2023,12,Guilty Conscience,mayor,IV I V vi,IV I V vi,4 1 5 6,4,0,0,0,0,0
+Think Later,Tate McRae,2023,13,Want That Too,mayor,IV⁹ vi V,IV vi V,4 6 5,3,1,0,0,0,0
+Think Later,Tate McRae,2023,14,Plastic Palm Trees,mayor,IV⁷ vi I^(add9) V^6(add11),IV vi I V,4 6 1 7,4,1,1,0,0,2

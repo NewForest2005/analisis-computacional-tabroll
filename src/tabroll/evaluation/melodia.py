@@ -31,7 +31,7 @@ REFS = ROOT / "references"
 TOL = 0.075                                       # tolerancia de ataque (s)
 SLOPE_TOL, MAD_MAX, DEL_MAX, WIN = 0.05, 0.06, 0.15, 4.0
 
-CANCIONES = {"mata_zyklek": "mata zyklek", "sarniezz": "sarniezz", "fabienk": "fabienk"}
+CANCIONES = {"mata_zyklek": "mata zyklek", "sarniezz": "sarniezz", "fabienk": "fabienk", "yor_zarad": "yor zarad"}
 
 # Guitarra que lleva la melodía en cada sección (prefijo del nombre de la sección), elegida por el autor el 9-nov-2026.
 MELODIA_PRINCIPAL = {
@@ -43,6 +43,10 @@ MELODIA_PRINCIPAL = {
     "fabienk": [("Melodía «Fabien»", "G1"), ("Guitarra 1 dobla al bajo", "G1"), ("La guitarra 2 toca la línea del bajo", "G2"),
                 ("Entra la guitarra 2", "G1"), ("Corrido otra vez", "G2"), ("Las dos guitarras", "G2"),
                 ("Segunda voz sobre la línea", "G2")],
+    # Yor Zarad (autor, 14-nov-2026). Una tupla es la unión de esas partes; en «C: riff con el bajo» la melodía es el bajo.
+    "yor_zarad": [("A:", "G2"), ("B:", "G1"), ("C: riff con el bajo", "B"), ("C: entra la guitarra 2", "G2"), ("D:", "G2"),
+                  ("E: otro riff", "G1"), ("E: entra la guitarra 2", "G2"), ("F", "G2"), ("G:", "G2"), ("H: 6/8", "G2"),
+                  ("H: entra la guitarra 3", ("G1", "G2")), ("I:", ("G1", "G3"))],
 }
 
 
@@ -78,6 +82,10 @@ def reference(song: str) -> dict:
         six = R.SIX
         notes = [(t * six, d * six, p + R.TRANSPOSE[part], part) for k, t, d, p, part in R.notes(R.GUITARS + R.BASSES)]
         secs = [(t * six, (t + n) * six, name, known) for t, n, known, name in R.timeline()]
+    elif song == "yor_zarad":
+        R = _module(REFS / "yor_zarad_partitura.py")
+        notes = [(t, d, p + R.TRANSPOSE[part], part) for t, d, p, part in R.notes(R.GUITARS + R.BASSES)]
+        secs = R.timeline()
     else:
         raise ValueError(f"Canción sin partitura de evaluación: {song}")
     return dict(notes=notes, sections=secs, guitars=tuple(R.GUITARS), basses=tuple(R.BASSES))
@@ -212,18 +220,22 @@ def in_known(det, al: Alignment):
 
 
 def lead_line(al: Alignment, song: str) -> list[dict]:
-    gu = mapped(al, al.ref["guitars"])
+    """Melodía principal: en cada sección, la parte (o la unión de partes) de MELODIA_PRINCIPAL; donde calla, la nota
+    más aguda de las demás guitarras. La parte puede ser un bajo: entonces la melodía de esa sección es la línea del bajo."""
+    gu, ba = mapped(al, al.ref["guitars"]), mapped(al, al.ref["basses"])
     out = []
     for k, (t0, t1, nm, kn) in enumerate(al.ref["sections"]):
-        ns = [n for n in gu if n["sec"] == k]
-        if not kn or not ns:
+        if not kn:
             continue
+        ns = [n for n in gu if n["sec"] == k]
         part = next((p for pre, p in MELODIA_PRINCIPAL.get(song, []) if nm.startswith(pre)), None)
         if part is None:
             out += top_line(ns)
             continue
-        lead = top_line([n for n in ns if n["part"] == part])
-        rest = top_line([n for n in ns if n["part"] != part])
+        parts = (part,) if isinstance(part, str) else tuple(part)
+        own = [n for n in ns + [n for n in ba if n["sec"] == k] if n["part"] in parts]
+        lead = top_line(own)
+        rest = top_line([n for n in ns if n["part"] not in parts])
         out += lead + [n for n in rest if not any(l["t"] - 0.03 <= n["t"] < l["te"] for l in lead)]
     return sorted(out, key=lambda n: n["t"])
 

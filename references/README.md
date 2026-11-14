@@ -31,3 +31,14 @@ cabecera de cada archivo). Junto con `mata_zyklek_loops.py` son las referencias 
 
 `alineaciones/*.json` guarda, para cada canción, el camino DTW entre la partitura y el audio oficial. Está calculado
 sobre ese audio, así que con otra versión de la grabación hay que recalcularlo. Ver `docs/evaluacion_melodia.md`.
+
+`yor_zarad_partitura.py` y `yor_zarad_notas.csv` son la referencia de Yor Zarad, armada a ciegas con los PDF y los WAV
+de Guitar Pro y verificada de oído (14-nov-2026). `sarniezz_partitura.py`, `fabienk_partitura.py` y
+`mata_zyklek_loops.py` tienen además los cambios de las dos rondas de arbitraje a ciegas (13 y 14-nov-2026).
+
+## Referencias completas para la armonía
+
+`completas/<canción>.csv` une las notas corregidas de oído con las notas de las demás pistas de la partitura de Guitar
+Pro, en el tiempo de la grabación oficial. `completas/<canción>_guitar_pro.csv` tiene todas las pistas de Guitar Pro sin
+corregir y `completas/<canción>.json`, los tramos donde su mapa es regular. Las usa `compare_references` de
+`src/tabroll/evaluation/armonia.py`. Ver `docs/armonia.md`.

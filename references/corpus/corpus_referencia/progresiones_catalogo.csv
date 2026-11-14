@@ -1,0 +1,22 @@
+grupo,nombre,codigo,acordes_en_do,romanos,funciones,raices_cuartos_de_tono,ejemplos,archivo_midi,alturas_midi
+Bucles,Most popular,1564,C G Am F,I V vi IV,T D Tr S,0·14·18·10,"Red Light Spells Danger, In the Stars",The most popular progession - TTCP - 1564.mid,36 60 64 67 | 43 50 55 59 | 45 60 64 69 | 41 60 65 69
+Bucles,Pachelbel,15634,C G Am Em F,I V vi iii IV,T D Tr Tr S,0·14·18·8·10,"Go West, Good Old-Fashioned Lover Boy",Pachebel's progression - TTCP - 15634.mid,36 60 64 67 | 43 50 55 59 | 45 60 64 69 | 40 52 55 59 | 41 60 65 69
+Bucles,All genres,6545,Am G F G,vi V IV V,Tr D S D,18·14·10·14,"Romeo and Juliet, Shake It Out",Effective in all genres - TTCP - 6545.mid,45 60 64 69 | 43 50 55 59 | 41 60 65 69 | 43 50 55 59
+Bucles,Magic changes,1645,C Am F G,I vi IV V,T Tr S D,0·18·10·14,"Baby (Bieber), Happy Ending (Strokes)",Those magic changes - TTCP - 1645.mid,36 60 64 67 | 45 60 64 69 | 41 60 65 69 | 43 50 55 59
+Bucles,Gaining,1465,C F Am G,I IV vi V,T S Tr D,0·10·18·14,"Downfall (N. Kahan), Bad Decisions",Gaining Popularity - TTCP - 1465.mid,36 60 64 67 | 41 60 65 69 | 45 60 64 69 | 43 50 55 59
+Bucles,Timeless,1545,C G F G,I V IV V,T D S D,0·14·10·14,"One Thing, Avalon",Timeless - TTCP - 1545.mid,36 60 64 67 | 43 50 55 59 | 41 60 65 69 | 43 50 55 59
+Cadencias,Cadential 6/4,,F Dm C/G G C,IV ii I⁶₄ V I,S S D⁶₄ D T,10·4·0(14)·14·0,"Circle of Life, The Jean Genie",The cadential 6 4 - TTCP - Cadential 64.mid,41 60 65 69 | 38 62 65 69 | 43 60 64 67 | 43 50 55 59 | 36 60 64 67
+Cadencias,Mixolydian,1 M7 4 1,C B♭ F C,I ♭VII IV I,T D S T,0·20·10·0,"Panic in Detroit, 15 Minutes",A Mixolidian Cadence - TTCP - 1 M7 4 1.mid,36 60 64 67 | 46 62 65 70 | 41 60 65 69 | 36 60 64 67
+Cadencias,Via ♭VII,1 5 4 M7 1,C G F B♭ C,I V IV ♭VII I,T D S D T,0·14·10·20·0,"Redesign Your Logo, Tapes",Cadencing via b VII - TTCP - 1 5 4 M7 1.mid,36 60 64 67 | 43 50 55 59 | 41 60 65 69 | 46 62 65 70 | 36 60 64 67
+Cadencias,In style,4 b4 1,F Fm C,IV iv I,S S T,10·10·0,"Fool for You, Begged",Cadencing in Style - -TTCP - 4 b4 1.mid,41 60 65 69 | 41 60 65 68 | 36 60 64 67
+Cadencias,♭VI→V,1 b6 5,C A♭ G,I ♭VI V,T S D,0·16·14,"Better the Devil You Know, Belle",Using the b VI to setup a V - TTCP - 1 b6 5.mid,36 60 64 67 | 44 60 63 68 | 43 50 55 59
+Bajo por grado,Down,1 56 6 5,C G/B Am G,I V⁶ vi V,T D Tr D,0·14·18·14 (0·22·18·14),"Honeybee, A New Bohemia",Stepwise Bass Down - TTCP - 1 56 6 5.mid,36 60 64 67 | 47 50 55 59 | 45 60 64 69 | 43 50 55 59
+Bajo por grado,Up,1 27 16 4,C Dm⁷ C/E F,I ii⁷ I⁶ IV,T S T S,0·4·0·10 (0·4·8·10),"Oh Darling, Vampires",Stepwise Bass Up - TTCP - 1 27 16 4.mid,36 60 64 67 | 38 60 62 65 69 | 40 60 64 67 | 41 60 65 69
+Bajo por grado,Newcomer,1 364 6 4,C Em/B Am F,I iii⁶₄ vi IV,T Tr Tr S,0·8·18·10 (0·22·18·10),"Oh! You Pretty Things, Why Judy Why",The Newcomer - TTCP - 1 364 6 4.mid,36 60 64 67 | 47 52 55 59 | 45 60 64 69 | 41 60 65 69
+Bajo por grado,I⁶ precad.,4 16 5,F C/E G,IV I⁶ V,S T D,10·0·14 (10·8·14),"More Than a Feeling, Ripcord",I 6 as a precadece - TTCP - 4 16 5.mid,41 60 65 69 | 40 60 64 67 | 43 50 55 59
+Bajo por grado,Simple,4 16 2,F C/E Dm,IV I⁶ ii,S T S,10·0·4 (10·8·4),"If You Leave Me Now, Five Years",Simple Yet Powerful - TTCP - 4 16 2.mid,41 60 65 69 | 40 60 64 67 | 38 62 65 69
+Bajo por grado,vi⁴₂ de paso,6 642 4,Am Am⁷/G F,vi vi⁴₂ IV,Tr Tr S,18·18·10 (18·14·10),"Time (Bowie), To Make a Big Man Cry",vi 4 2 as a passing chord - TTCP - 6 642 4.mid,45 60 64 69 | 43 60 64 67 69 | 41 60 65 69
+Aplicados,Pleased the Lord,4 5 56-6 6,F G E/G♯ Am,IV V V⁶/vi vi,S D (D) Tr,10·14·8·18 (bajo ·16·18),"For Reasons Unknown, BWV 264",The Chord that pleased that Lord - TTCP - 4 5 56-6 6.mid,41 60 65 69 | 43 50 55 59 | 44 52 56 59 | 45 60 64 69
+Aplicados,V/vi,1 5-6 6,C E Am,I V/vi vi,T (D) Tr,0·8·18,"Absolute Beginners, Andromeda",Expanding with v:vi - TTCP - 1 5-6 6.mid,36 60 64 67 | 40 52 56 59 | 45 60 64 69
+Aplicados,Sec. dom.,1 57-4 4,C C⁷ F,I V⁷/IV IV,T (D) S,0·0·10,"Sign of the Times, Meet Me in the Bathroom",Secondary Dominant - TTCP - 1 57-4 4.mid,36 60 64 67 | 36 60 64 67 70 | 41 60 65 69
+Aplicados,vii° aplicado,5 7-6 6,G G♯° Am,V vii°/vi vi,D (D) Tr,14·16·18,"He Ain't Heavy, Bottle Up and Explode",Applied vii degree - TTCP - 5 7-6 6.mid,43 50 55 59 | 44 50 56 59 | 45 60 64 69

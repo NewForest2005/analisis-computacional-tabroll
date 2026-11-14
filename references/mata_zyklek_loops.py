@@ -17,6 +17,10 @@ guitarra 2 (c. 194-201) y hay tres corrimientos de un pulso (c. 57, 98 y 129). L
 
 Arbitraje a ciegas (autor, 13-nov-2026): el Fa y el Re de la melodía 1 de la guitarra 3, que el cuaderno da un cuarto
 de tono abajo y arriba, quedan como en la partitura (3 de 3 clips cada uno, seguridad alta).
+
+Segunda ronda (autor, 14-nov-2026): en el c. 64 de la guitarra 3, donde la partitura tiene silencio, suena un Fa
+agudo (Fa5 escrito); el autor lo oyó en el clip y la altura medida en la pista de guitarra lo confirma. El Re antes
+del silencio de los c. 64 y 120 no se añadió: el autor no eligió ninguna versión. Control: Fa3 del Corte, bien.
 """
 NAMES = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
 
@@ -70,6 +74,9 @@ L = {
     'B96': bar((0, .5, 'G4'), (.5, .5, 'G4'), (1, .5, 'Ad4'), (1.5, .5, 'G4'), (2, .5, 'G4'),
                (2.5, .5, 'C4'), (3, .5, 'D4'), (3.5, .5, 'Dq4'), (4, .5, 'Eb4'), (4.5, .5, 'Ed4')),
     'T120': bar(*RUN_G),
+    # c. 64: donde la partitura tiene silencio suena un Fa agudo (oído por el autor el 14-nov; en la pista de guitarra
+    # dura cerca de pulso y medio)
+    'RUN64': bar((0, 1.5, 'F5'), *RUN_G),
     # guitarra 1 (sección final, 2 compases)
     'F_a': bar((0, 1, 'G4'), (1, 1, 'Ad4'), (2, 1, 'G4'), (3, .5, 'F4'), (3.5, 1, 'G4'), (4.5, .5, 'A4')),
     'F_b': bar((0, 1, 'G4'), (1, 1, 'Ad4'), (2, .5, 'G4'), (2.5, .5, 'F4'), (3, .5, 'G4'), (3.5, .5, 'Gq4'), (4, .5, 'Ab4'), (4.5, .5, 'Ad4')),
@@ -109,7 +116,7 @@ ARR = {p: {} for p in ('G1', 'G2', 'G3', 'G4', 'B1', 'B2')}
 # guitarra 3
 G3 = ARR['G3']
 G3.update(four(17, 31, 'R_a', 'R_d', 'R_acc')); G3[32] = 'RUN'; G3[48] = 'PICK'
-G3.update(four(49, 63, 'M1_a', 'M1_d')); G3[64] = 'RUN'
+G3.update(four(49, 63, 'M1_a', 'M1_d')); G3[64] = 'RUN64'
 for s in (65, 69, 73, 129, 133, 137):
     G3.update({s: 'M2_1', s + 1: 'M2_2', s + 2: 'M2_3', s + 3: 'M2_4'})
 G3.update({77: 'M2_1', 78: 'M2_2', 79: 'R_a', 80: 'R_d', 141: 'M2_1', 142: 'M2_2', 143: 'R_a', 144: 'R_d'})

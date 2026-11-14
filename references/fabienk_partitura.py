@@ -18,6 +18,13 @@ tono arriba y uno abajo, en orden al azar):
 - Patrón W de la guitarra 2, posición 3: Re#¼ (no Re#), en 3 de 3 clips. El mismo giro de la guitarra 1 (patrón Z,
   posición 3) queda como en la partitura hasta oírlo aparte.
 
+Segunda ronda a ciegas (autor, 14-nov-2026; versiones completas en orden al azar):
+- «Corrido otra vez» (c. 26-29): las notas de la guitarra 1 (XYXZ corrido) no se oyen; se quitan (2 de 2 clips,
+  seguridad alta). Quedan la guitarra 2 y el bajo.
+- El giro al unísono (patrón Z de la guitarra 1, posición 3): el autor eligió «las dos guitarras en Re#» en 2 de 2
+  clips, con seguridad media. Eso contradice los 3 clips de la primera ronda (Re#¼ en el patrón W). Z queda en Re# y
+  W en Re#¼, como estaban; la posición 3 de W queda en duda.
+
 La introducción de la grabación de estudio (bajo desde 0:12, guitarra callada de 0:16 a 0:25) no sigue el reparto de
 vueltas de la transcripción; esos tramos quedan fuera porque la alineación no es compatible con un tempo constante.
 No medible: el acorde de los c. 59 y 74.
@@ -137,8 +144,12 @@ LOOP_SECS = [('Corrido otra vez (c. 26-29, 2 vueltas)', 112, 'XYXZ'), ('Guitarra
              ('Melodía «Fabien» otra vez (c. 47-53, 4 vueltas)', 224, 'M'), ('Guitarra 1 dobla al bajo (c. 54-58)', 112, 'V')]
 for name, n, g1 in LOOP_SECS:
     parts = {'G2': shifted(n, W, 14), 'B': shifted(n, Zb2, 14)}
-    parts['G1'] = {'XYXZ': shifted(n, XYXZ, 56), 'V': up(shifted(n, Zb2, 14), 12), 'M': rep(4, 56, M)}[g1]
+    if g1 != 'XYXZ':                 # en «Corrido otra vez» la guitarra 1 no se oye (segunda ronda a ciegas, 14-nov)
+        parts['G1'] = {'V': up(shifted(n, Zb2, 14), 12), 'M': rep(4, 56, M)}[g1]
     sec(name, n, parts)
+# Notas de la partitura que el autor no oye en la grabación (segunda ronda a ciegas). No entran en la referencia y
+# tampoco se vuelven a añadir desde otra transcripción al armar la referencia de acordes completa.
+QUITADAS_DE_OIDO = {'Corrido otra vez': {'G1': shifted(112, XYXZ, 56)}}
 sec('Acorde (c. 59)', 16, {}, known=False)
 sec('Bajo solo (c. 60-66, 2 vueltas)', 112, {'B': rep(2, 56, L)})
 sec('«Sébastien»: bajo solo (c. 67-74, 4 vueltas)', 224, {'B': rep(4, 56, L)})
