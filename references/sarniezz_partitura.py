@@ -12,6 +12,13 @@ Correcciones de oído (autor, 9-nov-2026, verificadas con clips de la guitarra r
 - Patrón del bajo tocado por la guitarra 1: Sol#¼ en 8, Do#¼ en 12.5 y Do# en 13. El bajo queda como en la partitura.
 - Ya confirmados sin cambios: el riff (c. 15-18) y la guitarra 2 una octava abajo en c. 37-42.
 
+Arbitraje a ciegas de los desacuerdos con el cuaderno (autor, 13-nov-2026; en cada clip, la nota escrita, un cuarto de
+tono arriba y uno abajo, en orden al azar):
+- Frase 1, posición 30: Fa#¼ (no Fa#), en 2 de 2 clips con seguridad alta. La guitarra 2 una octava abajo (c. 37-42)
+  sale de la frase 1 y cambia con ella.
+- Confirmado como en la partitura: Do#¼ en la posición 42 (3 de 3 clips).
+- Sin decidir, se dejan como en la partitura: posiciones 13 (Fa#), 25 y 28 (La¼).
+
 No medible: c. 1-14 (casi solo bajo), «go go» c. 52-56 (solo ritmo), c. 58-63 (suena una línea de la guitarra 1 que
 la partitura no tiene y cuyo ritmo no quedó fijado) y la improvisación de la guitarra 1 en c. 77-82.
 """
@@ -63,7 +70,7 @@ BP = pat((0, 2, 'E3'), (2, 1, 'E3'), (3, .5, 'E3'), (3.5, .5, 'E3'), (4, 1, 'D3'
 P1 = pat((0, 1, 'D5'), (1, 1, 'D5'), (2, 1, 'D5'), (3, 1, 'E5'), (6, 2, 'A4'), (8, 1, 'D5'), (8, 1, 'Fs5'), (10, 1, 'Gs5'), (11, 1, 'Gq5'),
          (12, 1, 'G5'), (13, 1, 'Fs5'), (14, 1, 'Fs5'), (15, 1, 'D5'), (16, 1, 'Cq6'), (17, 1, 'E5'), (18, 1, 'D5'),
          (19, 5, 'Cs5'), (19, 5, 'D5'), (19, 5, 'Fs5'),
-         (24, 1, 'A4'), (25, 1, 'Aq4'), (26, 1, 'Fs5'), (27, 1, 'A4'), (28, 1, 'Aq4'), (29, 1, 'Fs5'), (30, 1, 'Fs5'), (31, 1, 'G5'),
+         (24, 1, 'A4'), (25, 1, 'Aq4'), (26, 1, 'Fs5'), (27, 1, 'A4'), (28, 1, 'Aq4'), (29, 1, 'Fs5'), (30, 1, 'Ft5'), (31, 1, 'G5'),
          (32, 1, 'Gq5'), (33, 1, 'Gs5'), (34, 1, 'Cs5'), (35, 1, 'Cq5'), (36, 1, 'C5'), (37, 1, 'Bq4'), (38, 1, 'B4'), (39, 1, 'D5'),
          (40, 1, 'Aq5'), (41, 1, 'D5'), (42, 1, 'Ct5'), (43, 1, 'Cs5'), (44, 1, 'Ct5'), (45, 1, 'D5'), (46, 1, 'Ct5'), (47, 1, 'Cs5'))
 # 39-47 corregidas de oído por el autor (9-nov): «D A1/4 D C#1/4 C# C#1/4 D C#1/4 C#», misma métrica; el La¼ va arriba (el audio no tiene La¼3)

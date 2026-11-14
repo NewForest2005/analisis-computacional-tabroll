@@ -13,6 +13,11 @@ Correcciones de oído (autor, 9-nov-2026, verificadas con clips de la guitarra r
   la partitura (4:29); antes suena V2, que el looper mantiene hasta el final.
 - Ya confirmados sin cambios: «Guitarra 1 sola» (c. 2-6) y «Guitarra 1 dobla al bajo».
 
+Arbitraje a ciegas de los desacuerdos con el cuaderno (autor, 13-nov-2026; en cada clip, la nota escrita, un cuarto de
+tono arriba y uno abajo, en orden al azar):
+- Patrón W de la guitarra 2, posición 3: Re#¼ (no Re#), en 3 de 3 clips. El mismo giro de la guitarra 1 (patrón Z,
+  posición 3) queda como en la partitura hasta oírlo aparte.
+
 La introducción de la grabación de estudio (bajo desde 0:12, guitarra callada de 0:16 a 0:25) no sigue el reparto de
 vueltas de la transcripción; esos tramos quedan fuera porque la alineación no es compatible con un tempo constante.
 No medible: el acorde de los c. 59 y 74.
@@ -65,7 +70,7 @@ Y = pat((0, 2, 'E5'), (6, 2, 'Cs5'), (8, 2, 'Ct5'), (11, 1, 'D5'))
 Z = pat((0, 1, 'E5'), (1, 1, 'D5'), (2, 1, 'Dq5'), (3, 1, 'Ds5'), (4, 1, 'Dt5'), (5, 2, 'E5'), (7, 1, 'E5'), (9, 1, 'D5'), (11, 1, 'D5'))
 XYXZ = seq((14, X), (14, Y), (14, X), (14, Z))[1]
 # ------------------------------------------------------------------ guitarra 2
-W = pat((0, 1, 'E5'), (1, 1, 'D5'), (2, 1, 'Dq5'), (3, 1, 'Ds5'), (4, 1, 'Dt5'), (5, 2, 'E5'), (7, 1, 'E5'), (9, 1, 'D5'), (11, 1, 'E5'), (13, 1, 'E5'))
+W = pat((0, 1, 'E5'), (1, 1, 'D5'), (2, 1, 'Dq5'), (3, 1, 'Dt5'), (4, 1, 'Dt5'), (5, 2, 'E5'), (7, 1, 'E5'), (9, 1, 'D5'), (11, 1, 'E5'), (13, 1, 'E5'))
 # ------------------------------------------------------------------ bajo
 Xb = pat((0, 2, 'B2'), (4, 2, 'Bq2'), (6, 2, 'C3'), (8, 2, 'Cq3'), (11, 1, 'Cs3'))
 Yb = pat((0, 2, 'E2'), (6, 2, 'Cs3'), (8, 2, 'Ct3'), (11, 1, 'D3'))

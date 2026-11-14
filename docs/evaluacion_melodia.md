@@ -167,6 +167,38 @@ y solo se adopta si sube en las tres. Cambio en puntos de F (Sarniezz / Mata Zyk
   ataques que dejan más notas regulares entre vueltas acierta en las tres, pero por márgenes de 7 a 24 notas: queda
   como candidato para la prueba ciega.
 
+## Arbitraje a ciegas de los desacuerdos (13-nov)
+
+Donde el cuaderno y la partitura corregida dan alturas distintas una y otra vez, el autor juzgó de oído qué toca la
+guitarra, sin saber cuál era cuál. Cada clip tiene la pista de guitarra real en un canal y la partitura sintetizada en
+el otro, tres veces: con la nota escrita, un cuarto de tono arriba y un cuarto de tono abajo, en orden al azar. Fueron
+21 clips, 3 de ellos controles con respuesta conocida (los 3 salieron bien). La regla se fijó antes de escuchar: una
+nota cambia si al menos 2 clips eligen la misma altura distinta de la partitura, con seguridad media o alta.
+
+| Canción | Nota de la partitura | Clips | Resultado |
+|---|---|---|---|
+| Sarniezz | Frase 1, posición 30: Fa# | 2 | Fa#¼ en los dos (alta): cambia |
+| Sarniezz | Frase 1, posición 42: Do#¼ | 3 | La partitura en los tres: se queda |
+| Sarniezz | Frase 1, posición 13: Fa# | 1 | Fa#¼ con seguridad baja: sin decidir |
+| Sarniezz | Frase 1, posición 25: La¼ | 2 | Uno la partitura y otro La#: sin decidir |
+| Sarniezz | Frase 1, posición 28: La¼ | 1 | La# en un solo clip: sin decidir |
+| Fabienk | Patrón W de la guitarra 2, posición 3: Re# | 3 | Re#¼ en los tres: cambia |
+| Mata Zyklek | Fa de la melodía 1 | 3 | La partitura en los tres: se queda |
+| Mata Zyklek | Re de la melodía 1 | 3 | La partitura en los tres: se queda |
+
+En la mitad de los casos decididos tenía razón la partitura, así que un desacuerdo no basta para corregirla: el
+cuaderno también se equivoca en cuartos de tono. Con los dos cambios (pistas de Demucs con semilla 0):
+
+| | Melodía principal antes | Después |
+|---|---|---|
+| Mata Zyklek | 66.5 | 66.5 |
+| Sarniezz | 43.9 | 44.2 |
+| Fabienk | 45.4 | 46.0 |
+
+El bajo no cambia. Los comentarios de esta ronda dieron cuatro correcciones candidatas: un acorde de Sarniezz, unas
+notas de la guitarra 1 de Fabienk que no se oyen, un Re de Mata Zyklek antes de un silencio y la fase de la frase 2 de
+Sarniezz en los c. 43-51. Van a una segunda ronda con la misma regla.
+
 ## Paso 4: la saliencia doble, una sola vez
 
 En la celda de la línea, `stereo_salience` se llama dos veces, con `gamma 0.7` y `0.0`. Las dos llamadas repetían la

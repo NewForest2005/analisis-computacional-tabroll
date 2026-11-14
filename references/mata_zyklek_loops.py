@@ -14,6 +14,9 @@ del intro; la nota con cabeza triangular del compás 4 de la melodía 2; el bajo
 
 Comparado con el audio oficial (alineado por DTW): el oficial no tiene unos 8 compases de la figura rápida de la
 guitarra 2 (c. 194-201) y hay tres corrimientos de un pulso (c. 57, 98 y 129). Lo demás coincide.
+
+Arbitraje a ciegas (autor, 13-nov-2026): el Fa y el Re de la melodía 1 de la guitarra 3, que el cuaderno da un cuarto
+de tono abajo y arriba, quedan como en la partitura (3 de 3 clips cada uno, seguridad alta).
 """
 NAMES = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
 
