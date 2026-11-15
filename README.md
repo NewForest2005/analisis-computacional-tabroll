@@ -16,6 +16,7 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `docs/historial/`: historial auxiliar de la investigación.
 - `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook.
 - `scripts/run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
+- `scripts/corpus_bloques.py` y `scripts/verosimilitud_por_bloques.py`: comparan armonía, altura y metro con los corpus disponibles.
 - `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
 - `tests/`: validaciones estructurales básicas.
 
