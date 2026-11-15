@@ -5,7 +5,7 @@
     python scripts/todo.py --otras primus  # además compara con las corridas cuyo nombre contenga «primus»
 
 Pasos, por canción: (1) cuaderno completo con run_song.py, solo con --correr o si la canción no tiene corrida;
-(2) tarjeta resumen; (3) tira de ciclos. Al final: (4) comparación de tarjetas de la banda (y de --otras);
+(2) tarjeta resumen; (3) tira de ciclos. Al final: (4) comparación de tarjetas y pruebas de estilo de la banda (y de --otras);
 (5) copia a outputs/graficas_<fecha>/<canción>/ el tabroll completo, el mapa de armonía, el círculo armónico, los
 ciclos, la tarjeta y la tira, y escribe un índice (indice.md) y las líneas de las tarjetas (tarjetas.jsonl).
 
@@ -92,6 +92,12 @@ def main() -> None:
         ok, txt = correr(["scripts/comparar_tarjetas.py", *runs, *grupos, "--salida", str(destino / "comparacion_tarjetas")])
         if not ok:
             fallos.append(("todas", "comparación de tarjetas", txt[-600:]))
+
+    # pruebas de estilo: cada canción frente a rock, práctica común, jazz, pentatónica, tonos enteros, dodecafonismo, etc.
+    if runs:
+        ok, txt = correr(["scripts/pruebas_de_estilo.py", *runs, "--salida", str(destino / "pruebas_de_estilo")])
+        if not ok:
+            fallos.append(("todas", "pruebas de estilo", txt[-600:]))
 
     # copiar las gráficas
     indice = [f"# Gráficas del {datetime.datetime.now():%Y-%m-%d %H:%M}", ""]

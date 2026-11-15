@@ -62,7 +62,7 @@ graficas: demucs check-ffmpeg
 	$(VENV_PYTHON) scripts/todo.py --correr
 
 graficas-actuales: check-python
-	$(VENV_PYTHON) scripts/todo.py
+	$(VENV_PYTHON) scripts/todo.py --otras primus
 
 graficas-primus: demucs check-ffmpeg
 	$(VENV_PYTHON) scripts/todo.py --correr --otras primus
