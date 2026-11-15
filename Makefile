@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-actuales graficas-primus clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -17,6 +17,9 @@ help:
 		'make check           Verificar extracción y sintaxis' \
 		'make test            Ejecutar las pruebas' \
 		'make run-sarniezz   Analizar Sarniezz y generar todos los outputs' \
+		'make graficas       Correr las cinco canciones y reunir todas las gráficas y métricas' \
+		'make graficas-actuales Reunir gráficas usando las corridas existentes más recientes' \
+		'make graficas-primus Correr las cinco y comparar también con las corridas de Primus' \
 		'make clean-outputs   Eliminar solo las corridas generadas en outputs/'
 
 check-python:
@@ -51,6 +54,18 @@ test: install
 run-sarniezz: demucs check-ffmpeg
 	@test -f "$(SARNIEZZ_AUDIO)" || { echo 'No se encontró el audio de Sarniezz:' >&2; echo "  $(SARNIEZZ_AUDIO)" >&2; exit 1; }
 	$(VENV_PYTHON) scripts/run_song.py "$(SARNIEZZ_AUDIO)" --nombre sarniezz
+
+todo: check-python
+	$(VENV_PYTHON) scripts/todo.py
+
+graficas: demucs check-ffmpeg
+	$(VENV_PYTHON) scripts/todo.py --correr
+
+graficas-actuales: check-python
+	$(VENV_PYTHON) scripts/todo.py
+
+graficas-primus: demucs check-ffmpeg
+	$(VENV_PYTHON) scripts/todo.py --correr --otras primus
 
 clean-outputs:
 	@test -d outputs || exit 0
