@@ -18,7 +18,9 @@ Puntas:
 - Ciclos de largo desigual (fase, polirritmia): cuántos largos de ciclo distintos (más de 5 % de diferencia) suenan a la
   vez en algún momento, 1 → 0, 3 o más → 100.
 - Capas (minimalismo aditivo, techno): entradas de patrones de ciclo por minuto; 4 por minuto → 100.
-- Síncopa (funk, jazz): % de ataques de la voz aguda que caen lejos de la rejilla de corcheas del compás.
+- Síncopa (funk, jazz): % de ataques de la voz aguda en posición débil (contratiempo o semicorchea) que se sostienen sobre la
+  siguiente posición más fuerte sin que haya un ataque ahí (Longuet-Higgins y Lee 1984, simplificado), con el retraso
+  medio de los ataques corregido.
 - Pulso constante (minimalismo, techno): 100 − 10 × el coeficiente de variación (%) de la duración del pulso.
 """
 from __future__ import annotations
@@ -74,21 +76,36 @@ def medir(run: Path) -> dict:
         distintos = max(distintos, len(grupos))
     entradas_min = len(segs) / (largo / 60) if largo else 0.0
 
-    # síncopa: ataques de la voz aguda lejos de la rejilla de corcheas del compás en que caen
-    sinc = n = 0
+    # síncopa (Longuet-Higgins y Lee 1984, simplificada): cada ataque va a la semicorchea más cercana de su compás, con
+    # el retraso medio de la canción corregido. Peso métrico: tiempo 0, corchea a contratiempo −1, semicorchea −2. Hay
+    # síncopa cuando un ataque en posición débil no tiene ataque en la siguiente posición más fuerte (la nota «se
+    # sostiene» sobre ella); vale la diferencia de pesos. Se informa el % de ataques sincopados.
+    fases = []
     k = 0
     for nota in J["raw_high"]:
         t = nota["start_s"]
         while k + 1 < len(bars) and bars[k]["fin_s"] <= t:
             k += 1
         b = bars[k]
-        if not (b["inicio_s"] <= t < b["fin_s"]):
-            continue
-        paso = (b["fin_s"] - b["inicio_s"]) / (2 * pulsos[k])          # corchea
-        r = ((t - b["inicio_s"]) / paso) % 1.0
-        sinc += min(r, 1 - r) > 0.25
+        if b["inicio_s"] <= t < b["fin_s"]:
+            fases.append((k, (t - b["inicio_s"]) / ((b["fin_s"] - b["inicio_s"]) / pulsos[k])))
+    retraso = 0.0
+    if fases:
+        ang = [2 * math.pi * 4 * (x % 1) for _, x in fases]
+        retraso = math.atan2(sum(math.sin(v) for v in ang), sum(math.cos(v) for v in ang)) / (2 * math.pi * 4)
+    pos = set()
+    for k_, x in fases:
+        pos.add((k_, round((x - retraso) * 4)))                          # (compás, semicorchea)
+    peso = lambda s16: 0 if s16 % 4 == 0 else -1 if s16 % 2 == 0 else -2
+    sinc = n = 0
+    for k_, s16 in pos:
         n += 1
-
+        siguiente = s16 + 1 if peso(s16) == -2 else s16 + 2 if peso(s16) == -1 else None
+        if siguiente is None:
+            continue
+        kk, ss = (k_, siguiente) if siguiente < 4 * pulsos[k_] else (k_ + 1, 0)
+        if (kk, ss) not in pos and (k_, s16 + 1) not in pos:
+            sinc += 1
     cuenta = Counter(pulsos)
     r = dict(corrida=run.name, tempo_bpm=round(bpm, 1), compases=len(bars),
              pulsos_por_compas={str(k_): round(100 * v / len(pulsos), 1) for k_, v in cuenta.most_common(5)},

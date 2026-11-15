@@ -9,7 +9,9 @@ corrida. Es una primera gráfica de referencia: cada punta usa una fórmula senc
 en la misma escala. Más adelante se cambia por una matriz de verosimilitud contra corpus.
 
 ARMONÍA (fundamentales de los compases confiables):
-- Rock, Práctica común, Pop: 100 × (1 − distancia de Jensen-Shannon entre las fundamentales de la canción y las del estilo).
+- Rock, Práctica común, Jazz, Pop: con --verosimilitud, el doble del percentil de verosimilitud de la canción en el corpus del
+  estilo (scripts/verosimilitud_estilos.py; percentil 50 = pieza típica → 100). Sin él: 100 × (1 − distancia de
+  Jensen-Shannon entre las fundamentales de la canción y las cifras publicadas del estilo).
 - Pentatónica: % del tiempo en fundamentales de la pentatónica sobre el centro.
 - Minimalismo (ciclos): % del tiempo dentro de ciclos repetidos de la voz grave.
 - Microtonal (24-EDO): el doble del % del tiempo con la fundamental en cuarto de tono (50 % → 100).
@@ -20,8 +22,9 @@ MELODÍA (la voz aguda):
 - Modal: % del tiempo en notas del modo de la canción (con sus grados en cuarto de tono, si los tiene).
 - Pentatónica: % del tiempo en notas de la pentatónica sobre el centro.
 - Minimalismo (ciclos): % del tiempo dentro de ciclos repetidos de la voz aguda.
-- Microtonal (24-EDO): % del tiempo en cuartos de tono, reescalado entre el piso de ruido medido en música sin cuartos de
-  tono (11 % → 0) y las 24 clases por igual (50 % → 100).
+- Microtonal (24-EDO): con --microtonal, la media de dos partes: cuánto (% del tiempo en cuartos de tono entre el piso de
+  ruido, 11 % → 0, y 25 % → 1) y qué tan concentrados están en dos grados fijos (30 % → 0, 80 % → 1). Sin él, solo el %
+  reescalado entre 11 % → 0 y 50 % → 100.
 - Pasos de ¼ de tono (cromatismo) y de ¾ de tono (segunda neutra, la firma del maqam): % de los pasos entre notas seguidas.
 - Dodecafonismo: entropía de las 12 clases, reescalada entre una escala de 7 notas usada por igual (2,81 bits → 0) y las 12
   por igual (3,58 bits → 100).
@@ -44,18 +47,17 @@ def recorta(x: float) -> float:
     return round(max(0.0, min(100.0, x)), 1)
 
 
-def parecidos(r: dict) -> tuple[dict, dict]:
-    """(armonía, melodía): el parecido de 0 a 100 de cada punta."""
-    armonia = {"Rock (corpus)": recorta(100 * (1 - r["distancia_rock"])),
-               "Clásica (KP)": recorta(100 * (1 - r["distancia_practica_comun"])),
-               "Jazz (iRealB)": recorta(100 * (1 - r["distancia_jazz"])) if r.get("distancia_jazz") is not None else 0.0,
+def parecidos(r: dict, ver: dict | None = None, mic: dict | None = None) -> tuple[dict, dict]:
+    """(armonía, melodía): el parecido de 0 a 100 de cada punta. Con `ver` (una fila de verosimilitud_estilos.json) las
+    puntas de rock, práctica común, jazz y pop pasan a ser la verosimilitud contra su corpus; con `mic` (una fila de
+    microtonal.json), la punta microtonal de la melodía usa la cantidad y la concentración de los cuartos de tono."""
+    armonia = {"Rock": recorta(100 * (1 - r["distancia_rock"])),
                "Pentatónica": recorta(max(r["pentatonica_menor"], r["pentatonica_mayor"])),
                "Minimalismo\n(ciclos)": recorta(r["tiempo_en_ciclos"]),
                "Microtonal\n(24-EDO)": recorta(2 * r["fundamentales_cuarto_de_tono"]),
-               "Jazz por movimiento": recorta(100 * (r["cuarta_ascendente"] - 24.8) / (PE.JAZZ_CUARTA_ASCENDENTE - 24.8) * (0.5 + 0.5 * min(1.0, r["antes_de_la_tonica"].get("V", 0.0) / 30)))
-               if r["cambios"] >= 8 else 0.0}
-    if "distancia_pop" in r:
-        armonia["Pop (corpus)"] = recorta(100 * (1 - r["distancia_pop"]))
+               "Jazz": recorta(100 * (r["cuarta_ascendente"] - 24.8) / (55.8 - 24.8) * (0.5 + 0.5 * min(1.0, r["antes_de_la_tonica"].get("V", 0.0) / 30)))
+               if r["cambios"] >= 8 else 0.0,
+               "Práctica común": recorta(100 * (1 - r["distancia_practica_comun"]))}
     if "distancia_pop" in r:
         armonia["Pop"] = recorta(100 * (1 - r["distancia_pop"]))
     melodia = {"Modal\n(el modo de la canción)": recorta(r["melodia_en_el_modo"]),
@@ -66,6 +68,14 @@ def parecidos(r: dict) -> tuple[dict, dict]:
                "Pasos de ¾ de tono\n(maqam)": recorta(r["paso_de_tres_cuartos"]),
                "Dodecafonismo": recorta(100 * (r["entropia_melodia_bits"] - math.log2(7)) / (math.log2(12) - math.log2(7))),
                "Tonos enteros": recorta(100 * (r["tonos_enteros"] - 50) / 50)}
+    if ver:
+        for punta, e in (("Rock", "rock"), ("Práctica común", "clasica"), ("Jazz", "jazz"), ("Pop", "pop")):
+            if f"percentil_{e}" in ver:
+                armonia[punta] = recorta(2 * ver[f"percentil_{e}"])   # percentil 50 = pieza típica del estilo → 100
+    if mic and mic.get("notas"):
+        cantidad = max(0.0, min(1.0, (mic["cuartos_de_tono"] - 11) / (25 - 11)))
+        concentracion = max(0.0, min(1.0, (mic["concentracion_dos_grados"] - 30) / (80 - 30)))
+        melodia["Microtonal\n(24-EDO)"] = recorta(50 * (cantidad + concentracion))
     return armonia, melodia
 
 
@@ -109,8 +119,8 @@ def dibujar(armonia: dict, melodia: dict, salida: Path, titulo: str, sub: str) -
     fig.text(0.04, 0.95, titulo, fontsize=18, fontweight="bold", color=tinta)
     fig.text(0.04, 0.915, sub, fontsize=10.5, color=gris)
     fig.text(0.04, 0.025, "Parecido con cada estilo o rasgo, de 0 a 100. Primera referencia: cada punta usa una fórmula sencilla propia (ver el script), así que las puntas no "
-             "están en la misma escala.\nArmonía: fundamentales de los compases confiables frente a cifras publicadas de rock (de Clercq y Temperley 2011), práctica común "
-             "(Temperley 2009) y jazz (Broze y Shanahan 2013). Melodía: la voz aguda del cuaderno.", fontsize=8, color=gris)
+             "están en la misma escala.\nArmonía: rock, práctica común, jazz y pop = verosimilitud contra su corpus (RS 200, Kostka-Payne, iRealPro, Hooktheory) "
+             "si se pasó --verosimilitud. Melodía: la voz aguda del cuaderno.", fontsize=8, color=gris)
     fig.savefig(salida, dpi=200, facecolor=fondo)
     plt.close(fig)
 
@@ -119,10 +129,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--titulo")
+    ap.add_argument("--verosimilitud", type=Path, help="verosimilitud.json de scripts/verosimilitud_estilos.py")
+    ap.add_argument("--microtonal", type=Path, help="microtonal.json de scripts/microtonal.py")
     a = ap.parse_args()
+    V = {f["corrida"]: f for f in json.loads(a.verosimilitud.read_text(encoding="utf-8"))["canciones"]} if a.verosimilitud else {}
+    MI = {f["corrida"]: f for f in json.loads(a.microtonal.read_text(encoding="utf-8"))} if a.microtonal else {}
     for run in a.corridas:
         r = PE.medir(run)
-        armonia, melodia = parecidos(r)
+        armonia, melodia = parecidos(r, V.get(run.name), MI.get(run.name))
         limpio = lambda d: {k.replace("\n", " "): v for k, v in d.items()}
         p = dict(armonia=limpio(armonia), melodia=limpio(melodia))
         titulo = a.titulo or PE.nombre(run.name)
