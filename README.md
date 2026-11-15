@@ -10,6 +10,10 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `src/tabroll/cells/`: extracción ordenada, una celda de código por archivo.
 - `docs/cell-index.md`: inventario y trazabilidad entre notebook y módulos.
 - `docs/architecture.md`: cómo se separan funciones, clases, inicialización, configuración y ejecución.
+- `references/partituras/`: partituras y archivos Guitar Pro de referencia.
+- `references/corpus/`: corpus y datos de comparación estilística.
+- `trabajo/`: materiales de trabajo y diagnósticos archivados.
+- `docs/historial/`: historial auxiliar de la investigación.
 - `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook.
 - `scripts/run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
 - `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
