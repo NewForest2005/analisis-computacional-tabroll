@@ -25,7 +25,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 CANCIONES = [("Sarniezz", "sarniezz"), ("Mata Zyklek", "mata_zyklek"), ("Fabienk", "fabienk"), ("Yor Zarad", "yor_zarad"), ("Utzp", "utzp")]
 PATRONES = ["tabroll24_completo*.png", "angine_harmony_completo*.png", "circulo_armonico*.png", "mapa_ciclos*.png", "ciclo_*.png",
-            "tarjeta*.png", "tira_de_ciclos.png"]
+            "tarjeta*.png", "tira_de_ciclos.png", "radar_de_estilos.png", "radar_ritmico.png"]
 
 
 def mas_reciente(salidas: Path, clave: str) -> Path | None:
@@ -99,6 +99,15 @@ def main() -> None:
         if not ok:
             fallos.append(("todas", "pruebas de estilo", txt[-600:]))
 
+    # radares por canción: estilo (armonía y melodía) y estructura rítmica
+    if runs:
+        ok, txt = correr(["scripts/radar_de_estilos.py", *runs])
+        if not ok:
+            fallos.append(("todas", "radar de estilos", txt[-600:]))
+        ok, txt = correr(["scripts/radar_ritmico.py", *runs, "--salida", str(destino / "radar_ritmico_comparado.png")])
+        if not ok:
+            fallos.append(("todas", "radar rítmico", txt[-600:]))
+
     # copiar las gráficas
     indice = [f"# Gráficas del {datetime.datetime.now():%Y-%m-%d %H:%M}", ""]
     for titulo, run in usadas.items():
@@ -109,8 +118,10 @@ def main() -> None:
             for f in sorted(run.rglob(patron)):
                 shutil.copy2(f, d / f.name)
                 n += 1
-        for nombre in ("resumen.md", "tarjeta.json", "tira_de_ciclos.json", "evaluacion_melodia.json", "evaluacion_armonia.json",
-                       "evaluacion_armonia_referencias.json"):
+        for nombre in ("resumen.md", "tarjeta.json", "tira_de_ciclos.json", "evaluacion_melodia.json", "evaluacion_melodia_por_seccion.csv",
+                       "armonia.json", "armonia_por_compas.csv", "evaluacion_armonia.json", "evaluacion_armonia_por_compas.csv",
+                       "evaluacion_armonia_referencias.json", "evaluacion_armonia_referencias_por_compas.csv",
+                       "radar_de_estilos.json", "radar_ritmico.json"):
             if (run / nombre).exists():
                 shutil.copy2(run / nombre, d / nombre)
         indice.append(f"- **{titulo}**: {n} imágenes, de `{run.name}`")

@@ -129,6 +129,16 @@ def medir(run: Path, min_conf: float = 0.5) -> dict:
         if a1 - b0 < 0.25:
             pasos[abs(round(m1 * 2) - round(m0 * 2))] += 1
     np_ = sum(v for k, v in pasos.items() if k) or 1
+    # melodía: cuánto cabe en una pentatónica sobre el centro y cuánto en el modo de la canción
+    mel_penta = max(sum(pc12[k] for k in PENTA_MENOR), sum(pc12[k] for k in PENTA_MAYOR)) / tm
+    pasos_g = {"1": 0, "2": 4, "3": 8, "4": 10, "5": 14, "6": 18, "7": 22}
+    en_modo = {0, 10, 14}
+    for g in (((H.get("resumen") or {}).get("modo") or {}).get("grados") or {}).values():
+        m_ = re.fullmatch(r"([♭b♯#]*)([1-7])([+d-]?)", (g or "").strip())
+        if m_:
+            en_modo.add((pasos_g[m_.group(2)] + sum(-2 if c in "♭b" else 2 for c in m_.group(1)) + {"+": 1, "d": -1, "-": -1, "": 0}[m_.group(3)]) % 24)
+    mel_modo = sum(v for k, v in pc24.items() if k in en_modo) / tm
+    segs_a = [s_ for x in (((H.get("resumen") or {}).get("patrones") or {}).get("Voz aguda") or {}).values() for s_ in (x.get("segmentos") or [])]
     grado_micro = max(((v / tm, k) for k, v in pc24.items() if k % 2), default=(0.0, None))
 
     # repetición: tiempo dentro de los patrones de ciclo de la voz grave (o de la aguda si la grave no tiene)
@@ -156,6 +166,8 @@ def medir(run: Path, min_conf: float = 0.5) -> dict:
              tonos_enteros=round(100 * wt, 1), entropia_melodia_bits=round(ent12, 2),
              acordes_distintos=acordes, tiempo_en_ciclos=round(100 * min(1.0, en_ciclo / largo), 1) if largo else 0.0,
              cambios_por_compas=round(cambios / max(len(ok) - 1, 1), 2),
+             melodia_pentatonica=round(100 * mel_penta, 1), melodia_en_el_modo=round(100 * mel_modo, 1),
+             melodia_en_ciclos=round(100 * min(1.0, sum(x_[1] - x_[0] for x_ in segs_a) / largo), 1) if largo else 0.0,
              cuartos_de_tono_melodia=round(100 * micro, 1), paso_de_cuarto_de_tono=round(100 * pasos[1] / np_, 1),
              paso_de_tres_cuartos=round(100 * pasos[3] / np_, 1),
              grado_en_cuarto_mas_usado=None if grado_micro[1] is None else f"{GRADOS[grado_micro[1] // 2]}+ ({100 * grado_micro[0]:.1f} %)")
