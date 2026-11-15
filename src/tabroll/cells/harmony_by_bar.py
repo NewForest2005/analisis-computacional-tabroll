@@ -14,6 +14,7 @@ def harmony_by_bar(raw_bass, raw_high, beat_times, lens, cycles, tonic_pc24, min
     Pb, ib = fold_bar_profiles(spans, NoteTable(raw_bass), cycles.get('Voz grave', []))
     Pm, im = fold_bar_profiles(spans, NoteTable(raw_high), cycles.get('Voz aguda', []), min_dur=min_melody_beats * spb)
     out = []
+    sin_ciclos = not any(cycles.get(v) for v in ('Voz grave', 'Voz aguda'))     # canción sin looper: no hay vueltas en toda la canción
     for k, ((t0, t1), pb, pm, xb, xm) in enumerate(zip(spans, Pb, Pm, ib, im)):
         row = dict(compas=k + 1, inicio_s=round(t0, 3), fin_s=round(t1, 3),
                    ciclo_bajo=xb['ciclo'], vueltas_bajo=xb['vueltas'], ciclo_aguda=xm['ciclo'], vueltas_aguda=xm['vueltas'],
@@ -25,7 +26,7 @@ def harmony_by_bar(raw_bass, raw_high, beat_times, lens, cycles, tonic_pc24, min
             out.append(row)
             continue
         agree = [a for a in (xb['acuerdo'], xm['acuerdo']) if a is not None]
-        acuerdo = float(np.mean(agree)) if agree else 0.6                    # sin ciclo no hay vueltas que comparar
+        acuerdo = float(np.mean(agree)) if agree else (1.0 if sin_ciclos else 0.6)   # sin ciclo no hay vueltas que comparar
         cover = min(1.0, (pb.sum() / xb['vueltas'] + 0.5 * pm.sum() / xm['vueltas']) / (t1 - t0))
         row.update(fundamental=PC24_NAMES[ch['fundamental']], fundamental_pc24=ch['fundamental'], calidad=ch['calidad'],
                    grado=DEG24_NAMES[(ch['fundamental'] - tonic_pc24) % 24],

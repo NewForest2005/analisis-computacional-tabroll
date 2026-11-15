@@ -28,7 +28,7 @@ for voice, line in lines_v.items():
 
 layers = None
 
-if stem is not None:                                                               # con la pista guitar se ven las capas del looper
+if stem is not None and any(cycles.values()):                                      # con la pista guitar se ven las capas del looper; sin ciclos no hay loop que medir
     loop = loop_period(cycles)
     layer_events, level = layer_changes(stem, loop, sr, HOP_P, NFFT_P)
     layers = (layer_events, level, HOP_P / sr)
