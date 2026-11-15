@@ -29,6 +29,12 @@ import re
 from collections import Counter
 from pathlib import Path
 
+try:
+    from corpus_adapters import load_references, transition_share
+except ImportError:                                                       # permite importar el módulo desde otro directorio
+    load_references = lambda: {}
+    transition_share = lambda *_: None
+
 GRADOS = ["I", "♭II", "II", "♭III", "III", "IV", "♯IV", "V", "♭VI", "VI", "♭VII", "VII"]
 ROCK = dict(zip(GRADOS, [32.8, 0.5, 3.6, 2.6, 1.9, 22.6, 0.3, 16.3, 4.0, 7.2, 8.1, 0.4]))
 _kp = {"I": 34.6, "V": 23.3, "II": 11.3, "IV": 7.6, "VI": 5.4, "VII": 3.8, "♭VI": 3.7, "♭VII": 0.7, "♭III": 1.1}
@@ -40,6 +46,8 @@ ANTES_DE_I = {"rock": {"IV": 39.6, "V": 26.9, "♭VII": 13.2}, "práctica común
 PENTA_MENOR, PENTA_MAYOR = {0, 3, 5, 7, 10}, {0, 2, 4, 7, 9}
 ESTILOS = ["Rock modal-pentatónico", "Práctica común", "Jazz", "Pentatónica", "Tonos enteros", "Dodecafonismo", "Minimalismo", "Microtonal"]
 CORPUS = Path(__file__).resolve().parent.parent / "references" / "corpus" / "albumes_progresiones.csv"
+_REFERENCIAS = load_references()
+JAZZ_CUARTA_ASCENDENTE = 100 * (transition_share(_REFERENCIAS.get("jazz"), 5) or 0.558)
 
 
 def js(p: dict, q: dict) -> float:
@@ -152,10 +160,14 @@ def medir(run: Path, min_conf: float = 0.5) -> dict:
     largo = max(b["fin_s"] for b in bars) - min(b["inicio_s"] for b in bars)
     acordes = len({(b["fundamental_pc24"], b.get("calidad")) for b in ok})
 
+    rock_ref = _REFERENCIAS.get("rock", {}).get("roots") or ROCK
+    clasica_ref = _REFERENCIAS.get("classical", {}).get("roots") or CLASICA
+    jazz_ref = _REFERENCIAS.get("jazz", {}).get("roots")
     r = dict(corrida=run.name, centro=(H.get("resumen") or {}).get("centro"), modo=((H.get("resumen") or {}).get("modo") or {}).get("nombre"),
              fundamentales={g: round(100 * p12[g], 1) for g in GRADOS if p12[g] > 0.004},
              fundamentales_cuarto_de_tono=round(100 * cuarto / total, 1),
-             distancia_rock=round(js(p12, ROCK), 3), distancia_practica_comun=round(js(p12, CLASICA), 3),
+             distancia_rock=round(js(p12, rock_ref), 3), distancia_practica_comun=round(js(p12, clasica_ref), 3),
+             distancia_jazz=None if jazz_ref is None else round(js(p12, jazz_ref), 3),
              pentatonica_menor=round(100 * masa(PENTA_MENOR), 1), pentatonica_mayor=round(100 * masa(PENTA_MAYOR), 1),
              cambios=cambios, cambios_distintos=distintos, movimiento={n: round(v, 1) for n, v in zip(MOV_NOMBRES, pm)},
              asimetria_quintas=None if asim is None else round(asim, 2),
@@ -200,8 +212,9 @@ def veredictos(r: dict) -> dict:
                                        f"JS {r['distancia_practica_comun']:.2f} · V→I {vi:.0f} % (clásica 62 %)")
     # jazz: la cuarta ascendente domina los cambios (55,8 % en el corpus de estándares)
     q = r["cuarta_ascendente"]
-    v[ESTILOS[2]] = sin if pocos else ("encaja" if q >= 47 and vi >= 30 else "en parte" if q >= 40 else "no encaja",
-                                       f"cuarta ascendente {q:.0f} % (jazz 56 %, rock 25 %) · V→I {vi:.0f} %")
+    v[ESTILOS[2]] = sin if pocos else ("encaja" if q >= 0.84 * JAZZ_CUARTA_ASCENDENTE and vi >= 30 else
+                                       "en parte" if q >= 0.72 * JAZZ_CUARTA_ASCENDENTE else "no encaja",
+                                       f"cuarta ascendente {q:.0f} % (jazz {JAZZ_CUARTA_ASCENDENTE:.0f} %) · V→I {vi:.0f} %")
     # pentatónica: las fundamentales caben en una pentatónica sobre el centro (rock 82 %, clásica 67 %)
     v[ESTILOS[3]] = ("encaja" if pen >= 90 else "en parte" if pen >= 75 else "no encaja", f"{pen:.0f} % de las fundamentales (rock 82 %)")
     # tonos enteros: la melodía cabe en una de las dos escalas (al azar: 50 %)

@@ -46,13 +46,16 @@ def recorta(x: float) -> float:
 
 def parecidos(r: dict) -> tuple[dict, dict]:
     """(armonía, melodía): el parecido de 0 a 100 de cada punta."""
-    armonia = {"Rock": recorta(100 * (1 - r["distancia_rock"])),
+    armonia = {"Rock (corpus)": recorta(100 * (1 - r["distancia_rock"])),
+               "Clásica (KP)": recorta(100 * (1 - r["distancia_practica_comun"])),
+               "Jazz (iRealB)": recorta(100 * (1 - r["distancia_jazz"])) if r.get("distancia_jazz") is not None else 0.0,
                "Pentatónica": recorta(max(r["pentatonica_menor"], r["pentatonica_mayor"])),
                "Minimalismo\n(ciclos)": recorta(r["tiempo_en_ciclos"]),
                "Microtonal\n(24-EDO)": recorta(2 * r["fundamentales_cuarto_de_tono"]),
-               "Jazz": recorta(100 * (r["cuarta_ascendente"] - 24.8) / (55.8 - 24.8) * (0.5 + 0.5 * min(1.0, r["antes_de_la_tonica"].get("V", 0.0) / 30)))
-               if r["cambios"] >= 8 else 0.0,
-               "Práctica común": recorta(100 * (1 - r["distancia_practica_comun"]))}
+               "Jazz por movimiento": recorta(100 * (r["cuarta_ascendente"] - 24.8) / (PE.JAZZ_CUARTA_ASCENDENTE - 24.8) * (0.5 + 0.5 * min(1.0, r["antes_de_la_tonica"].get("V", 0.0) / 30)))
+               if r["cambios"] >= 8 else 0.0}
+    if "distancia_pop" in r:
+        armonia["Pop (corpus)"] = recorta(100 * (1 - r["distancia_pop"]))
     if "distancia_pop" in r:
         armonia["Pop"] = recorta(100 * (1 - r["distancia_pop"]))
     melodia = {"Modal\n(el modo de la canción)": recorta(r["melodia_en_el_modo"]),
