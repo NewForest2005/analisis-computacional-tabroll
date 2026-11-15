@@ -5,7 +5,7 @@ Uso:
     python scripts/corpus_bloques.py --hooktheory Hooktheory.json.gz
     python scripts/corpus_bloques.py --symbtr SymbTr/txt
     python scripts/corpus_bloques.py --musicxml arab-andalusian-music/scores-musicxml --nombre andalusi --familia microtonal
-    python scripts/corpus_bloques.py --musicxml radif/MusicXML --nombre radif --familia microtonal --sin-metro
+    python scripts/corpus_bloques.py --midi RadifCorpus --nombre radif --familia microtonal --sin-metro
     python scripts/corpus_bloques.py --kern essen-folksong-collection --nombre essen --familia folk
     python scripts/corpus_bloques.py --session TheSession-data/csv/tunes.csv
     python scripts/corpus_bloques.py --wjd wjazzd.db [--tipos MODAL,BLUES --nombre wjd_modal]
@@ -256,9 +256,26 @@ USUL = {"aksak": 9, "agiraksak": 9, "raksaksagi": 9, "evfer": 9, "oynak": 9, "cu
         "darbeyn": 0, "serbest": 0, "usulsuz": 0}
 
 
-def symbtr(carpeta: Path, nombre: str) -> None:
+def a_24(cents: float, suave: float) -> list[tuple[int, float]]:
+    """Reparte una altura en cents (respecto de la tónica) entre los 24 grados: redondeo, o gaussiana de ancho `suave`."""
+    if not suave:
+        return [(round(cents / 50) % 24, 1.0)]
+    pesos = []
+    for b in range(24):
+        d = abs((cents - 50 * b + 600) % 1200 - 600)
+        if d < 3 * suave:
+            pesos.append((b, pow(2.718281828, -d * d / (2 * suave * suave))))
+    s = sum(w for _, w in pesos)
+    return [(b, w / s) for b, w in pesos]
+
+
+def symbtr(carpeta: Path, nombre: str, suave: float = 0.0) -> None:
     """SymbTr txt (Karaosmanoğlu 2012): columnas Kod, Koma53 (altura en comas de Holder, 53 por octava), Pay/Payda
-    (duración). Tónica = última nota (karar). El usul sale del nombre del archivo «makam--forma--usul--nombre--compositor»."""
+    (duración). Tónica = última nota (karar). El usul sale del nombre del archivo «makam--forma--usul--nombre--compositor».
+    Las alturas pasan a cents (1 coma = 1200/53) y de ahí a 24 grados. Ojo: en la notación Arel-Ezgi-Uzdilek casi todos
+    los grados «neutros» caen más cerca de un semitono que de un cuarto de tono (segâh en uşşak: 8 comas = 181 cents), así
+    que el redondeo los vuelve 12-EDO. Con --suave σ cada nota se reparte con una gaussiana de σ cents entre los grados
+    vecinos; correr con 0 y con 25 y ver si cambia la conclusión."""
     piezas, sin_usul = [], defaultdict(int)
     for f in sorted(carpeta.glob("*.txt")):
         filas = list(csv.DictReader(open(f, encoding="utf-8", errors="replace"), delimiter="\t"))
@@ -275,7 +292,8 @@ def symbtr(carpeta: Path, nombre: str) -> None:
         ton = notas[-1][0] % 53
         alt = [0.0] * 24
         for k, d in notas:
-            alt[round(((k - ton) % 53) * 24 / 53) % 24] += d
+            for b, w in a_24(((k - ton) % 53) * 1200 / 53, suave):
+                alt[b] += d * w
         partes = f.stem.split("--")
         usul = sin_tildes(partes[2]) if len(partes) > 2 else ""
         met = None
@@ -287,7 +305,8 @@ def symbtr(carpeta: Path, nombre: str) -> None:
         piezas.append(pieza(f.stem, None, alt, met))
     if sin_usul:
         print("usul sin tabla (sin metro):", dict(sorted(sin_usul.items(), key=lambda kv: -kv[1])[:15]))
-    escribir(nombre, "microtonal", "SymbTr (Karaosmanoğlu 2012), 53 comas redondeadas a 24", piezas, "CC BY-NC-SA 4.0")
+    escribir(nombre, "microtonal", f"SymbTr (Karaosmanoğlu 2012), 53 comas → cents → 24 grados ({'gaussiana σ = %g cents' % suave if suave else 'redondeo'})",
+             piezas, "CC BY-NC-SA 4.0")
 
 
 # ───────────────────────── MusicXML genérico (andalusí, Radif, SymbTr xml…) ─────────────────────────
@@ -352,6 +371,112 @@ def musicxml(carpeta: Path, nombre: str, familia: str, tonica: str, sin_metro: b
         if r:
             piezas.append(pieza(f.stem, None, r["altura"], r["metro"]))
     escribir(nombre, familia, f"MusicXML de {carpeta.name} (tónica: {tonica})", piezas)
+
+
+# ───────────────────────── MIDI con pitch bend (Radif) ─────────────────────────
+def leer_midi(path: Path, rango_bend: float = 2.0) -> dict | None:
+    """MIDI estándar sin librerías. Altura = nota + pitch bend del canal (rango ±`rango_bend` semitonos), en cuartos de
+    tono. En el Radif el koron es «un semitono abajo + bend de 2048» = ¼ de tono exacto. Duración en ticks; compases
+    desde los eventos de compás (0xFF 0x58). Tónica = última nota."""
+    datos = path.read_bytes()
+    if datos[:4] != b"MThd":
+        return None
+    ntracks = int.from_bytes(datos[10:12], "big")
+    pos = 8 + int.from_bytes(datos[4:8], "big")
+    eventos = []                                                       # (tick, tipo, canal, a, b)
+    for _ in range(ntracks):
+        if datos[pos:pos + 4] != b"MTrk":
+            break
+        fin = pos + 8 + int.from_bytes(datos[pos + 4:pos + 8], "big")
+        i, tick, estado = pos + 8, 0, 0
+        while i < fin:
+            delta = 0
+            while True:
+                c = datos[i]; i += 1
+                delta = (delta << 7) | (c & 0x7F)
+                if c < 0x80:
+                    break
+            tick += delta
+            c = datos[i]
+            if c == 0xFF:
+                tipo, i = datos[i + 1], i + 2
+                largo = 0
+                while True:
+                    c = datos[i]; i += 1
+                    largo = (largo << 7) | (c & 0x7F)
+                    if c < 0x80:
+                        break
+                if tipo == 0x58:
+                    eventos.append((tick, "compas", 0, datos[i], 2 ** datos[i + 1]))
+                i += largo
+                continue
+            if c in (0xF0, 0xF7):
+                i += 1
+                largo = 0
+                while True:
+                    c = datos[i]; i += 1
+                    largo = (largo << 7) | (c & 0x7F)
+                    if c < 0x80:
+                        break
+                i += largo
+                continue
+            if c >= 0x80:
+                estado, i = c, i + 1
+            tipo, canal = estado & 0xF0, estado & 0x0F
+            if tipo in (0xC0, 0xD0):
+                i += 1
+                continue
+            a, b = datos[i], datos[i + 1]
+            i += 2
+            if tipo == 0x90 and b > 0:
+                eventos.append((tick, "on", canal, a, b))
+            elif tipo == 0x80 or (tipo == 0x90 and b == 0):
+                eventos.append((tick, "off", canal, a, 0))
+            elif tipo == 0xE0:
+                eventos.append((tick, "bend", canal, (b << 7) | a, 0))
+        pos = fin
+    orden = {"compas": 0, "bend": 1, "off": 2, "on": 3}
+    eventos.sort(key=lambda e: (e[0], orden[e[1]]))
+    bend = defaultdict(lambda: 8192)
+    abiertas, notas, compases = {}, [], []
+    for tick, tipo, canal, a, b in eventos:
+        if tipo == "bend":
+            bend[canal] = a
+        elif tipo == "compas":
+            compases.append((tick, a, b))
+        elif tipo == "on":
+            abiertas[(canal, a)] = (tick, a + (bend[canal] - 8192) / 8192 * rango_bend)
+        elif (canal, a) in abiertas:
+            t0, altura = abiertas.pop((canal, a))
+            if tick > t0:
+                notas.append((t0, round(2 * altura), tick - t0))
+    if len(notas) < 8:
+        return None
+    notas.sort()
+    ton = notas[-1][1] % 24
+    alt = [0.0] * 24
+    for _, q, d in notas:
+        alt[(q - ton) % 24] += d
+    met = None
+    if compases:
+        met = [0.0] * 6
+        fin_t = max(t + d for t, _, d in notas)
+        for k, (t, num, den) in enumerate(compases):
+            hasta = compases[k + 1][0] if k + 1 < len(compases) else fin_t
+            met[familia_metro(pulsos_compas(num, den))] += max(0, hasta - t)
+    return dict(altura=alt, metro=met if met and sum(met) else None)
+
+
+def midi(carpeta: Path, nombre: str, familia: str, sin_metro: bool, rango_bend: float) -> None:
+    piezas = []
+    for f in sorted(list(carpeta.rglob("*.mid")) + list(carpeta.rglob("*.midi"))):
+        try:
+            r = leer_midi(f, rango_bend)
+        except (IndexError, ValueError):
+            r = None
+        if r:
+            piezas.append(pieza(f.stem, None, r["altura"], None if sin_metro else r["metro"]))
+    escribir(nombre, familia, f"MIDI de {carpeta.name} (pitch bend ±{rango_bend:g} semitonos; tónica: última nota)", piezas)
 
 
 # ───────────────────────── Humdrum **kern (Essen) ─────────────────────────
@@ -571,10 +696,13 @@ def main() -> None:
     ap.add_argument("--symbtr", type=Path)
     ap.add_argument("--musicxml", type=Path)
     ap.add_argument("--kern", type=Path)
+    ap.add_argument("--midi", type=Path, help="carpeta de MIDI con pitch bend (Radif)")
+    ap.add_argument("--rango-bend", type=float, default=2.0, help="MIDI: rango del pitch bend en semitonos")
     ap.add_argument("--session", type=Path)
     ap.add_argument("--wjd", type=Path)
     ap.add_argument("--dcml", type=Path)
     ap.add_argument("--chordonomicon", type=Path)
+    ap.add_argument("--suave", type=float, default=0.0, help="SymbTr: σ en cents para repartir cada nota entre grados vecinos (0 = redondeo)")
     ap.add_argument("--nombre")
     ap.add_argument("--familia", default="otro", choices=["rock/pop", "clasica", "jazz", "folk", "microtonal", "otro"])
     ap.add_argument("--tonica", default="final", choices=["final", "primera", "armadura"], help="MusicXML: cómo fijar la tónica")
@@ -587,9 +715,11 @@ def main() -> None:
     if a.hooktheory:
         hooktheory(a.hooktheory, a.nombre or "hooktheory"); algo = True
     if a.symbtr:
-        symbtr(a.symbtr, a.nombre or "symbtr"); algo = True
+        symbtr(a.symbtr, a.nombre or "symbtr", a.suave); algo = True
     if a.musicxml:
         musicxml(a.musicxml, a.nombre or a.musicxml.name, a.familia, a.tonica, a.sin_metro); algo = True
+    if a.midi:
+        midi(a.midi, a.nombre or a.midi.name, a.familia, a.sin_metro, a.rango_bend); algo = True
     if a.kern:
         kern(a.kern, a.nombre or "essen", a.familia if a.familia != "otro" else "folk"); algo = True
     if a.session:

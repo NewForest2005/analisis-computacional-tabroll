@@ -19,3 +19,8 @@ outputs/
 Sarniezz_Tabroll_Output.zip
 Sarniezz_outputs_*.zip
 .venv-bp/
+
+references/corpus/raw/RadifCorpus/
+references/corpus/raw/SymbTr/
+references/corpus/raw/SymbTr-2.4.3/
+references/corpus/raw/TheSession-data/

@@ -111,6 +111,29 @@ cae dentro de ninguno en la combinación completa, la tesis puede sostener empí
 
 ## Referencias
 
+### Fuentes consultadas para el test por bloques
+
+- [SymbTr](https://github.com/MTG/SymbTr): partituras simbólicas turcas con alturas en comas y 88 *usuls*; es la
+  referencia prioritaria para combinar microtonalidad y metro irregular.
+- [Radif Corpus](https://arxiv.org/abs/2507.10456): 228 piezas persas con koron/sori y cuartos de tono codificados;
+  sirve para altura, pero su repertorio principal es no métrico.
+- [The Session data](https://github.com/adactio/TheSession-data): melodías ABC con `meter` y `mode`, útil como control
+  de compases irregulares de tradición folk.
+- [Digital Arabic Maqām Archive](https://diarmaqar.net/en): teoría computable de maqamat, afinaciones y perfiles en
+  cents; sirve como plantilla, no como corpus de interpretaciones nota a nota.
+- [ORD-CC32](https://zenodo.org/records/15682346) y [su artículo](https://arxiv.org/abs/2506.14503): metadatos,
+  maqam, iqa y perfiles de altura extraídos de grabaciones del Congreso de El Cairo de 1932.
+- [Open Corpus for Arabic Maqam Recognition](https://lanfrica.com/en/record/open-corpus-for-arabic-maqam-recognition) y
+  [MaqamNet](https://github.com/josephbakarji/maqamnet): perfiles de altura y anotaciones de maqam sin audio ni
+  partitura simbólica completa.
+- [Microtonal Music Dataset](https://www.komazawa-u.ac.jp/~thirai/MicrotonalMusicDataset/) y [artículo de CMMR
+  2023](https://zenodo.org/records/10113964/files/cmmr2023_4c-D4.pdf): 100 piezas compuestas con distintas
+  afinaciones, incluidos ejemplos en 24-TET; es un control técnico, no un corpus estilístico natural.
+- [Análisis temporal de SymbTr y usul](https://github.com/eagomez2/turkish-makam-temporal-analysis): código y
+  descarga reproducible de una parte del corpus SymbTr.
+- [Documentación de PyABC2 para The Session](https://pyabc2.readthedocs.io/en/stable/examples/sources.html): confirma
+  los campos de metro, modo y ABC del volcado.
+
 ### Sitios y datos
 
 - [Rock Corpus / RS 200](https://rockcorpus.midside.com/), análisis armónicos, transcripciones melódicas y timing del

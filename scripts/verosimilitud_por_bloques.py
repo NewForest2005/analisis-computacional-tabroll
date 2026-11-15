@@ -6,10 +6,19 @@ Uso:
     python scripts/verosimilitud_por_bloques.py outputs/<corrida> [...] [--control outputs/<corrida_primus> ...] \
         --salida outputs/bloques
 
-Tres bloques por canción, cada uno comparado con cada corpus que lo tenga:
+Cuatro bloques por canción, cada uno comparado con cada corpus que lo tenga:
 - Armonía: fundamentales (12 grados) y cambios de fundamental (intervalo × llegada), igual que verosimilitud_estilos.py.
-- Altura: la melodía (voz aguda; si no hay, la grave) en 24 grados respecto de la tónica, por duración.
+- Escala (12 notas): la melodía (voz aguda; si no hay, la grave) en 12 grados respecto de la tónica, por duración; cada
+  cuarto de tono se reparte mitad y mitad entre los dos semitonos vecinos. ¿Existe esta escala en algún estilo?
+- Cuartos de tono: la melodía en 24 grados, comparada solo con corpus microtonales (familia «microtonal»: SymbTr, Radif,
+  andalusí). Antes se filtra con los controles: si la concentración de los cuartos de tono (% de su tiempo en los dos
+  grados en cuarto de tono más usados) no supera a la de los controles por al menos 2 desviaciones (z ≥ 2), la canción
+  se trata como de 12 notas y este bloque no cuenta. El % de tiempo en cuartos de tono no sirve de filtro: Primus marca
+  9-13 % y Utzp 11 %; la concentración sí separa (Primus 28-37 %, la banda 48-82 %): en la banda caen en grados fijos.
+  Si la canción pasa el filtro y no hay corpus microtonal, el bloque queda «sin vecino (sin corpus microtonal)».
 - Metro: reparto del tiempo por familia de compás (2·4·8 | 3·6·12 | 5 | 7 | 9 | otro impar).
+Antes había un solo bloque de altura en 24 grados contra el RS 200; se separó porque dos de los tres controles de Primus
+(sin cuartos de tono) quedaban «sin vecino»: mezclaba qué escala se usa con si hay cuartos de tono.
 Tipicidad de un bloque en un corpus (percentil): se busca la k-ésima pieza del corpus más parecida a la canción (k = 5,
 distancia de Jensen-Shannon) y se da el % de piezas del corpus cuya k-ésima más parecida está igual o más lejos (sin
 contarse a sí mismas ni a la otra versión de la misma canción). 50 = típica; 0 = no hay nada parecido en el corpus.
@@ -28,14 +37,14 @@ que el cuaderno se equivoca, con el reparto del control. ε y η se miden en las
 sin cuartos de tono) o valen lo medido en Tommy the Cat.
 
 Veredicto (umbral u, por defecto 5 %, como un contraste a una cola):
-- «estilo existente (X)»: algún corpus X con los tres bloques tiene percentil conjunto ≥ u.
+- «estilo existente (X)»: algún corpus X con todos los bloques medidos tiene percentil conjunto ≥ u.
 - «variante atípica de X»: cada bloque es típico en X por separado, pero la combinación no lo es.
 - «síntesis de lenguajes existentes»: cada bloque es típico (≥ u) en algún corpus, pero ningún corpus tiene todos los
   bloques típicos y ninguno explica la combinación (conjunto < u en todos).
 - «rasgo sin vecino: …»: algún bloque no es típico en ningún corpus (lo que no se explica con los corpus disponibles).
 Solo cuentan para el veredicto los corpus con 100 piezas o más (--min-piezas): en uno chico y disperso casi todo
-parece típico. Si ningún corpus tiene los tres bloques, el conjunto usa los que tenga y se avisa.
-Calibración: el mismo veredicto se aplica a cada pieza de los corpus con los tres bloques (contra las demás)
+parece típico. Si ningún corpus tiene todos los bloques, el conjunto usa los que tenga y se avisa.
+Calibración: el mismo veredicto se aplica a cada pieza de los corpus con al menos tres bloques (contra las demás)
 para saber cuántas veces llama «síntesis» o «sin vecino» a una pieza real de un estilo conocido (falsos positivos).
 
 Escribe <salida>.json, <salida>.csv, <salida>_bloques.png (percentiles por bloque y corpus) y <salida>_sintesis.png
@@ -58,8 +67,9 @@ from verosimilitud_estilos import cambios_dist, cancion as armonia_cancion, nomb
 
 RAIZ = Path(__file__).resolve().parent.parent
 BLOQUES_DIR = RAIZ / "references" / "corpus" / "bloques"
-BLOQUES = ["armonia", "altura", "metro"]
-TITULO = {"armonia": "Armonía", "altura": "Altura (24-EDO)", "metro": "Metro"}
+BLOQUES = ["armonia", "escala", "microtono", "metro"]
+TITULO = {"armonia": "Armonía", "escala": "Escala (12 notas)", "microtono": "Cuartos de tono", "metro": "Metro"}
+CONTROL_CONC = (32.0, 4.4)                                               # concentración en Primus (Tommy, Mud, Jerry), por defecto
 FAMILIA_COLOR = {"rock/pop": "#2a78d6", "clasica": "#eb6834", "jazz": "#1baf7a", "folk": "#eda100", "microtonal": "#e87ba4", "otro": "#6250d6"}
 NOMBRE_TIPO = {"existente": "estilo existente", "sin_vecino": "rasgo sin vecino", "sintesis": "síntesis", "variante": "variante atípica"}
 
@@ -84,6 +94,19 @@ def fuga(v: np.ndarray, eps: float) -> np.ndarray:
     return (1 - eps) * v + eps / 2 * (np.roll(v, 1, axis=-1) + np.roll(v, -1, axis=-1))
 
 
+def plegar(v: np.ndarray) -> np.ndarray:
+    """24 grados → 12: cada cuarto de tono se reparte mitad y mitad entre sus dos semitonos vecinos."""
+    par, impar = v[..., 0::2], v[..., 1::2]
+    return par + impar / 2 + np.roll(impar, 1, axis=-1) / 2
+
+
+def concentracion(alt24: np.ndarray) -> tuple[float, float]:
+    """(% del tiempo en cuartos de tono, % de ese tiempo en los dos grados en cuarto de tono más usados)."""
+    impar = alt24[1::2]
+    q = float(impar.sum())
+    return 100 * q, (100 * float(np.sort(impar)[::-1][:2].sum()) / q if q else 0.0)
+
+
 def kesimo(d: np.ndarray, k: int) -> float:
     d = d[np.isfinite(d)]
     if not len(d):
@@ -103,17 +126,19 @@ class Corpus:
             P = [P[i] for i in sorted(np.random.default_rng(0).choice(len(P), maximo, replace=False))]
         self.P, self.n, self.k, self.eps = P, len(P), k, eps
         self.error_metro = error_metro if error_metro is not None else np.zeros(6)
-        self.res = {"armonia": 0.0, "altura": 0.0, "metro": 0.0}
+        self.micro = self.familia == "microtonal"
         grupo = [re.sub(r"_(dt|tdc)$", "", str(p.get("id", i))) for i, p in enumerate(P)]
         mismo = np.array([[a == b for b in grupo] for a in grupo]) if self.n <= 5000 else np.eye(self.n, dtype=bool)
-        self.V = {b: [self._vec(p, b) for p in P] for b in ("fund", "camb", "altura", "metro")}
+        self.V = {b: [self._vec(p, b) for p in P] for b in ("fund", "camb", "escala", "microtono", "metro")}
         self.D, self.escala, self.ref = {}, {}, {}
         # resolución: lo que cambia una pieza al pasar por el modelo de medición; diferencias menores no se distinguen
-        self.res = {"armonia": 0.0, "altura": 0.0, "metro": 0.0}
+        self.res = {b: 0.0 for b in BLOQUES}
         crudas = [np.array(p["altura"]) for p in P if p.get("altura")]
         if crudas:
             A = np.array(crudas)
-            self.res["altura"] = float(np.median(np.diag(js_pares(A, fuga(A, eps)))))
+            self.res["escala"] = float(np.median(np.diag(js_pares(plegar(A), plegar(fuga(A, eps))))))
+            if self.micro:
+                self.res["microtono"] = float(np.median(np.diag(js_pares(A, fuga(A, eps)))))
         pura = np.eye(6)[0]
         eta = self.error_metro.sum()
         self.res["metro"] = float(js_pares(pura[None], ((1 - eta) * pura + self.error_metro)[None])[0, 0])
@@ -137,8 +162,10 @@ class Corpus:
             return np.array(p["fundamentales"]) if p.get("fundamentales") else None
         if b == "camb":
             return np.array(cambios_dist([tuple(x) for x in p["cambios"]])) if p.get("cambios") and len(p["cambios"]) >= 3 else None
-        if b == "altura":
-            return fuga(np.array(p["altura"]), self.eps) if p.get("altura") else None
+        if b == "escala":
+            return plegar(fuga(np.array(p["altura"]), self.eps)) if p.get("altura") else None
+        if b == "microtono":
+            return fuga(np.array(p["altura"]), self.eps) if p.get("altura") and self.micro else None
         if not p.get("metro"):
             return None
         eta = self.error_metro.sum()                                     # modelo de medición del compás
@@ -173,7 +200,8 @@ class Corpus:
 
     def medir(self, rasgos: dict) -> dict:
         """Distancias de una canción a cada pieza, por bloque."""
-        R = {"fund": [rasgos.get("fundamentales")], "camb": [rasgos.get("cambios_v")], "altura": [rasgos.get("altura")], "metro": [rasgos.get("metro")]}
+        R = {"fund": [rasgos.get("fundamentales")], "camb": [rasgos.get("cambios_v")], "escala": [rasgos.get("escala")],
+             "microtono": [rasgos.get("microtono")], "metro": [rasgos.get("metro")]}
         out = {}
         for b in self.bloques():
             d = self.distancias(R, b)
@@ -217,10 +245,11 @@ class Corpus:
         return ps, conj
 
     def rasgos(self, i: int) -> dict:
-        return dict(fundamentales=self.V["fund"][i], cambios_v=self.V["camb"][i], altura=self.V["altura"][i], metro=self.V["metro"][i])
+        return dict(fundamentales=self.V["fund"][i], cambios_v=self.V["camb"][i], escala=self.V["escala"][i], microtono=self.V["microtono"][i],
+                    metro=self.V["metro"][i])
 
 
-def veredicto(por_corpus: dict, conj: dict, corpora: dict, u: float, minimo: int = 100) -> dict:
+def veredicto(por_corpus: dict, conj: dict, corpora: dict, u: float, minimo: int = 100, microtonal: bool = False) -> dict:
     """Solo cuentan para el veredicto los corpus con al menos `minimo` piezas: en uno chico y disperso casi todo parece típico."""
     validos = {c for c in por_corpus if corpora[c].n >= minimo}
     mejor = {}
@@ -230,15 +259,17 @@ def veredicto(por_corpus: dict, conj: dict, corpora: dict, u: float, minimo: int
             p, c = max(cand)
             mejor[b] = dict(corpus=c, percentil=round(p, 1))
     medidos = list(mejor)
-    sin_vecino = [b for b in medidos if mejor[b]["percentil"] < u]
+    sin_vecino = [TITULO[b] for b in medidos if mejor[b]["percentil"] < u]
+    if microtonal and "microtono" not in mejor:                          # pasa el filtro y no hay corpus con qué comparar
+        sin_vecino.append("Cuartos de tono (sin corpus microtonal)")
     completos = {c: v for c, (v, comunes) in conj.items() if v is not None and set(comunes) == set(medidos) and c in validos}
     parciales = {c: v for c, (v, comunes) in conj.items() if v is not None and c in validos}
     cubre_todo = [c for c in validos if all(por_corpus[c].get(b, -1) >= u for b in medidos)]
     usar = completos or parciales
     mejor_conj = max(usar.items(), key=lambda kv: kv[1]) if usar else (None, None)
-    aviso = "" if completos else (" (conjunto con menos bloques: ningún corpus tiene los tres)" if parciales else " (sin corpus con dos bloques)")
+    aviso = "" if completos else (" (conjunto con menos bloques: ningún corpus los tiene todos)" if parciales else " (sin corpus con dos bloques)")
     if sin_vecino:
-        texto, tipo = "rasgo sin vecino: " + ", ".join(TITULO[b] for b in sin_vecino), "sin_vecino"
+        texto, tipo = "rasgo sin vecino: " + ", ".join(sin_vecino), "sin_vecino"
     elif mejor_conj[1] is not None and mejor_conj[1] >= u:
         texto, tipo = f"estilo existente ({mejor_conj[0]})", "existente"
     elif cubre_todo:
@@ -267,8 +298,10 @@ def rasgos_cancion(run: Path) -> dict:
         met[familia_metro(max(1, round(d / (60.0 / bpm))))] += d
     return dict(fundamentales=np.array(a["fundamentales"]) if sum(a["fundamentales"]) else None,
                 cambios_v=np.array(a["cambios_v"]) if a["cambios_v"] else None,
-                altura=alt / alt.sum() if alt.sum() else None, metro=met / met.sum() if met.sum() else None,
+                alt24=alt / alt.sum() if alt.sum() else None, escala=plegar(alt / alt.sum()) if alt.sum() else None, microtono=None,
+                metro=met / met.sum() if met.sum() else None,
                 cuartos=round(100 * alt[1::2].sum() / alt.sum(), 1) if alt.sum() else None,
+                concentracion=round(concentracion(alt / alt.sum())[1], 1) if alt.sum() else None,
                 voz="aguda" if J.get("raw_high") else "grave")
 
 
@@ -305,6 +338,14 @@ def main() -> None:
     origen = " (medido en el control)" if a.control else " (por defecto: Tommy the Cat)"
     print(f"modelo de medición: fuga a cuartos de tono ε = {eps:.3f}; compases mal leídos η = {error_metro.sum():.3f}{origen}")
 
+    cc = [R[r]["concentracion"] for r in a.control if r in R and R[r]["concentracion"] is not None]
+    media, de = (float(np.mean(cc)), max(float(np.std(cc, ddof=1)), 2.0)) if len(cc) >= 2 else CONTROL_CONC
+    for r in R.values():
+        r["z_concentracion"] = round((r["concentracion"] - media) / de, 1) if r["concentracion"] is not None else None
+        r["microtonal"] = bool(r["z_concentracion"] is not None and r["z_concentracion"] >= 2)
+        r["microtono"] = r["alt24"] if r["microtonal"] else None
+    print(f"filtro de cuartos de tono: concentración del control {media:.1f} ± {de:.1f} %; cuenta si z ≥ 2")
+
     corpora = {}
     for f in archivos:
         c = Corpus(f, eps, a.k, a.maximo, error_metro)
@@ -320,12 +361,14 @@ def main() -> None:
         dist = {n: c.medir(r) for n, c in corpora.items()}
         por = {n: c.percentiles(dist[n]) for n, c in corpora.items()}
         conj = {n: c.conjunto(dist[n]) for n, c in corpora.items()}
-        v = veredicto(por, conj, corpora, a.umbral, a.min_piezas)
+        v = veredicto(por, conj, corpora, a.umbral, a.min_piezas, r["microtonal"])
         f = dict(corrida=run.name, cancion=nombre(run.name), control=ctl, voz=r["voz"], cuartos_de_tono=r["cuartos"],
+                 concentracion=r["concentracion"], z_concentracion=r["z_concentracion"], microtonal=r["microtonal"],
                  percentiles={n: {b: round(x, 1) for b, x in p.items()} for n, p in por.items()},
                  conjunto={n: (None if x is None else round(x, 1)) for n, (x, _) in conj.items()}, **v)
         filas.append(f)
         mb = " · ".join(f"{TITULO[b].split(' ')[0]}←{m['corpus']} {m['percentil']:g}" for b, m in v["mejor_por_bloque"].items())
+        mb += f" · ¼ tono {r['cuartos']:g} %, concentración {r['concentracion']:g} % (z {r['z_concentracion']:g})"
         print(f"{'[control] ' if ctl else ''}{f['cancion']}: {mb} | conjunto {v['conjunto_mejor']['corpus']} {v['conjunto_mejor']['percentil']} → {v['veredicto']}")
 
     # calibración: piezas reales de los corpus con los tres bloques
@@ -342,28 +385,29 @@ def main() -> None:
             dist = {m: d.medir(r) for m, d in corpora.items() if m != n}
             por = {n: ps, **{m: d.percentiles(dist[m]) for m, d in corpora.items() if m != n}}
             conj = {n: cj, **{m: d.conjunto(dist[m]) for m, d in corpora.items() if m != n}}
-            v = veredicto(por, conj, corpora, a.umbral, a.min_piezas)
+            v = veredicto(por, conj, corpora, a.umbral, a.min_piezas, False)
             tipos[v["tipo"]] = tipos.get(v["tipo"], 0) + 1
         tot = sum(tipos.values())
         if tot:
             calib[n] = {k: round(100 * x / tot, 1) for k, x in sorted(tipos.items())} | {"piezas": tot}
             print(f"calibración en {n} ({tot} piezas reales): " + " · ".join(f"{k} {x}%" for k, x in calib[n].items() if k != "piezas"))
 
-    Path(a.salida + ".json").write_text(json.dumps(dict(umbral=a.umbral, eps=round(eps, 4), error_metro=[round(float(x), 4) for x in error_metro], k=a.k, canciones=filas, calibracion=calib,
+    Path(a.salida + ".json").write_text(json.dumps(dict(umbral=a.umbral, eps=round(eps, 4), control_concentracion=[round(media, 1), round(de, 1)], error_metro=[round(float(x), 4) for x in error_metro], k=a.k, canciones=filas, calibracion=calib,
                                                         corpus={n: dict(familia=c.familia, fuente=c.fuente, bloques=c.bloques(), piezas=c.n)
                                                                 for n, c in corpora.items()}), ensure_ascii=False, indent=1), encoding="utf-8")
     with open(a.salida + ".csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         cols = [(n, b) for n, c in corpora.items() for b in c.bloques()]
-        w.writerow(["cancion", "control", "veredicto"] + [f"{b}_{n}" for n, b in cols] + [f"conjunto_{n}" for n in corpora])
+        w.writerow(["cancion", "control", "veredicto", "cuartos_de_tono", "concentracion", "z_concentracion"] + [f"{b}_{n}" for n, b in cols] +
+                   [f"conjunto_{n}" for n in corpora])
         for f in filas:
-            w.writerow([f["cancion"], f["control"], f["veredicto"]] + [f["percentiles"][n].get(b, "") for n, b in cols] +
+            w.writerow([f["cancion"], f["control"], f["veredicto"], f["cuartos_de_tono"], f["concentracion"], f["z_concentracion"]] + [f["percentiles"][n].get(b, "") for n, b in cols] +
                        ["" if f["conjunto"][n] is None else f["conjunto"][n] for n in corpora])
-    dibujar(filas, corpora, calib, a.umbral, eps, float(error_metro.sum()), a.salida)
+    dibujar(filas, corpora, calib, a.umbral, eps, float(error_metro.sum()), a.salida, (media, de))
 
 
 # ───────────────────────── gráficas ─────────────────────────
-def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float, eta: float, salida: str) -> None:
+def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float, eta: float, salida: str, ctl: tuple) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -417,19 +461,27 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     plt.close(fig)
 
     # síntesis: por canción, de qué corpus viene cada bloque (fichas del color de la familia) y el veredicto
-    fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.62 * len(filas)), facecolor=fondo)
-    ax.set_xlim(0, 12.5)
+    fig, ax = plt.subplots(figsize=(14.5, 1.9 + 0.62 * len(filas)), facecolor=fondo)
+    ax.set_xlim(0, 14.5)
     ax.set_ylim(len(filas) + 0.2, -1.2)
     ax.axis("off")
-    xs = {"armonia": 2.7, "altura": 4.75, "metro": 6.8}
+    xs = {"armonia": 2.7, "escala": 4.75, "microtono": 6.8, "metro": 8.85}
     for b, x in xs.items():
         ax.text(x, -0.75, TITULO[b], ha="center", fontsize=10, fontweight="bold", color=tinta)
-    ax.text(8.85, -0.75, "Conjunto (mejor)", ha="center", fontsize=10, fontweight="bold", color=tinta)
-    ax.text(10.0, -0.75, "Veredicto", ha="left", fontsize=10, fontweight="bold", color=tinta)
+    ax.text(10.75, -0.75, "Conjunto (mejor)", ha="center", fontsize=10, fontweight="bold", color=tinta)
+    ax.text(11.85, -0.75, "Veredicto", ha="left", fontsize=10, fontweight="bold", color=tinta)
     for i, f in enumerate(filas):
         ax.text(0.1, i, ("◆ " if f["control"] else "★ ") + f["cancion"], va="center", fontsize=10, color=tinta)
         for b, x in xs.items():
             m = f["mejor_por_bloque"].get(b)
+            if b == "microtono" and not m:
+                rosa = FAMILIA_COLOR["microtonal"]
+                if f["microtonal"]:                                      # grado fijo y sin corpus con qué comparar
+                    ax.add_patch(plt.Rectangle((x - 0.95, i - 0.3), 1.9, 0.6, facecolor=fondo, edgecolor=rosa, lw=1.6, ls="--"))
+                    ax.text(x, i, f"grado fijo (z {f['z_concentracion']:g})", ha="center", va="center", fontsize=8.5, color=tinta)
+                else:
+                    ax.text(x, i, f"como el control (z {f['z_concentracion']:g})", ha="center", va="center", fontsize=8.5, color=gris)
+                continue
             if not m:
                 ax.text(x, i, "—", ha="center", va="center", color=gris)
                 continue
@@ -439,21 +491,24 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
             ax.text(x, i, f"{m['corpus']} {m['percentil']:g}", ha="center", va="center", fontsize=8.8, color="#ffffff" if ok else tinta,
                     fontweight="bold" if ok else "normal")
         cm = f["conjunto_mejor"]
-        ax.text(8.85, i, "—" if cm["percentil"] is None else f"{cm['corpus']} {cm['percentil']:g}", ha="center", va="center", fontsize=9,
+        ax.text(10.75, i, "—" if cm["percentil"] is None else f"{cm['corpus']} {cm['percentil']:g}", ha="center", va="center", fontsize=9,
                 color=tinta, fontweight="bold" if (cm["percentil"] or 0) >= u else "normal")
-        ax.text(10.0, i, f["veredicto"].split(" (")[0] if "conjunto con menos" in f["veredicto"] else f["veredicto"], va="center", fontsize=9, color=tinta)
+        ax.text(11.85, i, f["veredicto"].replace(" (conjunto con menos bloques: ningún corpus los tiene todos)", "").replace("rasgo sin vecino: ", "sin vecino:\n"),
+                va="center", fontsize=8.5, color=tinta, linespacing=1.1)
     fams = sorted({c.familia for c in corpora.values()})
     for k, fam in enumerate(fams):
         ax.add_patch(plt.Rectangle((0.1 + 1.75 * k, len(filas) - 0.05), 0.3, 0.22, color=FAMILIA_COLOR.get(fam, "#6250d6")))
         ax.text(0.47 + 1.75 * k, len(filas) + 0.06, fam, va="center", fontsize=8.5, color=gris)
     ax.set_title("¿De qué lenguaje viene cada bloque? Ficha llena = típico en ese corpus (percentil ≥ "
                  f"{u:g}); vacía = ni el mejor corpus lo explica", loc="left", fontsize=11.5, color=tinta)
-    nota = "Calibración (piezas reales de un corpus, medidas igual): " + "; ".join(
+    nota = (f"Cuartos de tono: z = concentración en los dos grados en ¼ de tono más usados frente al control ({ctl[0]:.0f} ± {ctl[1]:.0f} %); "
+            "z ≥ 2 = grado fijo de la escala (recuadro punteado: no hay corpus microtonal cargado para compararlo).\n")
+    nota += "Calibración (piezas reales de un corpus, medidas igual): " + "; ".join(
         f"{n}: " + ", ".join(f"{NOMBRE_TIPO.get(k, k)} {v:g} %" for k, v in d.items() if k != "piezas") for n, d in calib.items()) if calib else ""
     if any("conjunto con menos" in f["veredicto"] for f in filas):
-        nota += ("\n" if nota else "") + "El conjunto se calculó con los bloques que comparten canción y corpus: ningún corpus tiene aún los tres con altura en 24-EDO."
+        nota += "\nEl conjunto se calculó con los bloques que comparten canción y corpus: ningún corpus los tiene todos."
     fig.text(0.01, 0.01, nota, fontsize=7.5, color=gris)
-    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
     fig.savefig(salida + "_sintesis.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 
