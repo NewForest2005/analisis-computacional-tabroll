@@ -20,6 +20,7 @@ import argparse
 import csv
 import itertools
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -58,7 +59,8 @@ def main() -> None:
     ap.add_argument("--salida", default="outputs/comparar_repertorio")
     a = ap.parse_args()
 
-    corto = lambda r: nombre(r.name).replace("King gizzard ", "").capitalize()
+    # sin el nombre del grupo delante (King Gizzard, King Crimson, Gentle Giant…)
+    corto = lambda r: re.sub(r"^(king gizzard( and the lizard wizard)?|king crimson|gentle giant|primus) ", "", nombre(r.name).lower()).capitalize()
     def unicas(lista: list[Path]) -> list[Path]:
         """Sin corridas repetidas (globs que se solapan) ni dos corridas de la misma canción (se queda la última)."""
         por_nombre = {}

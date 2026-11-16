@@ -44,7 +44,7 @@ SEQ = ["#f1f0ea", "#cde2fb", "#9ec5f4", "#6da7ec", "#3987e5", "#256abf", "#184f9
 
 def nombre(run: str) -> str:
     n = re.sub(r"^\d{4}-\d\d-\d\d_\d+_", "", run)
-    n = re.sub(r"(angine_de_poitrine_|king_gizzard_|primus_|_audio_off\w*|_official_audio\w*|_repro|_cache|_\d{4}_\w+$)", "", n)
+    n = re.sub(r"(angine_de_poitrine_|king_gizzard(_and_the_lizard_wizard)?_|king_crimson_|gentle_giant_|primus_|_audio_off\w*|_official_audio\w*|_repro|_cache|_\d{4}_\w+$)", "", n)
     return n.replace("_", " ").strip().capitalize()
 
 
