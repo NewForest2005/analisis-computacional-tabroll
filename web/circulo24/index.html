@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Círculo de 24 notas</title>
+<style>
+  :root {
+    --fondo: #fcfcfb; --tinta: #0b0b0b; --gris: #52514e; --superficie: #ecebe7; --nota: #ffffff;
+    --rojo: #e5322d; --azul: #2a78d6; --rejilla: #d9d8d3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --fondo: #141413; --tinta: #f2f1ed; --gris: #a9a8a3; --superficie: #232321; --nota: #2e2e2c; --rejilla: #3a3a37;
+    }
+  }
+  :root[data-theme="dark"] {
+    --fondo: #141413; --tinta: #f2f1ed; --gris: #a9a8a3; --superficie: #232321; --nota: #2e2e2c; --rejilla: #3a3a37;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 20px 16px 32px; }
+  h1 { font-size: 1.35rem; margin: 0 0 4px; }
+  #subtitulo { color: var(--gris); margin: 0 0 12px; font-size: .95rem; }
+  #circulo svg { width: 100%; height: auto; display: block; }
+  .fondo { fill: var(--superficie); }
+  .veinticuatro { font-size: 150px; font-weight: 800; fill: var(--gris); opacity: .35; text-anchor: middle; }
+  .etiqueta { font-size: 30px; font-weight: 600; fill: var(--tinta); text-anchor: middle; }
+  .nota { fill: var(--nota); stroke: var(--tinta); stroke-width: 5; }
+  .cuarto { fill: var(--nota); stroke: var(--tinta); stroke-width: 4; }
+  .estela { fill: var(--rojo); }
+  .activo { stroke: var(--tinta); stroke-width: 5; }
+  .tonica { fill: none; stroke: var(--gris); stroke-width: 2; stroke-dasharray: 4 4; }
+  .nombre { font-size: 21px; font-weight: 700; text-anchor: middle; fill: var(--tinta); pointer-events: none; }
+  .nombre.encendido { fill: #ffffff; }
+  .huella { stroke: var(--tinta); stroke-width: 10; stroke-linecap: round; opacity: .55; }
+  .huella.es-cuarto { stroke: var(--rojo); opacity: .8; stroke-width: 7; }
+  .controles { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-top: 10px; }
+  .controles input[type=range] { flex: 1 1 260px; }
+  button, select { font: inherit; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--rejilla); background: var(--superficie); color: var(--tinta); cursor: pointer; }
+  #reloj { font-variant-numeric: tabular-nums; color: var(--gris); min-width: 9ch; }
+  .leyenda { color: var(--gris); font-size: .85rem; margin-top: 14px; line-height: 1.5; }
+  .punto { display: inline-block; width: .8em; height: .8em; border-radius: 50%; vertical-align: -1px; margin-right: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="titulo">Círculo de 24 notas</h1>
+  <p id="subtitulo"></p>
+  <div id="circulo"></div>
+  <div class="controles">
+    <button id="reproducir" type="button">Reproducir</button>
+    <input id="tiempo" type="range" min="0" max="1" step="0.01" value="0" aria-label="Tiempo">
+    <span id="reloj">0:00.0</span>
+  </div>
+  <div class="controles">
+    <label>Pista de audio
+      <select id="pista">
+        <option value="guitarra">guitarra</option>
+        <option value="bajo">bajo</option>
+        <option value="guitarra_bajo">guitarra + bajo</option>
+        <option value="guitarra_bajo_bateria">guitarra + bajo + batería</option>
+        <option value="mezcla">mezcla completa</option>
+      </select>
+    </label>
+    <label>Voz
+      <select id="voz">
+        <option value="aguda">aguda</option>
+        <option value="grave">grave</option>
+        <option value="ambas">ambas</option>
+      </select>
+    </label>
+    <label>Velocidad
+      <select id="velocidad">
+        <option value="0.5">0.5×</option>
+        <option value="0.75">0.75×</option>
+        <option value="1" selected>1×</option>
+      </select>
+    </label>
+    <label><input id="ver-huella" type="checkbox" checked> Huella</label>
+  </div>
+  <div id="audios" aria-live="polite"></div>
+  <p class="leyenda">
+    <span class="punto" style="background:var(--rojo)"></span>voz aguda
+    <span class="punto" style="background:var(--azul);margin-left:12px"></span>voz grave ·
+    círculos grandes: semitonos; pequeños: cuartos de tono (+¼) · borde punteado: tónica que estima el cuaderno ·
+    huella: tiempo acumulado en cada grado (en rojo, los cuartos de tono). La pista de audio se puede cambiar mientras está pausada. Barra espaciadora: reproducir o pausar.<br>
+    Notas detectadas automáticamente por el cuaderno (no la partitura).
+  </p>
+</main>
+<script src="datos.js"></script>
+<script src="circulo24.js"></script>
+</body>
+</html>

@@ -480,6 +480,45 @@ def midi(carpeta: Path, nombre: str, familia: str, sin_metro: bool, rango_bend: 
     escribir(nombre, familia, f"MIDI de {carpeta.name} (pitch bend ±{rango_bend:g} semitonos; tónica: última nota)", piezas)
 
 
+# ───────────────────────── Hindustani Classical Music Transcription Dataset (22 shrutis) ─────────────────────────
+SHRUTI_CENTS = {"S": 0, "r1": 90, "r2": 112, "R1": 182, "R2": 204, "g1": 294, "g2": 316, "G1": 386, "G2": 408, "M1": 498, "M2": 520,
+                "m1": 590, "m2": 612, "P": 702, "d1": 792, "d2": 814, "D1": 884, "D2": 906, "n1": 996, "n2": 1018, "N1": 1088, "N2": 1110}
+SHRUTI_SIMBOLO = {
+    "S": "S", "r": "r1", "Ͱ": "r2", "R": "R1", "ͱ": "R2", "g": "g1", "ͻ": "g2", "G": "G1", "ͼ": "G2", "M": "M1", "Λ": "M2",
+    "m": "m1", "Σ": "m2", "P": "P", "d": "d1", "β": "d2", "D": "D1", "λ": "D2", "n": "n1", "θ": "n2", "N": "N1", "π": "N2",
+    "Ś": "S", "ŕ": "r1", "ƍ": "r2", "Ŕ": "R1", "Ɛ": "R2", "ġ": "g1", "Ɣ": "g2", "Ġ": "G1", "Ƨ": "G2", "Ψ": "M1", "ƭ": "M2",
+    "ώ": "m1", "Ʋ": "m2", "ƥ": "P", "ď": "d1", "Ʊ": "d2", "Ď": "D1", "Ʒ": "D2", "ń": "n1", "ƺ": "n2", "Ń": "N1", "ǂ": "N2",
+    "Ş": "S", "ŗ": "r1", "Ȝ": "r2", "Ŗ": "R1", "Ȣ": "R2", "ϑ": "g1", "ȸ": "g2", "Ģ": "G1", "Ʉ": "G2", "Ӎ": "M1", "Ɏ": "M2",
+    "ӎ": "m1", "Ξ": "m2", "ϼ": "P", "ϙ": "d1", "ν": "d2", "Ϛ": "D1", "σ": "D2", "ņ": "n1", "ϗ": "n2", "Ņ": "N1", "ϡ": "N2"}
+
+
+def shrutis(carpeta: Path, nombre: str, suave: float, por_fragmento: bool) -> None:
+    """Lee las transcripciones de 22 shrutis y las resume en 24 grados respecto de Sa."""
+    cuenta: dict[str, int] = defaultdict(int)
+    grupos: dict[str, list[float]] = defaultdict(lambda: [0.0] * 24)
+    piezas, desconocidos = [], defaultdict(int)
+    for f in sorted(carpeta.rglob("*.txt")):
+        alt, n = [0.0] * 24, 0
+        for ch in f.read_text(encoding="utf-8", errors="replace"):
+            if ch in SHRUTI_SIMBOLO:
+                for b, w in a_24(SHRUTI_CENTS[SHRUTI_SIMBOLO[ch]], suave):
+                    alt[b] += w
+                n += 1
+            elif not ch.isspace():
+                desconocidos[ch] += 1
+        grab = f.stem.split("_")[0]
+        if not por_fragmento:
+            grupos[grab] = [x + y for x, y in zip(grupos[grab], alt)]
+            cuenta[grab] += n
+        elif n >= 8:
+            piezas.append(pieza(f"{grab}|{f.stem}", None, alt, None))
+    if not por_fragmento:
+        piezas = [pieza(g, None, v, None) for g, v in grupos.items() if cuenta[g] >= 8]
+    if desconocidos:
+        print("símbolos fuera de la tabla (ignorados):", dict(sorted(desconocidos.items(), key=lambda kv: -kv[1])))
+    escribir(nombre, "microtonal", f"Hindustani Classical Music Transcription Dataset, 22 shrutis → 24 grados; sin duraciones", piezas)
+
+
 # ───────────────────────── Humdrum **kern (Essen) ─────────────────────────
 def leer_kern(path: Path) -> dict | None:
     notas, met = [], [0.0] * 6
@@ -697,6 +736,8 @@ def main() -> None:
     ap.add_argument("--symbtr", type=Path)
     ap.add_argument("--musicxml", type=Path)
     ap.add_argument("--kern", type=Path)
+    ap.add_argument("--shrutis", type=Path, help="carpeta de transcripciones del Hindustani Classical Music Transcription Dataset")
+    ap.add_argument("--por-fragmento", action="store_true", help="shrutis: una pieza por fragmento; por defecto, agrupa por grabación")
     ap.add_argument("--midi", type=Path, help="carpeta de MIDI con pitch bend (Radif)")
     ap.add_argument("--rango-bend", type=float, default=2.0, help="MIDI: rango del pitch bend en semitonos")
     ap.add_argument("--session", type=Path)
@@ -721,6 +762,8 @@ def main() -> None:
         musicxml(a.musicxml, a.nombre or a.musicxml.name, a.familia, a.tonica, a.sin_metro); algo = True
     if a.midi:
         midi(a.midi, a.nombre or a.midi.name, a.familia, a.sin_metro, a.rango_bend); algo = True
+    if a.shrutis:
+        shrutis(a.shrutis, a.nombre or "hindustani", a.suave, a.por_fragmento); algo = True
     if a.kern:
         kern(a.kern, a.nombre or "essen", a.familia if a.familia != "otro" else "folk"); algo = True
     if a.session:
