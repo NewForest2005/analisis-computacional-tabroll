@@ -106,3 +106,21 @@ La banda es un **híbrido con un elemento nuevo**:
 - **Melodía:** escalas propias de 24 notas, con grados neutros fijos (♭2+, ♭6+, 6+, 7+, ♭3+), emparentadas con el maqam. Ningún estilo medido los tiene. Esto es lo nuevo.
 
 **Límites:** la melodía del cuaderno acierta entre 37 y 66 %; la armonía de Sarniezz, el 58 %; hay pocas canciones; y los corpus no tienen cuartos de tono.
+
+## 11. Fuentes audiovisuales y correcciones de transcripción
+
+Las declaraciones de la banda se documentan con el podcast de *Aucard de Tours* y cuatro videos de análisis o
+entrevista. La transcripción francesa del podcast usada en la investigación es una transcripción de trabajo del
+tramo 1:33–2:58, no una transcripción oficial; la palabra «ensemble» queda pendiente de confirmación auditiva.
+El pasaje describe el dúo de guitarra y bajo microtonales, la construcción por loops, la repetición con build-up,
+la relación estructural con el techno, la tradición rock instrumental y el uso de 5 y 7 tiempos.
+
+Se corrigieron recurrentemente los nombres «Angine de Poitrine», «Khn», «Sarniezz», «Utzp», «Mata Zyklek»,
+«Fabienk» y «Yor Zarad», además de los términos «quarts de ton», «en sept temps», «King Gizzard», «Sevish»,
+«maqam Hijaz», «frigio», «microtonal», «Alois Hába» y «xenarmónico». «Enorie», «Ababa hôtel» y «Cherpa/Sherper»
+no se identificaron y quedan fuera de las afirmaciones de la tesis.
+
+Fuentes: Khn de Poitrine, *Aucard de Tours* (26-feb-2026, 1:33–2:58); Mathemusique/Paul Lascabettes
+(16-may-2026); Levi McClain (7-sep-2026); y Thomas Little/Classical Nerd (17-ene-2019). David Bennett, «How
+Angine de Poitrine use Microtonality», se conserva como fuente audiovisual sin fecha de publicación identificada.
+Los enlaces completos están en `references/referencias_completas.md`.

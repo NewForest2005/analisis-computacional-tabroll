@@ -1,0 +1,96 @@
+## Referencias
+
+Verificadas en la investigación del 16-nov-2026 salvo las marcadas «por verificar». Antes de enviar, contrastar cada DOI en Crossref: TISMIR rechaza referencias inexistentes o incorrectas.
+
+**Extracción, separación y estructura**
+
+- Bittner, R. M., Bosch, J. J., Rubinstein, D., Meseguer-Brocal, G., y Ewert, S. (2022). A lightweight instrument-agnostic model for polyphonic note transcription and multipitch estimation. *Proc. IEEE ICASSP*, 781-785. https://doi.org/10.1109/ICASSP43922.2022.9746549
+
+- Ellis, D. P. W. (2007). Beat tracking by dynamic programming. *Journal of New Music Research*, 36(1), 51-60. https://doi.org/10.1080/09298210701653344
+
+- Foote, J. (2000). Automatic audio segmentation using a measure of audio novelty. *Proc. IEEE ICME*, 452-455. https://doi.org/10.1109/ICME.2000.869637
+
+- Kim, J. W., Salamon, J., Li, P., y Bello, J. P. (2018). CREPE: A convolutional representation for pitch estimation. *Proc. IEEE ICASSP*. https://doi.org/10.1109/ICASSP.2018.8461329
+
+- Lu, W.-T., Wang, J.-C., Kong, Q., y Hung, Y.-N. (2024). Music source separation with band-split RoPE transformer. *Proc. IEEE ICASSP*, 481-485. https://doi.org/10.1109/ICASSP48485.2024.10446843
+
+- Mauch, M., y Dixon, S. (2014). pYIN: A fundamental frequency estimator using probabilistic threshold distributions. *Proc. IEEE ICASSP*, 659-663. https://doi.org/10.1109/ICASSP.2014.6853678
+
+- McFee, B., y Ellis, D. P. W. (2014). Analyzing song structure with spectral clustering. *Proc. ISMIR*, 405-410.
+
+- McFee, B., Raffel, C., Liang, D., Ellis, D. P. W., McVicar, M., Battenberg, E., y Nieto, O. (2015). librosa: Audio and music signal analysis in Python. *Proc. SciPy*, 18-24. https://doi.org/10.25080/Majora-7b98e3ed-003
+
+- Müller, M. (2015). *Fundamentals of Music Processing*. Springer. https://doi.org/10.1007/978-3-319-21945-5
+
+- Paulus, J., Müller, M., y Klapuri, A. (2010). State of the art report: Audio-based music structure analysis. *Proc. ISMIR*, 625-636.
+
+- Raffel, C., McFee, B., Humphrey, E. J., Salamon, J., Nieto, O., Liang, D., y Ellis, D. P. W. (2014). mir\_eval: A transparent implementation of common MIR metrics. *Proc. ISMIR*, 367-372.
+
+- Rouard, S., Massa, F., y Défossez, A. (2023). Hybrid transformers for music source separation. *Proc. IEEE ICASSP*. https://doi.org/10.1109/ICASSP49357.2023.10096956
+
+- Salamon, J., y Gómez, E. (2012). Melody extraction from polyphonic music signals using pitch contour characteristics. *IEEE Transactions on Audio, Speech, and Language Processing*, 20(6), 1759-1770. https://doi.org/10.1109/TASL.2012.2188515
+
+- Serrà, J., Müller, M., Grosche, P., y Arcos, J. Ll. (2014). Unsupervised music structure annotation by time series structure features and segment similarity. *IEEE Transactions on Multimedia*, 16(5), 1229-1240. https://doi.org/10.1109/TMM.2014.2310701
+
+**MIR microtonal**
+
+- Bozkurt, B. (2008). An automatic pitch analysis method for Turkish maqam music. *Journal of New Music Research*, 37(1), 1-13.
+
+- Bozkurt, B., Yarman, O., Karaosmanoğlu, M. K., y Akkoç, C. (2009). Weighing diverse theoretical models on Turkish maqam music against pitch measurements. *Journal of New Music Research*, 38(1), 45-70. https://doi.org/10.1080/09298210903147673
+- Bozkurt, B., Ayangil, R., y Holzapfel, A. (2014). Computational analysis of Turkish makam music: Review of state-of-the-art and challenges. *Journal of New Music Research*, 43(1), 3-23.
+- Gedik, A. C., y Bozkurt, B. (2010). Pitch-frequency histogram-based music information retrieval for Turkish music. *Signal Processing*, 90(4), 1049-1063. https://doi.org/10.1016/j.sigpro.2009.06.017
+- Kanani, M., O'Leary, S., y McDermott, J. (2025). Radif Corpus: A symbolic dataset for non-metric Iranian classical music. *Proc. ISMIR*. [arXiv:2507.10456](https://arxiv.org/abs/2507.10456)
+- Serra, X. (2011). A multicultural approach in music information research. *Proc. ISMIR*. (por verificar)
+
+**Corpus, estilo y teoría de la información**
+
+- Broze, Y., y Shanahan, D. (2013). Diachronic changes in jazz harmony: A cognitive perspective. *Music Perception*, 31(1), 32-45. https://doi.org/10.1525/mp.2013.31.1.32
+- de Clercq, T., y Temperley, D. (2011). A corpus analysis of rock harmony. *Popular Music*, 30(1), 47-70. https://doi.org/10.1017/S026114301000067X
+- Huron, D. (2006). *Sweet Anticipation: Music and the Psychology of Expectation*. MIT Press.
+- Krumhansl, C. L. (1990). *Cognitive Foundations of Musical Pitch*. Oxford University Press.
+- Lin, J. (1991). Divergence measures based on the Shannon entropy. *IEEE Transactions on Information Theory*, 37(1), 145-151. https://doi.org/10.1109/18.61115
+- Pearce, M. T. (2018). Statistical learning and probabilistic prediction in music cognition: Mechanisms of stylistic enculturation. *Annals of the New York Academy of Sciences*, 1423(1), 378-395. https://doi.org/10.1111/nyas.13654
+- Shanahan, D., Broze, Y., y Rodgers, R. (2012). A diachronic analysis of harmonic schemata in jazz. *Proc. ICMPC 12 / ESCOM 8*, 909-917.
+- Temperley, D., y de Clercq, T. (2013). Statistical analysis of harmony and melody in rock music. *Journal of New Music Research*, 42(3), 187-204.
+
+**Ritmo y métrica**
+
+- Holzapfel, A., Krebs, F., y Srinivasamurthy, A. (2014). Tracking the «odd»: Meter inference in a culturally diverse music corpus. *Proc. ISMIR*, 425-430.
+- Loth, J., Sarmento, P., Carr, C. J., Zukowski, Z., y Barthet, M. (2023). ProgGP: From GuitarPro tablature neural generation to progressive metal production. *Proc. CMMR*. [arXiv:2307.05328](https://arxiv.org/abs/2307.05328)
+- Sarmento, P., Kumar, A., Carr, C. J., Zukowski, Z., Barthet, M., y Yang, Y.-H. (2021). DadaGP: A dataset of tokenized GuitarPro songs for sequence models. *Proc. ISMIR*. arXiv:2107.14653
+- Srinivasamurthy, A., Holzapfel, A., Cemgil, A. T., y Serra, X. (2016). A generalized Bayesian model for tracking long metrical cycles in acoustic music signals. *Proc. IEEE ICASSP*, 76-80. https://doi.org/10.1109/ICASSP.2016.7471640
+
+**Datos**
+
+- Karaosmanoğlu, M. K. (2012). A Turkish makam music symbolic database for music information retrieval: SymbTr. *Proc. ISMIR*, 223-228. [Repositorio](https://github.com/MTG/SymbTr)
+- Shanahan, D., y Broze, Y. iRealPro Corpus of Jazz Standards (v1.0). Zenodo. https://doi.org/10.5281/zenodo.3546040
+- Singh, Y., Gupta, Y., Patar, S., Saraswat, A., y Biswas, A. (2022). Hindustani Classical Music Transcription Dataset (v1.0.1). Zenodo. https://doi.org/10.5281/zenodo.7424861
+- Kostka-Payne corpus (Temperley). (por verificar la cita de la fuente)
+- Hooktheory, análisis de álbumes en bucles. (por verificar la cita de la fuente)
+
+**Sobre las bandas (prensa y fuentes primarias)**
+
+- Khn de Poitrine. «\[INTERVIEW\] Angine de Poitrine». *Aucard de Tours* (podcast), 26-feb-2026, 1:33–2:58. [Episodio](https://podcastaddict.com/aucard-de-tours/episode/218290057)
+- *Guitar World*, sobre la guitarra microtonal de la banda. [Artículo](https://www.guitarworld.com/artists/bands/angine-de-poitrine-microtonal-guitar)
+- *ABC News* (20-may-2026). [Artículo](https://www.abc.net.au/news/2026-05-20/angine-de-poitrine-microtonal-math-rock-quebec/106593634)
+- King Gizzard and the Lizard Wizard (2017). *Flying Microtonal Banana*, nota de lanzamiento. [Página oficial](https://kinggizzardandthelizardwizard.com/release/flying-microtonal-banana)
+
+**Fuentes audiovisuales y transcripciones de Angine de Poitrine**
+
+La siguiente transcripción del podcast es una transcripción de trabajo corregida en francés. El tramo indicado es
+1:33–2:58 del episodio; la palabra «ensemble» en «des riffs qui s’enchaînent ensemble» queda pendiente de confirmación
+auditiva definitiva. No se presenta como una transcripción oficial.
+
+> « Je dirais Angine de Poitrine, premièrement, c’est un duo guitare microtonale, basse microtonale et batterie. Puis on joue dans le rock, à saveur un peu électro. C’est pour dire que la musique est construite, est bâtie sur des loops, puis il y a quand même une répétitivité, mais toujours un build-up intentionnel pour apporter une phrase suivante, un riff plus développé, et s’en aller vers l’avant avec la tune, en ne restant pas stagnant […] une répétitivité — techno, c’est ça. Une touche électro ou techno au niveau de la construction structurelle des pièces, et non du timbre. Puis au niveau timbral, c’est plutôt ancré dans une tradition très rock, rock instrumental un peu champ gauche. […] pour faire danser les gens, rentrer un peu en transe avec ce délire de boucles, de riffs qui s’enchaînent ensemble. Idéalement les gens dansent en 5 puis en 7 […] toujours envie d’aller vers l’étrangeté, d’où l’utilisation peut-être du microtonal. »
+
+- Mathemusique (Paul Lascabettes). Video sobre Angine de Poitrine, 16-may-2026. [YouTube](https://www.youtube.com/watch?v=96D7DKZh-es).
+- McClain, Levi. Video sobre Angine de Poitrine, 7-sep-2026. [YouTube](https://www.youtube.com/watch?v=kWv5zjsjoHw).
+- Little, Thomas (Classical Nerd). « The Quarter-Tone Problem (and Hába’s “Field Shifting” Solution) », 17-ene-2019. [YouTube](https://www.youtube.com/watch?v=E_Z0q7jqyqI).
+- Bennett, David. « How Angine de Poitrine use Microtonality ». Fecha de publicación no identificada. [YouTube](https://www.youtube.com/watch?v=91QWp6Ygx7c).
+
+Correcciones recurrentes aplicadas al identificar nombres y términos en los tres videos: « Angine de Poitrine »
+(no « engine », « Angile », « Anene Deontrine », « Angevin du Poitou » o « Angéline de Poitiers »); « Khn » (no
+« Kuhn »); « Sarniezz »; « Utzp »; « Mata Zyklek »; « Fabienk »; y « Yor Zarad ». También se normalizan « quarts
+de ton », « en sept temps », « quatre temps », « huit fois », « King Gizzard », « Sevish », « maqam Hijaz »,
+« frigio », « microtonal », « Alois Hába » y « xenarmónico ». « Enorie », « Ababa hôtel » y « Cherpa/Sherper »
+quedan sin identificar y no se deben citar como nombres confirmados.
