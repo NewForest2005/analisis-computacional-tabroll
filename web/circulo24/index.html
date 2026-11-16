@@ -31,6 +31,7 @@
   .estela { fill: var(--rojo); }
   .activo { stroke: var(--tinta); stroke-width: 5; }
   .tonica { fill: none; stroke: var(--gris); stroke-width: 2; stroke-dasharray: 4 4; }
+  .acorde { fill: none; stroke: var(--rojo); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; opacity: .82; pointer-events: none; }
   .nombre { font-size: 21px; font-weight: 700; text-anchor: middle; fill: var(--tinta); pointer-events: none; }
   .nombre.encendido { fill: #ffffff; }
   .huella { stroke: var(--tinta); stroke-width: 10; stroke-linecap: round; opacity: .55; }
@@ -78,13 +79,14 @@
       </select>
     </label>
     <label><input id="ver-huella" type="checkbox" checked> Huella</label>
+    <label><input id="ver-acordes" type="checkbox" checked> Acordes</label>
   </div>
   <div id="audios" aria-live="polite"></div>
   <p class="leyenda">
     <span class="punto" style="background:var(--rojo)"></span>voz aguda
     <span class="punto" style="background:var(--azul);margin-left:12px"></span>voz grave ·
     círculos grandes: semitonos; pequeños: cuartos de tono (+¼) · borde punteado: tónica que estima el cuaderno ·
-    huella: tiempo acumulado en cada grado (en rojo, los cuartos de tono). La pista de audio se puede cambiar mientras está pausada. Barra espaciadora: reproducir o pausar.<br>
+    huella: tiempo acumulado en cada grado (en rojo, los cuartos de tono) · acordes: líneas entre las notas que suenan simultáneamente. La pista de audio se puede cambiar mientras está pausada. Barra espaciadora: reproducir o pausar.<br>
     Notas detectadas automáticamente por el cuaderno (no la partitura).
   </p>
 </main>

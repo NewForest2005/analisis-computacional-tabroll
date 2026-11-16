@@ -47,6 +47,7 @@
 
   const nodos = [];
   const capaHuella = el("g", {}, svg);
+  const capaAcorde = el("g", {}, svg);
   for (let g = 0; g < 24; g++) {
     const a = angulo(g);
     const x = R * Math.cos(a), y = R * Math.sin(a);
@@ -72,7 +73,7 @@
   // ───────────── controles ─────────────
   const $ = (id) => document.getElementById(id);
   const boton = $("reproducir"), barraT = $("tiempo"), rotulo = $("reloj"), selPista = $("pista"), selVoz = $("voz"),
-    velocidad = $("velocidad"), chkHuella = $("ver-huella");
+    velocidad = $("velocidad"), chkHuella = $("ver-huella"), chkAcordes = $("ver-acordes");
   $("titulo").textContent = D.titulo;
   $("subtitulo").textContent = `${D.desde.toFixed(1)} s a ${D.hasta.toFixed(1)} s` + (D.tempo_bpm ? ` · ${Math.round(D.tempo_bpm)} BPM` : "") +
     (D.tonica_pc24 !== null && D.tonica_pc24 !== undefined ? ` · tónica ${nombre24(((D.tonica_pc24 % 24) + 24) % 24)}` : "");
@@ -164,6 +165,21 @@
   const voces = () => (selVoz.value === "ambas" ? ["aguda", "grave"] : [selVoz.value]);
   const fmt = (s) => `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, "0")}`;
 
+  function dibujarAcorde(grados) {
+    while (capaAcorde.firstChild) capaAcorde.removeChild(capaAcorde.firstChild);
+    if (!chkAcordes.checked || grados.length < 2) return;
+    const puntos = grados.map((g) => {
+      const a = angulo(g);
+      return [R * Math.cos(a), R * Math.sin(a)];
+    });
+    if (puntos.length === 2) {
+      el("line", { x1: puntos[0][0], y1: puntos[0][1], x2: puntos[1][0], y2: puntos[1][1], class: "acorde" }, capaAcorde);
+    } else {
+      const cadena = puntos.concat([puntos[0]]).map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
+      el("polyline", { points: cadena, class: "acorde" }, capaAcorde);
+    }
+  }
+
   function cuadro(ts) {
     if (corriendo && !usarAudio) {
       if (ultimo !== null) tPropio += ((ts - ultimo) / 1000) * parseFloat(velocidad.value);
@@ -181,6 +197,7 @@
     const estela = new Array(24).fill(0);
     const acumulado = new Array(24).fill(0);
     const sonando = [];
+    const gradosAcorde = new Set();
     for (const v of voces()) {
       for (const [s, e, g] of D.voces[v] || []) {
         if (s > t) break;                       // las notas vienen ordenadas por inicio
@@ -188,11 +205,13 @@
         if (t < e) {
           if (!activo[g] || v === "aguda") activo[g] = v;
           sonando.push(nombre24(g));
+          gradosAcorde.add(g);
         } else if (t - e < ESTELA_S) {
           estela[g] = Math.max(estela[g], 0.55 * (1 - (t - e) / ESTELA_S));
         }
       }
     }
+    dibujarAcorde([...gradosAcorde].sort((a, b) => a - b));
     const maximo = Math.max(...acumulado, 1e-9);
     const verHuella = chkHuella.checked;
     for (let g = 0; g < 24; g++) {
