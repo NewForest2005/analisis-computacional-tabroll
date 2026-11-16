@@ -37,7 +37,8 @@ que el cuaderno se equivoca, con el reparto del control. ε y η se miden en las
 sin cuartos de tono) o valen lo medido en Tommy the Cat.
 
 Veredicto (umbral u, por defecto 5 %, como un contraste a una cola):
-- «estilo existente (X)»: algún corpus X con todos los bloques medidos tiene percentil conjunto ≥ u.
+- «estilo existente (X)»: algún corpus X con todos los bloques medidos tiene percentil conjunto ≥ u. Un conjunto
+  parcial (corpus al que le falta un bloque, p. ej. el rock sin cuartos de tono) no basta para llamarlo existente.
 - «variante atípica de X»: cada bloque es típico en X por separado, pero la combinación no lo es.
 - «síntesis de lenguajes existentes»: cada bloque es típico (≥ u) en algún corpus, pero ningún corpus tiene todos los
   bloques típicos y ninguno explica la combinación (conjunto < u en todos).
@@ -270,7 +271,7 @@ def veredicto(por_corpus: dict, conj: dict, corpora: dict, u: float, minimo: int
     aviso = "" if completos else (" (conjunto con menos bloques: ningún corpus los tiene todos)" if parciales else " (sin corpus con dos bloques)")
     if sin_vecino:
         texto, tipo = "rasgo sin vecino: " + ", ".join(sin_vecino), "sin_vecino"
-    elif mejor_conj[1] is not None and mejor_conj[1] >= u:
+    elif completos and mejor_conj[1] is not None and mejor_conj[1] >= u:     # solo con un corpus que tenga todos los bloques
         texto, tipo = f"estilo existente ({mejor_conj[0]})", "existente"
     elif cubre_todo:
         texto, tipo = f"variante atípica de {cubre_todo[0]}", "variante"
@@ -471,7 +472,8 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     ax.text(10.75, -0.75, "Conjunto (mejor)", ha="center", fontsize=10, fontweight="bold", color=tinta)
     ax.text(11.85, -0.75, "Veredicto", ha="left", fontsize=10, fontweight="bold", color=tinta)
     for i, f in enumerate(filas):
-        ax.text(0.1, i, ("◆ " if f["control"] else "★ ") + f["cancion"], va="center", fontsize=10, color=tinta)
+        corto = f["cancion"] if len(f["cancion"]) <= 20 else f["cancion"][:19] + "…"
+        ax.text(0.1, i, ("◆ " if f["control"] else "★ ") + corto, va="center", fontsize=10, color=tinta)
         for b, x in xs.items():
             m = f["mejor_por_bloque"].get(b)
             if b == "microtono" and not m:
@@ -503,12 +505,12 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
                  f"{u:g}); vacía = ni el mejor corpus lo explica", loc="left", fontsize=11.5, color=tinta)
     nota = (f"Cuartos de tono: z = concentración en los dos grados en ¼ de tono más usados frente al control ({ctl[0]:.0f} ± {ctl[1]:.0f} %); "
             "z ≥ 2 = grado fijo de la escala (recuadro punteado: no hay corpus microtonal cargado para compararlo).\n")
-    nota += "Calibración (piezas reales de un corpus, medidas igual): " + "; ".join(
+    nota += "Calibración (piezas reales de un corpus, medidas igual): " + ";\n    ".join(
         f"{n}: " + ", ".join(f"{NOMBRE_TIPO.get(k, k)} {v:g} %" for k, v in d.items() if k != "piezas") for n, d in calib.items()) if calib else ""
     if any("conjunto con menos" in f["veredicto"] for f in filas):
-        nota += "\nEl conjunto se calculó con los bloques que comparten canción y corpus: ningún corpus los tiene todos."
+        nota += "\nEl conjunto mejor se calculó con los bloques que comparten canción y corpus: ningún corpus los tiene todos."
     fig.text(0.01, 0.01, nota, fontsize=7.5, color=gris)
-    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.tight_layout(rect=(0, 0.04 + 0.022 * nota.count("\n"), 1, 1))
     fig.savefig(salida + "_sintesis.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 

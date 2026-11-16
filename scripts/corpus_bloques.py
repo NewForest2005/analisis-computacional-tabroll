@@ -252,7 +252,8 @@ USUL = {"aksak": 9, "agiraksak": 9, "raksaksagi": 9, "evfer": 9, "oynak": 9, "cu
         "devrihindi": 7, "devrituran": 7, "turkaksagi": 5, "duyek": 8, "agirduyek": 8, "musemmen": 8, "ciftesofyan": 8, "sofyan": 4,
         "nimsofyan": 2, "semai": 3, "senginsemai": 6, "yuruksemai": 6, "agirsenginsemai": 6, "frenkcin": 12, "fahte": 20,
         "devrikebir": 28, "remel": 28, "muhammes": 32, "hafif": 32, "berefsan": 32, "nimsakil": 24, "nimhafif": 16,
-        "cifteduyek": 16, "nimdevir": 18, "devirrevan": 26, "zencir": 120, "lenkfahte": 10, "nimevsat": 10, "evsat": 26,
+        "cifteduyek": 16, "nimdevir": 18, "devirrevan": 13, "devrirevan": 13, "sarkidevrirevani": 13, "yuruksemaiii": 6, "azeriyuruksemai": 6,
+        "agiraksaksemai": 10, "agirevfer": 9, "musemmenii": 8, "cenber": 24, "agircenber": 24, "darbifetih": 88, "zencir": 120, "lenkfahte": 10, "nimevsat": 10, "evsat": 26,
         "darbeyn": 0, "serbest": 0, "usulsuz": 0}
 
 
