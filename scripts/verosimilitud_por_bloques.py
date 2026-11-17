@@ -330,6 +330,11 @@ def main() -> None:
     ap.add_argument("--maximo", type=int, default=2500, help="piezas por corpus como máximo (muestra fija)")
     ap.add_argument("--min-segundos-cuartos", type=float, default=10.0,
                     help="segundos mínimos de melodía en cuarto de tono para medir la concentración (filtro microtonal)")
+    ap.add_argument("--efecto-campos", type=float, default=30.0,
+                    help="% mínimo de mezcla vertical evitada frente al azar para contar como grado fijo")
+    ap.add_argument("--alfa-campos", type=float, default=0.01,
+                    help="p máximo de la separación de campos (campos_haba.py) para contar como grado fijo; 1 = no se exige")
+    ap.add_argument("--permutaciones-campos", type=int, default=500)
     ap.add_argument("--salida", default="outputs/bloques")
     a = ap.parse_args()
 
@@ -361,14 +366,34 @@ def main() -> None:
 
     cc = [R[r]["concentracion"] for r in a.control if r in R and R[r]["concentracion"] is not None]
     media, de = (float(np.mean(cc)), max(float(np.std(cc, ddof=1)), 2.0)) if len(cc) >= 2 else CONTROL_CONC
-    for r in R.values():
+    # Regla combinada de «grado fijo» en cuarto de tono (16-nov). Las tres condiciones:
+    # 1) concentración con z >= 2 frente al control; 2) al menos --min-segundos-cuartos de melodía en cuarto de tono
+    #    (con 0.1 % del tiempo la concentración es ruido: Discipline); 3) separación de campos de Hába significativa
+    #    (campos_haba.py): bajo y voz aguda evitan sonar en campos distintos al menos un --efecto-campos % más que el
+    #    azar y con p < --alfa-campos. Hace falta el tamaño del efecto y no solo p: con muchos compases, un 7 % evitado
+    #    (Level Five) ya da p = 0.002. 30 % ≈ el doble del máximo de Primus (14 %), el control sin cuartos de tono.
+    # La 3) quita los falsos positivos que la concentración sola deja pasar (Red de King Crimson, confirmado de oído:
+    # 25 % del tiempo «en ¼» por distorsión, sin cuartos de tono). El error de medición cae al azar entre bajo y guitarra;
+    # un cuarto de tono fijo vive en una voz de forma estable. Se declara en el artículo: la medida es también un resultado.
+    from campos_haba import medir as medir_campos
+    rng = np.random.default_rng(0)
+    for run, r in R.items():
         r["z_concentracion"] = round((r["concentracion"] - media) / de, 1) if r["concentracion"] is not None else None
-        # además de la concentración, un mínimo de cuartos de tono: con 0.1 % del tiempo la concentración es ruido
-        r["microtonal"] = bool(r["z_concentracion"] is not None and r["z_concentracion"] >= 2
-                               and r.get("segundos_cuartos", 0) >= a.min_segundos_cuartos)
+        r["p_campos"] = None
+        previo = bool(r["z_concentracion"] is not None and r["z_concentracion"] >= 2
+                      and r.get("segundos_cuartos", 0) >= a.min_segundos_cuartos)
+        if previo and a.alfa_campos < 1:
+            try:
+                c, _ = medir_campos(run, a.permutaciones_campos, rng)
+                r["p_campos"], r["campos_evitada"] = c["p_mezcla"], (round(100 * (c["mezcla_nula"] - c["mezcla_vertical"]) / c["mezcla_nula"], 1)
+                                                                    if c["mezcla_nula"] else None)
+            except Exception as e:                                       # noqa: BLE001
+                print(f"  sin prueba de campos para {run.name}: {e}")
+        r["microtonal"] = bool(previo and (a.alfa_campos >= 1 or (r["p_campos"] is not None and r["p_campos"] < a.alfa_campos
+                                                                  and (r.get("campos_evitada") or 0) >= a.efecto_campos)))
         r["microtono"] = solo_cuartos(r["alt24"]) if r["microtonal"] else None
-    print(f"filtro de cuartos de tono: concentración del control {media:.1f} ± {de:.1f} %; cuenta si z ≥ 2 "
-          f"y hay al menos {a.min_segundos_cuartos:g} s de cuartos de tono en la melodía")
+    print(f"filtro de cuartos de tono: concentración del control {media:.1f} ± {de:.1f} %; cuenta si z ≥ 2, "
+          f"hay al menos {a.min_segundos_cuartos:g} s en cuarto de tono y la separación de campos evita ≥ {a.efecto_campos:g} % con p < {a.alfa_campos:g}")
 
     corpora = {}
     for f in archivos:
@@ -389,11 +414,14 @@ def main() -> None:
         v = veredicto(por, conj, corpora, a.umbral, a.min_piezas, r["microtonal"])
         f = dict(corrida=run.name, cancion=nombre(run.name), control=ctl, grupo=grupo, voz=r["voz"], cuartos_de_tono=r["cuartos"],
                  concentracion=r["concentracion"], z_concentracion=r["z_concentracion"], microtonal=r["microtonal"],
+                 segundos_cuartos=r.get("segundos_cuartos"), p_campos=r.get("p_campos"), campos_evitada=r.get("campos_evitada"),
                  percentiles={n: {b: round(x, 1) for b, x in p.items()} for n, p in por.items()},
                  conjunto={n: (None if x is None else round(x, 1)) for n, (x, _) in conj.items()}, **v)
         filas.append(f)
         mb = " · ".join(f"{TITULO[b].split(' ')[0]}←{m['corpus']} {m['percentil']:g}" for b, m in v["mejor_por_bloque"].items())
         mb += f" · ¼ tono {r['cuartos']:g} % ({r.get('segundos_cuartos', 0):g} s), concentración {r['concentracion']:g} % (z {r['z_concentracion']:g})"
+        if r.get("p_campos") is not None:
+            mb += f", campos evitados {r.get('campos_evitada')} % (p {r['p_campos']:g})"
         print(f"{ {'banda': '', 'control': '[control] ', 'comparar': '[comparado] '}[grupo]}{f['cancion']}: {mb} | conjunto {v['conjunto_mejor']['corpus']} {v['conjunto_mejor']['percentil']} → {v['veredicto']}")
 
     # canción más parecida de cada grupo de comparación, por bloque (distancia de Jensen-Shannon entre canciones)
