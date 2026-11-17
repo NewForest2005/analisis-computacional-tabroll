@@ -10,7 +10,8 @@ Cuatro bloques por canción, cada uno comparado con cada corpus que lo tenga:
 - Armonía: fundamentales (12 grados) y cambios de fundamental (intervalo × llegada), igual que verosimilitud_estilos.py.
 - Escala (12 notas): la melodía (voz aguda; si no hay, la grave) en 12 grados respecto de la tónica, por duración; cada
   cuarto de tono se reparte mitad y mitad entre los dos semitonos vecinos. ¿Existe esta escala en algún estilo?
-- Cuartos de tono: la melodía en 24 grados, comparada solo con corpus microtonales (familia «microtonal»: SymbTr, Radif,
+- Cuartos de tono: qué grados en cuarto de tono usa la melodía (reparto del tiempo entre los 12 grados en ¼, sin los
+  semitonos), comparado solo con corpus microtonales (familia «microtonal»: SymbTr, Radif,
   andalusí). Antes se filtra con los controles: si la concentración de los cuartos de tono (% de su tiempo en los dos
   grados en cuarto de tono más usados) no supera a la de los controles por al menos 2 desviaciones (z ≥ 2), la canción
   se trata como de 12 notas y este bloque no cuenta. El % de tiempo en cuartos de tono no sirve de filtro: Primus marca
@@ -110,7 +111,7 @@ def concentracion(alt24: np.ndarray) -> tuple[float, float]:
 
 
 def solo_cuartos(v: np.ndarray) -> np.ndarray | None:
-    """Reparto entre los 12 grados en cuarto de tono, sin los semitonos."""
+    """Reparto del tiempo entre los 12 grados en cuarto de tono (cuáles se usan), sin los semitonos."""
     o = np.asarray(v)[..., 1::2]
     s = o.sum(-1, keepdims=True)
     return np.where(s > 0, o / np.where(s > 0, s, 1), 0)
@@ -136,7 +137,7 @@ class Corpus:
         self.P, self.n, self.k, self.eps = P, len(P), k, eps
         self.error_metro = error_metro if error_metro is not None else np.zeros(6)
         self.micro = self.familia == "microtonal"
-        grupo = [re.sub(r"_(dt|tdc)$", "", str(p.get("id", i))).split("|")[0] for i, p in enumerate(P)]
+        grupo = [re.sub(r"_(dt|tdc)$", "", str(p.get("id", i))).split("|")[0] for i, p in enumerate(P)]   # misma canción o grabación
         mismo = np.array([[a == b for b in grupo] for a in grupo]) if self.n <= 5000 else np.eye(self.n, dtype=bool)
         self.V = {b: [self._vec(p, b) for p in P] for b in ("fund", "camb", "escala", "microtono", "metro")}
         self.D, self.escala, self.ref = {}, {}, {}
@@ -146,8 +147,9 @@ class Corpus:
         if crudas:
             A = np.array(crudas)
             self.res["escala"] = float(np.median(np.diag(js_pares(plegar(A), plegar(fuga(A, eps))))))
-            # En cuartos de tono no se resta un piso de resolución: la fuga desde los semitonos
-            # cambia el reparto microtonal de una pieza de forma demasiado grande.
+            # En cuartos de tono no hay piso de resolución: la fuga (que viene de los semitonos, mucho más abundantes)
+            # cambia tanto el reparto en ¼ de una pieza que el piso hacía iguales a casi todas (percentiles 0 o 100).
+            # El modelo de medición ya se aplica a cada pieza del corpus, así que se comparan tal cual.
         pura = np.eye(6)[0]
         eta = self.error_metro.sum()
         self.res["metro"] = float(js_pares(pura[None], ((1 - eta) * pura + self.error_metro)[None])[0, 0])
@@ -310,6 +312,7 @@ def rasgos_cancion(run: Path) -> dict:
                 alt24=alt / alt.sum() if alt.sum() else None, escala=plegar(alt / alt.sum()) if alt.sum() else None, microtono=None,
                 metro=met / met.sum() if met.sum() else None,
                 cuartos=round(100 * alt[1::2].sum() / alt.sum(), 1) if alt.sum() else None,
+                segundos_cuartos=round(float(alt[1::2].sum()), 1),
                 concentracion=round(concentracion(alt / alt.sum())[1], 1) if alt.sum() else None,
                 voz="aguda" if J.get("raw_high") else "grave")
 
@@ -319,12 +322,14 @@ def main() -> None:
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--control", nargs="*", type=Path, default=[], help="corridas de control sin cuartos de tono (Primus)")
     ap.add_argument("--comparar", nargs="*", type=Path, default=[],
-                    help="corridas de un repertorio adicional; no votan ni calibran el error")
+                    help="corridas de un repertorio a comparar canción por canción (p. ej. King Gizzard); no votan ni miden el error")
     ap.add_argument("--umbral", type=float, default=5.0)
     ap.add_argument("--eps", type=float, help="fuga a cuartos de tono del modelo de medición (si no, se mide en --control)")
     ap.add_argument("--min-piezas", type=int, default=100, help="tamaño mínimo de un corpus para el veredicto")
     ap.add_argument("--k", type=int, default=5, help="vecinos para la tipicidad (k-ésima pieza más parecida)")
     ap.add_argument("--maximo", type=int, default=2500, help="piezas por corpus como máximo (muestra fija)")
+    ap.add_argument("--min-segundos-cuartos", type=float, default=10.0,
+                    help="segundos mínimos de melodía en cuarto de tono para medir la concentración (filtro microtonal)")
     ap.add_argument("--salida", default="outputs/bloques")
     a = ap.parse_args()
 
@@ -334,7 +339,7 @@ def main() -> None:
     canciones, vistos = [], set()
     for grupo, lista in (("banda", a.corridas), ("control", a.control), ("comparar", a.comparar)):
         for r in lista:
-            if r.resolve() not in vistos:
+            if r.resolve() not in vistos:                                 # sin repetidas (globs que se solapan)
                 vistos.add(r.resolve())
                 canciones.append((r, grupo))
     R = {}
@@ -358,9 +363,12 @@ def main() -> None:
     media, de = (float(np.mean(cc)), max(float(np.std(cc, ddof=1)), 2.0)) if len(cc) >= 2 else CONTROL_CONC
     for r in R.values():
         r["z_concentracion"] = round((r["concentracion"] - media) / de, 1) if r["concentracion"] is not None else None
-        r["microtonal"] = bool(r["z_concentracion"] is not None and r["z_concentracion"] >= 2)
+        # además de la concentración, un mínimo de cuartos de tono: con 0.1 % del tiempo la concentración es ruido
+        r["microtonal"] = bool(r["z_concentracion"] is not None and r["z_concentracion"] >= 2
+                               and r.get("segundos_cuartos", 0) >= a.min_segundos_cuartos)
         r["microtono"] = solo_cuartos(r["alt24"]) if r["microtonal"] else None
-    print(f"filtro de cuartos de tono: concentración del control {media:.1f} ± {de:.1f} %; cuenta si z ≥ 2")
+    print(f"filtro de cuartos de tono: concentración del control {media:.1f} ± {de:.1f} %; cuenta si z ≥ 2 "
+          f"y hay al menos {a.min_segundos_cuartos:g} s de cuartos de tono en la melodía")
 
     corpora = {}
     for f in archivos:
@@ -385,10 +393,10 @@ def main() -> None:
                  conjunto={n: (None if x is None else round(x, 1)) for n, (x, _) in conj.items()}, **v)
         filas.append(f)
         mb = " · ".join(f"{TITULO[b].split(' ')[0]}←{m['corpus']} {m['percentil']:g}" for b, m in v["mejor_por_bloque"].items())
-        mb += f" · ¼ tono {r['cuartos']:g} %, concentración {r['concentracion']:g} % (z {r['z_concentracion']:g})"
-        print(f"{MARCA[grupo]}{f['cancion']}: {mb} | conjunto {v['conjunto_mejor']['corpus']} {v['conjunto_mejor']['percentil']} → {v['veredicto']}")
+        mb += f" · ¼ tono {r['cuartos']:g} % ({r.get('segundos_cuartos', 0):g} s), concentración {r['concentracion']:g} % (z {r['z_concentracion']:g})"
+        print(f"{ {'banda': '', 'control': '[control] ', 'comparar': '[comparado] '}[grupo]}{f['cancion']}: {mb} | conjunto {v['conjunto_mejor']['corpus']} {v['conjunto_mejor']['percentil']} → {v['veredicto']}")
 
-    # Para cada canción de la banda, localiza el tema más cercano del repertorio adicional y del control en cada bloque.
+    # canción más parecida de cada grupo de comparación, por bloque (distancia de Jensen-Shannon entre canciones)
     parecidas = []
     grupos_ref = {g: [r for r, gg in canciones if gg == g and r in R] for g in ("comparar", "control")}
     if grupos_ref["comparar"]:
@@ -403,10 +411,9 @@ def main() -> None:
             k = {"escala": "escala", "microtono": "alt24", "metro": "metro"}[b]
             if x[k] is None or y[k] is None:
                 return None
-            if b == "microtono":
+            if b == "microtono":                                         # solo qué grados en ¼ de tono se usan
                 return float(js_pares(solo_cuartos(x[k])[None], solo_cuartos(y[k])[None])[0, 0])
             return float(js_pares(x[k][None], y[k][None])[0, 0])
-
         print("\nCanción más parecida por bloque (distancia de Jensen-Shannon; 0 = igual):")
         for run, grupo in canciones:
             if grupo != "banda" or run not in R:
@@ -452,7 +459,7 @@ def main() -> None:
             calib[n] = {k: round(100 * x / tot, 1) for k, x in sorted(tipos.items())} | {"piezas": tot}
             print(f"calibración en {n} ({tot} piezas reales): " + " · ".join(f"{k} {x}%" for k, x in calib[n].items() if k != "piezas"))
 
-    Path(a.salida + ".json").write_text(json.dumps(dict(umbral=a.umbral, eps=round(eps, 4), control_concentracion=[round(media, 1), round(de, 1)], error_metro=[round(float(x), 4) for x in error_metro], k=a.k, canciones=filas, calibracion=calib,
+    Path(a.salida + ".json").write_text(json.dumps(dict(umbral=a.umbral, eps=round(eps, 4), control_concentracion=[round(media, 1), round(de, 1)], error_metro=[round(float(x), 4) for x in error_metro], k=a.k, canciones=filas, parecidas=parecidas, calibracion=calib,
                                                         corpus={n: dict(familia=c.familia, fuente=c.fuente, bloques=c.bloques(), piezas=c.n)
                                                                 for n, c in corpora.items()}), ensure_ascii=False, indent=1), encoding="utf-8")
     with open(a.salida + ".csv", "w", newline="", encoding="utf-8") as fh:
@@ -502,9 +509,9 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
                 ax.axvline(x0 - .5, color=fondo, lw=4)
         x0 += len(ns)
     ax.set_xticks(range(len(cols)), [n + ("*" if corpora[n].n < 100 else "") for g, n in cols], fontsize=8.5, color=tinta, rotation=0)
-    ax.set_yticks(range(len(filas)), [MARCA.get(f.get("grupo"), "◆ " if f["control"] else "★ ") + f["cancion"] for f in filas], fontsize=10, color=tinta)
+    ax.set_yticks(range(len(filas)), [MARCA[f["grupo"]] + f["cancion"] for f in filas], fontsize=10, color=tinta)
     for i, f in enumerate(filas):
-        if f["control"] and (i == 0 or not filas[i - 1]["control"]):
+        if i and f["grupo"] != filas[i - 1]["grupo"]:
             ax.axhline(i - .5, color=fondo, lw=4)
     ax.xaxis.tick_top()
     ax.tick_params(length=0)
@@ -512,7 +519,7 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
         s.set_visible(False)
     ax.set_title("Verosimilitud por bloques de rasgos y conjunta\n(% de piezas del corpus más raras que la canción; en negrita, ≥ "
                  f"{u:g} = típica)", loc="left", fontsize=12, color=tinta, pad=58)
-    fig.text(0.01, 0.01, f"★ Angine de Poitrine · ◆ control (Primus). «—»: el corpus no tiene ese bloque. Corpus con «*»: menos de 100 piezas, no cuenta para el veredicto.\n"
+    fig.text(0.01, 0.01, f"★ Angine de Poitrine · ◆ control (Primus)" + (" · ▲ comparado (King Gizzard u otro)" if any(f["grupo"] == "comparar" for f in filas) else "") + ". «—»: el corpus no tiene ese bloque. Corpus con «*»: menos de 100 piezas, no cuenta para el veredicto.\n"
              f"Modelo de medición: ε = {eps:.2f} de fuga a ¼ de tono y η = {eta:.2f} de "
              "compases mal leídos (lo que el cuaderno marca en el control), aplicados a cada pieza de corpus.\nPercentil: % de piezas del corpus cuya "
              "5.ª pieza más parecida está igual o más lejos que la de la canción. Conjunto: lo mismo midiendo el parecido en todos los bloques a la vez.", fontsize=7.5, color=gris)
@@ -532,7 +539,7 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     ax.text(11.85, -0.75, "Veredicto", ha="left", fontsize=10, fontweight="bold", color=tinta)
     for i, f in enumerate(filas):
         corto = f["cancion"] if len(f["cancion"]) <= 20 else f["cancion"][:19] + "…"
-        ax.text(0.1, i, ("◆ " if f["control"] else "★ ") + corto, va="center", fontsize=10, color=tinta)
+        ax.text(0.1, i, MARCA[f["grupo"]] + corto, va="center", fontsize=10, color=tinta)
         for b, x in xs.items():
             m = f["mejor_por_bloque"].get(b)
             if b == "microtono" and not m:
