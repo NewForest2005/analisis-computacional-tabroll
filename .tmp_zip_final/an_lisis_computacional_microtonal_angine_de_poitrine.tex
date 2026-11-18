@@ -1,0 +1,347 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish, english, bidi=basic, provide=*]{babel}
+\babelprovide[import, onchar=ids fonts]{english}
+\babelfont{rm}{Noto Sans}
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{accent}{RGB}{30, 58, 95}
+\definecolor{muted}{RGB}{100, 116, 139}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accent,
+    urlcolor=accent
+}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+{\color{accent}\LARGE\textbf{Análisis computacional microtonal: Angine de Poitrine}}\par
+\vspace{0.5em}
+{\color{muted}\rule{\linewidth}{0.6pt}}\par
+\vspace{0.5em}
+
+Nuestro objetivo en este cuaderno es consolidar, desde una perspectiva computacional, los diferentes aspectos musicales que caracterizan la armonía y melodía de la banda canadiense Angine de Poitrine, particularmente su uso de microtonos a nivel melódico y armónico.
+
+\subsection*{Preliminares de la banda}
+
+Angine de Poitrine es una banda canadiense formada en Saguenay, Quebec, en el año 2019. El nombre de la banda corresponde a un tipo de dolor pectoral encima del esternón conocido como angina, un síntoma de patología cardiovascular por la falta de oxígeno; usualmente se da por ateroesclerosis. Para mayor información sobre la enfermedad, consultar \href{https://www.ameli.fr/assure/sante/themes/angine-de-poitrine-angor/definition-causes-frequence-angine-poitrine}{este enlace}.
+
+Sus integrantes, bajo los pseudónimos Khn y Klek (de Poitrine), realizan su música bajo un subgénero del rock experimental denominado \textbf{math rock}, específicamente enfocado en el uso de cambios de dinámica utilizando microtonalidad.
+
+Inicialmente, se propone estudiar dos obras (con considerable popularidad) de su álbum \textit{Vol I}: \textbf{Sarniezz} y \textbf{Fabienk}. En el transcurso del tiempo se evaluará la viabilidad de su inclusión.
+
+\subsection*{Estado del Arte}
+
+El análisis computacional de la música ha emergido como una herramienta fundamental para profundizar en las estructuras complejas y los patrones subyacentes de las obras musicales. A diferencia de los métodos tradicionales, que a menudo se basan en la interpretación subjetiva, los enfoques computacionales ofrecen un marco objetivo y cuantificable para diseccionar parámetros musicales como la melodía, la armonía, el ritmo y el timbre. Esto es particularmente relevante cuando se abordan formas musicales que desafían los modelos teóricos convencionales, permitiendo la extracción de información detallada de diversas fuentes de datos, incluyendo señales de audio y representaciones simbólicas.
+
+La microtonalidad, definida como el uso de intervalos más pequeños que el semitono del sistema de temperamento igual de 12 tonos, presenta un desafío en la notación occidental tradicional, pues las herramientas analíticas son insuficientes para representar y cuantificar con precisión los matices de las prácticas microtonales. Las sutilezas involucradas en las alturas que caen entre los semitonos estándar requieren representaciones y marcos analíticos especializados. Esta brecha subraya la necesidad de métodos computacionales avanzados que puedan capturar, procesar e interpretar estas intrincadas relaciones de altura, superando las limitaciones de los sistemas de afinación estándar.
+
+El análisis computacional microtonal aprovecha las técnicas de procesamiento de señales digitales y algoritmos sofisticados. Los métodos clave incluyen algoritmos de detección de tono de alta resolución como YIN y pYIN, capaces de estimar con precisión las frecuencias fundamentales (F0) a partir de señales de audio; que se convierten luego en números MIDI fraccionarios continuos o desviaciones en \textit{cents}, proporcionando una representación granular de los matices microtonales. Las representaciones simbólicas, como MusicXML, describen afinaciones microtonales o alteraciones específicas, permitiendo un análisis comparativo entre los elementos microtonales intencionados y los ejecutados. Herramientas como la biblioteca \texttt{librosa} son fundamentales en la implementación de estas técnicas.
+
+La banda canadiense Angine de Poitrine sirve como un caso de estudio adecuado para el análisis computacional microtonal. Su estilo musical distintivo, incrustado dentro del subgénero del math rock, presenta prominentemente la microtonalidad dinámica, y a menudo explorando el sistema 24-EDO (temperamento igual de 24 tonos). Este enfoque implica la utilización de intervalos de cuarto de tono, que se reflejan físicamente en instrumentos especialmente adaptados (por ejemplo, guitarras y bajos con trastes de cuarto de tono). Comprender su lenguaje armónico y melódico requiere una inmersión más profunda en estas relaciones microtonales, trascendiendo así los límites del análisis estándar de 12 tonos.
+
+El propósito de este cuaderno es examinar estas características y su implicación en la microtonalidad, utilizando como objeto de estudio piezas de Angine de Poitrine. Se extraerán características de audio fundamentales como formas de onda, espectrogramas Mel y Coeficientes Cepstrales de Frecuencia Mel (MFCCs) utilizando \texttt{librosa}. Simultáneamente, las representaciones simbólicas de los archivos MusicXML se analizarán para extraer información estructural de las notas, incluyendo alturas MIDI fraccionarias y duraciones. El núcleo de este análisis microtonal implica funciones para convertir frecuencias a MIDI fraccionario y para cuantificar la altura del diapasón basándose en las características instrumentales (por ejemplo, la clase \texttt{AngineDePoitrineAnalyzer}). Esto permite el cálculo de intervalos melódicos en unidades de cuarto de tono y la generación de perfiles de clase de altura armónica en un espacio de 24 dimensiones, proporcionando un marco algebraico detallado para su sistema microtonal.
+
+Este marco computacional ofrece una metodología robusta para diseccionar y comprender los complejos paisajes microtonales encontrados en la música de Angine de Poitrine. Al cuantificar las desviaciones microtonales y analizar las relaciones de altura en un contexto granular de 24-EDO, se puede obtener información valiosa sobre las técnicas compositivas y las elecciones estéticas de la banda. Dicho análisis no solo enriquece la comprensión musicológica, sino que también abre vías para futuras investigaciones en transcripción microtonal automatizada, análisis de interpretación y el desarrollo de nuevas herramientas para la composición y educación microtonal.
+
+\vspace{0.5em}
+{\color{accent}\Large\textbf{Fundamentación Teórica}}\par
+\vspace{0.2em}
+
+La idea de un análisis computacional, de manera clásica, consiste en asignar una pieza a una macroestructura (entendida como resultados visuales, datos o patrones) a partir de un programa que pueda percibir los datos intrínsecos del audio de la pieza.
+
+Se puede entender el objeto, de naturaleza abstracta (ontológica) como una actividad cuyos registros existen en contextos específicos. El software analítico permite reconstruir de manera empírica el fundamento técnico de estos registros en un nivel académico.
+
+En particular, se presenta la siguiente definición:
+
+\textbf{Input}: código binario, donde cada bit es 0 o 1 inequívocamente; se determina antes de iniciar el análisis.
+
+Algunas consideraciones a tener en cuenta para el análisis, de manera general:
+
+\begin{itemize}
+    \item Si hay una curva en el registro, será interpretado como un error de muestra o como muestra neutral en los resultados antes y después del transcurso del análisis.
+    \item Un archivo de audio en formato WAV no contiene el mismo flujo de datos digitales que el mismo archivo en formato FLAC.
+    \item Un audio grabado en un formato MP3 (de baja calidad) sigue siendo mejor preservando información de la pieza que formatos de no compresión.
+    \item MusicXML, junto con MIDI, son los formatos de audio adecuados para análisis como el que se presentará, ya que conservan la selección de la información y explicitan tanto las líneas de compás (\texttt{barlines}) como las representaciones de la altura (\texttt{pitch}).
+\end{itemize}
+
+Hay tres maneras en las cuales las representaciones computacionales que forman el input son indefinidas (en el sentido de que no existe una única forma definitiva para que los datos se representen en una única pieza):
+
+\begin{itemize}
+    \item La proyección de los datos de una forma particular.
+    \item La selección de los datos que están representados en este formato (MusicXML o MIDI).
+    \item Algún elemento indispensable de información introducido de manera extrínseca, o al menos, la incertidumbre sobre la existencia de esta información.
+\end{itemize}
+
+También es importante resaltar que el diagrama de análisis musical necesita de revisión constante para reflejar las variaciones sobre posibles inputs (incluso cuando los inputs corresponden a una misma pieza).
+
+El análisis computacional, en este sentido, busca determinar cómo una pieza establece sus propios principios explicativos. Este debe poseer una estructura temporal (un orden cronológico) y una condición que garantiza su fructificación es que contenga (en el sentido técnico) menos información que la pieza a analizar; a su vez, se busca una estructura (macro) que cumpla un protocolo particular, es decir, libre de sesgos.
+
+\subsection*{Contextualizando a Angine de Poitrine}
+
+Las piezas de Angine de Poitrine, a nivel melódico, se fundamentan en el sistema 24-EDO en la sección principal del registro tonal sobre el cual se trabajan. Este sistema consiste en utilizar intervalos de 1/4 de tono adicionales en el mástil tanto de la guitarra eléctrica como el bajo (ambos interpretados por Khn) que permiten introducir la microtonalidad en una dimensión algo rígida pero suficientemente rica para su estudio.
+
+Para este análisis, se requiere conocimiento de:
+
+\begin{itemize}
+    \item Física de intervalos logarítmicos.
+    \item Aritmética modular sobre clases tonales.
+    \item Teoría de procesamiento de señales digitales.
+\end{itemize}
+
+\subsection*{Estructura Algebraica y Clases de Tonos}
+
+Vamos a asignar microtonos a clases tonales con aritmetica modular. Por nuestro razonamiento sobre 24-EDO, haremos un parsing de las notas de la guitarra y el bajo de Khn de Poitrine, como una funcion de cuantizacion a trozos basada en el indice de traste (k), distinto en cada uno.
+
+\subsubsection*{Escala de Tono Logarítmica}
+
+La percepción (humana) del tono opera, de manera geométrica relativa, en relación con la frecuencia $f$ de la onda que percibe. Cada octava es un multiplicador de 2 de esta frecuencia.
+
+Para medir las distancias microtonales (o su aproximación) de manera lineal, se utilizará como unidad de medida el cent $c$.
+
+La norma (o distancia absoluta) en cents entre cualquier frecuencia de referencia $f_0$ y una frecuencia $f$ está dada por
+
+\begin{align*}
+c = 1200 \log_2 \left( \frac{f}{f_0} \right).
+\end{align*}
+
+De este modo, la constante fundamental que representa un paso microtonal (1/4 de tono) es el factor multiplicador
+
+\begin{align*}
+\alpha = 2^{\frac{1}{24}} \approx 1.02932.
+\end{align*}
+
+Así, cada tono consecutivo escala por una frecuencia de $\approx 2.93\%$, con lo cual cada traste de la guitarra y el bajo se asignan a un incremento de $50c$.
+
+Se asignarán microtonos a clases tonales mediante una función, haciendo uso de la aritmética modular.
+
+Se realizará un análisis (parsing) de las notas de la guitarra y el bajo de Khn de Poitrine como una función de cuantización a trozos basada en el índice de posición de traste ($k$) en ambos instrumentos.
+
+Si ($k$) es el traste físico desde la punta del mástil de la guitarra hasta el puente, la correspondencia propuesta es la siguiente:
+
+\begin{align*}
+f(k) =
+\begin{cases}
+f_0 \cdot 2^{\frac{k}{24}}, \quad k \leq k_0 \\
+f(k_b) \cdot 2^{\frac{k-k_0}{12}}, \quad k > k_0
+\end{cases}
+\end{align*}
+
+Esta función de cuantización facilita la transición de los intervalos típicos (en $\mathbb{Z}_{12}$, música occidental convencional) a clústeres densos ultracromáticos (como el sistema 24-EDO del cual se inspira Angine de Poitrine), dependiendo de la ventana temporal en la cual se esté evaluando la pieza.
+
+El conjunto de microtonos en este contexto presenta variaciones; cuando $k < \text{Zona}_1$ o $k > \text{Zona}_2$, el grupo cromático en el que nos situaremos es $\mathbb{Z}_{12}$ (estándar tonal occidental). En cambio, si $\text{Zona}_1 \leq k \leq \text{Zona}_2$, expandimos el sistema a $\mathbb{Z}_{24}$ (configuración física de la guitarra y el bajo de Khn).
+
+En el primer caso, el análisis de la estructura melódica y armónica se centrará en una escala de $\Delta c = 100$ cents, mientras que si se transita a la zona intermedia (marcada como $\text{Zona}_2$), se utilizará la escala de $\Delta = 50$ cents.
+
+Para contextualizar la arquitectura sobre la cual nos basamos para construir la estructura algebraica, se explica tomando como base la guitarra y el bajo de Khn:
+
+\begin{itemize}
+    \item Guitarra: Existen 30 trastes de $\frac{1}{4}$ de tono seguidos de 6 trastes de semitono.
+    \item Bajo: Existen 24 trastes de $\frac{1}{4}$ de tono seguidos de 6 trastes de semitonos.
+\end{itemize}
+
+\subsection*{Estrategia}
+
+Primero, se procederá a convertir los audios a formato $\textbf{MIDI}$, para posteriormente procesar el audio como arreglo.
+
+Ahora, para garantizar que en el archivo se distinga la zona dual dividida, se convierte el archivo MIDI (o MXL) a una variante denominada número MIDI fraccionario (o su equivalente para MusicXML):
+
+\begin{align}
+M_{frac} = 69 + 12 \log_2 \left( \frac{f}{440} \right)
+\end{align}
+
+\subsection*{Herramientas matemáticas utilizadas en los cálculos}
+
+Esta sección reúne las operaciones matemáticas que sustentan el procesamiento realizado en el proyecto. Las fórmulas se escriben para dejar explícitos los objetos que se calculan y sus unidades. En lo que sigue, $x[n]$ es una señal muestreada, $f_s$ es la frecuencia de muestreo, $N$ es el tamaño de una ventana y $p_i$ representa una proporción no negativa cuya suma es uno.
+
+\subsubsection*{1. Muestreo, ventanas y transformada de Fourier}
+
+Un audio digital se representa como una sucesión de amplitudes $x[n]=x(n/f_s)$. Para estudiar qué frecuencias aparecen en un instante concreto, se divide la señal en ventanas y se aplica la Transformada Discreta de Fourier (DFT):
+
+\begin{align}
+X[k] &= \sum_{n=0}^{N-1} x[n]e^{-2\pi i kn/N}, \\
+f_k &= \frac{k f_s}{N}, \qquad k=0,1,\ldots,N-1.
+\end{align}
+
+El módulo $|X[k]|$ mide la amplitud de la componente $f_k$ y $|X[k]|^2$ su energía aproximada. Como una canción cambia con el tiempo, el proyecto utiliza la Transformada de Fourier de Tiempo Corto (STFT), que aplica la DFT a cada ventana $m$:
+
+\begin{align}
+X(m,k) &= \sum_{n=0}^{N-1}x[n+mH]\,w[n]e^{-2\pi i kn/N}, \\
+S(m,k) &= |X(m,k)|^2.
+\end{align}
+
+Aquí $w[n]$ es una ventana y $H$ es el salto entre ventanas. El espectrograma $S(m,k)$ permite comparar la evolución temporal del contenido frecuencial. Una ventana más larga mejora la resolución en frecuencia; una más corta mejora la resolución temporal.
+
+\subsubsection*{2. Escala Mel y MFCC}
+
+Para aproximar la organización perceptual de las frecuencias, se transforma la frecuencia $f$ a escala Mel:
+
+\begin{align}
+\operatorname{mel}(f)=2595\log_{10}\left(1+\frac{f}{700}\right).
+\end{align}
+
+Un banco de filtros triangulares $H_r[k]$ agrupa la energía del espectrograma en bandas Mel:
+
+\begin{align}
+E_r(m)=\sum_k H_r[k]S(m,k), \qquad
+L_r(m)=\log\bigl(E_r(m)+\varepsilon\bigr).
+\end{align}
+
+Los Coeficientes Cepstrales de Frecuencia Mel (MFCC) se obtienen mediante una transformada coseno discreta de los logaritmos de esas energías:
+
+\begin{align}
+\operatorname{MFCC}_q(m)=\sum_{r=0}^{R-1}L_r(m)\cos\left[\frac{\pi q}{R}\left(r+\frac12\right)\right].
+\end{align}
+
+Estos coeficientes resumen el timbre y la envolvente espectral. No representan directamente notas; por eso se usan como descriptores de audio complementarios a las alturas simbólicas y a la estimación de la frecuencia fundamental.
+
+\subsubsection*{3. Frecuencia fundamental, MIDI y cents}
+
+La frecuencia fundamental $f_0$ es la frecuencia asociada a la altura percibida. La conversión a número MIDI continuo es:
+
+\begin{align}
+M(f_0)=69+12\log_2\left(\frac{f_0}{440}\right).
+\end{align}
+
+La distancia entre dos alturas puede expresarse en cents:
+
+\begin{align}
+c(f_1,f_2)=1200\log_2\left(\frac{f_1}{f_2}\right).
+\end{align}
+
+En $q$-EDO, la octava se divide en $q$ pasos iguales. Un paso tiene $1200/q$ cents y su razón frecuencial es:
+
+\begin{align}
+\rho_q=2^{1/q}, \qquad f_j=f_\mathrm{ref}2^{j/q}.
+\end{align}
+
+Para 24-EDO, cada paso vale $50$ cents y la clase de altura microtonal se cuantiza como:
+
+\begin{align}
+\operatorname{pc}_{24}(M)=\operatorname{round}(2M)\bmod 24.
+\end{align}
+
+La aritmética modular identifica alturas separadas por octavas: dos alturas pertenecen a la misma clase si sus índices coinciden módulo $q$.
+
+\subsubsection*{4. Perfiles de altura y distribuciones ponderadas por duración}
+
+Para una canción se acumula el tiempo que cada clase de altura permanece activa. Si la nota $j$ ocupa $[a_j,b_j)$ y cae en la clase $r$, el perfil de 24 clases es:
+
+\begin{align}
+h_r=\sum_{j:\,\operatorname{pc}_{24}(j)=r}(b_j-a_j), \qquad
+p_r=\frac{h_r}{\sum_{s=0}^{23}h_s}.
+\end{align}
+
+El vector $p=(p_0,\ldots,p_{23})$ es una distribución de probabilidad: describe el porcentaje temporal de la melodía o de las fundamentales en cada clase. Para comparar con corpus de 12 notas, los cuartos de tono se proyectan en sus dos vecinos cromáticos:
+
+\begin{align}
+p^{(12)}_r=p_{2r}+\frac12p_{2r-1}+\frac12p_{2r+1},
+\qquad r\in\mathbb{Z}_{12},
+\end{align}
+
+con índices entendidos módulo 24. Así se conserva masa de probabilidad sin fingir que una altura de cuarto de tono es exactamente una nota cromática.
+
+\subsubsection*{5. Entropía e información}
+
+La entropía de Shannon de una distribución $p$ es:
+
+\begin{align}
+H(p)=-\sum_i p_i\log_2p_i,
+\end{align}
+
+con el convenio $0\log_2 0=0$. Se mide en bits. Una distribución concentrada en pocas clases tiene entropía baja; una distribución repartida entre muchas clases tiene entropía alta. Para $q$ clases, $H(p)\leq\log_2q$.
+
+La desigualdad de Jensen explica esta cota y muchas normalizaciones del proyecto. Para una función convexa $\varphi$ y pesos $\lambda_i\geq0$, $\sum_i\lambda_i=1$:
+
+\begin{align}
+\varphi\left(\sum_i\lambda_i x_i\right)\leq\sum_i\lambda_i\varphi(x_i).
+\end{align}
+
+Como $-\log x$ es convexa, la entropía es máxima cuando la masa está uniformemente distribuida. La información mutua entre dos variables discretas $X$ e $Y$ se calcula como:
+
+\begin{align}
+I(X;Y)&=\sum_{x,y}p(x,y)\log_2\frac{p(x,y)}{p(x)p(y)}\\
+&=H(X)+H(Y)-H(X,Y).
+\end{align}
+
+Mide cuánta incertidumbre sobre una variable se reduce al conocer la otra. En este proyecto se usa la misma lógica de reducción de incertidumbre para interpretar coincidencias entre bloques de rasgos, sin confundirla con una causalidad musical.
+
+\subsubsection*{6. Divergencia Jensen--Shannon y comparación de canciones}
+
+La divergencia de Kullback--Leibler entre $p$ y $q$ es:
+
+\begin{align}
+D_{\mathrm{KL}}(p\|q)=\sum_i p_i\log_2\frac{p_i}{q_i}.
+\end{align}
+
+Como no es simétrica y puede ser infinita si $q_i=0$, se utiliza la divergencia Jensen--Shannon. Con $m=(p+q)/2$:
+
+\begin{align}
+D_{\mathrm{JS}}(p,q)=\frac12D_{\mathrm{KL}}(p\|m)+\frac12D_{\mathrm{KL}}(q\|m).
+\end{align}
+
+Su raíz cuadrada es una distancia métrica en este contexto:
+
+\begin{align}
+d_{\mathrm{JS}}(p,q)=\sqrt{D_{\mathrm{JS}}(p,q)}.
+\end{align}
+
+La divergencia es $0$ cuando las distribuciones coinciden; valores mayores indican menos parecido. El mismo procedimiento se aplica por separado a perfiles de armonía, escala, cuartos de tono y metro, respetando la dimensión correspondiente.
+
+\subsubsection*{7. Verosimilitud relativa y percentiles}
+
+Para una canción objetivo $x$ y un corpus $C=\{c_1,\ldots,c_n\}$, se calcula una distancia $d(x,c_j)$ y se ordenan de menor a mayor. Si $d_k(x)$ es la $k$-ésima distancia más pequeña, una medida de posición relativa puede escribirse como:
+
+\begin{align}
+\operatorname{percentil}(x;C,k)=100\,\frac{\#\{j:d(x,c_j)\geq d_k(x)\}}{n}.
+\end{align}
+
+La interpretación es: qué proporción del corpus está tan lejos o más lejos que la canción objetivo bajo ese bloque de rasgos. Por eso un valor alto significa que la canción es relativamente compatible con algún vecino del corpus, no que sea una probabilidad absoluta de pertenecer al estilo.
+
+\subsubsection*{8. Metro, repetición y ciclos temporales}
+
+Si $z[t]$ es una secuencia temporal de eventos, una medida de repetición a distancia $\tau$ se obtiene mediante autocorrelación:
+
+\begin{align}
+R(\tau)=\sum_t\bigl(z[t]-\bar z\bigr)\bigl(z[t+\tau]-\bar z\bigr).
+\end{align}
+
+Una versión normalizada es:
+
+\begin{align}
+\rho(\tau)=\frac{R(\tau)}{R(0)}, \qquad -1\leq\rho(\tau)\leq1.
+\end{align}
+
+Los máximos de $\rho(\tau)$ señalan distancias temporales en las que reaparecen patrones. Si el eje temporal se discretiza en corcheas, $\tau$ se expresa en corcheas; esto permite comparar ciclos métricos aunque las canciones tengan distinta duración total. Para una métrica binaria de presencia por intervalo también puede usarse la similitud de Jaccard:
+
+\begin{align}
+J(A,B)=\frac{|A\cap B|}{|A\cup B|}.
+\end{align}
+
+\subsubsection*{9. Normalización de métricas y lectura de las gráficas}
+
+Cuando se combinan rasgos con unidades diferentes, cada valor $x$ se lleva a una escala común. Una normalización min--max es:
+
+\begin{align}
+x'=100\,\frac{x-x_{\min}}{x_{\max}-x_{\min}}.
+\end{align}
+
+Si una métrica es una distancia, se invierte para que valores altos representen mayor parecido, por ejemplo:
+
+\begin{align}
+\operatorname{parecido}=100(1-d), \qquad 0\leq d\leq1.
+\end{align}
+
+Las gráficas de bloques, radares y tarjetas deben leerse como resúmenes de distribuciones, distancias o porcentajes normalizados. Un color más intenso representa un valor mayor dentro de la escala de la propia gráfica; no implica por sí mismo mayor volumen, calidad musical ni una probabilidad absoluta.
+
+\end{document}

@@ -148,13 +148,13 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    fig.suptitle("Clasificación del álbum por corpus", x=0.5, y=0.98, ha="center", fontsize=16, fontweight="bold", color=TINTA)
-    fig.text(0.5, 0.925, "El color resume el percentil medio de tipicidad de la banda frente a cada corpus.\n"
+    fig.suptitle("Clasificación del álbum por corpus", x=0.56, y=0.98, ha="center", fontsize=16, fontweight="bold", color=TINTA)
+    fig.text(0.56, 0.925, "El color resume el percentil medio de tipicidad de la banda frente a cada corpus.\n"
              "Azul más oscuro = mayor parecido estadístico; blanco = menor parecido.", ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
-    fig.text(0.5, 0.455, "bl. = cantidad de bloques de rasgos con datos válidos para esa canción y ese corpus.",
+    fig.text(0.56, 0.455, "bl. = cantidad de bloques de rasgos con datos válidos para esa canción y ese corpus.",
              ha="center", va="top", fontsize=9, color=GRIS)
     if empate:
-        fig.text(0.5, 0.885, f"Empate entre {medias[0][0]} y {medias[1][0]}: diferencia menor de 3 puntos.", ha="center", va="top", fontsize=8.5, color=GRIS)
+        fig.text(0.56, 0.885, f"Empate entre {medias[0][0]} y {medias[1][0]}: diferencia menor de 3 puntos.", ha="center", va="top", fontsize=8.5, color=GRIS)
 
     ax2 = fig.add_subplot(gs[1])
     estilo(ax2, grid_x=True)
@@ -180,18 +180,17 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
         resumen = (f"predominante: {pred[0] if pred else '—'} ({victorias[pred[0]] if pred else 0} de {total}); "
                    f"secundario: {pred[1] if len(pred) > 1 else '—'} ({victorias[pred[1]] if len(pred) > 1 else 0})")
     ax2.set_title(f"Qué corpus gana cada bloque", loc="center", fontsize=12.5, fontweight="bold", color=TINTA, pad=20)
-    fig.text(0.5, 0.415, f"Percentil ≥ {u:g}: {resumen}; sin vecino: {sin_v}", ha="center", va="center", fontsize=8.5, color=GRIS)
+    fig.text(0.56, 0.415, f"Percentil ≥ {u:g}: {resumen}; sin vecino: {sin_v}", ha="center", va="center", fontsize=8.5, color=GRIS)
     victorias_totales = {c: sum(cuenta[b][c] for b in bl) for c in todos}
     handles = [plt.Line2D([0], [0], color=color[c], lw=8, label=f"{c} — {victorias_totales[c]} victorias") for c in todos]
     handles.append(plt.Line2D([0], [0], color=color["sin vecino"], lw=8, label=f"Sin vecino — {victorias_totales['sin vecino']} casos"))
     # La paleta queda debajo del gráfico inferior; el texto metodológico ocupa
     # una franja independiente, más cercana al gráfico y sin cruzar la leyenda.
-    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.62, 0.185), ncol=3, frameon=False, fontsize=7.8,
-               title="Paleta del gráfico inferior", title_fontsize=8.8)
-    fig.text(0.01, 0.045, "Número = canciones del álbum en que ese corpus gana un bloque.\n"
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.68, 0.185), ncol=3, frameon=False, fontsize=7.8)
+    fig.text(0.07, 0.045, "Número = canciones del álbum en que ese corpus gana un bloque.\n"
              "«Sin vecino» = ningún corpus supera el umbral.",
              fontsize=8.5, color=GRIS, ha="left", va="bottom", linespacing=1.15)
-    fig.subplots_adjust(top=0.84, bottom=0.25, left=0.08, right=0.98)
+    fig.subplots_adjust(top=0.84, bottom=0.25, left=0.14, right=0.98)
     guardar(fig, salida + "_a_clasificacion.png")
 
 

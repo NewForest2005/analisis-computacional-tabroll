@@ -1,0 +1,44 @@
+                                   Conjunto                 Tamano˜     Uso
+                                   Angine de Poitrine,       6 temas    Objeto de estudio (audio oficial)
+                                   Vol. II
+                                   Referencias corregidas    4 temas    Evaluaci´on; Yor Zarad a ciegas
+                                   de o´ıdo
+                                   Primus                    3 temas    Control sin cuartos de tono: mide el error
+                                   King Gizzard, FMB         9 temas    Rock en 24-EDO (influencia declarada)
+                                   (2017)
+                                   Zappa / King Crimson     7 / 6 / 6   Rock progresivo comparado
+                                   / Gentle Giant
+                                   RS 200 · iRealPro       400 · 1186   Corpus de rock y de jazz
+                                   Radif persa · SymbTr ·  229 · 2200   Corpus microtonales
+                                   indostan´ı                 · 50
+                                   Canci´on              Melod´ıa F    Sin octava      Bajo F      Fundamental
+                                                                            F
+                                   Mata Zyklek               66.4          67.5          83.0          95.4
+                                   Fabienk                   46.2          53.4          69.2          82.9
+                                   Sarniezz                  44.9          51.1          78.6          58.6
+                                   Yor Zarad (a ciegas)      36.8          47.7          68.6           –
+                                   Canci´on       Armon´ıa Escala       ¼ de     Metro     Veredicto
+                                                                        tono
+                                   Utzp            rock       radif     radif     rock     s´ıntesis
+                                   Mata Zyklek     rock       radif     radif       –      metro sin vecino
+                                   Yor Zarad       rock       radif     radif       –      metro sin vecino
+                                   Angor           rock       rock      radif       –      metro sin vecino
+                                   Fabienk           –        rock       –          –      3 bloques sin vecino
+                                   Sarniezz          –         –         –        rock     3 bloques sin vecino
+                                                                     1
+                                   Repertorio            Repetici´on    Campos       ¼ de tono    Metro sin
+                                                          del bucle     evitados        fijos       vecino
+                                   Angine de Poitrine      0.79–0.87     41–65 %        6/6           4/6
+                                   King Gizzard            0.50–0.82   mediana 26       2/9           2/9
+                                                                           %
+                                                                                           *
+                                   Zappa · Crimson · G.    0.38–0.69     mediana       1/19          11/19
+                                   Giant                                  5–6 %
+                                   Primus (control)        0.43–0.45     5–14 %         0/3           0/3
+                                   Sistema       Campos de            Error en los ¼          ¼ fundidos
+                                                   quintas                (cents)
+                                   19-EDO              1                   19.2               ♭2+, ♭6+...
+                                   24-EDO              2                     0                 ninguno
+                                   31-EDO              1                    7.6                ninguno
+                                   53-EDO              1                    6.9                ninguno
+                                                                    2
