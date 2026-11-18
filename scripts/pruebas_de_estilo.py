@@ -263,7 +263,8 @@ def dibujar(filas: list[dict], salida: str) -> None:
             ax.text(j + 0.5, y + 0.3, dato, ha="center", va="center", fontsize=6.6, color=letra[v["veredicto"]], linespacing=1.15)
     for j, e in enumerate(ESTILOS):
         ax.text(j + 0.5, nf + 0.12, e.replace(" ", "\n", 1) if len(e) > 14 else e, ha="center", va="bottom", fontsize=10, color=tinta)
-    fig.text(0.01, 0.01, "Umbrales propuestos por este trabajo a partir de cifras publicadas (de Clercq y Temperley 2011; Temperley 2009; Broze y Shanahan 2013). "
+    fig.suptitle("Veredictos de estilo: armonía y melodía de cada canción", x=0.01, ha="left", fontsize=13, color=tinta)
+    fig.text(0.01, 0.01, "Cada celda muestra el veredicto y la medida usada. Umbrales propuestos por este trabajo a partir de cifras publicadas (de Clercq y Temperley 2011; Temperley 2009; Broze y Shanahan 2013). "
              "Solo compases confiables.", fontsize=7.5, color=gris)
     fig.subplots_adjust(left=0.13, right=0.995, top=0.86, bottom=0.07)
     fig.savefig(salida + "_veredictos.png", dpi=200, facecolor=fondo)
@@ -283,7 +284,7 @@ def dibujar(filas: list[dict], salida: str) -> None:
     ax.set_yticks(range(nf), [nombre(r["corrida"]) for r in filas][::-1], fontsize=10)
     ax.set_xlim(0, max(max(r[c] for r in filas) for c, _, _ in refs) * 1.18)
     ax.set_xlabel("Distancia de Jensen-Shannon entre las fundamentales de la canción y las del estilo (0 = iguales)", fontsize=9, color=gris)
-    ax.set_title("¿De qué estilo están más cerca las fundamentales de cada canción?", loc="left", fontsize=12, color=tinta)
+    ax.set_title("Distancia armónica de cada canción respecto a los estilos", loc="left", fontsize=12, color=tinta)
     ax.legend(frameon=False, fontsize=9, loc="lower right")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)

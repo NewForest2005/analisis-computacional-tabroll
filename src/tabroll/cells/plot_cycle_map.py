@@ -28,6 +28,8 @@ def plot_cycle_map(groups, duration, filename='mapa_ciclos', layers=None):
 
     ax.set_xlim(0, duration)
     ax.set_ylim(rows - 0.5, -0.5)
+    ax.set_title('Mapa temporal de ciclos y capas', loc='left', color='white', fontsize=13, pad=12)
+    ax.set_xlabel('Tiempo de la canción (mm:ss)', color='white', fontsize=9)
     ax.set_yticks([])
 
     ax.set_xticks(np.arange(0, duration, 30))

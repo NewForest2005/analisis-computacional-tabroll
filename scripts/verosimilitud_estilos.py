@@ -177,9 +177,11 @@ def dibujar(filas: list[dict], C: dict, salida: str) -> None:
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Verosimilitud de la armonía de cada canción en cada estilo\n(% de piezas del estilo más raras que la canción: 50 = típica, 0 = más rara que todas)",
+    ax.set_title("Verosimilitud de la armonía por canción y estilo",
                  loc="left", fontsize=11.5, color=tinta, pad=46)
-    fig.text(0.01, 0.01, "Verosimilitud = % de piezas del estilo que quedan igual o más lejos de su centro que la canción (media de fundamentales y de cambios).\nCorpus: RS 200 (de Clercq y Temperley), "
+    ax.set_xlabel("Estilo del corpus", color=gris)
+    ax.set_ylabel("Canción", color=gris)
+    fig.text(0.01, 0.01, "Escala: % de piezas del estilo igual o más alejadas que la canción; 50 = pieza típica y 0 = más rara que todas. Corpus: RS 200 (de Clercq y Temperley), "
              "Kostka-Payne (Temperley 2009), iRealPro (Shanahan y Broze), 9 álbumes de Hooktheory.\n«¼ %»: tiempo con la fundamental en cuarto de tono, "
              "que se llevó al grado de abajo porque ningún corpus tiene cuartos de tono.", fontsize=7, color=gris)
     fig.tight_layout(rect=(0, 0.06, 1, 1))
@@ -210,14 +212,14 @@ def dibujar(filas: list[dict], C: dict, salida: str) -> None:
         pass
     ax.set_xlabel("Componente 1 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[0][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[0]))[:3]) + ")", color=gris)
     ax.set_ylabel("Componente 2 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[1][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[1]))[:3]) + ")", color=gris)
-    ax.set_title("Dónde caen las canciones entre las piezas de cada estilo (según qué fundamentales usan)", loc="left", fontsize=12, color=tinta)
+    ax.set_title("Posición de las canciones según sus fundamentales armónicas", loc="left", fontsize=12, color=tinta)
     ax.legend(frameon=False, fontsize=9, markerscale=2.2, loc="best")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)
     ax.grid(color="#e4e3df", lw=0.7)
     for s in ax.spines.values():
         s.set_visible(False)
-    fig.text(0.01, 0.01, "★ Angine de Poitrine · ◆ Primus. Componentes principales de la raíz cuadrada del reparto de fundamentales (12 grados).", fontsize=8, color=gris)
+    fig.text(0.01, 0.01, "Ejes = componentes principales del reparto de fundamentales en 12 grados; ★ = banda y ◆ = Primus.", fontsize=8, color=gris)
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     fig.savefig(salida + "_mapa.png", dpi=200, facecolor=fondo)
     plt.close(fig)

@@ -84,9 +84,11 @@ def main() -> None:
         ax.set_axisbelow(True)
         for s in ax.spines.values():
             s.set_visible(False)
+    fig.suptitle("Comparación de métricas estructurales entre canciones", x=0.012, ha="left", fontsize=14, color=tinta)
+    fig.text(0.012, 0.955, "Barras: valores crudos de la canción; unidades según cada panel. Colores = grupos de comparación.", fontsize=8.5, color=gris)
     for k, g in enumerate(grupos):
         fig.text(0.012 + 0.16 * k, 0.975, "■ " + g, color=COLORES[k % 4], fontsize=11, fontweight="bold", va="top")
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    fig.tight_layout(rect=(0, 0, 1, 0.91))
     fig.savefig(a.salida + ".png", dpi=200, facecolor=fondo)
     print(f"{a.salida}.png y .csv · {len(filas)} canciones · grupos: {', '.join(grupos)}")
 

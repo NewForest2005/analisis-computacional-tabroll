@@ -545,8 +545,9 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Verosimilitud por bloques de rasgos y conjunta\n(% de piezas del corpus más raras que la canción; en negrita, ≥ "
-                 f"{u:g} = típica)", loc="left", fontsize=12, color=tinta, pad=58)
+    ax.set_title("Verosimilitud por bloque de rasgos y conjunta", loc="left", fontsize=12, color=tinta, pad=58)
+    ax.set_xlabel("Bloque de rasgo y corpus de comparación", color=gris)
+    ax.set_ylabel("Canción", color=gris)
     fig.text(0.01, 0.01, f"★ Angine de Poitrine · ◆ control (Primus)" + (" · ▲ comparado (King Gizzard u otro)" if any(f["grupo"] == "comparar" for f in filas) else "") + ". «—»: el corpus no tiene ese bloque. Corpus con «*»: menos de 100 piezas, no cuenta para el veredicto.\n"
              f"Modelo de medición: ε = {eps:.2f} de fuga a ¼ de tono y η = {eta:.2f} de "
              "compases mal leídos (lo que el cuaderno marca en el control), aplicados a cada pieza de corpus.\nPercentil: % de piezas del corpus cuya "
@@ -595,8 +596,7 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     for k, fam in enumerate(fams):
         ax.add_patch(plt.Rectangle((0.1 + 1.75 * k, len(filas) - 0.05), 0.3, 0.22, color=FAMILIA_COLOR.get(fam, "#6250d6")))
         ax.text(0.47 + 1.75 * k, len(filas) + 0.06, fam, va="center", fontsize=8.5, color=gris)
-    ax.set_title("¿De qué lenguaje viene cada bloque? Ficha llena = típico en ese corpus (percentil ≥ "
-                 f"{u:g}); vacía = ni el mejor corpus lo explica", loc="left", fontsize=11.5, color=tinta)
+    ax.set_title("Lenguaje más probable para cada bloque de rasgos", loc="left", fontsize=11.5, color=tinta)
     nota = (f"Cuartos de tono: z = concentración en los dos grados en ¼ de tono más usados frente al control ({ctl[0]:.0f} ± {ctl[1]:.0f} %); "
             "z ≥ 2 = grado fijo de la escala (recuadro punteado: no hay corpus microtonal cargado para compararlo).\n")
     nota += "Calibración (piezas reales de un corpus, medidas igual): " + ";\n    ".join(

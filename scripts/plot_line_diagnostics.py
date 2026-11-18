@@ -105,7 +105,7 @@ def plot_diagnostics(run_dir: Path, reference_path: Path, output: Path | None = 
 
     hop = diagnostics["hop"]
     sr = diagnostics["sample_rate"]
-    for name, color, label in (("melody_n", "#000000", "Tabroll: línea actualmente elegida"), ("melody", "#7f7f7f", "Tabroll: línea para ciclos")):
+    for name, color, label in (("melody_n", "#000000", "Línea melódica elegida"), ("melody", "#7f7f7f", "Línea usada para ciclos")):
         values = diagnostics.get(name)
         if not values:
             continue
@@ -119,7 +119,7 @@ def plot_diagnostics(run_dir: Path, reference_path: Path, output: Path | None = 
     ax.set_xlim(offset, offset + max_bar * seconds_per_beat)
     ax.set_xlabel("Tiempo del audio (s)")
     ax.set_ylabel("Altura en MIDI (sonido real)")
-    ax.set_title(f"{reference['title']} · líneas del GP frente al análisis Tabroll")
+    ax.set_title(f"{reference['title']}: referencia escrita frente a detección de audio")
     ax.grid(axis="y", alpha=0.2)
     ax.legend(loc="upper left", ncol=2, fontsize=9)
     output = output or run_dir / "line_diagnostics.png"

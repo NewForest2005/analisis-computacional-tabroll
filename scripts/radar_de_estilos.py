@@ -116,11 +116,10 @@ def dibujar(armonia: dict, melodia: dict, salida: Path, titulo: str, sub: str) -
     fig = plt.figure(figsize=(17, 9.2), facecolor=fondo)
     panel(fig.add_axes([0.11, 0.14, 0.31, 0.57], polar=True), armonia, "Estructura armónica", "#2a78d6")
     panel(fig.add_axes([0.60, 0.14, 0.31, 0.57], polar=True), melodia, "Estructura melódica", "#eb6834")
-    fig.text(0.04, 0.95, titulo, fontsize=18, fontweight="bold", color=tinta)
+    fig.text(0.04, 0.95, f"{titulo}: parecido estilístico de la armonía y la melodía", fontsize=17, fontweight="bold", color=tinta)
     fig.text(0.04, 0.915, sub, fontsize=10.5, color=gris)
-    fig.text(0.04, 0.025, "Parecido con cada estilo o rasgo, de 0 a 100. Primera referencia: cada punta usa una fórmula sencilla propia (ver el script), así que las puntas no "
-             "están en la misma escala.\nArmonía: rock, práctica común, jazz y pop = verosimilitud contra su corpus (RS 200, Kostka-Payne, iRealPro, Hooktheory) "
-             "si se pasó --verosimilitud. Melodía: la voz aguda del cuaderno.", fontsize=8, color=gris)
+    fig.text(0.04, 0.025, "Escala radial: 0–100 (más lejos = mayor parecido). Cada punta es un estilo o rasgo; las fórmulas no son comparables entre puntas. "
+             "Panel azul = armonía; panel naranja = melodía.", fontsize=8, color=gris)
     fig.savefig(salida, dpi=200, facecolor=fondo)
     plt.close(fig)
 

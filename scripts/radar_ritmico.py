@@ -168,10 +168,10 @@ def dibujar(filas: list[dict], salida: Path, titulo: str, sub: str) -> None:
         ax.text(a, 108, n, ha=ha, va=va, fontsize=10, color=tinta, fontweight="bold", linespacing=1.1)
     if not una:
         ax.legend(loc="upper left", bbox_to_anchor=(-0.32, 1.2), frameon=False, fontsize=9.5)
-    fig.text(0.05, 0.955, titulo, fontsize=17, fontweight="bold", color=tinta)
+    fig.text(0.05, 0.955, f"{titulo}: perfil de estructura rítmica", fontsize=17, fontweight="bold", color=tinta)
     fig.text(0.05, 0.92, sub, fontsize=10, color=gris)
-    fig.text(0.05, 0.025, "Rasgos rítmicos de 0 a 100 (ver el script). Entre paréntesis, el estilo al que se asocia cada rasgo: no hay cifras publicadas\n"
-             "para medir el parecido. Compases detectados por el cuaderno, sin validar contra la partitura.", fontsize=8, color=gris)
+    fig.text(0.05, 0.025, "Escala radial: 0–100; cada punta es un rasgo rítmico y no una medida de parecido estadístico. "
+             "Los compases son los detectados en el audio.", fontsize=8, color=gris)
     fig.savefig(salida, dpi=200, facecolor=fondo)
     plt.close(fig)
 

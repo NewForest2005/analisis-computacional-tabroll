@@ -144,7 +144,7 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Percentil medio de tipicidad por corpus (0 = nada típico, 50 = pieza mediana)"
+    ax.set_title("Clasificación del álbum por corpus: percentil medio de tipicidad (0–100)"
                  + (f" · empate entre {medias[0][0]} y {medias[1][0]} (menos de 3 puntos)" if empate else ""), loc="left", fontsize=10.5, color=TINTA, pad=26)
 
     ax2 = fig.add_subplot(gs[1])
@@ -218,7 +218,7 @@ def fig_perfil(runs: dict, salida: str) -> None:
         ax.set_title(f"{titulo} ({unidad})", loc="left", fontsize=9.5, color=TINTA, pad=3)
     h, l = ejes[0].get_legend_handles_labels()
     fig.legend(h, l, loc="upper left", bbox_to_anchor=(0.01, 0.955), ncol=3, fontsize=8, frameon=False)
-    fig.suptitle("Perfil del disco con las medidas de Hooktheory, medido igual en los tres repertorios (raya = mediana)", x=0.01, ha="left",
+    fig.suptitle("Perfil estructural del álbum frente a Primus y King Gizzard", x=0.01, ha="left",
                  fontsize=11, color=TINTA)
     fig.tight_layout(rect=(0, 0, 1, 0.92))
     guardar(fig, salida + "_b_perfil.png")
@@ -297,7 +297,7 @@ def fig_circulo(runs: list[Path], salida: str) -> None:
     dibujar_circulo(fig.add_subplot(gs[:, :2]), alt_tot, tr_tot, "Vol. II completo (media de las canciones)", True)
     for i, (n, a, t) in enumerate(datos[:6]):
         dibujar_circulo(fig.add_subplot(gs[i // 3, 2 + i % 3]), a, t, n, False)
-    fig.suptitle("Los dos campos de quintas del sistema de 24 notas (Hába): anillo dorado = 12 grados regulares, anillo azul = 12 en cuarto de tono",
+    fig.suptitle("Círculo de quintas en 24-EDO: campos regulares y de cuarto de tono",
                  x=0.01, ha="left", fontsize=11, color=TINTA)
     fig.text(0.01, 0.015, "En 24-EDO la quinta mide 14 pasos y mcd(14, 24) = 2: el ciclo de quintas nunca pasa de un campo al otro. Cada grado «+» está junto a "
              "su vecino regular. Área = tiempo de la melodía en el grado; líneas = pasos melódicos más frecuentes (azul = cambia de campo). "
@@ -344,7 +344,7 @@ def fig_campos_tiempo(compases: list[dict], salida: str) -> None:
     cb = fig.colorbar(sm, ax=ejes[:, 0], orientation="horizontal", fraction=0.025, pad=0.12, aspect=50)
     cb.set_label("% del compás con cuarto de tono (franja de color); barra negra = mezcla vertical de campos (alto = 50 % o más)", fontsize=8, color=GRIS)
     cb.ax.tick_params(labelsize=7.5, colors=GRIS)
-    fig.suptitle("Dónde aparecen los cuartos de tono y dónde se mezclan los dos campos, compás por compás", x=0.01, ha="left", fontsize=11, color=TINTA)
+    fig.suptitle("Uso temporal de cuartos de tono y mezcla de campos", x=0.01, ha="left", fontsize=11, color=TINTA)
     guardar(fig, salida + "_d_campos_tiempo.png")
 
 
@@ -391,7 +391,7 @@ def fig_campos_resumen(filas: list[dict], salida: str, alfa: float) -> None:
     h = [Line2D([], [], marker="o", ls="", color=GRUPO_COLOR[g], label=et) for g, et in grupos] + \
         [Line2D([], [], marker="o", ls="", markerfacecolor=FONDO, markeredgecolor=GRIS, label=f"no significativo (p ≥ {alfa:g})")]
     fig.legend(handles=h, loc="upper left", bbox_to_anchor=(0.01, 0.94), ncol=4, fontsize=8, frameon=False)
-    fig.suptitle("Desplazamiento de campos: las tres pruebas (franja verde = rango de Primus, piso de error de medición)", x=0.01, ha="left",
+    fig.suptitle("Separación de los campos de Hába: tres pruebas frente al control", x=0.01, ha="left",
                  fontsize=11, color=TINTA)
     fig.tight_layout(rect=(0, 0, 1, 0.88))
     guardar(fig, salida + "_e_campos_resumen.png")
@@ -427,7 +427,7 @@ def fig_bucle(fases: list[dict], salida: str, extra: list[str]) -> None:
     from matplotlib.lines import Line2D
     h = [Line2D([], [], marker="o", ls="", color=c, label=f"compás de {p}") for p, c in col_pulsos.items()]
     fig.legend(handles=h, loc="upper left", bbox_to_anchor=(0.01, 0.955), ncol=6, fontsize=8, frameon=False)
-    fig.suptitle("En qué punto del riff empieza cada compás (eje y: fracción de la vuelta del bucle; eje x: minuto)", x=0.01, ha="left",
+    fig.suptitle("Fase del riff al inicio de cada compás", x=0.01, ha="left",
                  fontsize=11, color=TINTA)
     fig.text(0.01, 0.01, "Fase fija = el compás mide lo mismo que el bucle o lo divide. Fase que avanza en escalera = compás y bucle de largos distintos "
              "(polímetro o compás mal leído).\nSalto aislado tras un silencio = el riff vuelve a entrar por otro punto. Sin punto = fase ambigua o poco sonido.", fontsize=7.5, color=GRIS)

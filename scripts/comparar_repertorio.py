@@ -125,7 +125,7 @@ def dibujar(a, R, filas, escala, corto) -> None:
     etiquetas = [f"{corto(c)}\n({' '.join(R[c]['top'])})" for c in cols]
     filas_b = [f"{corto(b)}  ({' '.join(R[b]['top'])})" for b in a.banda]
     fig, ejes = plt.subplots(1, 2, figsize=(4 + 2.1 * len(cols), 1.8 + 0.62 * len(a.banda)), facecolor=fondo)
-    for ax, k, titulo in ((ejes[0], "cuartos", "Qué grados en ¼ de tono se usan"), (ejes[1], "todo", "Todo a la vez (armonía, ¼ de tono y metro)")):
+    for ax, k, titulo in ((ejes[0], "cuartos", "Distancia microtonal: grados en ¼ de tono"), (ejes[1], "todo", "Distancia conjunta: armonía, ¼ de tono y metro")):
         M = np.array([[next(f[k] for f in filas if f["cancion"] == corto(b) and f["comparada"] == corto(c)) for c in cols] for b in a.banda])
         ax.imshow(M, cmap=cmap, vmin=0, vmax=0.8, aspect="auto")
         for i in range(M.shape[0]):
@@ -144,7 +144,8 @@ def dibujar(a, R, filas, escala, corto) -> None:
         ax.text(len(a.repertorio) / 2 - 0.5, M.shape[0] - 0.3 + 0.75, a.nombre, ha="center", fontsize=9, color=gris)
         if a.control:
             ax.text(len(a.repertorio) + len(a.control) / 2 - 0.5, M.shape[0] - 0.3 + 0.75, "Primus (control)", ha="center", fontsize=9, color=gris)
-    fig.text(0.01, 0.01, f"Distancia de Jensen-Shannon entre canciones (0 = iguales; más oscuro = más parecido); en negrita, el tema de {a.nombre} más cercano. "
+    fig.suptitle(f"Comparación de {a.nombre} con su repertorio y el control Primus", x=0.01, ha="left", fontsize=13, color=tinta)
+    fig.text(0.01, 0.01, f"Distancia de Jensen-Shannon (0 = iguales; más oscuro = más parecido); en negrita, el tema de {a.nombre} más cercano. "
              f"Entre paréntesis, los dos grados en ¼ de tono más usados.\n«Todo a la vez» = la mayor de las tres distancias. Escala: entre temas de {a.nombre} "
              f"{min(escala['entre_repertorio']):.2f}–{max(escala['entre_repertorio']):.2f}; entre temas de la banda {min(escala['entre_banda']):.2f}–{max(escala['entre_banda']):.2f}.",
              fontsize=7.5, color=gris)

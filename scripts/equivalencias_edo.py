@@ -146,8 +146,10 @@ def main() -> None:
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Error (cents) de cada grado que usa el disco al pasarlo a otro sistema (debajo: % del tiempo de la melodía)",
+    ax.set_title("Error de afinación al proyectar la melodía entre sistemas EDO",
                  loc="left", fontsize=10, color="#0b0b0b")
+    ax.set_xlabel("Grado de la melodía en 24-EDO", color="#52514e")
+    ax.set_ylabel("Sistema de afinación", color="#52514e")
     fig.tight_layout()
     fig.savefig(a.salida + ".png", dpi=200, facecolor="#fcfcfb")
     print(f"→ {a.salida}.md/.json/.png")

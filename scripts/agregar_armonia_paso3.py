@@ -135,7 +135,7 @@ def draw_harmony_circle(circle, path, title=None):
     ax.set_ylim(-2.05, 1.95)
     ax.set_aspect('equal')
     ax.axis('off')
-    ax.set_title(title or f"Círculo armónico: {circle.get('cancion', '')}", color=INK, fontsize=13, loc='left')
+    ax.set_title(title or f"{circle.get('cancion', '')}: distribución armónica y transiciones en 24-EDO", color=INK, fontsize=13, loc='left')
     mov = ', '.join(f'{k} {round(100 * v)}%' for k, v in circle['movimientos'].items() if v > 0) or 'sin cambios'
     ax.text(-1.9, -1.98, f"Centro {circle.get('centro', '')} | modo {circle.get('modo', '')} | confiable {circle['tiempo_confiable']}% del tiempo\\n"
                          f"Movimientos: {mov} | cambios por compás {circle['cambios_por_compas']}", fontsize=8.5, color='#52514e', va='bottom')

@@ -1,0 +1,166 @@
+HISTORIAL DEL CUADERNO Y DEL PROYECTO
+=====================================
+
+Repositorio: analisis-computacional-tabroll
+Periodo cubierto: 2026-11-07 a 2026-11-16
+Fuente: git log --reverse del repositorio local
+
+Resumen general
+---------------
+
+El proyecto pasó de ser un cuaderno de Colab que generaba un tabroll para una canción a una herramienta reproducible
+para analizar melodía, armonía, ciclos, métrica y microtonalidad en 24-EDO. El historial se puede leer en estas etapas:
+
+1. Base del cuaderno y extracción de celdas (7–8 nov.)
+   Se incorporó el cuaderno completo, la estructura Python del paquete, la documentación de arquitectura y el índice de
+   celdas. Las celdas se extrajeron a src/tabroll/cells/ para poder probarlas y modificarlas fuera del notebook.
+   Se añadieron Makefile, pyproject, run_song.py, pruebas de extracción y pruebas básicas del flujo completo.
+   El cuaderno se estabilizó para cargar audio, separar guitarra y bajo con Demucs, detectar altura y compases, y
+   guardar salidas reproducibles.
+
+2. Selección de línea melódica y evaluación (8–9 nov.)
+   Se añadieron diagnósticos de línea, alineación con Guitar Pro, selección de pista melódica y visualización de errores.
+   Se incorporaron las partituras y referencias de Sarniezz, Mata Zyklek y Fabienk, junto con pruebas de ritmo,
+   alineación y evaluación melódica. La evaluación quedó basada en ataques y alturas en 24-EDO, separando melodía y bajo.
+
+3. Armonía y círculo de 24 notas (9–10 nov.)
+   Se añadió la documentación de armonía, la extracción de fundamentales y sonoridades por compás, el círculo armónico,
+   la comparación de círculos y el completado de referencias. Se incorporaron funciones, progresiones, ejes de Lendvai,
+   centros locales y ajustes de ruido/cambios. El cuaderno empezó a guardar armonia.json, circulo.json, tablas por compás
+   y figuras de armonía en harmony_outputs/.
+
+4. Ciclos, capas y tabroll ampliado (10–11 nov.)
+   Se añadieron diagnósticos de capas y repetición, figuras melódicas, columnas del tabroll, patrones de ciclo y ejes.
+   El tabroll pasó a representar la armonía en 24-EDO y a marcar columnas estructurales. También se incorporaron scripts
+   para limpiar notas, localizar ciclos y comparar las figuras armónicas.
+
+5. Reproducibilidad y primera evaluación ciega (13–14 nov.)
+   Se documentaron semillas, separaciones reproducibles y limitaciones de la referencia. Se añadió el cache de
+   stereo_salience para evitar repetir la STFT y los filtros armónicos. Se actualizaron las referencias corregidas de
+   Sarniezz, Mata Zyklek y Fabienk y se documentaron las rondas de arbitraje a ciegas.
+   También se añadieron alineaciones, referencias completas de armonía y materiales de trabajo de los pasos 1–4.
+
+6. Tarjetas, estilos y ritmo (14–15 nov.)
+   Se incorporaron tarjeta_cancion.py, tira_de_ciclos.py, comparar_tarjetas.py y el script todo.py. El proyecto empezó a
+   producir resúmenes por canción, índices de gráficas, tarjetas comparables y radares de estilo y estructura rítmica.
+   Se añadieron las pruebas de estilo, los radares armónico/melódico y rítmico, la métrica microtonal y la documentación
+   de la evolución de la tesis.
+
+7. Corpus y verosimilitud por bloques (15 nov.)
+   Se incorporaron adaptadores para Rock/RS200, práctica común, jazz/iRealPro, pop y Kostka–Payne. Después se añadieron
+   lectores para Radif, SymbTr, The Session y el corpus de transcripciones hindustaníes. La comparación pasó de
+   umbrales propuestos a percentiles y vecinos reales por bloques de armonía, escala, cuartos de tono y metro.
+   Se añadieron verosimilitud_por_bloques.py, corpus_bloques.py, documentación de límites, filtros de error medidos con
+   Primus y salidas separadas para sensibilidad y repertorios comparados.
+
+8. Visualización interactiva y repertorios externos (15–16 nov.)
+   Se añadió la exportación del círculo de 24 notas a una página web interactiva, con selección de guitarra, bajo,
+   mezcla y batería, además de líneas de acordes entre notas simultáneas. Se incorporó ciclos_metricos.py para detectar
+   ciclos métricos largos y la fase del riff frente al compás.
+   Se añadieron equivalencias entre 12, 19, 22, 24, 31, 36, 53 y 72 EDO, las figuras del álbum y los campos de Hába.
+   El proyecto se extendió a King Gizzard, Frank Zappa, King Crimson y Gentle Giant como repertorios comparados, siempre
+   separados de Primus, que queda como control de error de medición.
+
+9. Regla combinada de grado fijo (16 nov.)
+   El filtro microtonal actual exige simultáneamente concentración frente a Primus, al menos 10 segundos en cuarto de
+   tono y separación significativa de los dos campos de Hába. Se añadieron --min-segundos-cuartos,
+   --efecto-campos, --alfa-campos y permutaciones nulas. Las salidas nuevas de repertorios se guardan en outputs/prog/
+   para no alterar las cifras del artículo.
+
+Estado conceptual al cierre del historial
+------------------------------------------
+
+- El cuaderno transcribe melodía y bajo en una representación de 24-EDO, pero su precisión depende de la mezcla, la
+  separación de fuentes y la complejidad de cada canción.
+- La armonía se guarda por compás y puede verse como tabroll, círculo armónico, etiquetas funcionales y tablas.
+- Los ciclos del looper y los ciclos métricos se analizan por separado; la fase del riff frente al compás se conserva.
+- Primus se usa para estimar la fuga de medición hacia cuartos de tono y el error de métrica.
+- Radif se usa como vecino microtonal escrito; rock, jazz, pop, SymbTr y otros corpus cubren bloques diferentes.
+- King Gizzard, Zappa, King Crimson y Gentle Giant se comparan como repertorios, no como controles.
+- Las cifras nuevas de repertorios externos deben ir a outputs/prog/; outputs/bloques_v8.*, campos_haba.*,
+  ciclos_metricos*, comparar_kg*, figuras_album_* y equivalencias_edo.* conservan las cifras del artículo.
+
+Inventario completo de commits, en orden cronológico
+----------------------------------------------------
+
+2026-11-07
+  9fb7080  base inicial: notebook, celdas 001–094, paquete, README y tests iniciales.
+  13494c0  extracción y normalización de celdas, índice y estructura del notebook.
+  6b87d9f  Makefile, arquitectura, run_song.py y pruebas del flujo.
+
+2026-11-08
+  512c51a  integración de la primera salida de Sarniezz y ajustes del notebook/runner.
+  a1e36d0  reorganización amplia del proyecto, referencias iniciales y salidas reproducibles.
+  0b3a1f9  diagnóstico de líneas y mejoras de run_song.py.
+  ac0da26  selección de pista melódica y sus tests.
+  1c883c5  alineación GP–audio, partituras y diagnósticos.
+  0a6960e  diagnóstico de ritmo y líneas.
+  eede75b  ajustes del notebook y de las celdas de análisis.
+  0aeeeb8  incorporación de archivos GP y diagnóstico comprimido.
+
+2026-11-09
+  d46ab13  refinamiento del notebook, altura y flujo de ejecución.
+  5cc22b2  documentación/índice de celdas y ajustes de extracción.
+  12151d4  limpieza de celdas y notebook.
+  4941810  incorporación del historial de conversación.
+  27c7008  actualización menor del README.
+  6c12a0a  evaluación melódica, referencias corregidas y alineaciones.
+  958f9df  merge de la rama principal.
+  1182223  primera integración formal de armonía, documentación y tests.
+
+2026-11-10
+  235a25c  armonía paso 2/3, comparación de círculos y evaluación completa.
+  b842ad0  ajustes del círculo armónico y tests.
+  46143f0  ruido, cambios y validación del círculo.
+  40e1e0f  limpieza general del proyecto y del notebook.
+  b8be900  diagnósticos de capas, repetición y selección.
+  3bfbdf2  diagnósticos adicionales, canales y edad del audio.
+
+2026-11-11
+  e14758b  funciones auxiliares, Basic Pitch, fusión y pruebas de melodía.
+  0b06fe0  ejes de Lendvai, funciones/progresiones y tabroll armónico en 24-EDO.
+  987e111  columnas, figuras melódicas, patrones de ciclo y documentación ampliada.
+
+2026-11-13
+  3587924  centros locales y reproducibilidad; preparación de corridas reproducibles.
+  cd0a4c9  cache de saliencia estéreo y test de equivalencia con/sin cache.
+
+2026-11-14
+  afcbb6d  arbitraje a ciegas y correcciones de partituras.
+  d0f0347  incorporación de corpus de referencia y materiales de trabajo.
+  e92ec57  referencias completas de melodía/armonía, corpus y documentos de evaluación.
+  6f8b210  tarjetas de canción, tira de ciclos, comparación de tarjetas y ajustes del notebook.
+
+2026-11-15
+  5cece46  primer Makefile/todo para reunir las gráficas.
+  de5e66b  pruebas de estilo e integración de todo.py.
+  734a583  radares de estilo y ritmo, y versión ampliada de todo.py.
+  c9e40b0  corpus de referencia adicionales.
+  0a8eb8a  corpus adapters y ampliación de medidas de estilo.
+  0b4443f  corpus_estilos.py y verosimilitud_estilos.py.
+  6487998  microtonal.py, documentación de corpus y evolución de la tesis.
+  b46eb2d  partituras, PDFs y diagnósticos de referencia.
+  23a7b59  actualización del README.
+  0fac9b5  corpus_bloques.py y verosimilitud_por_bloques.py iniciales.
+  b62ed57  resúmenes de corpus clásica, jazz, pop y rock.
+  664176a  lectores de corpus, README, límites y bloque v3.
+  0923b84  Radif, SymbTr, The Session y correcciones del test por bloques.
+  86adb7d  Hindustani, comparar_repertorio, exportación del círculo web y mejoras del test.
+
+2026-11-16
+  f2b1f10  ciclos_metricos.py.
+  0da6124  referencias de Hába y líneas de acordes en el círculo web.
+  cb5503d  bibliografía completa y evolución de la tesis.
+  d233bf8  pasos 1–5: campos de Hába, ciclos, repertorios, equivalencias EDO y figuras del álbum.
+  41d35fd  paso 3c: King Crimson y Gentle Giant como repertorios separados.
+  e8a7eb8  filtro de cuartos de tono, escucha de Red y materiales de Zappa/King Crimson.
+  b150a76  regla combinada de grado fijo y materiales de Gentle Giant.
+
+Nota sobre los mensajes
+-----------------------
+
+Varios commits conservan mensajes genéricos como «...» o «///». En esos casos el resumen anterior se reconstruyó a
+partir de los archivos modificados y de la secuencia del desarrollo. Los hashes permiten consultar el diff exacto con:
+
+  git show <hash>
+

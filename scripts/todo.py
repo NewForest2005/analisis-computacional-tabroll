@@ -6,8 +6,8 @@
 
 Pasos, por canción: (1) cuaderno completo con run_song.py, solo con --correr o si la canción no tiene corrida;
 (2) tarjeta resumen; (3) tira de ciclos. Al final: (4) comparación de tarjetas y pruebas de estilo de la banda (y de --otras);
-(5) copia a outputs/graficas_<fecha>/<canción>/ el tabroll completo, el mapa de armonía, el círculo armónico, los
-ciclos, la tarjeta y la tira, y escribe un índice (indice.md) y las líneas de las tarjetas (tarjetas.jsonl).
+(5) copia a outputs/graficas_<fecha>/<canción>/ el mapa de armonía, el círculo armónico, los ciclos, la tarjeta y la tira,
+y escribe un índice (indice.md) y las líneas de las tarjetas (tarjetas.jsonl). No copia el tabroll.
 
 Si un paso falla en una canción, sigue con las demás y lo dice al final. No cambia el cuaderno ni las referencias.
 Utzp entra como una canción más: desde que sus salidas se usan aquí, deja de servir como prueba a ciegas.
@@ -24,8 +24,8 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 CANCIONES = [("Sarniezz", "sarniezz"), ("Mata Zyklek", "mata_zyklek"), ("Fabienk", "fabienk"), ("Yor Zarad", "yor_zarad"), ("Utzp", "utzp")]
-PATRONES = ["tabroll24_completo*.png", "angine_harmony_completo*.png", "circulo_armonico*.png", "mapa_ciclos*.png", "ciclo_*.png",
-            "tarjeta*.png", "tira_de_ciclos.png", "radar_de_estilos.png", "radar_ritmico.png"]
+PATRONES = ["circulo_armonico*.png", "mapa_ciclos*.png", "ciclo_*.png", "tarjeta*.png", "tira_de_ciclos.png",
+            "radar_de_estilos.png", "radar_ritmico.png"]
 
 
 def mas_reciente(salidas: Path, clave: str) -> Path | None:

@@ -62,8 +62,8 @@ def dibujar(fs: list[dict], salida: Path, titulo: str, centro: str | None, modo:
     ax.set_ylim(0, alto)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.text(0.4, alto - 0.5, titulo, fontsize=15, fontweight="bold", color=tinta, va="center")
-    ax.text(0.4, alto - 0.9, f"centro {centro or '—'} · modo {modo or '—'} · color = grado de la fundamental", fontsize=9.5, color=gris, va="center")
+    ax.text(0.4, alto - 0.5, f"{titulo}: ciclos armónicos repetidos", fontsize=15, fontweight="bold", color=tinta, va="center")
+    ax.text(0.4, alto - 0.9, f"Centro {centro or '—'} · modo {modo or '—'} · color = grado de la fundamental · × = vueltas · s = duración de vuelta", fontsize=9.5, color=gris, va="center")
     for k, f in enumerate(fs):
         y = alto - 1.9 - 1.35 * k
         ax.text(0.4, y, f"{f['patron']}", fontsize=13, fontweight="bold", color=tinta, va="center")
