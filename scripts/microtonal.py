@@ -105,6 +105,7 @@ def dibujar(filas: list[dict], salida: str) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import textwrap
     import numpy as np
 
     tinta, gris, fondo, rejilla = "#0b0b0b", "#52514e", "#fcfcfb", "#e4e3df"
@@ -140,7 +141,7 @@ def dibujar(filas: list[dict], salida: str) -> None:
     n = len(filas)
     cols = min(n, 4)
     filas_g = (n + cols - 1) // cols
-    fig = plt.figure(figsize=(4.2 * cols, 4.6 * filas_g + 0.6), facecolor=fondo)
+    fig = plt.figure(figsize=(4.2 * cols, 6.3 * filas_g + 1.8), facecolor=fondo)
     ang = np.linspace(0, 2 * np.pi, 24, endpoint=False)
     for k, f in enumerate(filas):
         ax = fig.add_subplot(filas_g, cols, k + 1, polar=True)
@@ -148,15 +149,22 @@ def dibujar(filas: list[dict], salida: str) -> None:
         ax.set_theta_direction(-1)
         v = np.array([f["escala24"][g] for g in GRADOS24])
         ax.bar(ang, np.sqrt(v), width=2 * np.pi / 24 * 0.85, color=[naranja if i % 2 else azul for i in range(24)], alpha=0.9)
-        ax.set_xticks(ang, [g if i % 2 == 0 else "" for i, g in enumerate(GRADOS24)], fontsize=8, color=tinta)
+        ax.set_xticks(ang, [g if i % 2 == 0 else "" for i, g in enumerate(GRADOS24)], fontsize=12, color=tinta)
         ax.set_yticks([])
         ax.set_facecolor(fondo)
         ax.spines["polar"].set_color(rejilla)
         ax.grid(color=rejilla, lw=0.6)
-        ax.set_title(f"{f['cancion']} · centro {f.get('centro') or '—'}", fontsize=11, color=tinta, pad=14)
-    fig.suptitle("Escalas melódicas en 24-EDO: distribución temporal por grado", x=0.02, ha="left", fontsize=12, color=tinta)
-    fig.text(0.02, 0.01, "Radio = raíz del porcentaje de tiempo en cada grado; azul = grado regular y naranja = cuarto de tono.", fontsize=8, color=gris)
-    fig.tight_layout(rect=(0, 0, 1, 0.95))
+        titulo = textwrap.fill(f"{f['cancion']} · centro {f.get('centro') or '—'}", width=15)
+        ax.set_title(titulo, fontsize=14, color=tinta, pad=18, linespacing=1.02)
+    fig.suptitle("Escalas melódicas en 24-EDO: distribución temporal por grado", x=0.5, y=0.98,
+                 ha="center", fontsize=17, fontweight="bold", color=tinta)
+    fig.text(0.48, 0.925, "Radio = raíz del porcentaje de tiempo en cada grado; azul = grado regular y naranja = cuarto de tono.",
+             fontsize=10.5, color=gris, ha="right", va="top")
+    from matplotlib.patches import Patch
+    fig.legend(handles=[Patch(facecolor=azul, label="Grado regular"), Patch(facecolor=naranja, label="Cuarto de tono")],
+               loc="upper right", bbox_to_anchor=(0.98, 0.95), ncol=1, frameon=False, fontsize=10,
+               title="Paleta", title_fontsize=10.5)
+    fig.tight_layout(rect=(0.02, 0.04, 0.98, 0.82), h_pad=5.5, w_pad=5.0)
     fig.savefig(salida + "_escalas.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 

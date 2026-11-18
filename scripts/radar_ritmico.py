@@ -4,7 +4,7 @@ Uso:
     python scripts/radar_ritmico.py outputs/<corrida> [...] [--titulo "Fabienk"]
 
 Lee armonia.json (compases y ciclos) y line_diagnostics.json (tempo y notas de la voz aguda). Escribe radar_ritmico.png
-y radar_ritmico.json en la carpeta de la corrida. Con varias corridas, además dibuja todas superpuestas en
+y radar_ritmico.json en la carpeta de la corrida. Con varias corridas, además dibuja un perfil mediano por banda en
 outputs/radar_ritmico_comparado.png (o en --salida).
 
 No hay cifras publicadas de ritmo para math rock, minimalismo ni techno: cada punta es un rasgo, y el estilo asociado
@@ -130,6 +130,47 @@ def nombre(corrida: str) -> str:
     return n.replace("_", " ").strip().capitalize()
 
 
+def artista(corrida: str) -> str:
+    """Agrupa cada corrida por la banda que la originó para las comparaciones."""
+    n = corrida.lower()
+    if "angine_de_poitrine" in n or "sarniezz" in n or "angor" in n:
+        return "Angine de Poitrine"
+    if "primus" in n:
+        return "Primus"
+    if "king_gizzard" in n or "kinggizzard" in n:
+        return "King Gizzard"
+    if "king_crimson" in n or "kingcrimson" in n:
+        return "King Crimson"
+    if "gentle_giant" in n or "gentlegiant" in n:
+        return "Gentle Giant"
+    if "zappa" in n or "g_spot" in n or "inca_roads" in n or "peaches" in n or "black_page" in n or "zomby" in n:
+        return "Frank Zappa"
+    if "fabienk" in n:
+        return "Fabienk"
+    if "mata_zyklek" in n or "matazyklek" in n:
+        return "Mata Zyklek"
+    if "yor_zarad" in n or "yorzarad" in n:
+        return "Yor Zarad"
+    if "utzp" in n:
+        return "Utzp"
+    return nombre(corrida)
+
+
+def agrupar_por_artista(filas: list[dict]) -> list[dict]:
+    """Devuelve un perfil mediano por artista, evitando superponer cada canción."""
+    grupos = {}
+    for f in filas:
+        grupos.setdefault(artista(f["corrida"]), []).append(f)
+    perfiles = []
+    for banda, canciones in grupos.items():
+        rasgos = {
+            rasgo: round(sorted(f["rasgos"][rasgo] for f in canciones)[len(canciones) // 2], 1)
+            for rasgo in canciones[0]["rasgos"]
+        }
+        perfiles.append({"corrida": banda, "rasgos": rasgos, "canciones": len(canciones)})
+    return perfiles
+
+
 def dibujar(filas: list[dict], salida: Path, titulo: str, sub: str) -> None:
     import matplotlib
     matplotlib.use("Agg")
@@ -140,7 +181,7 @@ def dibujar(filas: list[dict], salida: Path, titulo: str, sub: str) -> None:
     nombres = list(filas[0]["rasgos"])
     ang = np.linspace(0, 2 * np.pi, len(nombres), endpoint=False)
     fig = plt.figure(figsize=(9.5, 9.5), facecolor=fondo)
-    ax = fig.add_axes([0.2, 0.14, 0.6, 0.6], polar=True)
+    ax = fig.add_axes([0.2, 0.13, 0.6, 0.55], polar=True)
     ax.set_theta_offset(np.pi / 2)
     ax.set_theta_direction(-1)
     ax.set_facecolor(fondo)
@@ -151,12 +192,15 @@ def dibujar(filas: list[dict], salida: Path, titulo: str, sub: str) -> None:
     ax.grid(color=rejilla, lw=0.9)
     ax.spines["polar"].set_color(rejilla)
     cierre = np.append(ang, ang[0])
-    una = len(filas) == 1
-    for i, f in enumerate(filas):
+    comparada = len(filas) > 1
+    perfiles = agrupar_por_artista(filas) if comparada else filas
+    una = len(perfiles) == 1
+    for i, f in enumerate(perfiles):
         vals = list(f["rasgos"].values())
         c = COLORES[i % len(COLORES)]
         ax.fill(cierre, vals + vals[:1], color=c, alpha=0.22 if una else 0.07)
-        ax.plot(cierre, vals + vals[:1], color=c, lw=2, label=nombre(f["corrida"]))
+        etiqueta = f["corrida"] if not comparada else f'{f["corrida"]} ({f["canciones"]} canciones)'
+        ax.plot(cierre, vals + vals[:1], color=c, lw=2, label=etiqueta)
         ax.scatter(ang, vals, s=36 if una else 18, color=c, zorder=3, edgecolors=fondo, linewidths=1.2)
         if una:
             for a, v in zip(ang, vals):
@@ -167,11 +211,16 @@ def dibujar(filas: list[dict], salida: Path, titulo: str, sub: str) -> None:
         va = "bottom" if math.cos(a) > 0.5 else "top" if math.cos(a) < -0.5 else "center"
         ax.text(a, 108, n, ha=ha, va=va, fontsize=10, color=tinta, fontweight="bold", linespacing=1.1)
     if not una:
-        ax.legend(loc="upper left", bbox_to_anchor=(-0.32, 1.2), frameon=False, fontsize=9.5)
-    fig.text(0.05, 0.955, f"{titulo}: perfil de estructura rítmica", fontsize=17, fontweight="bold", color=tinta)
-    fig.text(0.05, 0.92, sub, fontsize=10, color=gris)
-    fig.text(0.05, 0.025, "Escala radial: 0–100; cada punta es un rasgo rítmico y no una medida de parecido estadístico. "
-             "Los compases son los detectados en el audio.", fontsize=8, color=gris)
+        fig.legend(*ax.get_legend_handles_labels(), loc="upper left", bbox_to_anchor=(0.04, 0.84),
+                   frameon=False, fontsize=9.5, title="Color por banda", title_fontsize=10)
+    fig.text(0.5, 0.955, f"{titulo}: perfil de estructura rítmica", ha="center", fontsize=19,
+             fontweight="bold", color=tinta)
+    fig.text(0.5, 0.91, "Cada color representa una banda; en la comparación se muestra la mediana de sus canciones.\n"
+             "Los valores indican cuánto presenta cada canción o banda de cada rasgo rítmico.",
+             ha="center", fontsize=10.5, color=gris, linespacing=1.35)
+    fig.text(0.5, 0.018, "Escala radial: 0–100; cada punto marca el valor de un rasgo rítmico.\n"
+             "La distancia al centro indica su intensidad; los compases son los detectados en el audio.",
+             fontsize=9.5, color=gris, ha="center", linespacing=1.25)
     fig.savefig(salida, dpi=200, facecolor=fondo)
     plt.close(fig)
 
@@ -196,7 +245,7 @@ def main() -> None:
         print(run.name + ": " + json.dumps(limpio, ensure_ascii=False))
     if len(filas) > 1:
         sal = a.salida or (a.corridas[0].parent / "radar_ritmico_comparado.png")
-        dibujar(filas, sal, a.titulo or "Estructura rítmica", f"{len(filas)} canciones superpuestas")
+        dibujar(filas, sal, a.titulo or "Estructura rítmica comparada", "Comparación de perfiles rítmicos por banda")
         print(f"comparado: {sal}")
 
 

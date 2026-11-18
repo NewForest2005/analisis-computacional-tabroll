@@ -518,8 +518,11 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
             x = f["conjunto"].get(n) if g == "conjunto" else f["percentiles"][n].get(g)
             if x is not None:
                 M[i, j] = x
-    fig, ax = plt.subplots(figsize=(2.8 + 0.95 * len(cols), 2.2 + 0.55 * len(filas)), facecolor=fondo)
-    ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
+    fig, ax = plt.subplots(figsize=(2.8 + 0.95 * len(cols), 3.6 + 0.55 * len(filas)), facecolor=fondo)
+    imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=100, aspect="auto")
+    barra = fig.colorbar(imagen, ax=ax, fraction=0.018, pad=0.025, shrink=0.88, anchor=(0.0, 0.78), ticks=[0, 25, 50, 75, 100])
+    barra.set_label("Verosimilitud / percentil (%)", color=gris, fontsize=9, labelpad=10)
+    barra.ax.tick_params(labelsize=8, colors=gris)
     for i in range(len(filas)):
         for j in range(len(cols)):
             v = M[i, j]
@@ -536,6 +539,15 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
             if x0:
                 ax.axvline(x0 - .5, color=fondo, lw=4)
         x0 += len(ns)
+    def cobertura(c, bloque: str) -> int:
+        if bloque == "conjunto":
+            return sum(all(p.get(b) for b in BLOQUES if b in c.bloques()) for p in c.P)
+        clave = {"armonia": "fundamentales", "escala": "altura", "microtono": "altura", "metro": "metro"}[bloque]
+        return sum(bool(p.get(clave)) and (bloque != "microtono" or c.micro) for p in c.P)
+
+    # Fila inferior alineada con cada columna: cobertura real del corpus para ese bloque.
+    for j, (g, n) in enumerate(cols):
+        ax.text(j, len(filas) + 0.58, f"n={cobertura(corpora[n], g)}", ha="center", va="top", fontsize=8.5, color=gris)
     ax.set_xticks(range(len(cols)), [n + ("*" if corpora[n].n < 100 else "") for g, n in cols], fontsize=8.5, color=tinta, rotation=0)
     ax.set_yticks(range(len(filas)), [MARCA[f["grupo"]] + f["cancion"] for f in filas], fontsize=10, color=tinta)
     for i, f in enumerate(filas):
@@ -545,27 +557,40 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Verosimilitud por bloque de rasgos y conjunta", loc="left", fontsize=12, color=tinta, pad=58)
-    ax.set_xlabel("Bloque de rasgo y corpus de comparación", color=gris)
-    ax.set_ylabel("Canción", color=gris)
-    fig.text(0.01, 0.01, f"★ Angine de Poitrine · ◆ control (Primus)" + (" · ▲ comparado (King Gizzard u otro)" if any(f["grupo"] == "comparar" for f in filas) else "") + ". «—»: el corpus no tiene ese bloque. Corpus con «*»: menos de 100 piezas, no cuenta para el veredicto.\n"
-             f"Modelo de medición: ε = {eps:.2f} de fuga a ¼ de tono y η = {eta:.2f} de "
-             "compases mal leídos (lo que el cuaderno marca en el control), aplicados a cada pieza de corpus.\nPercentil: % de piezas del corpus cuya "
-             "5.ª pieza más parecida está igual o más lejos que la de la canción. Conjunto: lo mismo midiendo el parecido en todos los bloques a la vez.", fontsize=7.5, color=gris)
-    fig.tight_layout(rect=(0, 0.08, 1, 1))
+    ax.set_xlabel("Bloque de rasgo y corpus de comparación", color=gris, fontsize=11, labelpad=28)
+    ax.set_ylabel("Canción", color=gris, fontsize=10, labelpad=8)
+    fig.suptitle("Verosimilitud por bloque de rasgos y conjunta", x=0.5, y=0.98, ha="center",
+                 fontsize=16, fontweight="bold", color=tinta)
+    descripcion = (
+        "Verosimilitud por bloque = qué tan habitual es cada rasgo de la banda frente a piezas reales de cada corpus.\n"
+        "La casilla conjunta pregunta si algún corpus explica a la vez la armonía, la escala, los cuartos de tono y el metro."
+    )
+    nota = (
+        "★ Banda\n\n◆ Control: Primus\n\n"
+        + ("▲ Repertorio comparado\n\n" if any(f["grupo"] == "comparar" for f in filas) else "")
+        + "— Sin datos para ese bloque\n\n"
+        "* Corpus con menos de 100 piezas: no cuenta para el veredicto\n\n"
+        f"ε = {eps:.2f}: fuga de medición hacia ¼ de tono\n"
+        f"η = {eta:.2f}: error de lectura del metro"
+    )
+    fig.text(0.5, 0.945, descripcion, ha="center", va="top", fontsize=10.2, color=gris, linespacing=1.15)
+    fig.text(0.01, 0.025, nota + "\n\nn = piezas del corpus con datos válidos para el bloque de la columna superior.", ha="left", va="bottom", fontsize=8.2, color=gris, linespacing=1.15)
+    fig.subplots_adjust(left=0.13, right=0.995, top=0.84, bottom=0.30)
     fig.savefig(salida + "_bloques.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 
     # síntesis: por canción, de qué corpus viene cada bloque (fichas del color de la familia) y el veredicto
-    fig, ax = plt.subplots(figsize=(14.5, 1.9 + 0.62 * len(filas)), facecolor=fondo)
-    ax.set_xlim(0, 14.5)
+    fig, ax = plt.subplots(figsize=(17.0, 3.7 + 0.68 * len(filas)), facecolor=fondo)
+    ax.set_xlim(0, 16.1)
     ax.set_ylim(len(filas) + 0.2, -1.2)
     ax.axis("off")
-    xs = {"armonia": 2.7, "escala": 4.75, "microtono": 6.8, "metro": 8.85}
+    ax.add_patch(plt.Rectangle((0, -1.02), 15.95, len(filas) + 1.12, facecolor="#f7f7f4",
+                               edgecolor="#d9d8d2", lw=1.0, zorder=0))
+    xs = {"armonia": 3.55, "escala": 5.75, "microtono": 7.95, "metro": 10.15}
     for b, x in xs.items():
-        ax.text(x, -0.75, TITULO[b], ha="center", fontsize=10, fontweight="bold", color=tinta)
-    ax.text(10.75, -0.75, "Conjunto (mejor)", ha="center", fontsize=10, fontweight="bold", color=tinta)
-    ax.text(11.85, -0.75, "Veredicto", ha="left", fontsize=10, fontweight="bold", color=tinta)
+        ax.text(x, -0.68, TITULO[b], ha="center", fontsize=10.5, fontweight="bold", color=tinta)
+    ax.text(12.45, -0.68, "Conjunto (mejor)", ha="center", fontsize=10.5, fontweight="bold", color=tinta)
+    ax.text(13.75, -0.68, "Veredicto", ha="left", fontsize=10.5, fontweight="bold", color=tinta)
     for i, f in enumerate(filas):
         corto = f["cancion"] if len(f["cancion"]) <= 20 else f["cancion"][:19] + "…"
         ax.text(0.1, i, MARCA[f["grupo"]] + corto, va="center", fontsize=10, color=tinta)
@@ -588,23 +613,38 @@ def dibujar(filas: list[dict], corpora: dict, calib: dict, u: float, eps: float,
             ax.text(x, i, f"{m['corpus']} {m['percentil']:g}", ha="center", va="center", fontsize=8.8, color="#ffffff" if ok else tinta,
                     fontweight="bold" if ok else "normal")
         cm = f["conjunto_mejor"]
-        ax.text(10.75, i, "—" if cm["percentil"] is None else f"{cm['corpus']} {cm['percentil']:g}", ha="center", va="center", fontsize=9,
+        ax.text(12.45, i, "—" if cm["percentil"] is None else f"{cm['corpus']} {cm['percentil']:g}", ha="center", va="center", fontsize=9,
                 color=tinta, fontweight="bold" if (cm["percentil"] or 0) >= u else "normal")
-        ax.text(11.85, i, f["veredicto"].replace(" (conjunto con menos bloques: ningún corpus los tiene todos)", "").replace("rasgo sin vecino: ", "sin vecino:\n"),
-                va="center", fontsize=8.5, color=tinta, linespacing=1.1)
+        veredicto_visible = (f["veredicto"].replace(" (conjunto con menos bloques: ningún corpus los tiene todos)", "")
+                            .replace("rasgo sin vecino: ", "SIN VECINO: ")
+                            .replace("síntesis de lenguajes existentes", "SÍNTESIS DE LENGUAJES EXISTENTES")
+                            .replace("estilo existente (", "ESTILO EXISTENTE (")
+                            .replace("variante atípica de ", "VARIANTE ATÍPICA DE "))
+        import textwrap
+        veredicto_envuelto = textwrap.fill(veredicto_visible.replace(": ", ":\n"), width=25, replace_whitespace=False)
+        ax.text(13.72, i, veredicto_envuelto,
+                va="center", fontsize=7.8, color=tinta, linespacing=1.05, wrap=True)
     fams = sorted({c.familia for c in corpora.values()})
-    for k, fam in enumerate(fams):
-        ax.add_patch(plt.Rectangle((0.1 + 1.75 * k, len(filas) - 0.05), 0.3, 0.22, color=FAMILIA_COLOR.get(fam, "#6250d6")))
-        ax.text(0.47 + 1.75 * k, len(filas) + 0.06, fam, va="center", fontsize=8.5, color=gris)
-    ax.set_title("Lenguaje más probable para cada bloque de rasgos", loc="left", fontsize=11.5, color=tinta)
-    nota = (f"Cuartos de tono: z = concentración en los dos grados en ¼ de tono más usados frente al control ({ctl[0]:.0f} ± {ctl[1]:.0f} %); "
-            "z ≥ 2 = grado fijo de la escala (recuadro punteado: no hay corpus microtonal cargado para compararlo).\n")
-    nota += "Calibración (piezas reales de un corpus, medidas igual): " + ";\n    ".join(
-        f"{n}: " + ", ".join(f"{NOMBRE_TIPO.get(k, k)} {v:g} %" for k, v in d.items() if k != "piezas") for n, d in calib.items()) if calib else ""
-    if any("conjunto con menos" in f["veredicto"] for f in filas):
-        nota += "\nEl conjunto mejor se calculó con los bloques que comparten canción y corpus: ningún corpus los tiene todos."
-    fig.text(0.01, 0.01, nota, fontsize=7.5, color=gris)
-    fig.tight_layout(rect=(0, 0.04 + 0.022 * nota.count("\n"), 1, 1))
+    fig.suptitle("Lenguaje más probable para cada bloque de rasgos", x=0.5, y=0.98, ha="center",
+                 fontsize=16, fontweight="bold", color=tinta)
+    descripcion = (
+        "Cada casilla identifica el corpus cuyo perfil se parece más a ese rasgo de la banda.\n"
+        "La columna conjunta comprueba si un mismo corpus explica varios rasgos a la vez."
+    )
+    nota = (
+        f"CUARTOS DE TONO / CONTROL: z compara la concentración de la banda con Primus ({ctl[0]:.0f} ± {ctl[1]:.0f} %).\n"
+        "Como el control = la concentración no supera el umbral de grado fijo; no se interpreta como escala microtonal.\n\n"
+        "CASILLA VACÍA = hay datos, pero el percentil queda bajo el umbral.  — = no hay datos comparables.\n\n"
+        "VEREDICTOS: ESTILO EXISTENTE = un corpus explica la combinación.\n"
+        "SÍNTESIS DE LENGUAJES EXISTENTES = distintos corpus explican bloques distintos.\n"
+        "SIN VECINO = algún bloque no tiene un corpus suficientemente parecido."
+    )
+    fig.text(0.04, 0.945, descripcion, ha="left", va="top", fontsize=10.2, color=gris, linespacing=1.15)
+    fig.text(0.04, 0.855, nota, fontsize=9.2, color=gris, linespacing=1.15, va="top")
+    fig.legend(handles=[plt.Line2D([0], [0], color=FAMILIA_COLOR.get(fam, "#6250d6"), lw=8, label=fam) for fam in fams],
+               loc="upper right", bbox_to_anchor=(0.98, 0.88), ncol=1, frameon=False, fontsize=8.8,
+               title="Paleta de corpus", title_fontsize=9.5)
+    fig.subplots_adjust(left=0.04, right=0.99, top=0.78, bottom=0.29)
     fig.savefig(salida + "_sintesis.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 

@@ -124,11 +124,15 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
     sin_v = sum(cuenta[b]["sin vecino"] for b in bl)
     total = sum(sum(cuenta[b].values()) for b in bl)
 
-    fig = plt.figure(figsize=(12.5, 1.6 + 0.48 * len(filas) + 2.6), facecolor=FONDO)
-    gs = fig.add_gridspec(2, 1, height_ratios=[len(filas) + 1, 2.4], hspace=0.55)
+    fig = plt.figure(figsize=(12.5, 3.6 + 0.48 * len(filas) + 3.4), facecolor=FONDO)
+    gs = fig.add_gridspec(2, 1, height_ratios=[len(filas) + 1, 2.4], hspace=1.35)
     ax = fig.add_subplot(gs[0])
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
-    ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
+    imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
+    barra = fig.colorbar(imagen, ax=ax, orientation="horizontal", fraction=0.045, pad=0.28,
+                         ticks=[0, 15, 30, 45, 60], aspect=40)
+    barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
+    barra.ax.tick_params(labelsize=8, colors=GRIS)
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             if np.isnan(M[i, j]):
@@ -144,8 +148,13 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Clasificación del álbum por corpus: percentil medio de tipicidad (0–100)"
-                 + (f" · empate entre {medias[0][0]} y {medias[1][0]} (menos de 3 puntos)" if empate else ""), loc="left", fontsize=10.5, color=TINTA, pad=26)
+    fig.suptitle("Clasificación del álbum por corpus", x=0.5, y=0.98, ha="center", fontsize=16, fontweight="bold", color=TINTA)
+    fig.text(0.5, 0.925, "El color resume el percentil medio de tipicidad de la banda frente a cada corpus.\n"
+             "Azul más oscuro = mayor parecido estadístico; blanco = menor parecido.", ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
+    fig.text(0.5, 0.455, "bl. = cantidad de bloques de rasgos con datos válidos para esa canción y ese corpus.",
+             ha="center", va="top", fontsize=9, color=GRIS)
+    if empate:
+        fig.text(0.5, 0.885, f"Empate entre {medias[0][0]} y {medias[1][0]}: diferencia menor de 3 puntos.", ha="center", va="top", fontsize=8.5, color=GRIS)
 
     ax2 = fig.add_subplot(gs[1])
     estilo(ax2, grid_x=True)
@@ -160,21 +169,29 @@ def fig_clasificacion(bloques: dict, salida: str) -> None:
             if not n:
                 continue
             ax2.barh(i, n, left=x, color=color[c], height=0.6, edgecolor=FONDO, linewidth=2)
-            ax2.text(x + n / 2, i, f"{c} {n}", ha="center", va="center", fontsize=8, color=TINTA if c == "sin vecino" else "#ffffff")
             x += n
     ax2.set_yticks(range(len(bl)), [titulo_b.get(b, b) for b in bl], fontsize=9, color=TINTA)
     ax2.set_xlim(0, len(filas))
-    ax2.set_xlabel("canciones del disco", fontsize=8.5, color=GRIS)
+    ax2.set_xlabel("Canciones del disco", fontsize=9.5, color=GRIS, labelpad=12)
     ax2.invert_yaxis()
     if len(pred) > 1 and victorias[pred[0]] == victorias[pred[1]]:
         resumen = f"empate entre {pred[0]} y {pred[1]} ({victorias[pred[0]]} de {total} cada uno)"
     else:
         resumen = (f"predominante: {pred[0] if pred else '—'} ({victorias[pred[0]] if pred else 0} de {total}); "
                    f"secundario: {pred[1] if len(pred) > 1 else '—'} ({victorias[pred[1]] if len(pred) > 1 else 0})")
-    ax2.set_title(f"Qué corpus gana cada bloque (percentil ≥ {u:g}): {resumen}; sin vecino: {sin_v}",
-                  loc="left", fontsize=10.5, color=TINTA)
-    fig.text(0.01, 0.005, "Percentiles de verosimilitud_por_bloques.py (kNN, k = 5). «bl.» = bloques que ese corpus permite medir. "
-             "Un corpus con menos bloques no es más parecido: solo se mide en menos cosas.", fontsize=7.5, color=GRIS)
+    ax2.set_title(f"Qué corpus gana cada bloque", loc="center", fontsize=12.5, fontweight="bold", color=TINTA, pad=20)
+    fig.text(0.5, 0.415, f"Percentil ≥ {u:g}: {resumen}; sin vecino: {sin_v}", ha="center", va="center", fontsize=8.5, color=GRIS)
+    victorias_totales = {c: sum(cuenta[b][c] for b in bl) for c in todos}
+    handles = [plt.Line2D([0], [0], color=color[c], lw=8, label=f"{c} — {victorias_totales[c]} victorias") for c in todos]
+    handles.append(plt.Line2D([0], [0], color=color["sin vecino"], lw=8, label=f"Sin vecino — {victorias_totales['sin vecino']} casos"))
+    # La paleta queda debajo del gráfico inferior; el texto metodológico ocupa
+    # una franja independiente, más cercana al gráfico y sin cruzar la leyenda.
+    fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.62, 0.185), ncol=3, frameon=False, fontsize=7.8,
+               title="Paleta del gráfico inferior", title_fontsize=8.8)
+    fig.text(0.01, 0.045, "Número = canciones del álbum en que ese corpus gana un bloque.\n"
+             "«Sin vecino» = ningún corpus supera el umbral.",
+             fontsize=8.5, color=GRIS, ha="left", va="bottom", linespacing=1.15)
+    fig.subplots_adjust(top=0.84, bottom=0.25, left=0.08, right=0.98)
     guardar(fig, salida + "_a_clasificacion.png")
 
 
@@ -197,8 +214,8 @@ def fig_perfil(runs: dict, salida: str) -> None:
             datos[grupo].append((nombre(r.name), t))
     if not datos.get("banda"):
         return
-    fig, ejes = plt.subplots(len(medidas), 1, figsize=(10, 1.25 * len(medidas) + 1.4), facecolor=FONDO)
-    etiqueta = {"banda": "Angine de Poitrine, Vol. II", "comparar": "King Gizzard, Flying Microtonal Banana", "control": "Primus (control)"}
+    fig, ejes = plt.subplots(len(medidas), 1, figsize=(11, 3.0 * len(medidas) + 3.2), facecolor=FONDO)
+    etiqueta = {"banda": "Angine de Poitrine", "comparar": "King Gizzard", "control": "Primus (control)"}
     filas_y = {"control": 0, "comparar": 1, "banda": 2}
     for ax, (k, titulo, unidad) in zip(ejes, medidas):
         estilo(ax, grid_x=True)
@@ -209,18 +226,24 @@ def fig_perfil(runs: dict, salida: str) -> None:
             y = filas_y[g]
             ax.scatter(xs, [y] * len(xs), s=46, color=GRUPO_COLOR[g], edgecolor=FONDO, linewidth=1.5, zorder=3, label=etiqueta[g])
             ax.plot([np.median(xs)] * 2, [y - 0.35, y + 0.35], color=GRUPO_COLOR[g], lw=2, zorder=2)
-            if g == "banda":
-                for j, (n, t) in enumerate(sorted([x for x in lista if x[1].get(k) is not None], key=lambda x: x[1][k])):
-                    ax.annotate(n[:10], (t[k], y), xytext=(0, 7 if j % 2 == 0 else -13), textcoords="offset points", ha="center",
-                                fontsize=6.8, color=GRIS)
-        ax.set_yticks([0, 1, 2], ["Primus", "King Gizzard", "Vol. II"], fontsize=8.5, color=TINTA)
+        ax.set_yticks([0, 1, 2], ["Primus", "King Gizzard", "Angine de Poitrine"], fontsize=8.5, color=TINTA)
         ax.set_ylim(-0.6, 2.9)
-        ax.set_title(f"{titulo} ({unidad})", loc="left", fontsize=9.5, color=TINTA, pad=3)
-    h, l = ejes[0].get_legend_handles_labels()
-    fig.legend(h, l, loc="upper left", bbox_to_anchor=(0.01, 0.955), ncol=3, fontsize=8, frameon=False)
-    fig.suptitle("Perfil estructural del álbum frente a Primus y King Gizzard", x=0.01, ha="left",
-                 fontsize=11, color=TINTA)
-    fig.tight_layout(rect=(0, 0, 1, 0.92))
+        ax.set_title(f"{titulo} ({unidad})", loc="center", fontsize=12, fontweight="bold", color=TINTA, pad=14)
+        ax.set_xlabel(f"Eje horizontal: valor de {titulo.lower()} en {unidad}; cada punto = una canción; raya = mediana del grupo.",
+                      fontsize=9, color=GRIS, labelpad=13)
+    fig.suptitle("Perfil estructural del álbum frente a Primus y King Gizzard", x=0.5, y=0.98, ha="center",
+                 fontsize=16, fontweight="bold", color=TINTA)
+    fig.text(0.5, 0.925, "Compara cinco medidas directas de las canciones de Angine de Poitrine con Primus y King Gizzard.\n"
+             "Los puntos muestran canciones individuales y las rayas verticales resumen la mediana de cada grupo.",
+             ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
+    handles = [plt.Line2D([0], [0], marker="o", color="none", markerfacecolor=GRUPO_COLOR[g], markeredgecolor=FONDO,
+                          markersize=8, label=etiqueta[g]) for g in ("banda", "control", "comparar") if datos.get(g)]
+    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.5, 0.105), ncol=3, fontsize=9.5, frameon=False,
+               title="Paleta de grupos", title_fontsize=10)
+    fig.text(0.03, 0.035, "Angine de Poitrine = repertorio de referencia.  Primus = control de medición.  King Gizzard = repertorio comparado.\n"
+             "La posición horizontal permite ver qué medidas son mayores o menores en la banda respecto a cada grupo.",
+             ha="left", va="bottom", fontsize=9, color=GRIS, linespacing=1.25)
+    fig.subplots_adjust(left=0.18, right=0.98, top=0.82, bottom=0.22, hspace=1.0)
     guardar(fig, salida + "_b_perfil.png")
     with open(salida + "_b_perfil.csv", "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
@@ -271,15 +294,14 @@ def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bo
             cruza = (a % 2) != (b % 2)
             (x0, y0), (x1, y1) = pos[a], pos[b]
             ax.plot([x0, x1], [y0, y1], color=CAMPO_Q if cruza else MUTED, lw=0.6 + 3 * tr[a, b] / mx, alpha=0.55, zorder=1)
-    esc = 2600 if grande else 900
+    esc = 2600 if grande else 1440
     for d in range(24):
         x, y = pos[d]
         ax.scatter([x], [y], s=12 + esc * p[d], color=CAMPO_Q if d % 2 else CAMPO_REG, edgecolor=FONDO, linewidth=1.2, zorder=3,
                    alpha=0.95 if p[d] > 0.005 else 0.25)
-        if grande or p[d] >= 0.04:
-            f = 1.17 if d % 2 == 0 else 0.80
-            ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=8.5 if grande else 6.8,
-                    color=TINTA if p[d] >= 0.02 else MUTED, fontweight="bold" if p[d] >= 0.08 else "normal")
+        f = 1.17 if d % 2 == 0 else 0.80
+        ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=8.5 if grande else 7.2,
+                color=TINTA if p[d] >= 0.02 else MUTED, fontweight="bold" if p[d] >= 0.08 else "normal")
     cuartos = 100 * p[1::2].sum()
     ax.set_title(f"{titulo}\n¼ de tono {cuartos:.0f} %", fontsize=10.5 if grande else 8.5, color=TINTA, pad=4)
     ax.set_xlim(-1.3, 1.3)
@@ -292,16 +314,32 @@ def fig_circulo(runs: list[Path], salida: str) -> None:
     datos = [(nombre(r.name), *reparto(r)) for r in rs]
     alt_tot = sum(a / a.sum() for _, a, _ in datos if a.sum())
     tr_tot = sum(t for _, _, t in datos)
-    fig = plt.figure(figsize=(13, 6.6), facecolor=FONDO)
-    gs = fig.add_gridspec(2, 5, width_ratios=[2.2, 2.2, 1, 1, 1], wspace=0.05, hspace=0.25)
+    fig = plt.figure(figsize=(16, 8.8), facecolor=FONDO)
+    gs = fig.add_gridspec(2, 5, width_ratios=[3.2, 3.2, 2, 2, 2], wspace=0.34, hspace=0.55)
     dibujar_circulo(fig.add_subplot(gs[:, :2]), alt_tot, tr_tot, "Vol. II completo (media de las canciones)", True)
     for i, (n, a, t) in enumerate(datos[:6]):
         dibujar_circulo(fig.add_subplot(gs[i // 3, 2 + i % 3]), a, t, n, False)
     fig.suptitle("Círculo de quintas en 24-EDO: campos regulares y de cuarto de tono",
-                 x=0.01, ha="left", fontsize=11, color=TINTA)
-    fig.text(0.01, 0.015, "En 24-EDO la quinta mide 14 pasos y mcd(14, 24) = 2: el ciclo de quintas nunca pasa de un campo al otro. Cada grado «+» está junto a "
-             "su vecino regular. Área = tiempo de la melodía en el grado; líneas = pasos melódicos más frecuentes (azul = cambia de campo). "
-             "En 19, 31 y 53-EDO la quinta (11, 18, 31 pasos) recorre todas las notas: un solo campo.", fontsize=7.5, color=GRIS, wrap=True)
+                 x=0.5, y=0.98, ha="center", fontsize=16, fontweight="bold", color=TINTA)
+    fig.text(0.5, 0.925, "El círculo muestra cómo se reparte la melodía de Angine de Poitrine entre los dos campos de quintas de 24-EDO.\n"
+             "El panel grande resume el álbum y los paneles pequeños muestran cada canción.",
+             ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    leyenda = [
+        Patch(facecolor=CAMPO_REG, edgecolor="none", label="Círculo/anillo amarillo: grados regulares"),
+        Patch(facecolor=CAMPO_Q, edgecolor="none", label="Círculo/anillo azul: grados en cuarto de tono"),
+        Line2D([0], [0], color=MUTED, lw=2, label="Línea gris: transición dentro de un campo"),
+        Line2D([0], [0], color=CAMPO_Q, lw=2, label="Línea azul: transición entre campos"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, markersize=10, label="Punto grande: mayor tiempo melódico en el grado"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, alpha=0.3, markersize=5, label="Punto pequeño o tenue: menor uso del grado"),
+    ]
+    fig.legend(handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, 0.12), ncol=2,
+               frameon=False, fontsize=8.5, title="Paleta y marcas de los círculos", title_fontsize=9.5)
+    fig.text(0.02, 0.035, "En 24-EDO la quinta mide 14 pasos y divide el ciclo en dos campos. Cada grado «+» está junto a su vecino regular.\n"
+             "El área del punto indica tiempo melódico; las líneas muestran los pasos melódicos más frecuentes. En 19, 31 y 53-EDO hay un solo campo.",
+             ha="left", va="bottom", fontsize=8.8, color=GRIS, linespacing=1.25)
+    fig.subplots_adjust(left=0.03, right=0.98, top=0.82, bottom=0.30)
     guardar(fig, salida + "_c_circulo_haba.png")
 
 
@@ -410,7 +448,7 @@ def fig_bucle(fases: list[dict], salida: str, extra: list[str]) -> None:
     col_pulsos = {3: "#1baf7a", 4: "#2a78d6", 5: "#e87ba4", 6: "#eda100", 7: "#eb6834", 8: "#6250d6"}
     nc = 2
     nr = (len(canciones) + 1) // 2
-    fig, ejes = plt.subplots(nr, nc, figsize=(12, 1.9 * nr + 1.2), facecolor=FONDO, squeeze=False)
+    fig, ejes = plt.subplots(nr, nc, figsize=(13.5, 3.6 * nr + 3.0), facecolor=FONDO, squeeze=False)
     for ax, n in zip(ejes.flat, canciones):
         estilo(ax, grid_y=True)
         L = int(por[n][0]["bucle_corcheas"])
@@ -421,17 +459,25 @@ def fig_bucle(fases: list[dict], salida: str, extra: list[str]) -> None:
             ax.scatter(float(f["inicio_s"]) / 60, int(f["fase"]) / L, s=14, color=col_pulsos.get(p, MUTED), lw=0)
         ax.set_ylim(-0.05, 1.05)
         ax.set_yticks([0, 0.5, 1], ["0", "½", "1"], fontsize=7.5)
-        ax.set_title(f"{n} · bucle de {L} corcheas ({L / 2:g} pulsos)", loc="left", fontsize=9, color=TINTA)
+        ax.set_title(f"{n} · bucle de {L} corcheas ({L / 2:g} pulsos)", loc="center", fontsize=10.5, fontweight="bold", color=TINTA, pad=12)
+        ax.set_ylabel("Fase del riff / longitud del bucle", fontsize=8.5, color=GRIS, labelpad=12)
+        ax.set_xlabel("Tiempo desde el inicio de la canción (min)", fontsize=8.5, color=GRIS, labelpad=12)
     for ax in list(ejes.flat)[len(canciones):]:
         ax.axis("off")
     from matplotlib.lines import Line2D
     h = [Line2D([], [], marker="o", ls="", color=c, label=f"compás de {p}") for p, c in col_pulsos.items()]
-    fig.legend(handles=h, loc="upper left", bbox_to_anchor=(0.01, 0.955), ncol=6, fontsize=8, frameon=False)
-    fig.suptitle("Fase del riff al inicio de cada compás", x=0.01, ha="left",
-                 fontsize=11, color=TINTA)
-    fig.text(0.01, 0.01, "Fase fija = el compás mide lo mismo que el bucle o lo divide. Fase que avanza en escalera = compás y bucle de largos distintos "
-             "(polímetro o compás mal leído).\nSalto aislado tras un silencio = el riff vuelve a entrar por otro punto. Sin punto = fase ambigua o poco sonido.", fontsize=7.5, color=GRIS)
-    fig.tight_layout(rect=(0, 0.04, 1, 0.91))
+    fig.suptitle("Fase del riff al inicio de cada compás", x=0.5, y=0.98, ha="center",
+                 fontsize=16, fontweight="bold", color=TINTA)
+    fig.text(0.5, 0.945, "La fase indica en qué punto del bucle comienza cada compás de la banda.\n"
+             "Una fase fija o escalonada ayuda a distinguir sincronía, polimetría y cambios de entrada del riff.",
+             ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
+    fig.text(0.02, 0.095, "Fase fija = el compás mide lo mismo que el bucle o lo divide.\n\n"
+             "Fase en escalera = compás y bucle tienen longitudes distintas.\n\n"
+             "Salto aislado = el riff vuelve a entrar por otro punto tras un silencio.\n\n"
+             "Sin punto = fase ambigua o poco sonido.", fontsize=8.8, color=GRIS, linespacing=1.2, va="bottom")
+    fig.legend(handles=h, loc="lower right", bbox_to_anchor=(0.98, 0.075), ncol=3, fontsize=8.5, frameon=False,
+               title="Color = pulsos del compás", title_fontsize=9.5)
+    fig.subplots_adjust(left=0.13, right=0.98, top=0.84, bottom=0.25, wspace=0.45, hspace=0.95)
     guardar(fig, salida + "_f_bucle_compas.png")
 
 

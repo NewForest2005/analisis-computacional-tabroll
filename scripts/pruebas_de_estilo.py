@@ -235,7 +235,7 @@ def veredictos(r: dict) -> dict:
 
 def nombre(corrida: str) -> str:
     n = re.sub(r"^\d{4}-\d\d-\d\d_\d+_", "", corrida)
-    n = re.sub(r"(angine_de_poitrine_|primus_|_audio_off\w*|_official_audio|_repro|_\d{4}_\w+$)", "", n)
+    n = re.sub(r"(angine_de_poitrine_|primus_|_audio_off\w*|_official_audio|_repro|_cache|_\d{4}_\w+$)", "", n)
     return n.replace("_", " ").strip().capitalize()
 
 
@@ -243,30 +243,44 @@ def dibujar(filas: list[dict], salida: str) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
 
     tinta, gris, fondo = "#0b0b0b", "#52514e", "#fcfcfb"
     tono = {"encaja": "#2a78d6", "en parte": "#a9c8ef", "no encaja": "#eeede8", "sin datos": fondo}
     letra = {"encaja": "#ffffff", "en parte": tinta, "no encaja": gris, "sin datos": gris}
     nf, nc = len(filas), len(ESTILOS)
-    fig, ax = plt.subplots(figsize=(2.6 + 2.15 * nc, 1.5 + 0.95 * nf), facecolor=fondo)
-    ax.set_xlim(0, nc)
-    ax.set_ylim(0, nf)
+    paso_x, paso_y = 1.16, 1.14
+    fig, ax = plt.subplots(figsize=(2.6 + 2.15 * nc, 2.4 + 1.15 * nf), facecolor=fondo)
+    ax.set_xlim(-0.45, (nc - 1) * paso_x + 1.05)
+    ax.set_ylim(-0.35, (nf - 1) * paso_y + 1.25)
     ax.axis("off")
     for i, r in enumerate(filas):
-        y = nf - 1 - i
+        y = (nf - 1 - i) * paso_y
         ax.text(-0.08, y + 0.5, nombre(r["corrida"]), ha="right", va="center", fontsize=11, fontweight="bold", color=tinta)
         for j, e in enumerate(ESTILOS):
+            x = j * paso_x
             v = r["veredictos"][e]
-            ax.add_patch(plt.Rectangle((j + 0.03, y + 0.05), 0.94, 0.9, fc=tono[v["veredicto"]], ec="#d9d8d2" if v["veredicto"] == "sin datos" else "none", ls="--", lw=1))
-            ax.text(j + 0.5, y + 0.64, v["veredicto"], ha="center", va="center", fontsize=10.5, fontweight="bold", color=letra[v["veredicto"]])
+            ax.add_patch(plt.Rectangle((x + 0.07, y + 0.08), 0.92, 0.84, fc=tono[v["veredicto"]], ec="#d9d8d2" if v["veredicto"] == "sin datos" else "none", ls="--", lw=1))
+            ax.text(x + 0.53, y + 0.64, v["veredicto"], ha="center", va="center", fontsize=10.5, fontweight="bold", color=letra[v["veredicto"]])
             dato = v["dato"].replace(" · ", "\n")
-            ax.text(j + 0.5, y + 0.3, dato, ha="center", va="center", fontsize=6.6, color=letra[v["veredicto"]], linespacing=1.15)
+            ax.text(x + 0.53, y + 0.29, dato, ha="center", va="center", fontsize=6.6, color=letra[v["veredicto"]], linespacing=1.15)
     for j, e in enumerate(ESTILOS):
-        ax.text(j + 0.5, nf + 0.12, e.replace(" ", "\n", 1) if len(e) > 14 else e, ha="center", va="bottom", fontsize=10, color=tinta)
-    fig.suptitle("Veredictos de estilo: armonía y melodía de cada canción", x=0.01, ha="left", fontsize=13, color=tinta)
-    fig.text(0.01, 0.01, "Cada celda muestra el veredicto y la medida usada. Umbrales propuestos por este trabajo a partir de cifras publicadas (de Clercq y Temperley 2011; Temperley 2009; Broze y Shanahan 2013). "
-             "Solo compases confiables.", fontsize=7.5, color=gris)
-    fig.subplots_adjust(left=0.13, right=0.995, top=0.86, bottom=0.07)
+        ax.text(j * paso_x + 0.53, (nf - 1) * paso_y + 1.08, e.replace(" ", "\n", 1) if len(e) > 14 else e,
+                ha="center", va="bottom", fontsize=10, fontweight="bold", color=tinta)
+    fig.suptitle("Veredictos de estilo: armonía y melodía de cada canción", x=0.5, y=0.98, ha="center",
+                 fontsize=17, fontweight="bold", color=tinta)
+    fig.text(0.5, 0.925, "Cada celda indica si la armonía y la melodía de una canción encajan con un estilo de referencia.\n"
+             "La banda se compara con reglas medibles y solo se usan compases confiables.", ha="center", va="top",
+             fontsize=9.5, color=gris, linespacing=1.25)
+    paleta = [Patch(facecolor=tono["encaja"], label="Azul oscuro = encaja"),
+              Patch(facecolor=tono["en parte"], label="Azul claro = encaja en parte"),
+              Patch(facecolor=tono["no encaja"], label="Blanco = no encaja"),
+              Patch(facecolor=tono["sin datos"], edgecolor="#d9d8d2", linestyle="--", label="Blanco rayado = sin datos")]
+    fig.legend(handles=paleta, loc="upper center", bbox_to_anchor=(0.5, 0.875), ncol=2,
+               frameon=False, fontsize=9, title="Paleta: intensidad del veredicto", title_fontsize=9.5)
+    fig.text(0.03, 0.035, "La medida pequeña dentro de cada celda explica por qué se obtuvo el veredicto; los umbrales son propuestas del análisis, no valores publicados.",
+             fontsize=8.8, color=gris, ha="left", va="bottom")
+    fig.subplots_adjust(left=0.18, right=0.995, top=0.78, bottom=0.13)
     fig.savefig(salida + "_veredictos.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 

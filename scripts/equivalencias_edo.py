@@ -135,22 +135,33 @@ def main() -> None:
     from matplotlib.colors import LinearSegmentedColormap
     usados = [d for d in range(24) if uso[d] > 0.005]
     M = np.array([[err_grado[n][d] for d in usados] for n in a.edo])
-    fig, ax = plt.subplots(figsize=(1.2 + 0.62 * len(usados), 1.4 + 0.45 * len(a.edo)), facecolor="#fcfcfb")
+    fig, ax = plt.subplots(figsize=(2.4 + 0.62 * len(usados), 3.0 + 0.45 * len(a.edo)), facecolor="#fcfcfb")
     cmap = LinearSegmentedColormap.from_list("e", ["#f1f0ea", "#9ec5f4", "#3987e5", "#184f95", "#0d366b"])
-    ax.imshow(M, cmap=cmap, vmin=0, vmax=25, aspect="auto")
+    imagen = ax.imshow(M, cmap=cmap, vmin=0, vmax=25, aspect="auto")
+    barra = fig.colorbar(imagen, ax=ax, fraction=0.025, pad=0.035, ticks=[0, 5, 10, 15, 20, 25])
+    barra.set_label("Error de afinación (cents)", color="#52514e", fontsize=9, labelpad=10)
+    barra.ax.tick_params(labelsize=8, colors="#52514e")
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             ax.text(j, i, f"{M[i, j]:.0f}", ha="center", va="center", fontsize=8, color="#ffffff" if M[i, j] > 12 else "#0b0b0b")
-    ax.set_xticks(range(len(usados)), [f"{grado24(d)}\n{100 * uso[d]:.0f} %" for d in usados], fontsize=8)
+    ax.set_xticks(range(len(usados)), [grado24(d) for d in usados], fontsize=8.5)
     ax.set_yticks(range(len(a.edo)), [f"{n}-EDO ({t['campos']} campo{'s' if t['campos'] > 1 else ''})" for n, t in zip(a.edo, tabla)], fontsize=8.5)
+    for j, d in enumerate(usados):
+        ax.text(j, len(a.edo) + 0.38, f"{100 * uso[d]:.0f} %", ha="center", va="top", fontsize=8, color="#52514e")
+    ax.set_ylim(len(a.edo) + 0.95, -0.5)
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
-    ax.set_title("Error de afinación al proyectar la melodía entre sistemas EDO",
-                 loc="left", fontsize=10, color="#0b0b0b")
-    ax.set_xlabel("Grado de la melodía en 24-EDO", color="#52514e")
-    ax.set_ylabel("Sistema de afinación", color="#52514e")
-    fig.tight_layout()
+    ax.set_xlabel("Grado de la melodía en 24-EDO", color="#52514e", fontsize=10, labelpad=42)
+    ax.set_ylabel("Sistema de afinación", color="#52514e", fontsize=10, labelpad=12)
+    fig.suptitle("Equivalencias de afinación: melodía de la banda en otros sistemas EDO",
+                 x=0.5, y=0.98, ha="center", fontsize=16, fontweight="bold", color="#0b0b0b")
+    fig.text(0.5, 0.925, "Cada celda muestra el error en cents al proyectar un grado de la melodía de 24-EDO a otro sistema.\n"
+             "Los sistemas con colores más claros conservan mejor la afinación microtonal de la banda.",
+             ha="center", va="top", fontsize=9.5, color="#52514e", linespacing=1.25)
+    fig.text(0.22, 0.045, "Paleta: blanco = menor error de afinación; azul oscuro = mayor error.  La fila inferior indica el porcentaje de uso de cada grado en la melodía del álbum.",
+             ha="left", va="bottom", fontsize=8.8, color="#52514e")
+    fig.subplots_adjust(left=0.22, right=0.88, top=0.78, bottom=0.27)
     fig.savefig(a.salida + ".png", dpi=200, facecolor="#fcfcfb")
     print(f"→ {a.salida}.md/.json/.png")
 

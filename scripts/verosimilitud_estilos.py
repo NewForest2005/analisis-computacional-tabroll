@@ -30,7 +30,7 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 CORPUS = RAIZ / "references" / "corpus" / "estilos_por_pieza.json"
 ESTILOS = {"rock": "Rock (RS 200)", "clasica": "Práctica común (Kostka-Payne)", "jazz": "Jazz (iRealPro)", "pop": "Pop (Hooktheory)"}
-COLOR = {"rock": "#2a78d6", "clasica": "#eb6834", "jazz": "#1baf7a", "pop": "#eda100"}
+COLOR = {"rock": "#1f5fa8", "clasica": "#c6532a", "jazz": "#16825d", "pop": "#bd7900"}
 GRADOS = ["I", "♭II", "II", "♭III", "III", "IV", "♯IV", "V", "♭VI", "VI", "♭VII", "VII"]
 ALFA = 0.5                                                              # suavizado de Laplace
 
@@ -156,6 +156,7 @@ def dibujar(filas: list[dict], C: dict, salida: str) -> None:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import numpy as np
+    from matplotlib.lines import Line2D
 
     tinta, gris, fondo = "#0b0b0b", "#52514e", "#fcfcfb"
     est = list(C)
@@ -198,29 +199,43 @@ def dibujar(filas: list[dict], C: dict, salida: str) -> None:
     mu = X.mean(0)
     U, S_, Vt = np.linalg.svd(X - mu, full_matrices=False)
     P = (X - mu) @ Vt[:2].T
-    fig, ax = plt.subplots(figsize=(10, 8), facecolor=fondo)
+    fig, ax = plt.subplots(figsize=(10, 8.5), facecolor=fondo)
     for e in est:
         k = [i for i, l in enumerate(lab) if l == e]
-        ax.scatter(P[k, 0], P[k, 1], s=10, color=COLOR[e], alpha=0.35, label=f"{ESTILOS[e]} · {len(k)} piezas", edgecolors="none")
+        ax.scatter(P[k, 0], P[k, 1], s=14, color=COLOR[e], alpha=0.58, label=f"{ESTILOS[e]} · {len(k)} piezas", edgecolors="none")
     for f in filas:
         q = (np.sqrt([f["fundamentales"].get(g, 0) / 100 for g in GRADOS]) - mu) @ Vt[:2].T
         banda = "primus" not in f["corrida"].lower()
         ax.scatter(*q, s=110, marker="*" if banda else "D", color=tinta if banda else "#6250d6", zorder=5, edgecolors=fondo, linewidths=1)
-        ax.annotate(f["cancion"], q, xytext=(7, 5), textcoords="offset points", fontsize=9.5, color=tinta, fontweight="bold" if banda else "normal")
     # qué grado empuja cada eje
     for k in np.argsort(-np.abs(Vt[0]))[:3]:
         pass
-    ax.set_xlabel("Componente 1 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[0][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[0]))[:3]) + ")", color=gris)
-    ax.set_ylabel("Componente 2 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[1][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[1]))[:3]) + ")", color=gris)
-    ax.set_title("Posición de las canciones según sus fundamentales armónicas", loc="left", fontsize=12, color=tinta)
-    ax.legend(frameon=False, fontsize=9, markerscale=2.2, loc="best")
+    ax.set_xlabel("Componente 1 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[0][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[0]))[:3]) + ")", color=gris, labelpad=15)
+    ax.set_ylabel("Componente 2 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[1][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[1]))[:3]) + ")", color=gris, labelpad=15)
+    fig.suptitle("Posición de las canciones según sus fundamentales armónicas", x=0.5, y=0.97,
+                 ha="center", fontsize=17, fontweight="bold", color=tinta)
+    handles, labels = ax.get_legend_handles_labels()
+    handles.extend([
+        Line2D([0], [0], marker="*", color="none", markerfacecolor=tinta, markeredgecolor=tinta,
+               markersize=8, label="★  Angine de Poitrine"),
+        Line2D([0], [0], marker="D", color="none", markerfacecolor="#6250d6", markeredgecolor="#6250d6",
+               markersize=7, label="◆  Primus"),
+    ])
+    leyenda = fig.legend(handles=handles, frameon=False, fontsize=8.5, markerscale=1.0, loc="upper left",
+                         bbox_to_anchor=(0.04, 0.855), ncol=1, title="Paleta: corpus y banda", title_fontsize=10.5,
+                         labelspacing=1.1, borderpad=0.2)
+    leyenda.get_title().set_fontweight("bold")
+    leyenda.get_title().set_ha("left")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)
     ax.grid(color="#e4e3df", lw=0.7)
     for s in ax.spines.values():
         s.set_visible(False)
-    fig.text(0.01, 0.01, "Ejes = componentes principales del reparto de fundamentales en 12 grados; ★ = banda y ◆ = Primus.", fontsize=8, color=gris)
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    fig.text(0.04, 0.055, "La posición resume la cercanía entre los repartos de fundamentales armónicas de las canciones y los corpus.\n"
+             "Cada punto del fondo es una pieza del corpus; su color identifica el corpus de referencia.\n"
+             "La intensidad indica la concentración visual de piezas cercanas; los símbolos muestran las canciones comparadas.",
+             ha="left", fontsize=9.5, color=gris, linespacing=1.35)
+    fig.subplots_adjust(left=0.18, right=0.97, top=0.76, bottom=0.21)
     fig.savefig(salida + "_mapa.png", dpi=200, facecolor=fondo)
     plt.close(fig)
 
