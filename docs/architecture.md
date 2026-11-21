@@ -1,6 +1,6 @@
 # Organización del código
 
-La extracción mantiene una relación uno a uno con el notebook:
+La extracción mantiene una relación uno a uno con el notebook, que es la fuente de verdad: los módulos se regeneran con `make extract` y no se editan a mano (ver «Regenerar los módulos» en el [README](../README.md#regenerar-los-módulos)).
 
 ```text
 notebooks/Tabroll_Angine_de_Poitrine.ipynb

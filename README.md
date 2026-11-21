@@ -2,7 +2,7 @@
 
 En este repositorio se encuentra el código fundamental para el análisis computacional de audio y la generación de un piano roll armónico/melódico estilo TheoryTab.
 
-El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Sus 94 celdas de código fueron extraídas en módulos Python independientes dentro de [`src/tabroll/cells`](src/tabroll/cells). Las celdas que definen una función o clase usan ese nombre como archivo (`find_stem.py`, `scale.py`, `render_song_graphic.py`); las celdas con varias funciones o configuración usan un nombre descriptivo.
+El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Cada una de sus celdas de código se extrae a un módulo Python independiente dentro de [`src/tabroll/cells`](src/tabroll/cells); el inventario actualizado, con el número de celda original, está en [`docs/cell-index.md`](docs/cell-index.md). **El notebook es la fuente de verdad**: los cambios se hacen en el notebook y después se regeneran los módulos (ver [Regenerar los módulos](#regenerar-los-módulos)). Las celdas que definen una función o clase usan ese nombre como archivo (`find_stem.py`, `scale.py`, `render_song_graphic.py`); las celdas con varias funciones o configuración usan un nombre descriptivo.
 
 ## Estructura
 
@@ -10,11 +10,14 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `src/tabroll/cells/`: extracción ordenada, una celda de código por archivo.
 - `docs/cell-index.md`: inventario y trazabilidad entre notebook y módulos.
 - `docs/architecture.md`: cómo se separan funciones, clases, inicialización, configuración y ejecución.
+- `docs/*.md`: notas de análisis (armonía, melodía, corpus y estilos, verosimilitud por bloques, evolución de la tesis).
+- `docs/articulo/`: artículo final en LaTeX y su PDF.
+- `docs/poster/`: póster en LaTeX (`poster_version_1_Santi.tex` incrusta `poster_original.pdf`) y su PDF.
 - `references/partituras/`: partituras y archivos Guitar Pro de referencia.
 - `references/corpus/`: corpus y datos de comparación estilística.
 - `trabajo/`: materiales de trabajo y diagnósticos archivados.
 - `docs/historial/`: historial auxiliar de la investigación.
-- `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook.
+- `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook (`--check` solo verifica).
 - `scripts/run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
 - `scripts/corpus_bloques.py` y `scripts/verosimilitud_por_bloques.py`: comparan armonía, escala, cuartos de tono y metro con los corpus disponibles.
 - `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
@@ -87,8 +90,8 @@ Las pistas `<canción>_guitar` y `<canción>_bass` se buscan junto a la canción
 ## Calidad
 
 ```bash
-python -m compileall -q src
-pytest
+make check   # extracción al día (sin escribir nada), sintaxis y dependencias
+make test    # todas las pruebas (unos 3 minutos)
 ```
 
 Los comandos de shell propios de Jupyter se conservan como comentarios en el módulo correspondiente para que todos los archivos `.py` sean sintácticamente válidos.
@@ -105,8 +108,16 @@ Ese objetivo instala Demucs, comprueba FFmpeg y ejecuta el notebook sobre `Angin
 
 ## Regenerar los módulos
 
-Si se modifica el notebook, regenerar los módulos con:
+Los módulos de `src/tabroll/cells/` se generan desde el notebook: **no los edites a mano**. Haz el cambio en la celda del notebook y regenera:
 
 ```bash
-python scripts/extract_cells.py
+make extract                                        # regenera módulos y docs/cell-index.md
+.venv/bin/python scripts/extract_cells.py --check   # solo informa diferencias, no escribe
 ```
+
+La extracción guarda en `src/tabroll/cells/.extraccion.json` la huella de cada módulo que escribe. Si un módulo cambió a mano desde la última extracción, `make extract` se detiene y lista esos archivos en lugar de borrar el cambio. Hay dos salidas:
+
+- Pasar el cambio a la celda correspondiente del notebook y volver a correr `make extract` (lo normal).
+- Descartar el cambio manual con `.venv/bin/python scripts/extract_cells.py --force`.
+
+La prueba `tests/test_extracted_cells.py` falla si notebook y módulos no coinciden.
