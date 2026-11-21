@@ -6,19 +6,19 @@ Alteraciones (Stein-Zimmermann): 'q' medio sostenido, 's' sostenido, 't' tres cu
 Corchea = 256 (la partitura dice 260; la hoja del bajo del sencillo, 256). Las secciones con la guitarra 2 y el bajo en
 loop de 7/8 siguen ese loop aunque la guitarra 1 vaya en 2/4.
 
-Correcciones de oído (autor, 9-nov-2026, verificadas con clips de la guitarra real frente a la partitura sintetizada):
+Correcciones de oído (autor, verificadas con clips de la guitarra real frente a la partitura sintetizada):
 - Melodía «Fabien»: tresillo Mi Re Si en el c. 1; en el c. 5, Si (corchea), tresillo Si La Si, Do# y Si.
 - Segunda voz V2: Do#¼ (no Do#) en el c. 3 y las cuatro últimas notas una octava arriba.
 - Reparto de vueltas de c. 89-110 según la grabación: la melodía «Fabien» entra cinco vueltas después de lo que dice
   la partitura (4:29); antes suena V2, que el looper mantiene hasta el final.
 - Ya confirmados sin cambios: «Guitarra 1 sola» (c. 2-6) y «Guitarra 1 dobla al bajo».
 
-Arbitraje a ciegas de los desacuerdos con el cuaderno (autor, 13-nov-2026; en cada clip, la nota escrita, un cuarto de
+Arbitraje a ciegas de los desacuerdos con el cuaderno (autor; en cada clip, la nota escrita, un cuarto de
 tono arriba y uno abajo, en orden al azar):
 - Patrón W de la guitarra 2, posición 3: Re#¼ (no Re#), en 3 de 3 clips. El mismo giro de la guitarra 1 (patrón Z,
   posición 3) queda como en la partitura hasta oírlo aparte.
 
-Segunda ronda a ciegas (autor, 14-nov-2026; versiones completas en orden al azar):
+Segunda ronda a ciegas (autor; versiones completas en orden al azar):
 - «Corrido otra vez» (c. 26-29): las notas de la guitarra 1 (XYXZ corrido) no se oyen; se quitan (2 de 2 clips,
   seguridad alta). Quedan la guitarra 2 y el bajo.
 - El giro al unísono (patrón Z de la guitarra 1, posición 3): el autor eligió «las dos guitarras en Re#» en 2 de 2
@@ -87,7 +87,7 @@ FILL = pat((0, 1, 'E3'), (1, 1, 'D3'), (2, 1, 'B2'), (3, 1, 'A2'), (4, 1, 'E2'),
 # loop del bajo desde el c. 16 (sin correr): el «E1 E2» queda al final
 Zb2 = pat((0, 1, 'E3'), (1, 1, 'D3'), (2, 1, 'Dq3'), (3, 1, 'Ds3'), (4, 1, 'Dt3'), (5, 2, 'E3'), (7, 1, 'E3'), (9, 1, 'D3'), (10, 1, 'E2'), (11, 1, 'E3'))
 # ------------------------------------------------------------------ 2/4 (8 semicorcheas por compás)
-# melodía «Fabien» corregida de oído por el autor (9-nov): tresillo Mi Re Si en el c. 1; en el c. 5, Si (corchea),
+# melodía «Fabien» corregida de oído por el autor: tresillo Mi Re Si en el c. 1; en el c. 5, Si (corchea),
 # tresillo Si La Si, Do# y Si (no La)
 BAR5 = pat((0, 2, 'B4'), (2, .67, 'B4'), (2.67, .67, 'A4'), (3.33, .67, 'B4'), (4, 2, 'Cs5'), (6, 2, 'B4'))
 M = seq((8, pat((0, 4, 'E5'), (4, 2, 'E5'), (6, .67, 'E5'), (6.67, .67, 'D5'), (7.33, .67, 'B4'))),
@@ -144,7 +144,7 @@ LOOP_SECS = [('Corrido otra vez (c. 26-29, 2 vueltas)', 112, 'XYXZ'), ('Guitarra
              ('Melodía «Fabien» otra vez (c. 47-53, 4 vueltas)', 224, 'M'), ('Guitarra 1 dobla al bajo (c. 54-58)', 112, 'V')]
 for name, n, g1 in LOOP_SECS:
     parts = {'G2': shifted(n, W, 14), 'B': shifted(n, Zb2, 14)}
-    if g1 != 'XYXZ':                 # en «Corrido otra vez» la guitarra 1 no se oye (segunda ronda a ciegas, 14-nov)
+    if g1 != 'XYXZ':                 # en «Corrido otra vez» la guitarra 1 no se oye (segunda ronda a ciegas)
         parts['G1'] = {'V': up(shifted(n, Zb2, 14), 12), 'M': rep(4, 56, M)}[g1]
     sec(name, n, parts)
 # Notas de la partitura que el autor no oye en la grabación (segunda ronda a ciegas). No entran en la referencia y
@@ -155,7 +155,7 @@ sec('Bajo solo (c. 60-66, 2 vueltas)', 112, {'B': rep(2, 56, L)})
 sec('«Sébastien»: bajo solo (c. 67-74, 4 vueltas)', 224, {'B': rep(4, 56, L)})
 sec('La guitarra 2 toca la línea del bajo (c. 75-81, 2 vueltas)', 112, {'G2': rep(2, 56, L_G), 'B': rep(2, 56, L)})
 sec('Las dos guitarras (c. 82-88, 2 vueltas)', 112, {'G1': rep(2, 56, V2), 'G2': rep(2, 56, L_G), 'B': rep(2, 56, L)})
-# Reparto de vueltas según la grabación (escucha del autor y alturas medidas en la pista de guitarra, 9-nov):
+# Reparto de vueltas según la grabación (escucha del autor y alturas medidas en la pista de guitarra):
 # la melodía «Fabien» no entra en el c. 89 sino cinco vueltas después (4:29); antes suena la segunda voz V2,
 # que el looper mantiene hasta el final. La duración total (12 vueltas) no cambia.
 sec('Segunda voz sobre la línea del bajo (c. 89-96, 5 vueltas, según la grabación)', 280,

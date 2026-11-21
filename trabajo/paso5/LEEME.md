@@ -1,4 +1,4 @@
-# Paso 5: equivalencias en 19, 31 y 53-EDO (16-nov)
+# Paso 5: equivalencias en 19, 31 y 53-EDO
 
 Van en `scripts/`:
 - `equivalencias_edo.py` (nuevo). Importa funciones de `figuras_album.py`.

@@ -14,12 +14,12 @@ matemáticos elaborados. Las entradas marcadas «por verificar» requieren compr
 - docs/evolucion_de_la_tesis.md: evolución conceptual y bibliográfica del proyecto.
 - references/referencias_completas.md: base bibliográfica original, incorporada íntegramente desde la sección siguiente.
 - trabajo/historial_commits_cuaderno.txt: historial del desarrollo y procedencia de las etapas del análisis.
-- LEEME_poster_nuevos_graficos.md: contenido propuesto para introducción, metodología, resultados, perspectivas y conclusiones del póster.
-- formulas_teoria_matematica_angine_de_poitrine.pdf: resumen de fórmulas de tono logarítmico, Mel, Fourier, MFCC, KL y repetición temporal.
+- docs/poster/LEEME_nuevos_graficos.md: contenido propuesto para introducción, metodología, resultados, perspectivas y conclusiones del póster.
+- docs/formulas/formulas_teoria_matematica_angine_de_poitrine.pdf: resumen de fórmulas de tono logarítmico, Mel, Fourier, MFCC, KL y repetición temporal.
 
 ## Referencias bibliográficas y fuentes
 
-Verificadas en la investigación del 16-nov-2026 salvo las marcadas «por verificar». Antes de enviar, contrastar cada DOI en Crossref: TISMIR rechaza referencias inexistentes o incorrectas.
+Verificadas durante la investigación, salvo las marcadas «por verificar». Antes de enviar, contrastar cada DOI en Crossref: TISMIR rechaza referencias inexistentes o incorrectas.
 
 **Extracción, separación y estructura**
 

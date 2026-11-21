@@ -1,6 +1,6 @@
 ## Referencias
 
-Verificadas en la investigación del 16-nov-2026 salvo las marcadas «por verificar». Antes de enviar, contrastar cada DOI en Crossref: TISMIR rechaza referencias inexistentes o incorrectas.
+Verificadas durante la investigación, salvo las marcadas «por verificar». Antes de enviar, contrastar cada DOI en Crossref: TISMIR rechaza referencias inexistentes o incorrectas.
 
 **Extracción, separación y estructura**
 

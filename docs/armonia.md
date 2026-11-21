@@ -257,7 +257,7 @@ Hasta aquí la armonía se medía contra las pistas corregidas de oído (dos gui
 `references/completas/` trae, para Sarniezz, Mata Zyklek y Fabienk, las notas de TODAS las pistas de la partitura de
 Guitar Pro (guitarras I a VI y bajo), ya en el tiempo de la grabación oficial. Solo sirve para evaluar.
 
-Cómo se armó (scripts en `trabajo/trabajo_14nov_c.zip`, carpeta `fa/`):
+Cómo se armó (scripts en `trabajo/referencia_acordes.zip`, carpeta `fa/`):
 
 1. Alturas, cuerdas, trastes, ligados y bends: de la tablatura de los PDF por pista. Tiempos: de los WAV que Guitar Pro
    exporta por pista. Entre el 82 % y el 88 % de las notas tiene su ataque medido en el WAV; el resto se interpola entre

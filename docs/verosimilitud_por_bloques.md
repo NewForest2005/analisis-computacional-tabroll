@@ -12,4 +12,4 @@ En ese bloque los cuartos de tono se reparten entre los dos semitonos vecinos y 
 
 Mata Zyklek, Fabienk y Yor Zarad mezclan compases dentro de la misma canción (Fabienk: 52 % del tiempo en 7, 28 % en 4 y 18 % en 3). Ninguna pieza del RS 200, del iRealPro ni de SymbTr hace eso: cada pieza de esos corpus tiene un solo compás o usul, aunque SymbTr incluye muchos de 7, 9 y 10 tiempos. Por eso el resultado dice que no hay antecedente en los corpus revisados, no que no lo haya en ninguna música. El estilo más cercano en la literatura es el rock progresivo y el math rock. El corpus que permitiría comprobarlo, ProgGP (173 temas de metal progresivo en Guitar Pro; Loth et al. 2023), solo se obtiene pidiéndolo por correo a sus autores y no estuvo disponible para esta tesis.
 
-Las cifras del punto 2 y el reparto de compases de Fabienk son los de la corrida final del 15-nov. Si vuelves a correr el test con otras corridas del cuaderno, revísalas antes de citarlas.
+Las cifras del punto 2 y el reparto de compases de Fabienk son los de la corrida final. Si vuelves a correr el test con otras corridas del cuaderno, revísalas antes de citarlas.

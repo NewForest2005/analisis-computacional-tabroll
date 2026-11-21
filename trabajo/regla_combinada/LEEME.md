@@ -1,4 +1,4 @@
-# Regla combinada de «grado fijo» en cuarto de tono (16-nov)
+# Regla combinada de «grado fijo» en cuarto de tono
 
 Reemplaza scripts/verosimilitud_por_bloques.py (usa campos_haba.py, que va también por si acaso).
 

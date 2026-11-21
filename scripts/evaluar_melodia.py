@@ -1,7 +1,7 @@
 """Mide la voz aguda y la voz grave de una o varias corridas contra las partituras corregidas.
 
 Uso:
-    python scripts/evaluar_melodia.py outputs/2026-11-09_*            # una o varias carpetas de corrida
+    python scripts/evaluar_melodia.py outputs/<corrida>*               # una o varias carpetas de corrida
     python scripts/evaluar_melodia.py outputs/<carpeta> --cancion sarniezz
 
 Escribe evaluacion_melodia.json y evaluacion_melodia_por_seccion.csv dentro de cada carpeta.

@@ -5,21 +5,21 @@ Alturas ESCRITAS en MIDI con cuartos de tono: guitarras en clave de sol 8vb y ba
 (TRANSPOSE). Alteraciones (Stein-Zimmermann): 'q' medio sostenido, 's' sostenido, 't' tres cuartos sostenido,
 'd' medio bemol, 'b' bemol. Cada nota alterada lleva su signo, así que una nota sin signo es natural.
 
-Correcciones de oído (autor, 9-nov-2026, verificadas con clips de la guitarra real frente a la partitura sintetizada):
+Correcciones de oído (autor, verificadas con clips de la guitarra real frente a la partitura sintetizada):
 - Frase 1, posiciones 39-47: Re La¼ Re Do#¼ Do# Do#¼ Re Do#¼ Do#. El La¼ va arriba (el audio no tiene La¼ grave).
 - Frase 2 (guitarra 2): Sol# en 5, 7 y 18; Re6 en 8 (no Fa6; octava comprobada en el audio); Si¼-Si en semicorcheas en
   15; Si¼ en 22 y Si en 23. Confirmada en c. 43-51 y c. 64-69.
 - Patrón del bajo tocado por la guitarra 1: Sol#¼ en 8, Do#¼ en 12.5 y Do# en 13. El bajo queda como en la partitura.
 - Ya confirmados sin cambios: el riff (c. 15-18) y la guitarra 2 una octava abajo en c. 37-42.
 
-Arbitraje a ciegas de los desacuerdos con el cuaderno (autor, 13-nov-2026; en cada clip, la nota escrita, un cuarto de
+Arbitraje a ciegas de los desacuerdos con el cuaderno (autor; en cada clip, la nota escrita, un cuarto de
 tono arriba y uno abajo, en orden al azar):
 - Frase 1, posición 30: Fa#¼ (no Fa#), en 2 de 2 clips con seguridad alta. La guitarra 2 una octava abajo (c. 37-42)
   sale de la frase 1 y cambia con ella.
 - Confirmado como en la partitura: Do#¼ en la posición 42 (3 de 3 clips).
 - Sin decidir en esa ronda: posiciones 13 (Fa#), 25 y 28 (La¼).
 
-Segunda ronda a ciegas (autor, 14-nov-2026; tres clips nuevos por posición, misma regla: cambia con 2 de 3):
+Segunda ronda a ciegas (autor; tres clips nuevos por posición, misma regla: cambia con 2 de 3):
 - Frase 1, posición 13: Fa#¼ (no Fa#), en 2 de 3 clips, seguridad alta.
 - Frase 1, posición 25: La# (no La¼), en 2 de 3 clips, seguridad alta.
 - Frase 1, posición 28: La# (no La¼), en 3 de 3 clips, seguridad alta.
@@ -80,11 +80,11 @@ P1 = pat((0, 1, 'D5'), (1, 1, 'D5'), (2, 1, 'D5'), (3, 1, 'E5'), (6, 2, 'A4'), (
          (24, 1, 'A4'), (25, 1, 'As4'), (26, 1, 'Fs5'), (27, 1, 'A4'), (28, 1, 'As4'), (29, 1, 'Fs5'), (30, 1, 'Ft5'), (31, 1, 'G5'),
          (32, 1, 'Gq5'), (33, 1, 'Gs5'), (34, 1, 'Cs5'), (35, 1, 'Cq5'), (36, 1, 'C5'), (37, 1, 'Bq4'), (38, 1, 'B4'), (39, 1, 'D5'),
          (40, 1, 'Aq5'), (41, 1, 'D5'), (42, 1, 'Ct5'), (43, 1, 'Cs5'), (44, 1, 'Ct5'), (45, 1, 'D5'), (46, 1, 'Ct5'), (47, 1, 'Cs5'))
-# 39-47 corregidas de oído por el autor (9-nov): «D A1/4 D C#1/4 C# C#1/4 D C#1/4 C#», misma métrica; el La¼ va arriba (el audio no tiene La¼3)
+# 39-47 corregidas de oído por el autor: «D A1/4 D C#1/4 C# C#1/4 D C#1/4 C#», misma métrica; el La¼ va arriba (el audio no tiene La¼3)
 # guitarra 2 en 37-42: la frase una octava abajo (el primer compás al unísono)
 P1LOW = [(o, d, p if o < 8 else p - 12) for o, d, p in P1
          if not (o == 8 and p == P('D5')) and o not in (16, 40) and not (o == 19 and p != P('Cs5'))]
-# frase 2 corregida de oído por el autor (9-nov, escuchada en c. 64-69): Sol# en 5, 7 y 18 (no Sol), Re6 en 8 (no Fa6;
+# frase 2 corregida de oído por el autor (escuchada en c. 64-69): Sol# en 5, 7 y 18 (no Sol), Re6 en 8 (no Fa6;
 # el audio confirma la octava), Si¼-Si en semicorcheas en 15 (no silencio), Si¼ en 22 y Si en 23 (no Si y Si-¼)
 P2 = pat((0, 1, 'D5'), (1, 1, 'D5'), (2, 1, 'B5'), (3, 1, 'Gs5'), (5, 1, 'Gs5'), (6, 1, 'B5'), (7, 1, 'Gs5'),
          (8, 1, 'D6'), (10, 1, 'Cs6'), (11, 1, 'Cq6'), (12, 1, 'C6'), (13, 1, 'Bq5'), (14, 1, 'B5'), (15, .5, 'Bq5'), (15.5, .5, 'B5'),
@@ -92,7 +92,7 @@ P2 = pat((0, 1, 'D5'), (1, 1, 'D5'), (2, 1, 'B5'), (3, 1, 'Gs5'), (5, 1, 'Gs5'),
 DYAD20 = pat((7, 3, 'D5'), (7, 3, 'Fs5'))
 G13 = pat((10, 1, 'E4'), (11, 1, 'Ds4'))
 G14 = pat((0, 1, 'Ds4'), (1, 1, 'Dq4'), (2, 1, 'D4'), (3, 1, 'B3'), (7, 1, 'G3'), (8, 1, 'Gq3'), (9, 1, 'Gs3'), (10, 1, 'Gq3'), (11, 1, 'G3'))
-# la guitarra 1 toca el patrón del bajo con tres alturas distintas (corregidas de oído por el autor, 9-nov):
+# la guitarra 1 toca el patrón del bajo con tres alturas distintas (corregidas de oído por el autor):
 # posición 8 Sol#¼ (no Sol#), 12.5 Do#¼ (no Do#), 13 Do# (no Do¼). El bajo se deja como en la partitura.
 BPG = [(o, d, {8: P('Gt3'), 12.5: P('Ct4'), 13: P('Cs4')}.get(o, p)) for o, d, p in BP]
 BP12, BP24 = up(BPG, 12), up(BPG, 24)

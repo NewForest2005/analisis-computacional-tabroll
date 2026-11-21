@@ -1,4 +1,4 @@
-# Gentle Giant como repertorio comparado (16-nov)
+# Gentle Giant como repertorio comparado
 
 Generado a partir de las salidas: comparar_gg.* (comparar_repertorio.py), campos_gg.* (campos_haba.py), ciclos_gg.* (ciclos_metricos.py).
 

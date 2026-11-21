@@ -63,7 +63,7 @@ PC24 = ['C', 'C+', 'C#', 'C#+', 'D', 'D+', 'D#', 'D#+', 'E', 'E+', 'F', 'F+',
         'F#', 'F#+', 'G', 'G+', 'G#', 'G#+', 'A', 'A+', 'A#', 'A#+', 'B', 'B+']
 
 
-# Nota de reposo de cada canción, de oído (autor, 9-nov-2026). Sirve para comprobar el centro, también sin partitura.
+# Nota de reposo de cada canción, de oído (autor). Sirve para comprobar el centro, también sin partitura.
 TONICA_DE_OIDO = {"mata zyklek": "G", "sarniezz": "E", "fabienk": "E", "utzp": "E", "uztp": "E", "yor zarad": "G"}
 
 

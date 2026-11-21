@@ -1,4 +1,4 @@
-# King Crimson como repertorio comparado (16-nov)
+# King Crimson como repertorio comparado
 
 Generado a partir de las salidas: comparar_kc.* (comparar_repertorio.py), campos_kc.* (campos_haba.py), ciclos_kc.* (ciclos_metricos.py). Banda: las 6 corridas _repro del Vol. II. Control: Primus.
 

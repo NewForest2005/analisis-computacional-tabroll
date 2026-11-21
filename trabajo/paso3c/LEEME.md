@@ -1,4 +1,4 @@
-# Paso 3c: King Crimson y Gentle Giant como repertorios comparados (16-nov)
+# Paso 3c: King Crimson y Gentle Giant como repertorios comparados
 
 Reemplaza en `scripts/` estos cuatro archivos. El único cambio: los nombres de las canciones salen sin el nombre del grupo delante (King Gizzard, King Crimson, Gentle Giant, Primus). Las cifras no cambian.
 

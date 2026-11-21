@@ -1,0 +1,69 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,margin=2.6cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish,english,bidi=basic,provide=*]{babel}
+\babelprovide[import,onchar=ids fonts]{english}
+\babelfont{rm}{Noto Sans}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{microtype}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\definecolor{azul}{RGB}{30,58,95}
+
+\newcommand{\bloque}[4]{%
+  \vspace{0.55cm}
+  {\Large\color{azul}\textbf{#1}}\par
+  \vspace{0.22cm}
+  \begin{equation*}
+    #2
+  \end{equation*}
+  \vspace{0.12cm}
+  {\normalsize \textbf{Uso en el proyecto:} #3}\par
+  \vspace{0.10cm}
+  {\small \textbf{Variables:} #4}\par
+  \vspace{0.48cm}
+  \hrule height 0.35pt
+}
+
+\begin{document}
+
+{\color{azul}\LARGE\textbf{Fórmulas matemáticas principales}}\par
+\vspace{0.25cm}
+{\large Análisis computacional microtonal de Angine de Poitrine}\par
+\vspace{0.35cm}
+\hrule height 0.8pt
+
+\bloque{Escala de tono logarítmica}
+{c=1200\log_2\left(\frac{f}{f_0}\right)}
+{Se usó para medir intervalos entre alturas detectadas y expresar desviaciones microtonales en cents antes de compararlas en 24-EDO.}
+{$c$: distancia de altura en cents; $f$: frecuencia de la nota analizada; $f_0$: frecuencia de referencia.}
+
+\bloque{Escala Mel}
+{\operatorname{mel}(f)=2595\log_{10}\left(1+\frac{f}{700}\right)}
+{Se usó para agrupar la energía del audio en bandas perceptuales y construir descriptores espectrales complementarios al análisis de alturas.}
+{$\operatorname{mel}(f)$: frecuencia expresada en Mels; $f$: frecuencia física en Hz; $700$: constante de la transformación perceptual.}
+
+\bloque{Transformada de Fourier}
+{X[k]=\sum_{n=0}^{N-1}x[n]e^{-2\pi i kn/N}}
+{Se usó sobre ventanas de audio para identificar la energía de sus componentes frecuenciales y apoyar la separación y el análisis de la señal.}
+{$X[k]$: componente compleja en el bin $k$; $x[n]$: amplitud de la muestra $n$; $N$: número de muestras de la ventana; $k$: índice de frecuencia.}
+
+\newpage
+
+\bloque{Coeficientes Cepstrales de Frecuencia Mel (MFCC)}
+{\operatorname{MFCC}_q(m)=\sum_{r=0}^{R-1}L_r(m)\cos\left[\frac{\pi q}{R}\left(r+\frac12\right)\right]}
+{Se usó para resumir la envolvente espectral y caracterizar el timbre del audio como información complementaria a la melodía y la armonía.}
+{$\operatorname{MFCC}_q(m)$: coeficiente $q$ en la ventana $m$; $L_r(m)$: log-energía del filtro Mel $r$; $R$: número de filtros; $q$: índice del coeficiente; $m$: ventana temporal.}
+
+\bloque{Divergencia de Kullback--Leibler}
+{D_{\mathrm{KL}}(p\mathbin{\|}q)=\sum_i p_i\log_2\left(\frac{p_i}{q_i}\right)}
+{Se usó como componente de la comparación de distribuciones de alturas, fundamentales y rasgos entre canciones y corpus de referencia.}
+{$D_{\mathrm{KL}}(p\|q)$: divergencia de $p$ respecto de $q$; $p_i$: proporción del rasgo $i$ en la canción; $q_i$: proporción del rasgo $i$ en el corpus; $i$: clase o rasgo comparado.}
+
+\bloque{Medida de repetición a distancia}
+{R(\tau)=\sum_t\bigl(z[t]-\bar z\bigr)\bigl(z[t+\tau]-\bar z\bigr)}
+{Se usó para detectar la repetición del riff o del patrón temporal después de una distancia $\tau$ y estimar ciclos métricos.}
+{$R(\tau)$: repetición a distancia $\tau$; $z[t]$: presencia o intensidad del evento en el instante $t$; $\bar z$: media temporal; $\tau$: distancia temporal entre patrones.}
+
+\end{document}

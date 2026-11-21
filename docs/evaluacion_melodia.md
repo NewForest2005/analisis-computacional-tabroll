@@ -61,7 +61,7 @@ Lo que queda fuera:
 
 ## Correcciones de las partituras
 
-Las de Sarniezz y Fabienk se hicieron de oído el 9-nov-2026. Cada una se verificó con clips: la pista de guitarra real
+Las de Sarniezz y Fabienk se hicieron de oído. Cada una se verificó con clips: la pista de guitarra real
 en un canal y la partitura sintetizada en el otro. Están anotadas en la cabecera de `references/sarniezz_partitura.py`
 y de `references/fabienk_partitura.py`. Mata Zyklek usa `references/mata_zyklek_loops.py` sin cambios.
 
@@ -131,7 +131,7 @@ estéreo, ni una red general separan la melodía de las otras capas en esta band
 
 ## Reproducibilidad (paso 1 del plan de trabajo)
 
-- Con las mismas pistas, el cuaderno da el mismo resultado. Entre 8 y 12 corridas de cada canción del 11 de noviembre,
+- Con las mismas pistas, el cuaderno da el mismo resultado. Entre 8 y 12 corridas de cada canción,
   con distintas versiones del cuaderno, dieron las mismas notas, la misma F y la misma tabla por compás.
 - Demucs era el único paso al azar: con `shifts=1` desplaza el audio entre 0 y 0.5 s antes de separar. Con el mismo
   código, Mata Zyklek dio 57.2 con unas pistas y 61.6 con otras. `separate_stems` fija ahora la semilla (`semilla=0`).
@@ -141,7 +141,7 @@ estéreo, ni una red general separan la melodía de las otras capas en esta band
   (`tests/test_reproducibilidad.py`). Se quitaron el bloque guiado por el `.gp` de la celda de la línea, que estaba
   apagado, y los presets de Fabienk y Mata Zyklek de la celda de ajustes.
 
-## Paso 3, primera ronda: altura de la línea (probado y descartado, 13-nov-2026)
+## Paso 3, primera ronda: altura de la línea (probado y descartado)
 
 Réplica de la celda de la línea fuera del cuaderno (las mismas funciones, con las pistas de semilla 0): reproduce la F
 guardada con ±0.9 puntos en la voz aguda y exacta en el bajo. Cada cambio se mide en las tres canciones con partitura
@@ -167,7 +167,7 @@ y solo se adopta si sube en las tres. Cambio en puntos de F (Sarniezz / Mata Zyk
   ataques que dejan más notas regulares entre vueltas acierta en las tres, pero por márgenes de 7 a 24 notas: queda
   como candidato para la prueba ciega.
 
-## Arbitraje a ciegas de los desacuerdos (13-nov)
+## Arbitraje a ciegas de los desacuerdos
 
 Donde el cuaderno y la partitura corregida dan alturas distintas una y otra vez, el autor juzgó de oído qué toca la
 guitarra, sin saber cuál era cuál. Cada clip tiene la pista de guitarra real en un canal y la partitura sintetizada en
@@ -199,7 +199,7 @@ El bajo no cambia. Los comentarios de esta ronda dieron cuatro correcciones cand
 notas de la guitarra 1 de Fabienk que no se oyen, un Re de Mata Zyklek antes de un silencio y la fase de la frase 2 de
 Sarniezz en los c. 43-51. Van a una segunda ronda con la misma regla.
 
-## Arbitraje a ciegas, segunda ronda (14-nov)
+## Arbitraje a ciegas, segunda ronda
 
 Fueron 21 clips con la síntesis más corta. La regla se fijó antes de escuchar: en la parte 1, una posición cambia si al
 menos 2 de sus 3 clips eligen la misma altura distinta de la partitura; en la parte 2, una corrección se aplica si sus

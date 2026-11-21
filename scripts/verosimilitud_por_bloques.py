@@ -366,7 +366,7 @@ def main() -> None:
 
     cc = [R[r]["concentracion"] for r in a.control if r in R and R[r]["concentracion"] is not None]
     media, de = (float(np.mean(cc)), max(float(np.std(cc, ddof=1)), 2.0)) if len(cc) >= 2 else CONTROL_CONC
-    # Regla combinada de «grado fijo» en cuarto de tono (16-nov). Las tres condiciones:
+    # Regla combinada de «grado fijo» en cuarto de tono. Las tres condiciones:
     # 1) concentración con z >= 2 frente al control; 2) al menos --min-segundos-cuartos de melodía en cuarto de tono
     #    (con 0.1 % del tiempo la concentración es ruido: Discipline); 3) separación de campos de Hába significativa
     #    (campos_haba.py): bajo y voz aguda evitan sonar en campos distintos al menos un --efecto-campos % más que el

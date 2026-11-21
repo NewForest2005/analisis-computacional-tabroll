@@ -21,7 +21,7 @@ Comprobaciones: la altura medida en el WAV coincide con la del PDF más el bend 
 semitonos alto según la pista y el registro, igual con y sin bend). El render y la grabación oficial van al mismo tempo:
 la grabación empieza 4.11 s más tarde y no se desvía de esa recta (references/alineaciones/yor_zarad.json).
 
-Verificación de oído (autor, 14-nov-2026): 20 clips de la grabación frente a la partitura sintetizada y 6 clips a
+Verificación de oído (autor): 20 clips de la grabación frente a la partitura sintetizada y 6 clips a
 ciegas con versiones en orden al azar. Cambios respecto del PDF:
 - Intro: el primer acorde de armónicos de la guitarra 2 va un cuarto de tono arriba.
 - Figura del bajo (c. 24, 28, 64, 68, 72, 112, 116, 120, 124, 136, 140, 144 y 148): la nota aguda es La (no Sol#),

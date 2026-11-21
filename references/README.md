@@ -24,7 +24,7 @@ octava a ese campo.
 ## Partituras corregidas para la evaluación
 
 `sarniezz_partitura.py` y `fabienk_partitura.py` son las transcripciones de Andrew Kahler desplegadas nota a nota,
-con las correcciones hechas de oído y comprobadas contra la grabación oficial (9-nov-2026; la lista está en la
+con las correcciones hechas de oído y comprobadas contra la grabación oficial (la lista está en la
 cabecera de cada archivo). Junto con `mata_zyklek_loops.py` son las referencias que usa
 `src/tabroll/evaluation/melodia.py`. Las alturas están ESCRITAS: guitarras y bajos suenan una octava abajo
 (`TRANSPOSE`).
@@ -33,8 +33,8 @@ cabecera de cada archivo). Junto con `mata_zyklek_loops.py` son las referencias 
 sobre ese audio, así que con otra versión de la grabación hay que recalcularlo. Ver `docs/evaluacion_melodia.md`.
 
 `yor_zarad_partitura.py` y `yor_zarad_notas.csv` son la referencia de Yor Zarad, armada a ciegas con los PDF y los WAV
-de Guitar Pro y verificada de oído (14-nov-2026). `sarniezz_partitura.py`, `fabienk_partitura.py` y
-`mata_zyklek_loops.py` tienen además los cambios de las dos rondas de arbitraje a ciegas (13 y 14-nov-2026).
+de Guitar Pro y verificada de oído. `sarniezz_partitura.py`, `fabienk_partitura.py` y
+`mata_zyklek_loops.py` tienen además los cambios de las dos rondas de arbitraje a ciegas.
 
 ## Referencias completas para la armonía
 

@@ -3,7 +3,7 @@
 
 Ejemplo:
     python scripts/plot_line_diagnostics.py \
-        outputs/2026-11-08_170852_angine_de_poitrine_sarniezz_audio_offici_sarniezz_oficial \
+        outputs/<corrida_de_sarniezz> \
         --reference references/sarniezz_gp.json
 """
 

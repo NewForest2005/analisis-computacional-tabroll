@@ -1,4 +1,4 @@
-# Pasos 1 a 3 (16-nov)
+# Pasos 1 a 3
 
 Los tres van en `scripts/`. Probados solo en mi copia de trabajo; no toqué el repo.
 

@@ -1,4 +1,4 @@
-# Paso 4: figuras del álbum (16-nov)
+# Paso 4: figuras del álbum
 
 Van en `scripts/`:
 - `figuras_album.py` (nuevo): seis figuras del Vol. II.

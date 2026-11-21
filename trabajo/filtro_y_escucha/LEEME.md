@@ -1,4 +1,4 @@
-# Filtro de cuartos de tono con mínimo de tiempo, y escucha de Red (16-nov)
+# Filtro de cuartos de tono con mínimo de tiempo, y escucha de Red
 
 ## 1. scripts/verosimilitud_por_bloques.py (reemplaza el del repo)
 - Nuevo: la concentración solo cuenta si la melodía tiene al menos 10 s en cuarto de tono (`--min-segundos-cuartos`, por defecto 10).

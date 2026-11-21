@@ -1,4 +1,4 @@
-"""Aplica al cuaderno los dos cambios del 9-nov-2026.
+"""Aplica al cuaderno dos cambios: melodía y armonía en 24-EDO.
 
 1. Melodía (celda «2) Altura»): la línea `melody_n` se atrae suavemente al registro típico de la melodía de la canción.
 2. Armonía en 24-EDO, paso 1: celdas nuevas al final del cuaderno (funciones y una celda de ejecución).

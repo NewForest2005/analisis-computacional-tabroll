@@ -15,10 +15,10 @@ del intro; la nota con cabeza triangular del compás 4 de la melodía 2; el bajo
 Comparado con el audio oficial (alineado por DTW): el oficial no tiene unos 8 compases de la figura rápida de la
 guitarra 2 (c. 194-201) y hay tres corrimientos de un pulso (c. 57, 98 y 129). Lo demás coincide.
 
-Arbitraje a ciegas (autor, 13-nov-2026): el Fa y el Re de la melodía 1 de la guitarra 3, que el cuaderno da un cuarto
+Arbitraje a ciegas (autor): el Fa y el Re de la melodía 1 de la guitarra 3, que el cuaderno da un cuarto
 de tono abajo y arriba, quedan como en la partitura (3 de 3 clips cada uno, seguridad alta).
 
-Segunda ronda (autor, 14-nov-2026): en el c. 64 de la guitarra 3, donde la partitura tiene silencio, suena un Fa
+Segunda ronda (autor): en el c. 64 de la guitarra 3, donde la partitura tiene silencio, suena un Fa
 agudo (Fa5 escrito); el autor lo oyó en el clip y la altura medida en la pista de guitarra lo confirma. El Re antes
 del silencio de los c. 64 y 120 no se añadió: el autor no eligió ninguna versión. Control: Fa3 del Corte, bien.
 """
@@ -74,7 +74,7 @@ L = {
     'B96': bar((0, .5, 'G4'), (.5, .5, 'G4'), (1, .5, 'Ad4'), (1.5, .5, 'G4'), (2, .5, 'G4'),
                (2.5, .5, 'C4'), (3, .5, 'D4'), (3.5, .5, 'Dq4'), (4, .5, 'Eb4'), (4.5, .5, 'Ed4')),
     'T120': bar(*RUN_G),
-    # c. 64: donde la partitura tiene silencio suena un Fa agudo (oído por el autor el 14-nov; en la pista de guitarra
+    # c. 64: donde la partitura tiene silencio suena un Fa agudo (oído por el autor; en la pista de guitarra
     # dura cerca de pulso y medio)
     'RUN64': bar((0, 1.5, 'F5'), *RUN_G),
     # guitarra 1 (sección final, 2 compases)
