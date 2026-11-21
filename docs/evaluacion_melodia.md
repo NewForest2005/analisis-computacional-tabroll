@@ -81,7 +81,7 @@ pedazos cortos que deja `extract_notes`, que corta una nota nueva en cada ataque
 `drop_loose_notes` quita las notas de hasta 3 cuadros (menos de 80 ms) que no reaparecen a la misma altura una vuelta
 antes y una vuelta después del ciclo que las contiene. Se eligió así porque en las tres canciones, entre esas notas,
 solo 6 a 24 % eran aciertos; las notas cortas que sí vuelven en las dos vueltas vecinas aciertan mucho más y se quedan.
-Se aplica a las dos voces (`scripts/limpiar_notas.py`).
+Se aplica a las dos voces (`scripts/cuaderno/limpiar_notas.py`).
 
 | | Melodía principal | Bajo |
 |---|---|---|
@@ -96,8 +96,8 @@ sonando. Quitarlas pide separar la capa en el audio, que es un paso aparte.
 ## Separar por capas del looper (probado y descartado)
 
 Se probaron dos formas de aprovechar el looper para elegir la melodía principal, con diagnósticos sobre la partitura
-alineada (`scripts/diagnostico_repeticion.py`, `diagnostico_capas.py`, `diagnostico_seleccion.py`) y sobre el audio
-(`scripts/diagnostico_edad_audio.py`).
+alineada (`scripts/diagnostico/diagnostico_repeticion.py`, `diagnostico_capas.py`, `diagnostico_seleccion.py`) y sobre el audio
+(`scripts/diagnostico/diagnostico_edad_audio.py`).
 
 - REPET (Rafii y Pardo, 2013) a la vuelta del looper no sirve: la melodía se repite en cada vuelta igual que el riff,
   y con una mediana de 5 vueltas solo entre 1 y 18 % de sus notas quedaría en primer plano. La excepción son tramos
@@ -114,11 +114,11 @@ en muchos cuadros la melodía no aparece en la saliencia.
 
 ## Estéreo y Basic Pitch (probados y descartados)
 
-- Estéreo (`scripts/diagnostico_canales.py`): con la saliencia de cada canal de la pista de guitarra (izquierda,
+- Estéreo (`scripts/diagnostico/diagnostico_canales.py`): con la saliencia de cada canal de la pista de guitarra (izquierda,
   derecha, lados) la melodía aparece entre los picos de un cuadro en 1-2 puntos más que en mono; juntando izquierda y
   derecha, 3-6 puntos más, en parte por mirar el doble de picos. No la destapa: sigue tapada en el 50-65 % de los
   cuadros.
-- Basic Pitch (Bittner y otros, ICASSP 2022; `scripts/diagnostico_basic_pitch.py`, `basic_pitch_notas.py`,
+- Basic Pitch (Bittner y otros, ICASSP 2022; `scripts/diagnostico/diagnostico_basic_pitch.py`, `basic_pitch_notas.py`,
   `diagnostico_fusion.py`): con el ajuste de notas cortas encuentra 36 / 47 / 48 % de la melodía (Sarniezz / Mata
   Zyklek / Fabienk), menos que el cuaderno (51 / 69 / 49 %). Junto con el cuaderno recupera 7-14 puntos más, pero esas
   notas caen sobre todo donde el cuaderno tiene otra altura (58-93 %), no en huecos (7-10 %). Ninguna regla para

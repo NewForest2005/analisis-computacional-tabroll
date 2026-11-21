@@ -1,6 +1,6 @@
 /* Círculo de 24 notas animado (Angine de Poitrine).
  *
- * Lee window.CIRCULO24 (lo escribe scripts/exportar_circulo24.py en datos.js):
+ * Lee window.CIRCULO24 (lo escribe scripts/comparacion/exportar_circulo24.py en datos.js):
  *   { titulo, desde, hasta, tonica_pc24, tempo_bpm, audio, audios,
  *     voces: { aguda: [[inicio_s, fin_s, grado24], ...], grave: [...] } }
  * Los tiempos ya vienen relativos al inicio del fragmento. grado24: 0 = Do, 1 = Do + ¼ de tono, 2 = Do#, ... 23 = Si + ¼.
@@ -15,7 +15,7 @@
   "use strict";
   const D = window.CIRCULO24;
   if (!D) {
-    document.body.insertAdjacentHTML("beforeend", "<p>No se encontró datos.js. Corre antes scripts/exportar_circulo24.py.</p>");
+    document.body.insertAdjacentHTML("beforeend", "<p>No se encontró datos.js. Corre antes scripts/comparacion/exportar_circulo24.py.</p>");
     return;
   }
 

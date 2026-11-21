@@ -8,7 +8,7 @@ from tabroll.reference.guitarpro import _rhythm_duration
 
 
 def _load_plot_module():
-    path = Path(__file__).parents[1] / "scripts" / "plot_line_diagnostics.py"
+    path = Path(__file__).parents[1] / "scripts" / "diagnostico" / "plot_line_diagnostics.py"
     spec = importlib.util.spec_from_file_location("plot_line_diagnostics", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None

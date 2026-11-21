@@ -9,8 +9,8 @@ Van en `scripts/`:
 1. Angor no está en `bloques_v8.json` (salen 5 canciones). Vuelve a correr verosimilitud_por_bloques v8 con Angor, con los mismos argumentos de tu última corrida y la carpeta de Angor añadida.
 2. Después:
 ```
-python scripts/equivalencias_edo.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --salida outputs/equivalencias_edo
-python scripts/figuras_album.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_gizzard* --bloques outputs/bloques_v8.json --campos outputs/campos_haba --fases outputs/ciclos_metricos_fases.csv --salida outputs/figuras_album
+python scripts/comparacion/equivalencias_edo.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --salida outputs/equivalencias_edo
+python scripts/comparacion/figuras_album.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_gizzard* --bloques outputs/bloques_v8.json --campos outputs/campos_haba --fases outputs/ciclos_metricos_fases.csv --salida outputs/figuras_album
 ```
 Mándame la consola de los dos, `outputs/equivalencias_edo.md` y `figuras_album_a_clasificacion.png`.
 

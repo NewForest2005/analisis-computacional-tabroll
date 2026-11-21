@@ -9,9 +9,9 @@ Los tres van en `scripts/`. Probados solo en mi copia de trabajo; no toqué el r
 ## Qué correr (en la raíz del repo)
 
 ```
-python scripts/comparar_repertorio.py outputs/*angine_de_poitrine* --repertorio outputs/*king_gizzard* --control outputs/*primus* --salida outputs/comparar_kg
-python scripts/campos_haba.py outputs/*angine_de_poitrine* --control outputs/*primus* --comparar outputs/*king_gizzard* --salida outputs/campos_haba
-python scripts/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*king_gizzard* --salida outputs/ciclos_metricos
+python scripts/comparacion/comparar_repertorio.py outputs/*angine_de_poitrine* --repertorio outputs/*king_gizzard* --control outputs/*primus* --salida outputs/comparar_kg
+python scripts/comparacion/campos_haba.py outputs/*angine_de_poitrine* --control outputs/*primus* --comparar outputs/*king_gizzard* --salida outputs/campos_haba
+python scripts/comparacion/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*king_gizzard* --salida outputs/ciclos_metricos
 ```
 Mándame la salida de consola de los tres y `outputs/campos_haba.md`, `outputs/ciclos_metricos.md`.
 

@@ -1,6 +1,6 @@
 # Filtro de cuartos de tono con mínimo de tiempo, y escucha de Red
 
-## 1. scripts/verosimilitud_por_bloques.py (reemplaza el del repo)
+## 1. scripts/comparacion/verosimilitud_por_bloques.py (reemplaza el del repo)
 - Nuevo: la concentración solo cuenta si la melodía tiene al menos 10 s en cuarto de tono (`--min-segundos-cuartos`, por defecto 10).
 - La consola muestra los segundos: «¼ tono 25.3 % (48.4 s), concentración …».
 - La banda no cambia (Angor, la que menos tiene: 13.5 s). Quedan fuera Discipline (0.3 s), G-Spot Tornado (6.8 s), The Black Page #1 (4.4 s), Peaches en Regalia (2.1 s) y Frame by Frame (8.3 s).

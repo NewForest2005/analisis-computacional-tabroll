@@ -17,9 +17,9 @@ mkdir -p outputs/prog
 
 ## 3. Comandos (un repertorio por vez; cambia king_crimson por gentle_giant y kc por gg)
 ```
-python scripts/comparar_repertorio.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --repertorio outputs/*king_crimson* --control outputs/*primus* --nombre "King Crimson" --salida outputs/prog/comparar_kc
-python scripts/campos_haba.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_crimson* --salida outputs/prog/campos_kc
-python scripts/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro outputs/*king_crimson* --salida outputs/prog/ciclos_kc
+python scripts/comparacion/comparar_repertorio.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --repertorio outputs/*king_crimson* --control outputs/*primus* --nombre "King Crimson" --salida outputs/prog/comparar_kc
+python scripts/comparacion/campos_haba.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_crimson* --salida outputs/prog/campos_kc
+python scripts/comparacion/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro outputs/*king_crimson* --salida outputs/prog/ciclos_kc
 ```
 Test por bloques: repite EXACTAMENTE los argumentos de tu corrida de `bloques_v8` (corpus, `--control` con Primus, umbral), y cambia solo dos cosas: `--comparar outputs/*king_crimson*` y `--salida outputs/prog/bloques_kc`. King Crimson y Gentle Giant van siempre en `--comparar`, nunca en `--control`: el control mide el error de medición con Primus y cambiarlo movería todas las cifras del artículo.
 

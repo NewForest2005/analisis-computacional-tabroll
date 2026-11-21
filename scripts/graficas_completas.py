@@ -84,38 +84,38 @@ def main() -> int:
         return [str(r) for r in runs]
 
     for run in todos:
-        call(["scripts/tarjeta_cancion.py", str(run)], failures)
-        call(["scripts/tira_de_ciclos.py", str(run)], failures)
+        call(["scripts/comparacion/tarjeta_cancion.py", str(run)], failures)
+        call(["scripts/comparacion/tira_de_ciclos.py", str(run)], failures)
 
     # Ambos radares aceptan varias corridas; se cargan los corpus una sola vez.
-    call(["scripts/radar_de_estilos.py", *paths(todos)], failures)
-    call(["scripts/radar_ritmico.py", *paths(todos), "--salida", str(OUT / "radar_ritmico_comparado.png")], failures)
+    call(["scripts/comparacion/radar_de_estilos.py", *paths(todos)], failures)
+    call(["scripts/comparacion/radar_ritmico.py", *paths(todos), "--salida", str(OUT / "radar_ritmico_comparado.png")], failures)
 
-    call(["scripts/pruebas_de_estilo.py", *paths(todos), "--salida", str(OUT / "pruebas_de_estilo")], failures)
-    call(["scripts/verosimilitud_estilos.py", *paths(todos), "--salida", str(OUT / "verosimilitud")], failures)
-    call(["scripts/microtonal.py", *paths(todos), "--salida", str(OUT / "microtonal")], failures)
-    call(["scripts/ciclos_metricos.py", *paths(todos), "--salida", str(OUT / "ciclos_metricos")], failures)
+    call(["scripts/comparacion/pruebas_de_estilo.py", *paths(todos), "--salida", str(OUT / "pruebas_de_estilo")], failures)
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(todos), "--salida", str(OUT / "verosimilitud")], failures)
+    call(["scripts/comparacion/microtonal.py", *paths(todos), "--salida", str(OUT / "microtonal")], failures)
+    call(["scripts/comparacion/ciclos_metricos.py", *paths(todos), "--salida", str(OUT / "ciclos_metricos")], failures)
 
-    call(["scripts/campos_haba.py", *paths(banda), "--control", *paths(primus),
+    call(["scripts/comparacion/campos_haba.py", *paths(banda), "--control", *paths(primus),
           "--comparar", *paths(externos), "--salida", str(OUT / "campos_haba")], failures)
-    call(["scripts/verosimilitud_por_bloques.py", *paths(banda), "--control", *paths(primus),
+    call(["scripts/comparacion/verosimilitud_por_bloques.py", *paths(banda), "--control", *paths(primus),
           "--comparar", *paths(externos), "--salida", str(OUT / "bloques")], failures)
-    call(["scripts/comparar_tarjetas.py", *paths(todos), "--salida", str(OUT / "comparacion_tarjetas")], failures)
+    call(["scripts/comparacion/comparar_tarjetas.py", *paths(todos), "--salida", str(OUT / "comparacion_tarjetas")], failures)
 
     for nombre, repertorio in (("king_gizzard", king_gizzard), ("zappa", zappa),
                                ("king_crimson", king_crimson), ("gentle_giant", gentle_giant)):
         if repertorio:
-            call(["scripts/comparar_repertorio.py", *paths(banda), "--repertorio", *paths(repertorio),
+            call(["scripts/comparacion/comparar_repertorio.py", *paths(banda), "--repertorio", *paths(repertorio),
                   "--control", *paths(primus), "--nombre", nombre.replace("_", " ").title(),
                   "--salida", str(OUT / f"comparar_{nombre}")], failures)
 
-    call(["scripts/equivalencias_edo.py", *paths(banda), "--salida", str(OUT / "equivalencias_edo")], failures)
+    call(["scripts/comparacion/equivalencias_edo.py", *paths(banda), "--salida", str(OUT / "equivalencias_edo")], failures)
 
     bloques = OUT / "bloques.json"
     campos = OUT / "campos_haba"
     fases = OUT / "ciclos_metricos_fases.csv"
     if bloques.exists():
-        call(["scripts/figuras_album.py", *paths(banda), "--control", *paths(primus),
+        call(["scripts/comparacion/figuras_album.py", *paths(banda), "--control", *paths(primus),
               "--comparar", *paths(king_gizzard), "--bloques", str(bloques), "--campos", str(campos),
               "--fases", str(fases), "--salida", str(OUT / "figuras_album")], failures)
 

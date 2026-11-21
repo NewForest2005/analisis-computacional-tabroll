@@ -63,12 +63,12 @@ def main() -> None:
             continue
         usadas[titulo] = run
         print(f"[{titulo}] {run.name}", flush=True)
-        ok, txt = correr(["scripts/tarjeta_cancion.py", str(run), "--titulo", titulo])
+        ok, txt = correr(["scripts/comparacion/tarjeta_cancion.py", str(run), "--titulo", titulo])
         if ok:
             lineas.append(txt.splitlines()[-1])
         else:
             fallos.append((titulo, "tarjeta", txt[-600:]))
-        ok, txt = correr(["scripts/tira_de_ciclos.py", str(run), "--titulo", titulo])
+        ok, txt = correr(["scripts/comparacion/tira_de_ciclos.py", str(run), "--titulo", titulo])
         if not ok:
             fallos.append((titulo, "tira de ciclos", txt[-600:]))
 
@@ -81,7 +81,7 @@ def main() -> None:
         for d in extra:                                                 # la corrida más reciente de cada canción del grupo
             por_cancion[d.name.split("_", 2)[-1]] = d
         for d in por_cancion.values():
-            ok, txt = correr(["scripts/tarjeta_cancion.py", str(d)])
+            ok, txt = correr(["scripts/comparacion/tarjeta_cancion.py", str(d)])
             if ok:
                 lineas.append(txt.splitlines()[-1])
                 runs.append(str(d))
@@ -89,22 +89,22 @@ def main() -> None:
                 fallos.append((d.name, "tarjeta", txt[-600:]))
         grupos += ["--grupo", f"{texto.capitalize()}={texto}"]
     if runs:
-        ok, txt = correr(["scripts/comparar_tarjetas.py", *runs, *grupos, "--salida", str(destino / "comparacion_tarjetas")])
+        ok, txt = correr(["scripts/comparacion/comparar_tarjetas.py", *runs, *grupos, "--salida", str(destino / "comparacion_tarjetas")])
         if not ok:
             fallos.append(("todas", "comparación de tarjetas", txt[-600:]))
 
     # pruebas de estilo: cada canción frente a rock, práctica común, jazz, pentatónica, tonos enteros, dodecafonismo, etc.
     if runs:
-        ok, txt = correr(["scripts/pruebas_de_estilo.py", *runs, "--salida", str(destino / "pruebas_de_estilo")])
+        ok, txt = correr(["scripts/comparacion/pruebas_de_estilo.py", *runs, "--salida", str(destino / "pruebas_de_estilo")])
         if not ok:
             fallos.append(("todas", "pruebas de estilo", txt[-600:]))
 
     # radares por canción: estilo (armonía y melodía) y estructura rítmica
     if runs:
-        ok, txt = correr(["scripts/radar_de_estilos.py", *runs])
+        ok, txt = correr(["scripts/comparacion/radar_de_estilos.py", *runs])
         if not ok:
             fallos.append(("todas", "radar de estilos", txt[-600:]))
-        ok, txt = correr(["scripts/radar_ritmico.py", *runs, "--salida", str(destino / "radar_ritmico_comparado.png")])
+        ok, txt = correr(["scripts/comparacion/radar_ritmico.py", *runs, "--salida", str(destino / "radar_ritmico_comparado.png")])
         if not ok:
             fallos.append(("todas", "radar rítmico", txt[-600:]))
 

@@ -90,23 +90,23 @@ La evaluación agrega:
 Las celdas del paso 3 calculan el círculo de la canción y dibujan `circulo_armonico.png` en `harmony_outputs`.
 `run_song.py` guarda además `circulo.json`. El círculo tiene 24 posiciones contadas desde la tónica, perfiles del
 bajo, voz aguda y fundamentales, fundamentales por ciclo, transiciones, movimientos, calidades y ritmo armónico.
-`scripts/comparar_circulos.py` calcula distancias entre círculos de 0 a 1 y valida audio frente a partitura, mitades
+`scripts/comparacion/comparar_circulos.py` calcula distancias entre círculos de 0 a 1 y valida audio frente a partitura, mitades
 de una canción y canciones cercanas.
 
-**Ajuste 1 (`scripts/ajustar_circulo.py`).** En `fundamentales_por_ciclo` cada ciclo distinto del bajo cuenta una
+**Ajuste 1 (`scripts/cuaderno/ajustar_circulo.py`).** En `fundamentales_por_ciclo` cada ciclo distinto del bajo cuenta una
 vez, y los compases sin ciclo cuentan juntos como un ciclo más. Antes cada compás suelto contaba como un ciclo entero, y
 en Mata Zyklek 30 compases sueltos pesaban más que sus tres ciclos. El círculo guarda también `tiempo_sin_ciclo`.
 Pesar cada ciclo por sus vueltas se probó y quedó descartado: acerca la capa a `fundamentales` y empeora Mata Zyklek.
 
 **Ajuste 1b.** `draw_harmony_circle` arma la figura con `matplotlib.figure.Figure`, sin pyplot, así que no depende de
-la celda que fija el backend ni abre ventanas. `python scripts/comparar_circulos.py outputs/<carpetas> --actualizar`
+la celda que fija el backend ni abre ventanas. `python scripts/comparacion/comparar_circulos.py outputs/<carpetas> --actualizar`
 reescribe `circulo.json` y la figura de corridas ya hechas sin correr el cuaderno. La comparación se guarda por defecto
 en `outputs/comparacion_circulos.json`.
 
 **Ajuste 2 (`src/tabroll/evaluation/circulo.py`).** En la distancia combinada, transiciones y movimientos pesan según
 los cambios de fundamental del círculo que tiene menos: nada con menos de 5, n/20 entre 5 y 20, y completo desde 20
 (`peso_cambios` en cada distancia). Con pocos cambios esas capas son sobre todo ruido de muestreo:
-`scripts/ruido_cambios.py` saca dos muestras de n cambios de una misma canción y mide cuánto difieren.
+`scripts/diagnostico/ruido_cambios.py` saca dos muestras de n cambios de una misma canción y mide cuánto difieren.
 
 | Cambios | Transiciones | Movimientos |
 |---:|---:|---:|

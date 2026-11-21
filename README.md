@@ -19,9 +19,16 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `references/corpus/`: corpus y datos de comparación estilística.
 - `trabajo/`: materiales de trabajo y diagnósticos archivados.
 - `docs/historial/`: historial auxiliar de la investigación.
-- `scripts/extract_cells.py`: regenera la extracción cuando cambia el notebook (`--check` solo verifica).
-- `scripts/run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
-- `scripts/corpus_bloques.py` y `scripts/verosimilitud_por_bloques.py`: comparan armonía, escala, cuartos de tono y metro con los corpus disponibles.
+- `scripts/`: flujo principal.
+  - `run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
+  - `todo.py` y `graficas_completas.py`: corren todas las canciones y reúnen las gráficas (`make todo`, `make graficas`).
+  - `extract_cells.py`: regenera la extracción cuando cambia el notebook (`--check` solo verifica).
+  - `parse_gp.py`, `evaluar_melodia.py` y `completar_evaluacion.py`: partituras Guitar Pro y evaluación contra ellas.
+- `scripts/cuaderno/`: pasos del análisis que modifican el notebook (armonía en 24-EDO, funciones, ejes de Lendvai,
+  notas columna, análisis melódico, limpieza de notas…). Ya están aplicados; se pueden volver a correr sin duplicar cambios.
+- `scripts/diagnostico/`: diagnósticos de la línea melódica, las capas del looper, Basic Pitch y el ruido de muestreo.
+- `scripts/comparacion/`: comparación con corpus y repertorios (estilos, verosimilitud por bloques, campos de Hába,
+  ciclos métricos, equivalencias EDO) y gráficas comparativas (tarjetas, tiras de ciclos, radares, figuras del álbum).
 - `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
 - `tests/`: validaciones estructurales básicas.
 

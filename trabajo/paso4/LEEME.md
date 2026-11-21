@@ -9,8 +9,8 @@ Van en `scripts/`:
 ## Qué correr (en la raíz del repo, en este orden)
 
 ```
-python scripts/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro outputs/*king_gizzard* --salida outputs/ciclos_metricos
-python scripts/figuras_album.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_gizzard* --bloques outputs/<json de tu última corrida de verosimilitud_por_bloques v8> --campos outputs/campos_haba --fases outputs/ciclos_metricos_fases.csv --salida outputs/figuras_album
+python scripts/comparacion/ciclos_metricos.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro outputs/*king_gizzard* --salida outputs/ciclos_metricos
+python scripts/comparacion/figuras_album.py outputs/*angine_de_poitrine* outputs/*fabienk_official_audio_repro --control outputs/*primus* --comparar outputs/*king_gizzard* --bloques outputs/<json de tu última corrida de verosimilitud_por_bloques v8> --campos outputs/campos_haba --fases outputs/ciclos_metricos_fases.csv --salida outputs/figuras_album
 ```
 (Si Angor no entra con `*angine_de_poitrine*`, agrégala con su carpeta.)
 
