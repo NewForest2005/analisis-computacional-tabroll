@@ -1,6 +1,6 @@
 # Gentle Giant como repertorio comparado (16-nov)
 
-Corrido por Claude con tus salidas: comparar_gg.* (comparar_repertorio.py), campos_gg.* (campos_haba.py), ciclos_gg.* (ciclos_metricos.py).
+Generado a partir de las salidas: comparar_gg.* (comparar_repertorio.py), campos_gg.* (campos_haba.py), ciclos_gg.* (ciclos_metricos.py).
 
 ## Escucha de The Runaway (escucha_runaway/)
 Es el único tema de los 22 sin cuartos de tono que pasa la regla combinada: 24 s «en cuarto de tono» (sobre todo La#+ y Fa+, centro Mi) y 39 % de campos evitados.

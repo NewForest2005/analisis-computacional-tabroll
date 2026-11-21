@@ -1,4 +1,4 @@
-# Frank Zappa como repertorio comparado (16-nov, corrido por Claude con tus salidas)
+# Frank Zappa como repertorio comparado (16-nov)
 
 Archivos: comparar_fz.* (comparar_repertorio.py), campos_fz.* (campos_haba.py), ciclos_fz.* (ciclos_metricos.py).
 Banda: las 6 corridas _repro del Vol. II (con Angor). Control: Primus (Tommy, Mud, Jerry).
