@@ -30,9 +30,13 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import estilo_figuras  # noqa: E402
 
 
 def nombre(run: str) -> str:
@@ -203,6 +207,54 @@ def lectura_fases(fs: list[dict], L: int) -> dict:
                 polimetro=round(deriva / validos, 2) if validos else None)
 
 
+def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columnas: int = 4):
+    """Una curva de repetición por canción, en una cuadrícula de `columnas` con ejes compartidos."""
+    import matplotlib.pyplot as plt
+    from matplotlib.patches import Patch
+    from estilo_figuras import FONDO, GRIS, PALETA_ARTISTA, REJILLA, TINTA
+
+    orden = list(PALETA_ARTISTA)
+    curvas = sorted(curvas, key=lambda c: orden.index(c[2]) if c[2] in orden else len(orden))
+    columnas = max(1, min(columnas, len(curvas)))
+    filas = -(-len(curvas) // columnas)
+    fig, cuerpo = estilo_figuras.figura(
+        16, 1.05 * filas + 0.9, "Repetición musical según la distancia temporal",
+        subtitulo="Cada barra muestra cuánto se repiten ataques y alturas al separar la música ℓ corcheas. "
+                  "Un pico estable ayuda a identificar ciclos métricos largos del repertorio.",
+        nota="Eje x: distancia en corcheas ℓ. Eje y: repetición en la canción completa (0 a 1). "
+             "Las cifras sobre las barras son los mejores periodos detectados.")
+    ejes = cuerpo.subplots(filas, columnas, sharex=True, sharey=True, squeeze=False)
+    ticks = np.arange(0, min(40, int(lags[-1])) + 1, 10)
+    for k, ax in enumerate(ejes.flat):
+        if k >= len(curvas):
+            ax.set_visible(False)
+            continue
+        n, R, grupo = curvas[k]
+        ax.bar(lags, R, color=PALETA_ARTISTA[grupo], width=0.75)
+        for l, r in picos(R, lags):
+            ax.text(l, r + 0.03, str(l), ha="center", va="bottom", fontsize=6.5, color=TINTA)
+        ax.set_title(n, loc="left", fontsize=8.5, color=TINTA, pad=2)
+        ax.set_ylim(0, 1.25)
+        ax.set_yticks([0, 0.5, 1])
+        ax.set_xlim(0, lags[-1] + 0.5)
+        ax.set_xticks(ticks)
+        ax.set_facecolor(FONDO)
+        ax.grid(axis="y", color=REJILLA, lw=0.6)
+        ax.set_axisbelow(True)
+        for s_ in ("top", "right"):
+            ax.spines[s_].set_visible(False)
+        for s_ in ("left", "bottom"):
+            ax.spines[s_].set_color(REJILLA)
+        ax.tick_params(labelsize=7.5, colors=GRIS, length=0)
+        if k >= len(curvas) - columnas:          # última fila ocupada de cada columna
+            ax.xaxis.set_tick_params(labelbottom=True)
+            ax.set_xlabel("ℓ (corcheas)", fontsize=8.5, color=GRIS)
+    presentes = [g for g in PALETA_ARTISTA if any(c[2] == g for c in curvas)]
+    cuerpo.legend(handles=[Patch(facecolor=PALETA_ARTISTA[g], label=g) for g in presentes], loc="outside upper center",
+                  ncol=len(presentes), frameon=False, fontsize=9.5)
+    return fig
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
@@ -266,41 +318,8 @@ def main() -> None:
             for f in fs:
                 fh.write(f"{n},{Lb},{f['compas']},{f['t0']:.2f},{f['L']},{'' if f['fase'] is None else f['fase']},{'' if f['ajuste'] is None else f['ajuste']}\n")
 
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    tinta, gris, fondo = "#0b0b0b", "#52514e", "#fcfcfb"
-    paleta = {"Angine de Poitrine": "#2a78d6", "Primus": "#eb6834", "King Gizzard": "#1baf7a",
-              "Frank Zappa": "#eda100", "King Crimson": "#8b5fbf", "Gentle Giant": "#d1495b"}
-    fig, ejes = plt.subplots(len(curvas), 1, figsize=(10.5, 2.0 * len(curvas) + 2.4), sharex=False, facecolor=fondo, squeeze=False)
-    for ax, (n, R, grupo) in zip(ejes[:, 0], curvas):
-        ax.bar(lags, R, color=paleta[grupo], width=0.7, label=grupo)
-        for l, r in picos(R, lags):
-            ax.text(l, r + 0.01, str(l), ha="center", fontsize=8, color=tinta)
-        ax.set_ylabel(n, rotation=0, ha="right", va="center", fontsize=9, color=tinta, labelpad=18)
-        ax.set_ylim(0, 1.05)
-        ax.set_xlim(0, lags[-1] + 0.5)
-        ticks = np.arange(0, min(40, int(lags[-1])) + 1, 5)
-        ax.set_xticks(ticks)
-        ax.set_xticklabels([str(x) for x in ticks], fontsize=8.5, color=gris)
-        ax.tick_params(axis="x", labelbottom=True, colors=gris)
-        ax.set_facecolor(fondo)
-        for s in ("top", "right"):
-            ax.spines[s].set_visible(False)
-        ax.tick_params(labelsize=8, colors=gris)
-    ejes[-1, 0].set_xlabel("Distancia en corcheas ℓ", fontsize=11, color=gris, labelpad=12)
-    fig.suptitle("Repetición musical según la distancia temporal", fontsize=16, fontweight="bold", color=tinta, x=0.5, y=0.98, ha="center")
-    fig.text(0.5, 0.945, "Cada pico muestra cuánto se repiten ataques y alturas al separar la música ℓ corcheas.\n"
-             "Un pico estable ayuda a identificar ciclos métricos largos del repertorio.", fontsize=9.5, color=gris, ha="center", va="top", linespacing=1.25)
-    fig.text(0.31, 0.075, "Eje x: distancia en corcheas ℓ (0, 5, 10, 15, 20, 25, 30, 35, 40).  Eje y: canción completa.\n"
-             "Las cifras sobre las barras son los mejores periodos detectados.",
-             fontsize=10, color=gris, ha="left", va="center", linespacing=1.25)
-    from matplotlib.patches import Patch
-    fig.legend(handles=[Patch(facecolor=c, label=g) for g, c in paleta.items() if any(x[2] == g for x in curvas)],
-               loc="upper left", bbox_to_anchor=(0.02, 0.90), ncol=1, frameon=False, fontsize=9,
-               title="Paleta por artista", title_fontsize=9.5)
-    fig.subplots_adjust(left=0.31, right=0.98, top=0.86, bottom=0.12, hspace=0.35)
-    fig.savefig(a.salida + ".png", dpi=170, facecolor=fondo)
+    estilo_figuras.preparar()
+    estilo_figuras.guardar(dibujar(curvas, lags), a.salida + ".png", dpi=170)
     print(f"→ {a.salida}.md, {a.salida}.png")
 
 

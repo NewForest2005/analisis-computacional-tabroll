@@ -30,3 +30,7 @@ references/corpus/raw/TheSession-data/
 .tmp_*/
 .matplotlib-cache/
 __MACOSX/
+
+# Separación con BS-RoFormer SW (entorno aparte y pistas generadas)
+.venv-rof/
+pistas_roformer/

@@ -54,8 +54,9 @@ def main() -> int:
     cache.mkdir(parents=True, exist_ok=True)
     os.environ.setdefault("MPLCONFIGDIR", str(cache))
 
+    # Las corridas con pistas de BS-RoFormer (docs/separacion_roformer.md) no entran: Demucs es el separador por defecto.
     banda = latest(("sarniezz", "mata_zyklek", "fabienk_official", "yor_zarad", "utzp", "angor"),
-                   exclude=("king_gizzard", "primus", "king_crimson", "gentle_giant"))
+                   exclude=("king_gizzard", "primus", "king_crimson", "gentle_giant", "_roformer"))
     primus = latest(("primus",))
     king_gizzard = latest(("king_gizzard",))
     king_crimson = latest(("king_crimson",))

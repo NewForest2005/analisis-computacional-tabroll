@@ -15,7 +15,11 @@ import argparse
 import csv
 import json
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import estilo_figuras  # noqa: E402
 
 MEDIDAS = [("complejidad_acordes", "Complejidad de acordes (0-100)"), ("complejidad_melodica", "Complejidad melódica (0-100)"),
            ("tension_acorde_melodia", "Tensión acorde-melodía (0-100)"), ("novedad_progresion", "Novedad de la progresión (bits)"),
@@ -55,6 +59,48 @@ def grupo_corrida(corrida: str) -> str:
     return "Angine de Poitrine"
 
 
+def dibujar(filas: list[dict], grupos: list[str]):
+    """Seis paneles en una fila (una medida cada uno) con las canciones compartidas en el eje vertical."""
+    import matplotlib.pyplot as plt
+    from estilo_figuras import FONDO, GRIS, REJILLA, TINTA, partir
+
+    ancho_panel = 3.1
+    fig, cuerpo = estilo_figuras.figura(
+        2.4 + ancho_panel * len(MEDIDAS), 0.2 * len(filas) + 1.4,
+        "Comparación de métricas estructurales entre canciones",
+        subtitulo="Complejidad, tensión, novedad, microtonalidad y confiabilidad de la medición en la banda y sus "
+                  "repertorios de referencia. Los valores son medidas directas del análisis; no son percentiles.",
+        nota="Paréntesis en novedad: número de cambios de fundamental distintos observados. "
+             "Menos de 5 cambios = estimación poco estable.")
+    ejes = cuerpo.subplots(1, len(MEDIDAS), sharey=True)
+    y = list(range(len(filas)))[::-1]
+    colores = [PALETA.get(r["grupo"], COLORES[grupos.index(r["grupo"]) % 4]) for r in filas]
+    for ax, (m, titulo) in zip(ejes, MEDIDAS):
+        vals = [r.get(m) for r in filas]
+        ax.barh(y, [v or 0 for v in vals], color=colores, height=0.68)
+        tope = max([v for v in vals if v is not None] + [1])
+        for yi, v, r in zip(y, vals, filas):
+            txt = "sin cambios" if v is None and m == "novedad_progresion" else "—" if v is None else f"{v:g}"
+            if m == "novedad_progresion" and v is not None:
+                txt += f" ({r.get('cambios_distintos', 0)})"
+            ax.text((v or 0) + tope * 0.03, yi, txt, va="center", fontsize=7, color=TINTA)
+        ax.set_xlim(0, tope * 1.45)
+        ax.set_xticks([t for t in ax.get_xticks() if 0 <= t <= tope * 1.1])
+        ax.set_ylim(-0.6, len(filas) - 0.4)
+        ax.set_title(partir(titulo, ancho_panel - 0.2, 10), fontsize=10, fontweight="bold", color=TINTA)
+        ax.set_xlabel(partir(EJES[m], ancho_panel - 0.2, 8.5), fontsize=8.5, color=GRIS)
+        ax.set_facecolor(FONDO)
+        ax.tick_params(colors=GRIS, length=0, labelsize=7.5)
+        ax.grid(axis="x", color=REJILLA, lw=0.8)
+        ax.set_axisbelow(True)
+        for s in ax.spines.values():
+            s.set_visible(False)
+    ejes[0].set_yticks(y, [r["cancion"] for r in filas], fontsize=8)
+    handles = [plt.Line2D([0], [0], color=PALETA.get(g, COLORES[i % 4]), lw=8, label=g) for i, g in enumerate(grupos)]
+    cuerpo.legend(handles=handles, loc="outside upper center", ncol=len(grupos), frameon=False, fontsize=9.5)
+    return fig
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
@@ -80,44 +126,8 @@ def main() -> None:
         w.writeheader()
         w.writerows(filas)
 
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
-    tinta, gris, rejilla, fondo = "#0b0b0b", "#52514e", "#e4e3df", "#fcfcfb"
-    fig, ejes = plt.subplots(2, 3, figsize=(16.5, 2.4 + 1.0 * len(filas)), facecolor=fondo)
-    y = [1.15 * v for v in list(range(len(filas))[::-1])]
-    for ax, (m, titulo) in zip(ejes.flat, MEDIDAS):
-        vals = [r.get(m) for r in filas]
-        ax.barh(y, [v or 0 for v in vals], color=[PALETA.get(r["grupo"], COLORES[grupos.index(r["grupo"]) % 4]) for r in filas], height=0.62)
-        tope = max([v for v in vals if v is not None] + [1])
-        for yi, v, r in zip(y, vals, filas):
-            txt = "sin cambios" if v is None and m == "novedad_progresion" else "—" if v is None else f"{v:g}"
-            if m == "novedad_progresion" and v is not None:
-                txt += f"  ({r.get('cambios_distintos', 0)})"
-            ax.text((v or 0) + tope * 0.02, yi, txt, va="center", fontsize=9, color=tinta)
-        ax.set_yticks(y, [r["cancion"] for r in filas] if ax in ejes[:, 0] else [""] * len(filas), fontsize=9.5)
-        ax.set_xlim(0, tope * 1.25)
-        ax.set_ylim(-0.7, max(y, default=0) + 0.7)
-        ax.set_title(titulo, loc="center", fontsize=11.5, fontweight="bold", color=tinta, pad=12)
-        ax.set_xlabel(EJES[m], fontsize=9.5, color=gris, labelpad=13)
-        ax.set_facecolor(fondo)
-        ax.tick_params(colors=gris, length=0, labelsize=8.5)
-        ax.grid(axis="x", color=rejilla, lw=0.8)
-        ax.set_axisbelow(True)
-        for s in ax.spines.values():
-            s.set_visible(False)
-    fig.suptitle("Comparación de métricas estructurales entre canciones", x=0.5, y=0.98, ha="center",
-                 fontsize=17, fontweight="bold", color=tinta)
-    fig.text(0.03, 0.935, "Compara complejidad, tensión, novedad, microtonalidad y confiabilidad de la medición en la banda y sus repertorios de referencia. Los valores son medidas directas del análisis; no son percentiles.",
-             fontsize=10.5, color=gris, ha="left", va="top")
-    fig.text(0.03, 0.035, "Paréntesis en novedad: número de cambios de fundamental distintos observados. Menos de 5 cambios = estimación poco estable.",
-             fontsize=10.5, color=gris, ha="left", va="bottom")
-    handles = [plt.Line2D([0], [0], color=PALETA[g], lw=8, label=g) for g in grupos]
-    fig.legend(handles=handles, loc="upper right", bbox_to_anchor=(0.98, 0.905), ncol=2,
-               frameon=False, fontsize=9.5, title="Banda / repertorio", title_fontsize=10)
-    fig.subplots_adjust(left=0.20, right=0.98, top=0.84, bottom=0.12, wspace=0.38, hspace=0.45)
-    fig.savefig(a.salida + ".png", dpi=200, facecolor=fondo)
+    estilo_figuras.preparar()
+    estilo_figuras.guardar(dibujar(filas, grupos), a.salida + ".png")
     print(f"{a.salida}.png y .csv · {len(filas)} canciones · grupos: {', '.join(grupos)}")
 
 

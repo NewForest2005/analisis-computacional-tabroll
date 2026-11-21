@@ -23,6 +23,9 @@ Cada corrida crea outputs/<fecha>_<hora>_<canción>[_<nombre>]/ con:
 El notebook no se modifica: los cambios de --preset y --set se aplican a una copia en memoria.
 Las pistas _guitar y _bass se buscan junto a la canción; si no hay, la celda 1b las crea con
 Demucs y este script las deja junto a la canción para la próxima vez.
+
+Con --separador roformer usa las pistas de BS-RoFormer SW que deja scripts/separar_roformer.py en
+pistas_roformer/ (ver docs/separacion_roformer.md); la carpeta de la corrida lleva la etiqueta «roformer».
 """
 
 from __future__ import annotations
@@ -49,6 +52,7 @@ NOTEBOOK = ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb"
 OUTPUTS = ROOT / "outputs"
 AUDIO_EXT = {".mp3", ".wav", ".flac", ".ogg", ".m4a", ".aiff", ".aif"}
 AUDIO_FOLDER = "Angine de Poitrine Audios"
+ROFORMER_DIR = ROOT / "pistas_roformer"
 MARKER = ".corrida"
 
 
@@ -188,6 +192,17 @@ def find_stem(audio: Path, kind: str) -> Path | None:
     hits = [p for p in audio.parent.rglob("*")
             if p.is_file() and not p.name.startswith(".") and p.suffix.lower() in AUDIO_EXT and name_key(p.stem).startswith(key)]
     return max(hits, key=lambda p: (p.parent == audio.parent, p.stat().st_mtime)) if hits else None
+
+
+def roformer_stems(audio: Path, folder: Path = ROFORMER_DIR) -> tuple[dict[str, Path], dict | None]:
+    """Pistas de BS-RoFormer SW de la canción y su manifiesto; se detiene con el comando para crearlas si faltan."""
+    stems = {kind: folder / f"{audio.stem}_{kind}.flac" for kind in ("guitar", "bass")}
+    missing = [kind for kind, p in stems.items() if not p.is_file()]
+    if missing:
+        raise SystemExit(f"Faltan las pistas de BS-RoFormer SW ({', '.join(missing)}) en {folder}. Créalas con:\n"
+                         f"  .venv-rof/bin/python scripts/separar_roformer.py \"{audio}\"")
+    manifest = folder / f"{audio.stem}.json"
+    return stems, (json.loads(manifest.read_text(encoding="utf-8")) if manifest.is_file() else None)
 
 
 def link_or_copy(src: Path, dest: Path) -> None:
@@ -535,7 +550,8 @@ def write_markdown(path: Path, info: dict) -> None:
          f"- Corrida: `{info['carpeta']}` ({info['fecha']}), notebook {info['version_notebook']}",
          f"- Estado: **{info['estado']}**" + (f" en la celda {info['celda_con_error']}" if info.get("celda_con_error") is not None else ""),
          f"- Pistas: guitarra `{info['pistas']['guitarra'] or 'ninguna'}`, bajo `{info['pistas']['bajo'] or 'ninguna'}`"
-         + (" (creadas con Demucs)" if info["pistas"]["creadas_con_demucs"] else ""),
+         + (" (creadas con Demucs)" if info["pistas"]["creadas_con_demucs"] else "")
+         + (" (BS-RoFormer SW)" if info["pistas"].get("separador") == "bs-roformer-sw" else ""),
          f"- Huellas SHA-256 (primeros 12 caracteres): mezcla `{hu.get('mezcla', '—')}`, guitarra `{hu.get('guitarra', '—')}`, "
          f"bajo `{hu.get('bajo', '—')}`",
          f"- Preset: {info['preset'] or 'ninguno'} | cambios: {', '.join(f'{k}={v}' for k, v in info['cambios'].items()) or 'ninguno'}",
@@ -636,9 +652,18 @@ def run(args) -> int:
     if args.sin_pistas:
         changes.setdefault("SEPARATE", "False")
 
-    run_dir = make_run_dir(Path(args.salidas).resolve(), audio, args.nombre)
-    link_or_copy(audio, run_dir / audio.name)
+    roformer = None
     given = {"guitar": args.guitar, "bass": args.bass}
+    if args.separador == "roformer":
+        if args.sin_pistas:
+            raise SystemExit("--separador roformer y --sin-pistas no se pueden usar juntos.")
+        stems, roformer = roformer_stems(audio)
+        given = {kind: given[kind] or str(stems[kind]) for kind in given}
+
+    run_dir = make_run_dir(Path(args.salidas).resolve(), audio, args.nombre or ("roformer" if args.separador == "roformer" else None))
+    link_or_copy(audio, run_dir / audio.name)
+    if args.separador == "roformer" and roformer is not None:
+        (run_dir / "separacion_roformer.json").write_text(json.dumps(roformer, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     used = {}
     for kind in ("guitar", "bass"):
         src = Path(given[kind]).expanduser().resolve() if given[kind] else (None if args.sin_pistas else find_stem(audio, kind))
@@ -731,6 +756,9 @@ def run(args) -> int:
         "pistas": {"guitarra": (used["guitar"].name if used["guitar"] else created.get("guitar")),
                    "bajo": (used["bass"].name if used["bass"] else created.get("bass")),
                    "creadas_con_demucs": bool(created),
+                   "separador": "bs-roformer-sw" if args.separador == "roformer" else ("htdemucs_6s" if created else "pistas existentes"),
+                   "roformer": ({"modelo_sha256": roformer["modelo"]["sha256"], "parametros": roformer["parametros"],
+                                 "versiones": roformer["entorno"]["versiones"]} if roformer else None),
                    "sha256": {"mezcla": huella(audio), "guitarra": huella(stems["guitar"]), "bajo": huella(stems["bass"])}},
         "tiempo_s": total, "ram_max_mb": ram, "resultado": {}, "imagenes": images, "avisos": avisos,
     }
@@ -786,6 +814,8 @@ def main(argv=None) -> int:
     p.add_argument("--guitar", help="pista de guitarra (si no se da, se busca <canción>_guitar.* junto a la canción)")
     p.add_argument("--bass", help="pista de bajo (si no se da, se busca <canción>_bass.* junto a la canción)")
     p.add_argument("--sin-pistas", action="store_true", help="analizar solo la mezcla: no usa pistas ni corre Demucs")
+    p.add_argument("--separador", choices=("demucs", "roformer"), default="demucs",
+                   help="de dónde salen las pistas: demucs (por defecto) o las de BS-RoFormer SW en pistas_roformer/")
     p.add_argument("--preset", help="aplica un preset de la celda de ajustes (ver --presets)")
     p.add_argument("--set", action="append", default=[], metavar="NOMBRE=VALOR",
                    help="cambia una variable del notebook en esta corrida, por ejemplo --set GRID=0.5 o --set \"KEY_OVERRIDE=('E', 'dorian')\"")

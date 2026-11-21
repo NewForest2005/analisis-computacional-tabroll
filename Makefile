@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-actuales graficas-primus clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -21,6 +21,9 @@ help:
 		'make graficas-completas Alias de make graficas' \
 		'make graficas-actuales Reunir gráficas básicas usando las corridas existentes más recientes' \
 		'make graficas-primus Correr las cinco y comparar también con las corridas de Primus' \
+		'make roformer-entorno Crear .venv-rof (conda-forge) con audio-separator para BS-RoFormer SW' \
+		'make separar-roformer CANCION=Sarniezz  Separar guitarra y bajo con BS-RoFormer SW' \
+		'make run-roformer CANCION=Sarniezz      Correr el cuaderno con las pistas de BS-RoFormer SW' \
 		'make clean-outputs   Eliminar solo las corridas generadas en outputs/'
 
 check-python:
@@ -70,6 +73,28 @@ graficas-actuales: check-python
 
 graficas-primus: demucs check-ffmpeg
 	$(VENV_PYTHON) scripts/todo.py --correr --otras primus
+
+CONDA ?= $(HOME)/miniforge3/bin/conda
+ROFORMER_ENV := .venv-rof
+AUDIO_SEPARATOR_VERSION := 0.48.0
+CANCION ?= Sarniezz
+ROFORMER_CONDA_DEPS := torchvision numba llvmlite librosa=0.11 audioread onnxruntime pysoundfile scipy resampy
+
+roformer-entorno:
+	@test -x "$(CONDA)" || { echo 'Falta conda: instala Miniforge (ver docs/separacion_roformer.md).' >&2; exit 1; }
+	@test -x $(ROFORMER_ENV)/bin/python || "$(CONDA)" create -y -p $(ROFORMER_ENV) -c conda-forge python=3.12 pytorch torchvision ffmpeg
+	# En Mac Intel, PyPI no tiene ruedas de estas dependencias (torchvision solo para torch 2.2; llvmlite
+	# habría que compilarlo con LLVM): vienen de conda-forge y pip ya no intenta reemplazarlas.
+	"$(CONDA)" install -y -p $(ROFORMER_ENV) -c conda-forge $(ROFORMER_CONDA_DEPS)
+	$(ROFORMER_ENV)/bin/python -m pip install "audio-separator[cpu]==$(AUDIO_SEPARATOR_VERSION)"
+	$(ROFORMER_ENV)/bin/python scripts/separar_roformer.py --entorno
+
+separar-roformer:
+	@test -x $(ROFORMER_ENV)/bin/python || { echo 'Falta $(ROFORMER_ENV); corre make roformer-entorno.' >&2; exit 1; }
+	$(ROFORMER_ENV)/bin/python scripts/separar_roformer.py "$(CANCION)"
+
+run-roformer: check-python
+	$(VENV_PYTHON) scripts/run_song.py "$(CANCION)" --separador roformer
 
 clean-outputs:
 	@test -d outputs || exit 0

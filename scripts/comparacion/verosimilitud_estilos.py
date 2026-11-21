@@ -25,7 +25,11 @@ import csv
 import json
 import math
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import estilo_figuras  # noqa: E402
 
 RAIZ = Path(__file__).resolve().parents[2]
 CORPUS = RAIZ / "references" / "corpus" / "estilos_por_pieza.json"
@@ -152,44 +156,51 @@ def main() -> None:
 
 
 def dibujar(filas: list[dict], C: dict, salida: str) -> None:
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
+    estilo_figuras.preparar()
+    estilo_figuras.guardar(figura_matriz(filas, list(C)), salida + "_matriz.png")
+    estilo_figuras.guardar(figura_mapa(filas, C), salida + "_mapa.png")
+
+
+def figura_matriz(filas: list[dict], est: list[str]):
+    """Canciones × estilos (percentil). Secuencial de un tono: más oscuro = más verosímil."""
     import numpy as np
-    from matplotlib.lines import Line2D
-
-    tinta, gris, fondo = "#0b0b0b", "#52514e", "#fcfcfb"
-    est = list(C)
-
-    # 1) matriz canciones × estilos (percentil). Secuencial de un tono: más oscuro = más verosímil.
-    M = np.array([[f[f"percentil_{e}"] for e in est] for f in filas])
-    fig, ax = plt.subplots(figsize=(2.6 + 2.0 * len(est), 1.6 + 0.62 * len(filas)), facecolor=fondo)
     from matplotlib.colors import LinearSegmentedColormap
+    from estilo_figuras import GRIS, TINTA
+
+    M = np.array([[f[f"percentil_{e}"] for e in est] for f in filas])
+    fig, cuerpo = estilo_figuras.figura(
+        max(9.0, 3.6 + 1.9 * len(est)), 0.42 * len(filas) + 1.2, "Verosimilitud de la armonía por canción y estilo",
+        subtitulo="Escala: % de piezas del estilo igual o más alejadas que la canción; 50 = pieza típica y 0 = más rara que todas.",
+        nota="Corpus: RS 200 (de Clercq y Temperley), Kostka-Payne (Temperley 2009), iRealPro (Shanahan y Broze), "
+             "9 álbumes de Hooktheory.\n«¼ %»: tiempo con la fundamental en cuarto de tono, que se llevó al grado de "
+             "abajo porque ningún corpus tiene cuartos de tono.", texto_pt=8.5)
+    ax = cuerpo.subplots()
     cmap = LinearSegmentedColormap.from_list("azul", ["#f1f0ea", "#a9c8ef", "#2a78d6", "#0d3c78"])
     ax.imshow(M, cmap=cmap, vmin=0, vmax=60, aspect="auto")
-    for i, f in enumerate(filas):
-        for j, e in enumerate(est):
+    for i in range(len(filas)):
+        for j in range(len(est)):
             v = M[i, j]
-            ax.text(j, i, f"{v:g}", ha="center", va="center", fontsize=11, fontweight="bold", color="#ffffff" if v >= 30 else tinta)
-    ax.set_xticks(range(len(est)), [ESTILOS[e].replace(" (", "\n(") for e in est], fontsize=9.5, color=tinta)
+            ax.text(j, i, f"{v:g}", ha="center", va="center", fontsize=10, fontweight="bold", color="#ffffff" if v >= 30 else TINTA)
+    ax.set_xticks(range(len(est)), [ESTILOS[e].replace(" (", "\n(") for e in est], fontsize=9, color=TINTA)
     ax.set_yticks(range(len(filas)), [f"{f['cancion']}" + (f"  · ¼ {f['fundamentales_cuarto_de_tono']:g} %" if f["fundamentales_cuarto_de_tono"] else "")
-                                      for f in filas], fontsize=10, color=tinta)
+                                      for f in filas], fontsize=9, color=TINTA)
     ax.xaxis.tick_top()
+    ax.xaxis.set_label_position("top")
     ax.tick_params(length=0)
-    for s in ax.spines.values():
-        s.set_visible(False)
-    ax.set_title("Verosimilitud de la armonía por canción y estilo",
-                 loc="left", fontsize=11.5, color=tinta, pad=46)
-    ax.set_xlabel("Estilo del corpus", color=gris)
-    ax.set_ylabel("Canción", color=gris)
-    fig.text(0.01, 0.01, "Escala: % de piezas del estilo igual o más alejadas que la canción; 50 = pieza típica y 0 = más rara que todas. Corpus: RS 200 (de Clercq y Temperley), "
-             "Kostka-Payne (Temperley 2009), iRealPro (Shanahan y Broze), 9 álbumes de Hooktheory.\n«¼ %»: tiempo con la fundamental en cuarto de tono, "
-             "que se llevó al grado de abajo porque ningún corpus tiene cuartos de tono.", fontsize=7, color=gris)
-    fig.tight_layout(rect=(0, 0.06, 1, 1))
-    fig.savefig(salida + "_matriz.png", dpi=200, facecolor=fondo)
-    plt.close(fig)
+    for s_ in ax.spines.values():
+        s_.set_visible(False)
+    ax.set_xlabel("Estilo del corpus", color=GRIS)
+    ax.set_ylabel("Canción", color=GRIS)
+    return fig
 
-    # 2) mapa: análisis de componentes principales de los repartos de fundamentales (raíz cuadrada, como en Hellinger)
+
+def figura_mapa(filas: list[dict], C: dict):
+    """Análisis de componentes principales de los repartos de fundamentales (raíz cuadrada, como en Hellinger)."""
+    import numpy as np
+    from matplotlib.lines import Line2D
+    from estilo_figuras import FONDO, GRIS, REJILLA, TINTA
+
+    est = list(C)
     X, lab = [], []
     for e, ps in C.items():
         for p in ps:
@@ -197,47 +208,40 @@ def dibujar(filas: list[dict], C: dict, salida: str) -> None:
             lab.append(e)
     X = np.array(X)
     mu = X.mean(0)
-    U, S_, Vt = np.linalg.svd(X - mu, full_matrices=False)
+    _, _, Vt = np.linalg.svd(X - mu, full_matrices=False)
     P = (X - mu) @ Vt[:2].T
-    fig, ax = plt.subplots(figsize=(10, 8.5), facecolor=fondo)
+    fig, cuerpo = estilo_figuras.figura(
+        12, 7.2, "Posición de las canciones según sus fundamentales armónicas",
+        subtitulo="Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones comparadas. "
+                  "La cercanía resume el parecido entre sus repartos de fundamentales.",
+        nota="Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan en ella "
+             "(+ y − indican el sentido).")
+    ax = cuerpo.subplots()
     for e in est:
         k = [i for i, l in enumerate(lab) if l == e]
         ax.scatter(P[k, 0], P[k, 1], s=14, color=COLOR[e], alpha=0.58, label=f"{ESTILOS[e]} · {len(k)} piezas", edgecolors="none")
     for f in filas:
         q = (np.sqrt([f["fundamentales"].get(g, 0) / 100 for g in GRADOS]) - mu) @ Vt[:2].T
         banda = "primus" not in f["corrida"].lower()
-        ax.scatter(*q, s=110, marker="*" if banda else "D", color=tinta if banda else "#6250d6", zorder=5, edgecolors=fondo, linewidths=1)
-    # qué grado empuja cada eje
-    for k in np.argsort(-np.abs(Vt[0]))[:3]:
-        pass
-    ax.set_xlabel("Componente 1 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[0][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[0]))[:3]) + ")", color=gris, labelpad=15)
-    ax.set_ylabel("Componente 2 (" + ", ".join(f"{GRADOS[k]}{'+' if Vt[1][k] > 0 else '−'}" for k in np.argsort(-np.abs(Vt[1]))[:3]) + ")", color=gris, labelpad=15)
-    fig.suptitle("Posición de las canciones según sus fundamentales armónicas", x=0.5, y=0.97,
-                 ha="center", fontsize=17, fontweight="bold", color=tinta)
-    handles, labels = ax.get_legend_handles_labels()
-    handles.extend([
-        Line2D([0], [0], marker="*", color="none", markerfacecolor=tinta, markeredgecolor=tinta,
-               markersize=8, label="★  Angine de Poitrine"),
-        Line2D([0], [0], marker="D", color="none", markerfacecolor="#6250d6", markeredgecolor="#6250d6",
-               markersize=7, label="◆  Primus"),
-    ])
-    leyenda = fig.legend(handles=handles, frameon=False, fontsize=8.5, markerscale=1.0, loc="upper left",
-                         bbox_to_anchor=(0.04, 0.855), ncol=1, title="Paleta: corpus y banda", title_fontsize=10.5,
-                         labelspacing=1.1, borderpad=0.2)
+        ax.scatter(*q, s=110, marker="*" if banda else "D", color=TINTA if banda else "#6250d6", zorder=5, edgecolors=FONDO, linewidths=1)
+    eje = lambda v: ", ".join(f"{GRADOS[k]}{'+' if v[k] > 0 else '−'}" for k in np.argsort(-np.abs(v))[:3])
+    ax.set_xlabel(f"Componente 1 ({eje(Vt[0])})", color=GRIS)
+    ax.set_ylabel(f"Componente 2 ({eje(Vt[1])})", color=GRIS)
+    handles, _ = ax.get_legend_handles_labels()
+    for h in handles:
+        h.set_alpha(1)
+    handles += [Line2D([0], [0], marker="*", color="none", markerfacecolor=TINTA, markeredgecolor=TINTA, markersize=11, label="Angine de Poitrine"),
+                Line2D([0], [0], marker="D", color="none", markerfacecolor="#6250d6", markeredgecolor="#6250d6", markersize=7, label="Primus")]
+    leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=9, title="Corpus y bandas",
+                            title_fontsize=10, labelspacing=1.0, markerscale=1.4)
     leyenda.get_title().set_fontweight("bold")
-    leyenda.get_title().set_ha("left")
-    ax.set_facecolor(fondo)
-    ax.tick_params(colors=gris, length=0)
-    ax.grid(color="#e4e3df", lw=0.7)
-    for s in ax.spines.values():
-        s.set_visible(False)
-    fig.text(0.04, 0.055, "La posición resume la cercanía entre los repartos de fundamentales armónicas de las canciones y los corpus.\n"
-             "Cada punto del fondo es una pieza del corpus; su color identifica el corpus de referencia.\n"
-             "La intensidad indica la concentración visual de piezas cercanas; los símbolos muestran las canciones comparadas.",
-             ha="left", fontsize=9.5, color=gris, linespacing=1.35)
-    fig.subplots_adjust(left=0.18, right=0.97, top=0.76, bottom=0.21)
-    fig.savefig(salida + "_mapa.png", dpi=200, facecolor=fondo)
-    plt.close(fig)
+    leyenda._legend_box.align = "left"
+    ax.set_facecolor(FONDO)
+    ax.tick_params(colors=GRIS, length=0)
+    ax.grid(color=REJILLA, lw=0.7)
+    for s_ in ax.spines.values():
+        s_.set_visible(False)
+    return fig
 
 
 if __name__ == "__main__":

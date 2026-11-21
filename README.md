@@ -24,11 +24,14 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
   - `todo.py` y `graficas_completas.py`: corren todas las canciones y reúnen las gráficas (`make todo`, `make graficas`).
   - `extract_cells.py`: regenera la extracción cuando cambia el notebook (`--check` solo verifica).
   - `parse_gp.py`, `evaluar_melodia.py` y `completar_evaluacion.py`: partituras Guitar Pro y evaluación contra ellas.
+  - `separar_roformer.py`: separación alternativa con BS-RoFormer SW en un entorno aparte (ver
+    [`docs/separacion_roformer.md`](docs/separacion_roformer.md)); `run_song.py --separador roformer` usa esas pistas.
 - `scripts/cuaderno/`: pasos del análisis que modifican el notebook (armonía en 24-EDO, funciones, ejes de Lendvai,
   notas columna, análisis melódico, limpieza de notas…). Ya están aplicados; se pueden volver a correr sin duplicar cambios.
 - `scripts/diagnostico/`: diagnósticos de la línea melódica, las capas del looper, Basic Pitch y el ruido de muestreo.
 - `scripts/comparacion/`: comparación con corpus y repertorios (estilos, verosimilitud por bloques, campos de Hába,
   ciclos métricos, equivalencias EDO) y gráficas comparativas (tarjetas, tiras de ciclos, radares, figuras del álbum).
+  `estilo_figuras.py` compone las figuras sin solapes y avisa si algo se monta (ver [`docs/graficas.md`](docs/graficas.md)).
 - `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
 - `tests/`: validaciones estructurales básicas.
 
