@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa presentacion graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -21,6 +21,7 @@ help:
 		'make graficas-completas Alias de make graficas' \
 		'make graficas-diapositivas Solo las seis gráficas de la presentación (outputs/graficas_clave_*/diapositivas)' \
 		'make defensa        PDF con los puntos para la defensa (docs/defensa) y copia en ~/Downloads' \
+		'make presentacion   Servir la presentación (presentacion/index.html) en http://localhost:8000' \
 		'make graficas-actuales Reunir gráficas básicas usando las corridas existentes más recientes' \
 		'make graficas-primus Correr las cinco y comparar también con las corridas de Primus' \
 		'make roformer-entorno Crear .venv-rof (conda-forge) con audio-separator para BS-RoFormer SW' \
@@ -75,6 +76,13 @@ graficas-diapositivas: check-python
 	$(VENV_PYTHON) scripts/graficas_completas.py --clave
 
 graficas-clave: graficas-diapositivas
+
+PUERTO ?= 8000
+
+presentacion:
+	@echo "Presentación en http://localhost:$(PUERTO)  (Ctrl+C para cerrar)"
+	@(sleep 1 && open "http://localhost:$(PUERTO)") &
+	cd presentacion && python3 -m http.server $(PUERTO)
 
 DEFENSA_TMP := .tmp_defensa
 DESCARGAS ?= $(HOME)/Downloads

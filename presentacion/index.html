@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis computacional microtonal</title>
+<link rel="stylesheet" href="lib/reveal/reset.min.css">
+<link rel="stylesheet" href="lib/reveal/reveal.min.css">
+<style>
+  /* Fuentes institucionales (copias locales: funciona sin conexión) */
+  @font-face { font-family: "Ancizar Sans"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSans.woff2) format("woff2"); }
+  @font-face { font-family: "Ancizar Sans"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSans-Italic.woff) format("woff"); }
+  @font-face { font-family: "Ancizar Serif"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSerif.woff2) format("woff2"); }
+  @font-face { font-family: "Ancizar Serif"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSerif-Italic.woff) format("woff"); }
+
+  :root {
+    --verde: #06784f;          /* accent3 de la plantilla */
+    --verde-oscuro: #033c27;   /* accent3 al 50 % */
+    --verde-claro: #14c486;    /* accent4 */
+    --amarillo: #ffb93e;
+    --crema: #f8eccd;          /* bg2 */
+    --tinta: #29272d;          /* dk1 */
+    --gris: #8a8984;
+    --marco: #36373a;          /* alrededor de la diapositiva */
+    --barra: #444447;          /* barra de navegación */
+    --alto-barra: 52px;
+  }
+
+  html, body, .reveal-viewport { height: 100%; margin: 0; background: var(--marco); overflow: hidden; }
+
+  /* ---------- área de la diapositiva (todo menos la barra inferior) ---------- */
+  .reveal { position: absolute; inset: 0 0 var(--alto-barra) 0; width: auto; height: auto; }
+  .reveal .slides { text-align: left; }
+  .reveal .slides > section {
+    width: 960px; height: 540px; padding: 0 !important; top: 0 !important;
+    background: #fff center / 100% 100% no-repeat;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.35);
+    font-family: "Ancizar Sans", sans-serif; color: var(--tinta);
+  }
+  .reveal .slides > section > * { position: absolute; margin: 0; }
+
+  /* número de diapositiva arriba a la izquierda (lo llena el script) */
+  .numero { left: 42px; top: 10px; font-size: 10px; color: var(--gris); }
+
+  /* ---------- fondos de la plantilla ---------- */
+  section.portada  { background-image: url(plantilla/fondo_portada.png) !important; }
+  section.titulo,
+  section.contenido { background-image: url(plantilla/fondo_contenido.png) !important; }
+  section.contenido.claro { background-image: url(plantilla/fondo_contenido_claro.png) !important; }
+  section.cierre   { background-image: url(plantilla/fondo_cierre.png) !important; }
+  section.cierre .numero { color: rgba(255,255,255,.55); }
+
+  /* ---------- diapositiva de título ---------- */
+  .titulo h1 {
+    left: 153px; top: 170px; width: 651px; height: 76px; display: flex; align-items: center; justify-content: center;
+    font: 400 53px/1.1 "Ancizar Serif", serif; color: var(--verde); text-align: center;
+  }
+  .titulo .subtitulo {
+    left: 294px; top: 232px; width: 372px; height: 39px; display: flex; align-items: center; justify-content: center;
+    font: italic 700 24px/1.1 "Ancizar Sans", sans-serif; color: var(--verde-claro); text-align: center; white-space: nowrap;
+  }
+  .titulo .linea { left: 176px; top: 266px; width: 610px; border-top: 1.33px solid var(--verde-oscuro); }
+  .titulo .facultad {
+    left: 155px; top: 310px; width: 651px; height: 76px; display: flex; align-items: center; justify-content: center;
+    font: 400 24px/1.2 "Ancizar Serif", serif; color: var(--verde); text-align: center;
+  }
+
+  /* ---------- diapositiva de contenido ---------- */
+  .contenido h2 {
+    left: 50px; top: 32px; width: 694px; height: 59px; display: flex; align-items: center;
+    font: 800 29px/1.1 "Ancizar Serif", serif; color: var(--verde);
+  }
+  .contenido .subtitulo {
+    left: 50px; top: 82px; width: 827px;
+    font: 400 18.7px/1 "Ancizar Sans", sans-serif; letter-spacing: 4px; text-transform: uppercase; color: var(--verde);
+  }
+  .contenido .cuerpo { left: 59px; top: 137px; width: 848px; height: 300px; font: 300 18.7px/2 "Ancizar Sans", sans-serif; }
+  .cuerpo ol, .cuerpo ul { margin: 0; padding-left: 36px; }
+  .cuerpo ol li::marker { color: var(--verde-claro); font-weight: 400; }
+  .cuerpo ul { list-style: none; }
+  .cuerpo ul li { position: relative; }
+  .cuerpo ul li::before { content: ""; position: absolute; left: -24px; top: .8em; width: 7px; height: 7px; background: var(--verde-claro); }
+  .contenido .pie {
+    left: 27px; top: 503px; font: italic 400 12px/1.35 "Ancizar Sans", sans-serif; color: #fff;
+  }
+  .contenido.claro .pie { color: var(--verde); }
+
+  /* ---------- cierre ---------- */
+  .cierre .gracias {
+    left: 369px; top: 230px; width: 220px; height: 53px; display: flex; align-items: center; justify-content: center;
+    font: italic 400 42.7px/1 "Ancizar Serif", serif; color: var(--crema);
+  }
+
+  /* ---------- barra de navegación inferior ---------- */
+  .navegacion {
+    position: fixed; left: 0; right: 0; bottom: 0; height: var(--alto-barra);
+    display: flex; align-items: center; justify-content: center; gap: 34px;
+    background: var(--barra); border-top: 1px solid #5a5a5e;
+    font: 500 19px/1 "Segoe UI", system-ui, -apple-system, sans-serif; letter-spacing: .02em; color: #fff;
+    user-select: none;
+  }
+  .navegacion button {
+    width: 40px; height: 40px; display: grid; place-items: center; padding: 0;
+    background: none; border: 0; border-radius: 4px; cursor: pointer; color: #fff;
+  }
+  .navegacion button:hover:not(:disabled) { background: rgba(255,255,255,.1); }
+  .navegacion button:focus-visible { outline: 2px solid var(--amarillo); }
+  .navegacion button:disabled { opacity: .3; cursor: default; }
+  .navegacion svg { width: 14px; height: 20px; fill: currentColor; }
+  .navegacion .contador { min-width: 170px; text-align: center; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="reveal">
+  <div class="slides">
+
+    <!-- 1 · Portada -->
+    <section class="portada" aria-label="Portada"></section>
+
+    <!-- 2 · Título -->
+    <section class="titulo">
+      <span class="numero"></span>
+      <h1>Título Ancízar Serif 40pt</h1>
+      <p class="subtitulo">Subtítulo Ancízar Sans Italic 18 pt</p>
+      <div class="linea"></div>
+      <p class="facultad">Facultad –Departamento- Sede Ancízar Serif 18pt</p>
+    </section>
+
+    <!-- 3 · Contenido -->
+    <section class="contenido">
+      <span class="numero"></span>
+      <h2>Contenido</h2>
+      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
+      <div class="cuerpo">
+        <ol>
+          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+          <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+          <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
+          <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
+        </ol>
+      </div>
+      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
+    </section>
+
+    <!-- 4 · Contenido con pie claro -->
+    <section class="contenido claro">
+      <span class="numero"></span>
+      <h2>Título Ancízar Serif Extrabold 22 pt</h2>
+      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
+      <div class="cuerpo"></div>
+      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
+    </section>
+
+    <!-- 5 · Referencias -->
+    <section class="contenido">
+      <span class="numero"></span>
+      <h2>Referencias</h2>
+      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
+      <div class="cuerpo">
+        <ul>
+          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
+          <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+        </ul>
+      </div>
+      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
+    </section>
+
+    <!-- 6 · Cierre -->
+    <section class="cierre">
+      <span class="numero"></span>
+      <p class="gracias">Gracias</p>
+    </section>
+
+  </div>
+</div>
+
+<nav class="navegacion" aria-label="Cambiar diapositiva">
+  <button type="button" id="anterior" aria-label="Diapositiva anterior">
+    <svg viewBox="0 0 14 20"><path d="M14 0v20L0 10z"/></svg>
+  </button>
+  <span class="contador" id="contador" aria-live="polite">Diapositiva 1 de 1</span>
+  <button type="button" id="siguiente" aria-label="Diapositiva siguiente">
+    <svg viewBox="0 0 14 20"><path d="M0 0v20l14-10z"/></svg>
+  </button>
+</nav>
+
+<script src="lib/reveal/reveal.min.js"></script>
+<script>
+  Reveal.initialize({
+    width: 960, height: 540, margin: 0.04,     // 16:9, como la plantilla (10 × 5.625 in)
+    center: false, controls: false, progress: false, slideNumber: false,
+    hash: true, transition: "fade", transitionSpeed: "fast", backgroundTransition: "none",
+  }).then(() => {
+    const total = Reveal.getTotalSlides();
+    Reveal.getSlides().forEach((s, i) => s.querySelectorAll(".numero").forEach(n => n.textContent = i + 1));
+
+    const anterior = document.getElementById("anterior");
+    const siguiente = document.getElementById("siguiente");
+    const contador = document.getElementById("contador");
+    const actualizar = () => {
+      const i = Reveal.getSlidePastCount() + 1;
+      contador.textContent = `Diapositiva ${i} de ${total}`;
+      anterior.disabled = i === 1;
+      siguiente.disabled = i === total;
+    };
+    anterior.addEventListener("click", () => { Reveal.prev(); anterior.blur(); });
+    siguiente.addEventListener("click", () => { Reveal.next(); siguiente.blur(); });
+    Reveal.on("slidechanged", actualizar);
+    actualizar();
+  });
+</script>
+</body>
+</html>
