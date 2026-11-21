@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -19,6 +19,8 @@ help:
 		'make run-sarniezz   Analizar Sarniezz y generar todos los outputs' \
 		'make graficas       Reunir comparativas no-tabroll de banda, repertorios y corpus' \
 		'make graficas-completas Alias de make graficas' \
+		'make graficas-diapositivas Solo las seis gráficas de la presentación (outputs/graficas_clave_*/diapositivas)' \
+		'make defensa        PDF con los puntos para la defensa (docs/defensa) y copia en ~/Downloads' \
 		'make graficas-actuales Reunir gráficas básicas usando las corridas existentes más recientes' \
 		'make graficas-primus Correr las cinco y comparar también con las corridas de Primus' \
 		'make roformer-entorno Crear .venv-rof (conda-forge) con audio-separator para BS-RoFormer SW' \
@@ -67,6 +69,24 @@ graficas: check-python
 	$(VENV_PYTHON) scripts/graficas_completas.py
 
 graficas-completas: graficas
+
+graficas-diapositivas: check-python
+	@test -x $(VENV_PYTHON) || { echo 'Falta $(VENV_PYTHON); ejecuta make install una vez con conexión.' >&2; exit 1; }
+	$(VENV_PYTHON) scripts/graficas_completas.py --clave
+
+graficas-clave: graficas-diapositivas
+
+DEFENSA_TMP := .tmp_defensa
+DESCARGAS ?= $(HOME)/Downloads
+
+defensa:
+	@command -v xelatex >/dev/null || { echo 'Falta xelatex (MacTeX).' >&2; exit 1; }
+	@mkdir -p $(DEFENSA_TMP)
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=$(DEFENSA_TMP) docs/defensa/puntos_defensa.tex >/dev/null \
+		|| { tail -30 $(DEFENSA_TMP)/puntos_defensa.log >&2; exit 1; }
+	cp $(DEFENSA_TMP)/puntos_defensa.pdf docs/defensa/puntos_defensa.pdf
+	cp docs/defensa/puntos_defensa.pdf "$(DESCARGAS)/puntos_defensa.pdf"
+	@echo "→ docs/defensa/puntos_defensa.pdf y $(DESCARGAS)/puntos_defensa.pdf"
 
 graficas-actuales: check-python
 	$(VENV_PYTHON) scripts/todo.py --otras primus

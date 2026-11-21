@@ -13,6 +13,7 @@ El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb
 - `docs/*.md`: notas de análisis (armonía, melodía, corpus y estilos, verosimilitud por bloques, evolución de la tesis).
 - `docs/articulo/`: artículo final en LaTeX y su PDF.
 - `docs/poster/`: póster en LaTeX (`poster_version_1_Santi.tex` incrusta `poster_original.pdf`), su PDF y `LEEME_nuevos_graficos.md` con el contenido propuesto por sección.
+- `docs/defensa/`: puntos para la defensa ordenados, con la fuente de cada cifra (`make defensa` genera el PDF y lo copia a `~/Downloads`).
 - `docs/formulas/`: resumen de fórmulas (tono logarítmico, Mel, Fourier, MFCC, KL, repetición temporal) en LaTeX y PDF.
 - `docs/referencias_compiladas.md`: bibliografía y fuentes del proyecto, compiladas.
 - `references/partituras/`: partituras y archivos Guitar Pro de referencia.

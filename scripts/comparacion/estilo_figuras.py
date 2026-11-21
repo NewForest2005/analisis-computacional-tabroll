@@ -21,6 +21,22 @@ import textwrap
 TINTA, GRIS, MUTED, FONDO, REJILLA = "#0b0b0b", "#52514e", "#8a8984", "#fcfcfb", "#e4e3de"
 PALETA_ARTISTA = {"Angine de Poitrine": "#2a78d6", "Primus": "#eb6834", "King Gizzard": "#1baf7a",
                   "Frank Zappa": "#eda100", "King Crimson": "#8b5fbf", "Gentle Giant": "#d1495b"}
+# Símbolo y color de cada artista en gráficos de dispersión, donde el fondo ya usa los colores de los corpus
+# (azul, rojo, verde y ocre): (marcador, color, tamaño en la leyenda).
+SIMBOLO_ARTISTA = {"Angine de Poitrine": ("*", TINTA, 11), "Primus": ("D", "#6250d6", 7),
+                   "King Gizzard": ("^", "#d81b60", 8), "Frank Zappa": ("s", "#00acc1", 7),
+                   "King Crimson": ("P", "#546e7a", 8), "Gentle Giant": ("X", "#f9a825", 8)}
+_ZAPPA = ("g_spot_tornado", "inca_roads", "peaches_en_regalia", "the_black_page", "zomby_woof")
+
+
+def artista(corrida: str) -> str:
+    """Artista de una corrida por el nombre de su carpeta; lo que no es de un repertorio de referencia es la banda."""
+    low = corrida.lower()
+    for clave, nombre in (("primus", "Primus"), ("king_gizzard", "King Gizzard"), ("king_crimson", "King Crimson"),
+                          ("gentle_giant", "Gentle Giant")):
+        if clave in low:
+            return nombre
+    return "Frank Zappa" if any(k in low for k in _ZAPPA) else "Angine de Poitrine"
 
 TITULO_PT, TEXTO_PT = 16, 9.5
 _MARGEN_IN = 0.22          # aire arriba del título y debajo de la nota

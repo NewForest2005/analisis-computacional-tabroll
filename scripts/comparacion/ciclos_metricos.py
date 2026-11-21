@@ -46,18 +46,7 @@ def nombre(run: str) -> str:
 
 
 def artista(run: str) -> str:
-    low = run.lower()
-    if "primus" in low:
-        return "Primus"
-    if "king_gizzard" in low:
-        return "King Gizzard"
-    if "king_crimson" in low:
-        return "King Crimson"
-    if "gentle_giant" in low:
-        return "Gentle Giant"
-    if any(k in low for k in ("g_spot_tornado", "inca_roads", "peaches_en_regalia", "the_black_page", "zomby_woof")):
-        return "Frank Zappa"
-    return "Angine de Poitrine"
+    return estilo_figuras.artista(run)
 
 
 def mmss(t: float) -> str:
@@ -207,7 +196,7 @@ def lectura_fases(fs: list[dict], L: int) -> dict:
                 polimetro=round(deriva / validos, 2) if validos else None)
 
 
-def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columnas: int = 4):
+def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columnas: int = 4, diapositiva: bool = False):
     """Una curva de repetición por canción, en una cuadrícula de `columnas` con ejes compartidos."""
     import matplotlib.pyplot as plt
     from matplotlib.patches import Patch
@@ -217,8 +206,9 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
     curvas = sorted(curvas, key=lambda c: orden.index(c[2]) if c[2] in orden else len(orden))
     columnas = max(1, min(columnas, len(curvas)))
     filas = -(-len(curvas) // columnas)
+    alto_fila = 2.0 if diapositiva else 1.05
     fig, cuerpo = estilo_figuras.figura(
-        16, 1.05 * filas + 0.9, "Repetición musical según la distancia temporal",
+        12 if diapositiva else 16, alto_fila * filas + 0.9, "Repetición musical según la distancia temporal",
         subtitulo="Cada barra muestra cuánto se repiten ataques y alturas al separar la música ℓ corcheas. "
                   "Un pico estable ayuda a identificar ciclos métricos largos del repertorio.",
         nota="Eje x: distancia en corcheas ℓ. Eje y: repetición en la canción completa (0 a 1). "
@@ -246,9 +236,9 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
         for s_ in ("left", "bottom"):
             ax.spines[s_].set_color(REJILLA)
         ax.tick_params(labelsize=7.5, colors=GRIS, length=0)
-        if k >= len(curvas) - columnas:          # última fila ocupada de cada columna
+        if diapositiva or k >= len(curvas) - columnas:          # en la diapositiva, todas; si no, la última fila
             ax.xaxis.set_tick_params(labelbottom=True)
-            ax.set_xlabel("ℓ (corcheas)", fontsize=8.5, color=GRIS)
+            ax.set_xlabel("Distancia ℓ entre repeticiones (corcheas)" if diapositiva else "ℓ (corcheas)", fontsize=8.5, color=GRIS)
     presentes = [g for g in PALETA_ARTISTA if any(c[2] == g for c in curvas)]
     cuerpo.legend(handles=[Patch(facecolor=PALETA_ARTISTA[g], label=g) for g in presentes], loc="outside upper center",
                   ncol=len(presentes), frameon=False, fontsize=9.5)
@@ -262,6 +252,7 @@ def main() -> None:
     ap.add_argument("--ventana", type=float, default=30.0, help="segundos por ventana")
     ap.add_argument("--min-tramo", type=int, default=4, help="compases seguidos para listar un tramo")
     ap.add_argument("--salida", default="outputs/ciclos_metricos")
+    ap.add_argument("--diapositiva", action="store_true", help="3 columnas, marcas y rótulo del eje x en cada panel")
     a = ap.parse_args()
 
     por = {}
@@ -319,7 +310,8 @@ def main() -> None:
                 fh.write(f"{n},{Lb},{f['compas']},{f['t0']:.2f},{f['L']},{'' if f['fase'] is None else f['fase']},{'' if f['ajuste'] is None else f['ajuste']}\n")
 
     estilo_figuras.preparar()
-    estilo_figuras.guardar(dibujar(curvas, lags), a.salida + ".png", dpi=170)
+    estilo_figuras.guardar(dibujar(curvas, lags, columnas=3 if a.diapositiva else 4, diapositiva=a.diapositiva),
+                           a.salida + ".png", dpi=170)
     print(f"→ {a.salida}.md, {a.salida}.png")
 
 

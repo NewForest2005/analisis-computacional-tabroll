@@ -101,7 +101,7 @@ def medir(run: Path) -> dict:
                 escala24={GRADOS24[g]: round(100 * tiempo[g] / total, 2) for g in range(24)})
 
 
-def dibujar(filas: list[dict], salida: str) -> None:
+def dibujar(filas: list[dict], salida: str, diapositiva: bool = False) -> None:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -125,8 +125,12 @@ def dibujar(filas: list[dict], salida: str) -> None:
     ax.set_yticks(y, [f["cancion"] for f in filas], fontsize=10)
     ax.set_xlabel("% del tiempo de la melodía en cuartos de tono", color=gris, fontsize=9)
     ax.set_xlim(0, max(f["cuartos_de_tono"] for f in filas) * 1.75)
-    ax.set_title("Uso estructural de los cuartos de tono en la melodía", loc="left", fontsize=12, color=tinta)
-    ax.legend(frameon=False, fontsize=9, loc="lower right")
+    ax.set_title("Uso estructural de los cuartos de tono en la melodía", loc="left", color=tinta,
+                 **({"fontsize": 15, "fontweight": "bold", "pad": 34} if diapositiva else {"fontsize": 12}))
+    if diapositiva:   # leyenda debajo del eje, fuera de las barras y de sus cifras
+        ax.legend(frameon=False, fontsize=9.5, loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=2)
+    else:
+        ax.legend(frameon=False, fontsize=9, loc="lower right")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)
     ax.grid(axis="x", color=rejilla, lw=0.8)
@@ -173,6 +177,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--salida", default="outputs/microtonal")
+    ap.add_argument("--diapositiva", action="store_true", help="título grande y en negrita (versión para presentación)")
     a = ap.parse_args()
     filas = []
     for run in a.corridas:
@@ -188,7 +193,7 @@ def main() -> None:
         w = csv.DictWriter(fh, fieldnames=campos, extrasaction="ignore")
         w.writeheader()
         w.writerows(filas)
-    dibujar(filas, a.salida)
+    dibujar(filas, a.salida, a.diapositiva)
 
 
 if __name__ == "__main__":

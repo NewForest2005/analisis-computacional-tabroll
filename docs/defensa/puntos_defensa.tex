@@ -1,0 +1,179 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\definecolor{azul}{RGB}{30,58,95}
+\definecolor{gris}{RGB}{90,90,90}
+
+\newcommand{\fuente}[1]{\par{\small\color{gris}Fuente: #1}}
+\newcommand{\seccion}[1]{\vspace{0.4cm}{\Large\color{azul}\textbf{#1}}\par\vspace{0.1cm}}
+\newcommand{\bem}{$\flat$}
+\setlist[enumerate]{leftmargin=*,itemsep=6pt}
+\setlist[itemize]{itemsep=1pt,topsep=2pt}
+
+\begin{document}
+
+{\LARGE\color{azul}\textbf{Puntos para la defensa}}\par
+\vspace{0.1cm}
+{\large Análisis computacional microtonal de Angine de Poitrine}\par
+\vspace{0.3cm}
+Ordenados como avanza una defensa: la herramienta, la armonía, la melodía, la forma, la síntesis y las preguntas
+difíciles. Cada punto dice de dónde sale la cifra para poder comprobarla. Las gráficas 1a--3b son las de
+\texttt{make graficas-diapositivas}; los § remiten a \texttt{docs/evolucion\_de\_la\_tesis.md}.
+
+\seccion{1. La herramienta: por qué creerle}
+\begin{enumerate}
+\item \textbf{Una herramienta que no existía.} Ninguna herramienta estándar transcribe en 24-EDO (cuartos de tono).
+  El cuaderno separa guitarra y bajo, sigue la altura, detecta compases y ciclos del looper y analiza la armonía.
+  \fuente{\texttt{docs/evolucion\_de\_la\_tesis.md} §1.}
+\item \textbf{Se mide contra partituras corregidas de oído, no contra la oficial.} La de Guitar Pro también tiene
+  errores, y la de Fabienk es de la versión en vivo.
+  \fuente{§2.}
+\item \textbf{Prueba a ciegas.} Yor Zarad se reservó sin abrir ninguna salida del cuaderno: 36.8 en la melodía,
+  47.7 sin contar octavas y 68.6 en el bajo; el centro de la canción queda al nivel de las demás.
+  \fuente{§4.}
+\item \textbf{Arbitraje a ciegas.} En la primera ronda la partitura tenía razón en la mitad de los desacuerdos.
+  Desde entonces, que el cuaderno y la partitura no coincidan no basta para corregir.
+  \fuente{§2.}
+\item \textbf{La herramienta no usa la partitura para guiarse.} Se quitó todo lo que dependía del .gp, así que sirve
+  para canciones sin partitura.
+  \fuente{§2.}
+\item \textbf{Reproducible.} Demucs usa semilla fija y se guardan huellas SHA-256 del audio. Un hallazgo solo cuenta
+  si se mantiene con dos separaciones distintas (la misma canción dio 57 y 62).
+  \fuente{§2.}
+\item \textbf{Un separador mejor no cambió el resultado.} BS-RoFormer tiene mejor SDR público que Demucs (9.05 frente
+  a 5.22 en guitarra), pero en Sarniezz dio el mismo 44.9 en la melodía y tarda una hora por canción. El cuello de
+  botella no es la separación sino las capas superpuestas del looper. Responde de antemano a «¿por qué no usaste un
+  modelo mejor?».
+  \fuente{\texttt{docs/separacion\_roformer.md}.}
+\end{enumerate}
+
+\seccion{2. Armonía: no encaja en ningún estilo medido}
+\begin{enumerate}[resume]
+\item \textbf{Ninguna canción de la banda es típica de ningún corpus.} El máximo es 17.7 (Utzp en pop); Fabienk,
+  Yor Zarad y Sarniezz no pasan de 7.2.
+  \fuente{matriz de verosimilitud, gráfica 1a.}
+\item \textbf{El contraste da peso al resultado.} Con el mismo método, las referencias sí caen en estilos conocidos:
+  Gentle Giant «Experience» 92.4 en pop, King Gizzard «Billabong Valley» 86.2 en rock, Primus «Tommy the Cat» 75.1
+  en pop. El método no declara todo «raro».
+  \fuente{matriz de las 36 canciones.}
+\item \textbf{El método está calibrado.} Sobre 388 piezas reales de rock, las clasifica como «estilo existente» en el
+  92.3\,\% de los casos y como «sin vecino» solo en el 5.2\,\%. En la banda, «sin vecino» aparece en 9 de 24 casos
+  (37.5\,\%), unas siete veces más. Probablemente el mejor argumento contra «tu método siempre dice que es nuevo».
+  \fuente{salida de \texttt{verosimilitud\_por\_bloques.py}.}
+\item \textbf{Sarniezz y Fabienk caen donde no hay piezas de ningún corpus,} por el peso de \bem VII y \bem III (parte
+  baja del mapa). Mata Zyklek y Utzp, que son pedales, quedan en el borde del rock.
+  \fuente{mapa de fundamentales, gráfica 1b, y §6.}
+\item \textbf{Distancia al pop de Hooktheory:} 0.40--0.59 para la banda; los álbumes de pop entre sí no pasan de 0.07.
+  \fuente{§6.}
+\item \textbf{Los umbrales ad hoc se descartaron.} Las primeras pruebas de estilo usaban umbrales propios y se
+  reemplazaron por corpus reales. Sirvieron para descartar jazz, práctica común, tonos enteros y dodecafonismo.
+  \fuente{§6.}
+\end{enumerate}
+
+\seccion{3. Melodía: el elemento nuevo}
+\begin{enumerate}[resume]
+\item \textbf{Los cuartos de tono son grados de la escala, no adornos.} La banda concentra entre el 48 y el 82\,\% de
+  sus cuartos de tono en dos grados fijos, que vuelven en casi todas las vueltas del ciclo.
+  \fuente{gráfica 2a y §7.}
+\item \textbf{Piso de ruido medido.} En Primus, que no usa cuartos de tono, el cuaderno marca el 9--13\,\% de la
+  melodía en cuartos de tono por bends y slides. Lo que supera ese piso, como grado, es de la banda.
+  \fuente{gráfica 2a.}
+\item \textbf{Dos familias de escala.}
+  \begin{itemize}
+  \item \bem 2+ y \bem 6+ sobre un modo frigio: Mata Zyklek, Yor Zarad y Utzp. Cercana al maqam y al makam turco, que
+    la banda cita.
+  \item 7+, 6+ y \bem 3+ sobre un modo dórico: Sarniezz y Fabienk.
+  \end{itemize}
+  \fuente{círculo de 24-EDO, gráfica 2b, y §7.}
+\item \textbf{Base matemática del círculo de 24-EDO.} La quinta mide 14 pasos y $\gcd(14,24)=2$: el círculo se parte
+  en dos campos, los 12 grados regulares y los 12 en cuarto de tono. En 19, 31 o 53-EDO hay un solo campo. Une el
+  álgebra del artículo con la música.
+  \fuente{gráfica 2b y la sección «Estructura algebraica» del artículo.}
+\item \textbf{Angor es la excepción:} solo un 5\,\% de cuartos de tono, bajo el piso de ruido. Si preguntan por qué
+  una canción no sigue el patrón, la respuesta está en los datos.
+  \fuente{gráfica 2a.}
+\end{enumerate}
+
+\seccion{4. Forma: los ciclos del looper}
+\begin{enumerate}[resume]
+\item \textbf{Picos altos y aislados en la repetición.} La banda tiene picos en 20, 24, 28 y 32 corcheas; Primus y
+  Zappa tienen curvas planas.
+  \fuente{gráfica 3a.}
+\item \textbf{Los picos coinciden con lo que dice la banda (hipótesis).} En el podcast hablan de tocar en 5 y 7
+  tiempos:
+  \begin{itemize}
+  \item Fabienk tiene casi todos sus compases de 7 pulsos; su pico de 28 corcheas equivale a dos compases de 7.
+  \item Yor Zarad tiene tramos de 7 y el mismo pico de 28.
+  \item Mata Zyklek tiene tramos de 5; su pico de 20 corcheas equivale a dos compases de 5, con picos menores en 5 y 10.
+  \end{itemize}
+  El cuaderno llegó a eso desde el audio, sin que se lo dijeran.
+  \fuente{\texttt{ciclos\_metricos.md} y §11.}
+\item \textbf{Sarniezz y Utzp, en cambio, son de 4:} picos en 16 y 32 y tramos de 4 y 8 pulsos. No toda la banda es
+  de compases irregulares; cerca de la mitad, como dice la tesis.
+  \fuente{\texttt{ciclos\_metricos.md}.}
+\end{enumerate}
+
+\seccion{5. Síntesis e influencias}
+\begin{enumerate}[resume]
+\item \textbf{El híbrido se ve bloque por bloque.} La armonía y el metro apuntan hacia rock; la escala y los cuartos
+  de tono, hacia radif, cada uno con un pariente distinto. Rock gana 8 de 24 bloques, radif 7 y en 9 no hay vecino.
+  \fuente{gráfica 3b.}
+\item \textbf{El vecino más cercano es King Gizzard, que la banda cita como influencia.} En armonía, la canción más
+  parecida de cada tema de la banda es casi siempre de King Gizzard:
+  \begin{itemize}
+  \item Angor con «Flying Microtonal Banana»: distancia 0.00, idénticas (las dos son un pedal 100\,\% sobre I; caen en
+    el mismo punto del mapa y tienen los mismos percentiles);
+  \item Utzp con la misma canción: 0.01;
+  \item Mata Zyklek con «Open Water»: 0.03.
+  \end{itemize}
+  En metro pasa lo mismo: Utzp, Yor Zarad y Sarniezz están a 0.00--0.01 de canciones de King Gizzard. El análisis
+  confirma una influencia declarada.
+  \fuente{salida de \texttt{verosimilitud\_por\_bloques.py}.}
+\item \textbf{Sarniezz y Fabienk no tienen vecino ni siquiera en King Gizzard.} En armonía, su canción más parecida
+  queda a 0.47--0.51. Lo propio de la banda está ahí.
+  \fuente{la misma salida.}
+\item \textbf{Primus es una comparación propia, no una influencia declarada.} Ninguna fuente pública la cita. Comparte
+  con Fabienk y Sarniezz el centro, el modo dórico y las fundamentales 1, \bem 3 y \bem 7, pero en todos los bloques
+  queda más lejos que el vecino más cercano. Conviene presentarlo así antes de que lo señalen.
+  \fuente{§8.}
+\end{enumerate}
+
+\seccion{6. Preguntas difíciles}
+\begin{enumerate}[resume]
+\item \textbf{«King Gizzard también concentra los cuartos de tono.»} Es cierto: Melting 96\,\%, Doom City 95\,\%,
+  Sleep Drifter 99.5\,\%. Lo que distingue a la banda no es concentrarlos, sino qué grados fija (\bem 2+ y \bem 6+, o
+  7+ y 6+) y sobre qué modo. Además, las canciones microtonales de King Gizzard también salen atípicas en la matriz
+  (Flying Microtonal Banana 9.1, Sleep Drifter 7.9): la banda pertenece a una corriente microtonal en el rock, no está
+  sola.
+\item \textbf{«¿Cuánto acierta la transcripción?»} Melodía: 66.4 en Mata Zyklek, 46.2 en Fabienk, 44.9 en Sarniezz y
+  36.8 en la prueba a ciegas. Bajo: 69--83. Fundamental correcta: 95\,\% en Mata Zyklek, 82--83\,\% en Fabienk y
+  58\,\% en Sarniezz (el punto débil, por su riff cromático en cuartos de tono). Los resultados de estilo usan sobre
+  todo la armonía y los ciclos, que son lo más confiable.
+\item \textbf{«Los corpus no tienen cuartos de tono.»} Es cierto. Las fundamentales en cuarto de tono se llevan al
+  grado de abajo y su peso se informa aparte (el «¼\,\%» de la matriz: 14.4\,\% en Yor Zarad, 3.9\,\% en Sarniezz).
+  Si eso sesga algo, es hacia parecerse más a los corpus: la conclusión de que no encaja es conservadora.
+\item \textbf{«Son pocas canciones.»} Son seis, todo el Vol.~II, y 30 de referencia medidas con el mismo cuaderno.
+\item \textbf{Límites que conviene decir primero:}
+  \begin{itemize}
+  \item fuera de la banda falla la elección del centro (Tommy the Cat sale en Sol en vez de Mi);
+  \item la síncopa del radar rítmico da lo mismo que el azar;
+  \item la referencia de Utzp no pasó la verificación de oído.
+  \end{itemize}
+  \fuente{§5, §9 y §10.}
+\end{enumerate}
+
+\vspace{0.3cm}
+\colorbox{azul!8}{\parbox{\dimexpr\linewidth-2\fboxsep}{%
+\textbf{El hilo en una frase.} La banda toma la forma del rock en loop, la armonía del rock modal y el metro de King
+Gizzard, y le suma algo que ningún corpus medido tiene: escalas de 24 notas con grados neutros fijos. El método no
+exagera la novedad: en rock real solo declara «sin vecino» el 5\,\% de las veces.}}
+
+\end{document}

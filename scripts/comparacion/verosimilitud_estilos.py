@@ -113,6 +113,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--salida", default="outputs/verosimilitud")
+    ap.add_argument("--diapositiva", action="store_true", help="en el mapa, estrellas grandes y rombos pequeños")
     a = ap.parse_args()
     if not CORPUS.exists():
         raise SystemExit("Falta references/corpus/estilos_por_pieza.json: corre antes scripts/comparacion/corpus_estilos.py")
@@ -152,13 +153,13 @@ def main() -> None:
         w = csv.DictWriter(fh, fieldnames=campos, extrasaction="ignore")
         w.writeheader()
         w.writerows(filas)
-    dibujar(filas, C, a.salida)
+    dibujar(filas, C, a.salida, a.diapositiva)
 
 
-def dibujar(filas: list[dict], C: dict, salida: str) -> None:
+def dibujar(filas: list[dict], C: dict, salida: str, diapositiva: bool = False) -> None:
     estilo_figuras.preparar()
     estilo_figuras.guardar(figura_matriz(filas, list(C)), salida + "_matriz.png")
-    estilo_figuras.guardar(figura_mapa(filas, C), salida + "_mapa.png")
+    estilo_figuras.guardar(figura_mapa(filas, C, diapositiva), salida + "_mapa.png")
 
 
 def figura_matriz(filas: list[dict], est: list[str]):
@@ -194,7 +195,7 @@ def figura_matriz(filas: list[dict], est: list[str]):
     return fig
 
 
-def figura_mapa(filas: list[dict], C: dict):
+def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
     """Análisis de componentes principales de los repartos de fundamentales (raíz cuadrada, como en Hellinger)."""
     import numpy as np
     from matplotlib.lines import Line2D
@@ -220,18 +221,29 @@ def figura_mapa(filas: list[dict], C: dict):
     for e in est:
         k = [i for i, l in enumerate(lab) if l == e]
         ax.scatter(P[k, 0], P[k, 1], s=14, color=COLOR[e], alpha=0.58, label=f"{ESTILOS[e]} · {len(k)} piezas", edgecolors="none")
+    from estilo_figuras import PALETA_ARTISTA, SIMBOLO_ARTISTA, artista
+    presentes = []
     for f in filas:
         q = (np.sqrt([f["fundamentales"].get(g, 0) / 100 for g in GRADOS]) - mu) @ Vt[:2].T
-        banda = "primus" not in f["corrida"].lower()
-        ax.scatter(*q, s=110, marker="*" if banda else "D", color=TINTA if banda else "#6250d6", zorder=5, edgecolors=FONDO, linewidths=1)
+        quien = artista(f["corrida"])
+        presentes.append(quien)
+        marca, color, _ = SIMBOLO_ARTISTA[quien]
+        banda = quien == "Angine de Poitrine"
+        # La estrella llena menos área que los otros símbolos: se agranda para que la banda se vea igual o más.
+        # En la diapositiva (banda y Primus) la estrella es aún mayor y el rombo, pequeño.
+        tam = (260 if banda else 50) if diapositiva else (200 if banda else 60)
+        ax.scatter(*q, s=tam, marker=marca, color=color, zorder=6 if banda else 5,
+                   edgecolors=FONDO if banda else TINTA, linewidths=1 if banda else 0.5)
     eje = lambda v: ", ".join(f"{GRADOS[k]}{'+' if v[k] > 0 else '−'}" for k in np.argsort(-np.abs(v))[:3])
     ax.set_xlabel(f"Componente 1 ({eje(Vt[0])})", color=GRIS)
     ax.set_ylabel(f"Componente 2 ({eje(Vt[1])})", color=GRIS)
     handles, _ = ax.get_legend_handles_labels()
     for h in handles:
         h.set_alpha(1)
-    handles += [Line2D([0], [0], marker="*", color="none", markerfacecolor=TINTA, markeredgecolor=TINTA, markersize=11, label="Angine de Poitrine"),
-                Line2D([0], [0], marker="D", color="none", markerfacecolor="#6250d6", markeredgecolor="#6250d6", markersize=7, label="Primus")]
+    for quien in [a for a in PALETA_ARTISTA if a in presentes]:
+        marca, color, tam_leyenda = SIMBOLO_ARTISTA[quien]
+        handles.append(Line2D([0], [0], marker=marca, color="none", markerfacecolor=color, markeredgecolor=color,
+                              markersize=tam_leyenda, label=quien))
     leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=9, title="Corpus y bandas",
                             title_fontsize=10, labelspacing=1.0, markerscale=1.4)
     leyenda.get_title().set_fontweight("bold")

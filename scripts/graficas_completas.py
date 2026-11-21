@@ -4,11 +4,16 @@
 Selecciona la corrida más reciente por canción, regenera las gráficas por canción y
 produce las comparaciones de la banda con Primus, King Gizzard, Zappa, King Crimson
 y Gentle Giant, además de todos los corpus disponibles en references/corpus.
+
+Con --clave solo corre lo necesario para las seis gráficas de la presentación (tres diapositivas de dos) y las
+copia numeradas en <salida>/diapositivas/.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime
@@ -17,6 +22,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUTS = ROOT / "outputs"
 OUT = OUTPUTS / f"graficas_completas_{datetime.now():%Y-%m-%d_%H%M}"
+# Diapositiva 1: armonía fuera de todos los corpus · 2: cuartos de tono como grados fijos · 3: síntesis, un híbrido.
+# Diapositiva 1: armonía fuera de todos los corpus · 2: cuartos de tono como grados fijos · 3: síntesis, un híbrido.
+# La lista (origen, nombre en diapositivas/) se arma en main(), cuando ya se conoce la carpeta de salida.
+CLAVE: list[tuple[Path, str]] = []
 ZAPPA_KEYS = ("g_spot_tornado", "inca_roads", "peaches_en_regalia", "the_black_page", "zomby_woof")
 
 
@@ -47,7 +56,23 @@ def call(args: list[str], failures: list[str]) -> None:
         failures.append(" ".join(args))
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    global OUT
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--clave", action="store_true", help="solo las seis gráficas de la presentación")
+    args = ap.parse_args(argv)
+    if args.clave:
+        OUT = OUTPUTS / f"graficas_clave_{datetime.now():%Y-%m-%d_%H%M}"
+    global CLAVE
+    fuente = OUT / "fuente_diapositivas"
+    CLAVE = [
+        (fuente / "verosimilitud_banda_matriz.png", "1a_armonia_matriz_verosimilitud.png"),
+        (fuente / "verosimilitud_banda_primus_mapa.png", "1b_armonia_mapa_fundamentales.png"),
+        (fuente / "microtonal_banda_uso.png", "2a_melodia_uso_cuartos_de_tono.png"),
+        (OUT / "figuras_album_c_circulo_haba.png", "2b_melodia_circulo_24edo.png"),
+        (fuente / "ciclos_banda.png", "3a_sintesis_ciclos_metricos.png"),
+        (OUT / "figuras_album_a_clasificacion.png", "3b_sintesis_clasificacion_album.png"),
+    ]
     failures: list[str] = []
     # Matplotlib hereda esta ruta en cada subproceso; evita la caché no escribible de macOS.
     cache = OUTPUTS / ".matplotlib"
@@ -83,6 +108,9 @@ def main() -> int:
 
     def paths(runs: list[Path]) -> list[str]:
         return [str(r) for r in runs]
+
+    if args.clave:
+        return clave(banda, primus, king_gizzard, todos, externos, paths, failures)
 
     for run in todos:
         call(["scripts/comparacion/tarjeta_cancion.py", str(run)], failures)
@@ -127,6 +155,43 @@ def main() -> int:
             print("  ", failure)
         return 1
     print("Todas las gráficas no-tabroll terminaron correctamente.")
+    return 0
+
+
+def clave(banda, primus, king_gizzard, todos, externos, paths, failures: list[str]) -> int:
+    """Solo los scripts de las seis gráficas de la presentación; las copia numeradas en diapositivas/."""
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(todos), "--salida", str(OUT / "verosimilitud")], failures)
+    call(["scripts/comparacion/microtonal.py", *paths(todos), "--salida", str(OUT / "microtonal")], failures)
+    call(["scripts/comparacion/ciclos_metricos.py", *paths(todos), "--salida", str(OUT / "ciclos_metricos")], failures)
+    call(["scripts/comparacion/verosimilitud_por_bloques.py", *paths(banda), "--control", *paths(primus),
+          "--comparar", *paths(externos), "--salida", str(OUT / "bloques")], failures)
+    call(["scripts/comparacion/figuras_album.py", *paths(banda), "--control", *paths(primus),
+          "--comparar", *paths(king_gizzard), "--bloques", str(OUT / "bloques.json"), "--salida", str(OUT / "figuras_album")],
+         failures)
+    # Versiones para diapositiva (no tocan las salidas normales de arriba): solo las 6 canciones de la banda en la
+    # matriz, los cuartos de tono y los ciclos; en el mapa, la banda frente a Primus con estrellas grandes.
+    fuente = OUT / "fuente_diapositivas"
+    fuente.mkdir(exist_ok=True)
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda), "--salida", str(fuente / "verosimilitud_banda")], failures)
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda + primus), "--diapositiva",
+          "--salida", str(fuente / "verosimilitud_banda_primus")], failures)
+    call(["scripts/comparacion/microtonal.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "microtonal_banda")], failures)
+    call(["scripts/comparacion/ciclos_metricos.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "ciclos_banda")], failures)
+    destino = OUT / "diapositivas"
+    destino.mkdir(exist_ok=True)
+    faltan = []
+    for origen, nombre in CLAVE:
+        if origen.exists():
+            shutil.copy2(origen, destino / nombre)
+        else:
+            faltan.append(str(origen))
+    print(f"\nDiapositivas: {destino}")
+    for _, nombre in CLAVE:
+        print("  ", nombre)
+    if failures or faltan:
+        for item in failures + [f"falta {f}" for f in faltan]:
+            print("  fallo:", item)
+        return 1
     return 0
 
 

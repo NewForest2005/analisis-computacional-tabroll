@@ -60,6 +60,48 @@ si algo se monta. Todavía avisan `_b_perfil` (4 franjas vacías) y `_f_bucle_co
 banda, 36 en total, nombres largos) y exige que `revisar` no encuentre problemas. Otra prueba comprueba que `revisar`
 sí detecta una leyenda sobre los datos, dos textos montados y un texto que se sale. Corre con `make test`.
 
+## 6. Un símbolo y un color por artista en el mapa
+
+El mapa de fundamentales dibujaba como estrella toda canción que no fuera de Primus. Con las 36 canciones, King
+Gizzard, Zappa, King Crimson y Gentle Giant salían como estrellas, aunque la leyenda decía que eran Angine de Poitrine
+(33 estrellas en vez de 6).
+
+- `estilo_figuras.artista(corrida)` reconoce el artista por el nombre de la carpeta de la corrida (la misma regla que
+  ya usaba `ciclos_metricos.py`, que ahora la llama desde ahí).
+- `estilo_figuras.SIMBOLO_ARTISTA` fija símbolo y color, distintos de los colores de los corpus del fondo: Angine de
+  Poitrine ★ negro, Primus ◆ violeta, King Gizzard ▲ magenta, Frank Zappa ■ cian, King Crimson ✚ gris azulado y
+  Gentle Giant ✖ amarillo.
+- La estrella de la banda es más grande (`s=200`) que los demás símbolos (`s=60`) y se dibuja encima.
+- La leyenda solo lista los artistas presentes, así que la versión para diapositiva (banda y Primus) no cambia.
+
+Angor y «Flying Microtonal Banana» son pedales sobre I (100 % de la fundamental en I, sin cambios): caen en el mismo
+punto y la estrella tapa el triángulo.
+
+## 7. Gráficas de la presentación
+
+`make graficas-diapositivas` (`scripts/graficas_completas.py --clave`; `make graficas-clave` es un alias) corre solo
+los scripts de las seis gráficas elegidas para la defensa. Deja las salidas normales en
+`outputs/graficas_clave_<fecha>_<hora>/`, las versiones para diapositiva en `fuente_diapositivas/` y las seis finales,
+numeradas, en `diapositivas/`. Tarda unos 5-6 minutos.
+
+| Diapositiva | Eje | Izquierda | Derecha |
+|---|---|---|---|
+| 1 | Armonía: fuera de todos los corpus | `1a_armonia_matriz_verosimilitud` | `1b_armonia_mapa_fundamentales` |
+| 2 | Melodía: cuartos de tono como grados fijos | `2a_melodia_uso_cuartos_de_tono` | `2b_melodia_circulo_24edo` |
+| 3 | Síntesis: un híbrido | `3a_sintesis_ciclos_metricos` | `3b_sintesis_clasificacion_album` |
+
+Las versiones para diapositiva usan la opción `--diapositiva` de cada script; sin ella, las gráficas de las 36
+canciones salen igual que antes.
+
+| Gráfica | Versión para diapositiva |
+|---|---|
+| 1a matriz | Solo las 6 canciones de la banda (el script corre solo con sus corridas; los percentiles no cambian). |
+| 1b mapa | La banda frente a Primus. Estrellas más grandes (`s=260`, del tamaño visual de los rombos) y rombos más pequeños (`s=50`). La leyenda no cambia. |
+| 2a cuartos de tono | Solo las 6 canciones; título de 15 pt en negrita; leyenda debajo del eje para no tapar las cifras. |
+| 2b círculo | Sin cambios (ya muestra solo la banda). |
+| 3a ciclos | Solo las 6 canciones, en 3 columnas; marcas del eje horizontal y su rótulo («Distancia ℓ entre repeticiones (corcheas)») en cada panel. |
+| 3b clasificación | Sin cambios (ya muestra solo la banda). |
+
 ## Cómo seguir
 
 Para pasar otra gráfica al mismo esquema:
