@@ -6,7 +6,10 @@ from pathlib import Path
 ROOT = Path(__file__).parents[1]
 CELLS = ROOT / "src" / "tabroll" / "cells"
 NOTEBOOK = ROOT / "notebooks" / "Tabroll_Angine_de_Poitrine.ipynb"
-REGENERATE = "El notebook cambió y los módulos no: corre `python scripts/extract_cells.py`."
+REGENERATE = (
+    "Los módulos no coinciden con el notebook. Si editaste el notebook, corre `make extract`; "
+    "si editaste un módulo, pasa el cambio al notebook (el notebook es la fuente de verdad)."
+)
 
 spec = importlib.util.spec_from_file_location("extract_cells", ROOT / "scripts" / "extract_cells.py")
 extract_cells = importlib.util.module_from_spec(spec)

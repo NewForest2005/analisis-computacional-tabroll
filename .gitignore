@@ -25,3 +25,8 @@ references/corpus/raw/RadifCorpus/
 references/corpus/raw/SymbTr/
 references/corpus/raw/SymbTr-2.4.3/
 references/corpus/raw/TheSession-data/
+
+# Temporales de LaTeX, pósteres y cachés locales
+.tmp_*/
+.matplotlib-cache/
+__MACOSX/

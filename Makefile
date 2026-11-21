@@ -13,8 +13,8 @@ help:
 	@printf '%s\n' \
 		'make install         Crear el entorno e instalar el proyecto y las pruebas' \
 		'make demucs          Instalar Demucs para separar guitarra y bajo' \
-		'make extract         Regenerar un archivo Python por celda' \
-		'make check           Verificar extracción y sintaxis' \
+		'make extract         Regenerar un archivo Python por celda (se detiene si hay módulos editados a mano)' \
+		'make check           Verificar extracción (sin escribir) y sintaxis' \
 		'make test            Ejecutar las pruebas' \
 		'make run-sarniezz   Analizar Sarniezz y generar todos los outputs' \
 		'make graficas       Reunir comparativas no-tabroll de banda, repertorios y corpus' \
@@ -45,7 +45,7 @@ extract:
 	$(VENV_PYTHON) scripts/extract_cells.py
 
 check: install
-	$(VENV_PYTHON) scripts/extract_cells.py
+	$(VENV_PYTHON) scripts/extract_cells.py --check
 	$(VENV_PYTHON) -m compileall -q src scripts tests
 	$(VENV_PYTHON) -m pip check
 
