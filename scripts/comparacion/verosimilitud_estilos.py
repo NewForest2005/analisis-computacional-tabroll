@@ -34,6 +34,8 @@ import estilo_figuras  # noqa: E402
 RAIZ = Path(__file__).resolve().parents[2]
 CORPUS = RAIZ / "references" / "corpus" / "estilos_por_pieza.json"
 ESTILOS = {"rock": "Rock (RS 200)", "clasica": "Práctica común (Kostka-Payne)", "jazz": "Jazz (iRealPro)", "pop": "Pop (Hooktheory)"}
+CITA = {"rock": "RS 200 (de Clercq y Temperley)", "clasica": "Kostka-Payne (Temperley 2009)", "jazz": "iRealPro (Shanahan y Broze)",
+        "pop": "9 álbumes de Hooktheory"}
 COLOR = {"rock": "#1f5fa8", "clasica": "#c6532a", "jazz": "#16825d", "pop": "#bd7900"}
 GRADOS = ["I", "♭II", "II", "♭III", "III", "IV", "♯IV", "V", "♭VI", "VI", "♭VII", "VII"]
 ALFA = 0.5                                                              # suavizado de Laplace
@@ -113,7 +115,9 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--salida", default="outputs/verosimilitud")
-    ap.add_argument("--diapositiva", action="store_true", help="en el mapa, estrellas grandes y rombos pequeños")
+    ap.add_argument("--diapositiva", action="store_true",
+                    help="sin subtítulo ni nota (van en la diapositiva); en el mapa, leyenda grande, estrellas grandes y rombos pequeños")
+    ap.add_argument("--estilos", help="columnas de la matriz, separadas por comas (por ejemplo rock,pop); los percentiles no cambian")
     a = ap.parse_args()
     if not CORPUS.exists():
         raise SystemExit("Falta references/corpus/estilos_por_pieza.json: corre antes scripts/comparacion/corpus_estilos.py")
@@ -153,28 +157,33 @@ def main() -> None:
         w = csv.DictWriter(fh, fieldnames=campos, extrasaction="ignore")
         w.writeheader()
         w.writerows(filas)
-    dibujar(filas, C, a.salida, a.diapositiva)
+    estilos = [e.strip() for e in a.estilos.split(",")] if a.estilos else None
+    if estilos and (desconocidos := [e for e in estilos if e not in C]):
+        raise SystemExit(f"estilos desconocidos: {', '.join(desconocidos)} (hay: {', '.join(C)})")
+    dibujar(filas, C, a.salida, a.diapositiva, estilos)
 
 
-def dibujar(filas: list[dict], C: dict, salida: str, diapositiva: bool = False) -> None:
+def dibujar(filas: list[dict], C: dict, salida: str, diapositiva: bool = False, estilos: list[str] | None = None) -> None:
     estilo_figuras.preparar()
-    estilo_figuras.guardar(figura_matriz(filas, list(C)), salida + "_matriz.png")
+    estilo_figuras.guardar(figura_matriz(filas, estilos or list(C), textos=not diapositiva), salida + "_matriz.png")
     estilo_figuras.guardar(figura_mapa(filas, C, diapositiva), salida + "_mapa.png")
 
 
-def figura_matriz(filas: list[dict], est: list[str]):
-    """Canciones × estilos (percentil). Secuencial de un tono: más oscuro = más verosímil."""
+def figura_matriz(filas: list[dict], est: list[str], textos: bool = True):
+    """Canciones × estilos (percentil). Secuencial de un tono: más oscuro = más verosímil.
+
+    Con textos=False no lleva subtítulo ni nota (en la diapositiva van como leyenda debajo de la imagen)."""
     import numpy as np
     from matplotlib.colors import LinearSegmentedColormap
     from estilo_figuras import GRIS, TINTA
 
     M = np.array([[f[f"percentil_{e}"] for e in est] for f in filas])
     fig, cuerpo = estilo_figuras.figura(
-        max(9.0, 3.6 + 1.9 * len(est)), 0.42 * len(filas) + 1.2, "Verosimilitud de la armonía por canción y estilo",
-        subtitulo="Escala: % de piezas del estilo igual o más alejadas que la canción; 50 = pieza típica y 0 = más rara que todas.",
-        nota="Corpus: RS 200 (de Clercq y Temperley), Kostka-Payne (Temperley 2009), iRealPro (Shanahan y Broze), "
-             "9 álbumes de Hooktheory.\n«¼ %»: tiempo con la fundamental en cuarto de tono, que se llevó al grado de "
-             "abajo porque ningún corpus tiene cuartos de tono.", texto_pt=8.5)
+        max(9.0, 3.6 + 1.9 * len(est)) if len(est) > 2 else 6.6, 0.42 * len(filas) + 1.2, "Verosimilitud de la armonía por canción y estilo",
+        subtitulo="Escala: % de piezas del estilo igual o más alejadas que la canción; 50 = pieza típica y 0 = más rara que todas."
+        if textos else "",
+        nota="Corpus: " + ", ".join(CITA[e] for e in est) + ".\n«¼ %»: tiempo con la fundamental en cuarto de tono, que "
+             "se llevó al grado de abajo porque ningún corpus tiene cuartos de tono." if textos else "", texto_pt=8.5)
     ax = cuerpo.subplots()
     cmap = LinearSegmentedColormap.from_list("azul", ["#f1f0ea", "#a9c8ef", "#2a78d6", "#0d3c78"])
     ax.imshow(M, cmap=cmap, vmin=0, vmax=60, aspect="auto")
@@ -213,10 +222,10 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
     P = (X - mu) @ Vt[:2].T
     fig, cuerpo = estilo_figuras.figura(
         12, 7.2, "Posición de las canciones según sus fundamentales armónicas",
-        subtitulo="Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones comparadas. "
-                  "La cercanía resume el parecido entre sus repartos de fundamentales.",
-        nota="Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan en ella "
-             "(+ y − indican el sentido).")
+        subtitulo="" if diapositiva else "Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones "
+                  "comparadas. La cercanía resume el parecido entre sus repartos de fundamentales.",
+        nota="" if diapositiva else "Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan "
+             "en ella (+ y − indican el sentido).")
     ax = cuerpo.subplots()
     for e in est:
         k = [i for i, l in enumerate(lab) if l == e]
@@ -244,8 +253,9 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
         marca, color, tam_leyenda = SIMBOLO_ARTISTA[quien]
         handles.append(Line2D([0], [0], marker=marca, color="none", markerfacecolor=color, markeredgecolor=color,
                               markersize=tam_leyenda, label=quien))
-    leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=9, title="Corpus y bandas",
-                            title_fontsize=10, labelspacing=1.0, markerscale=1.4)
+    leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=11.5 if diapositiva else 9,
+                            title="Corpus y bandas", title_fontsize=12.5 if diapositiva else 10, labelspacing=1.0,
+                            markerscale=1.6 if diapositiva else 1.4)
     leyenda.get_title().set_fontweight("bold")
     leyenda._legend_box.align = "left"
     ax.set_facecolor(FONDO)

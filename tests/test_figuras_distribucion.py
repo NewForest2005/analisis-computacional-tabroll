@@ -97,3 +97,23 @@ def test_revisar_detecta_problemas():
 def test_partir_respeta_el_ancho():
     texto = estilo_figuras.partir("palabra " * 60, 4.0, 10)
     assert max(len(linea) for linea in texto.split("\n")) <= int(4.0 * 72 / (10 * 0.56))
+
+
+def test_matriz_con_dos_estilos():
+    modulo = cargar("verosimilitud_estilos")
+    rng = np.random.default_rng(4)
+    filas = [{"cancion": n, "corrida": n.lower(), "fundamentales_cuarto_de_tono": 3.9 if i == 5 else 0.0,
+              **{f"percentil_{e}": round(float(rng.uniform(0, 20)), 1) for e in modulo.ESTILOS}} for i, n in enumerate(BANDA)]
+    sin_problemas(modulo.figura_matriz(filas, ["rock", "pop"]))
+
+
+def test_acierto_de_la_herramienta():
+    modulo = cargar("figuras_presentacion")
+    filas = [dict(cancion="Mata Zyklek", melodia=66.4, bajo=83.0, fundamental=95.4, fundamental_confiables=100.0),
+             dict(cancion="Sarniezz", melodia=44.9, bajo=78.6, fundamental=57.5, fundamental_confiables=66.7),
+             dict(cancion="Yor Zarad", melodia=36.8, bajo=68.6, fundamental=None, fundamental_confiables=None)]
+    fig = modulo.figura_acierto(filas)
+    problemas = [p for p in estilo_figuras.revisar(fig) if not p.startswith("franja vacía")]
+    import matplotlib.pyplot as plt
+    plt.close(fig)
+    assert problemas == []

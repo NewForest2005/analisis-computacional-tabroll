@@ -1,0 +1,210 @@
+/* Plantilla institucional (Modelo Verde) en reveal.js. Medidas en px de una diapositiva de 960 × 540
+   (10 × 5.625 in a 96 ppp): 1 pt = 1.333 px. */
+
+@font-face { font-family: "Ancizar Sans"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSans.woff2) format("woff2"); }
+@font-face { font-family: "Ancizar Sans"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSans-Italic.woff) format("woff"); }
+@font-face { font-family: "Ancizar Serif"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSerif.woff2) format("woff2"); }
+@font-face { font-family: "Ancizar Serif"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSerif-Italic.woff) format("woff"); }
+
+:root {
+  --verde: #06784f;          /* accent3 */
+  --verde-oscuro: #033c27;
+  --verde-claro: #14c486;    /* accent4 */
+  --verde-suave: #eef6f2;
+  --amarillo: #ffb93e;
+  --amarillo-suave: #fff4df;
+  --crema: #f8eccd;
+  --tinta: #29272d;
+  --gris: #6b6a66;
+  --gris-claro: #8a8984;
+  --linea: #dcdcd6;
+  --rojo: #c0392b;
+  --marco: #36373a;
+  --barra: #444447;
+  --alto-barra: 52px;
+}
+
+html, body, .reveal-viewport { height: 100%; margin: 0; background: var(--marco); overflow: hidden; }
+
+/* ---------- área de la diapositiva ---------- */
+.reveal { position: absolute; inset: 0 0 var(--alto-barra) 0; width: auto; height: auto; }
+.reveal .slides { text-align: left; }
+.reveal .slides section:not(.stack) {
+  width: 960px; height: 540px; padding: 0 !important; top: 0 !important;
+  background: #fff center / 100% 100% no-repeat;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.35);
+  font-family: "Ancizar Sans", sans-serif; color: var(--tinta); font-size: 17px; line-height: 1.35;
+}
+.reveal .slides section.stack { background: none; box-shadow: none; }
+.reveal .slides section:not(.stack) > * { position: absolute; margin: 0; }
+.reveal .slides section:not(.stack) > aside.notes { display: none; }
+
+.numero { left: 42px; top: 10px; font-size: 10px; color: var(--gris-claro); }
+
+/* ---------- fondos ---------- */
+section.portada  { background-image: url(plantilla/fondo_portada.png) !important; }
+section.titulo, section.contenido { background-image: url(plantilla/fondo_contenido.png) !important; }
+section.contenido.claro { background-image: url(plantilla/fondo_contenido_claro.png) !important; }
+section.cierre   { background-image: url(plantilla/fondo_cierre.png) !important; }
+section.cierre .numero { color: rgba(255,255,255,.55); }
+
+/* ---------- título ---------- */
+.titulo h1 {
+  left: 110px; top: 128px; width: 740px; height: 118px; display: flex; align-items: flex-end; justify-content: center;
+  font: 400 40px/1.12 "Ancizar Serif", serif; color: var(--verde); text-align: center;
+}
+.titulo .subtitulo {
+  left: 110px; top: 250px; width: 740px; height: 34px; display: flex; align-items: center; justify-content: center;
+  font: italic 700 24px/1.1 "Ancizar Sans", sans-serif; color: var(--verde-claro); text-align: center;
+}
+.titulo .linea { left: 176px; top: 290px; width: 610px; border-top: 1.33px solid var(--verde-oscuro); }
+.titulo .facultad {
+  left: 110px; top: 318px; width: 740px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font: 400 21px/1.35 "Ancizar Serif", serif; color: var(--verde); text-align: center;
+}
+
+/* ---------- contenido ---------- */
+.contenido h2 {
+  left: 50px; top: 32px; width: 840px; height: 59px; display: flex; align-items: center;
+  font: 800 29px/1.1 "Ancizar Serif", serif; color: var(--verde);
+}
+.contenido .subtitulo {
+  left: 50px; top: 82px; width: 860px;
+  font: 400 14px/1 "Ancizar Sans", sans-serif; letter-spacing: 3.2px; text-transform: uppercase; color: var(--verde);
+}
+.contenido .pie { left: 27px; top: 503px; font: italic 400 12px/1.35 "Ancizar Sans", sans-serif; color: #fff; }
+.contenido.claro .pie { color: var(--verde); }
+
+/* zona útil entre el subtítulo y la franja verde */
+.area { left: 50px; top: 128px; width: 860px; height: 346px; }
+.area.alta { top: 124px; height: 350px; }
+
+/* ---------- piezas reutilizables ---------- */
+.cols { display: grid; gap: 22px; height: 100%; }
+.c2 { grid-template-columns: 1fr 1fr; }
+.c-texto-fig { grid-template-columns: 0.9fr 1.1fr; }
+.c-fig-texto { grid-template-columns: 1.15fr 0.85fr; }
+.c3 { grid-template-columns: repeat(3, 1fr); }
+.c4 { grid-template-columns: repeat(4, 1fr); }
+.pila { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.centrar { display: flex; align-items: center; justify-content: center; min-height: 0; }
+
+.fig { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 0; min-width: 0; height: 100%; }
+.fig img { max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--linea); border-radius: 3px; background: #fff; }
+.fig.sin-borde img { border: 0; }
+.fig figcaption, .leyenda { font-size: 11.5px; color: var(--gris); margin-top: 4px; text-align: center; }
+
+.tarjeta { background: var(--verde-suave); border-left: 4px solid var(--verde); border-radius: 4px; padding: 9px 13px; }
+.tarjeta.amarilla { background: var(--amarillo-suave); border-left-color: var(--amarillo); }
+.tarjeta.gris { background: #f3f3f0; border-left-color: var(--gris-claro); }
+.tarjeta h3 { font: 700 15px/1.2 "Ancizar Sans", sans-serif; color: var(--verde); margin: 0 0 4px; }
+.tarjeta.amarilla h3 { color: #9a6200; }
+.tarjeta p { margin: 0; font-size: 14px; line-height: 1.35; }
+
+.lista { margin: 0; padding-left: 20px; font-size: 16px; line-height: 1.45; }
+.lista li { margin-bottom: 5px; }
+.lista li::marker { color: var(--verde-claro); }
+.lista.cuadros { list-style: none; padding-left: 18px; }
+.lista.cuadros li { position: relative; }
+.lista.cuadros li::before { content: ""; position: absolute; left: -16px; top: .55em; width: 7px; height: 7px; background: var(--verde-claro); }
+
+.nota { font-size: 12px; color: var(--gris); line-height: 1.35; }
+.resalta { color: var(--verde); font-weight: 700; }
+.idea { font: 400 19px/1.35 "Ancizar Serif", serif; color: var(--verde-oscuro); }
+.grande { font: 800 44px/1 "Ancizar Serif", serif; color: var(--verde); }
+.pendiente {
+  border: 2px dashed var(--amarillo); border-radius: 6px; background: var(--amarillo-suave);
+  display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px;
+  font-size: 13px; color: #8a5a00;
+}
+
+/* tablas sobrias (para cifras que vienen de la consola) */
+table.datos { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+table.datos th { text-align: left; font-weight: 700; color: var(--verde); border-bottom: 2px solid var(--verde); padding: 4px 8px; }
+table.datos td { border-bottom: 1px solid var(--linea); padding: 4px 8px; vertical-align: top; }
+table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.etq { display: inline-block; padding: 1px 7px; border-radius: 9px; font-size: 11.5px; font-weight: 700; }
+.etq.si { background: #d9f3e8; color: var(--verde); }
+.etq.no { background: #f6e0dd; color: var(--rojo); }
+
+/* barras horizontales en HTML */
+.barras { display: grid; grid-template-columns: auto 1fr auto; gap: 5px 10px; align-items: center; font-size: 13.5px; }
+.barras .b { height: 15px; background: var(--verde); border-radius: 2px; }
+.barras .b.clara { background: var(--verde-claro); }
+.barras .b.amarilla { background: var(--amarillo); }
+.barras .b.gris { background: #c9c8c2; }
+.barras .v { font-variant-numeric: tabular-nums; font-weight: 700; }
+.barras .g { grid-column: 1 / -1; font-weight: 700; color: var(--verde); margin-top: 4px; font-size: 13px; }
+
+/* flujo de pasos */
+.flujo { display: flex; align-items: stretch; gap: 8px; }
+.flujo .paso { flex: 1; background: var(--verde-suave); border-radius: 5px; padding: 8px 10px; font-size: 13.5px; text-align: center; }
+.flujo .paso b { display: block; color: var(--verde); font-size: 14.5px; margin-bottom: 2px; }
+.flujo .flecha { align-self: center; color: var(--verde-claro); font-size: 22px; }
+
+/* fórmulas */
+.formula { font-size: 17px; }
+.formula .katex { font-size: 1.05em; }
+.produce { font-size: 12.5px; color: var(--gris); }
+.produce::before { content: "→ "; color: var(--verde-claro); font-weight: 700; }
+
+/* árbol del repositorio */
+.arbol { font: 13px/1.5 "SF Mono", Menlo, Consolas, monospace; background: #f7f7f4; border: 1px solid var(--linea); border-radius: 5px; padding: 10px 14px; white-space: pre; color: var(--tinta); }
+.arbol .d { color: var(--verde); font-weight: 700; }
+.arbol .c { color: var(--gris-claro); }
+.arbol .fv { background: var(--amarillo-suave); border-radius: 3px; padding: 0 3px; }
+
+.formula-celda { grid-template-columns: 1fr 1.05fr; gap: 10px; min-height: 0; }
+
+.compacta .tarjeta { padding: 6px 11px; }
+.compacta .tarjeta h3 { font-size: 14px; margin-bottom: 2px; }
+.compacta .tarjeta p { font-size: 13px; line-height: 1.3; }
+
+.conclusion { gap: 8px; padding: 12px 15px; }
+.conclusion h3 { font-size: 16px; }
+.conclusion .cifra { display: flex; align-items: baseline; gap: 8px; }
+.conclusion .grande { font-size: 38px; }
+.conclusion .frente { font-size: 14px; color: var(--gris); font-weight: 700; }
+.conclusion .clave { font-weight: 700; color: var(--tinta); font-size: 13.5px; }
+.conclusion p { font-size: 14.5px; line-height: 1.4; }
+.conclusion .clave { font-size: 14.5px; }
+
+.flujo-compacto { gap: 4px; }
+.flujo-compacto .paso { padding: 6px 5px; font-size: 12px; line-height: 1.25; }
+.flujo-compacto .paso b { font-size: 13px; }
+.flujo-compacto .flecha { font-size: 17px; }
+.flujo-vertical { flex-direction: column; gap: 0; }
+.flujo-vertical .paso { padding: 5px 10px; font-size: 13px; }
+.flujo-vertical .flecha { transform: rotate(90deg); font-size: 16px; line-height: 1; margin: 1px 0; }
+
+/* video */
+.video { background: #000; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.video iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* diapositiva de gráfica a pantalla completa (sub-diapositivas) */
+.grafica-completa { left: 40px; top: 118px; width: 880px; height: 318px; }
+.grafica-completa + .leyenda-grafica { position: absolute; left: 60px; top: 440px; width: 840px; }
+.leyenda-grafica { font-size: 11.5px; line-height: 1.3; color: var(--gris); text-align: center; margin: 4px 0 0; }
+
+/* ---------- cierre ---------- */
+.cierre .gracias {
+  left: 330px; top: 220px; width: 300px; height: 60px; display: flex; align-items: center; justify-content: center;
+  font: italic 400 42.7px/1 "Ancizar Serif", serif; color: var(--crema);
+}
+
+/* ---------- barra de navegación inferior ---------- */
+.navegacion {
+  position: fixed; left: 0; right: 0; bottom: 0; height: var(--alto-barra);
+  display: flex; align-items: center; justify-content: center; gap: 34px;
+  background: var(--barra); border-top: 1px solid #5a5a5e;
+  font: 500 19px/1 "Segoe UI", system-ui, -apple-system, sans-serif; letter-spacing: .02em; color: #fff; user-select: none;
+}
+.navegacion button {
+  width: 40px; height: 40px; display: grid; place-items: center; padding: 0;
+  background: none; border: 0; border-radius: 4px; cursor: pointer; color: #fff;
+}
+.navegacion button:hover:not(:disabled) { background: rgba(255,255,255,.1); }
+.navegacion button:focus-visible { outline: 2px solid var(--amarillo); }
+.navegacion button:disabled { opacity: .3; cursor: default; }
+.navegacion svg { width: 14px; height: 20px; fill: currentColor; }
+.navegacion .contador { min-width: 230px; text-align: center; text-transform: uppercase; }

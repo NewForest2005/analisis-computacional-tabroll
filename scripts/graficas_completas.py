@@ -69,9 +69,16 @@ def main(argv: list[str] | None = None) -> int:
         (fuente / "verosimilitud_banda_matriz.png", "1a_armonia_matriz_verosimilitud.png"),
         (fuente / "verosimilitud_banda_primus_mapa.png", "1b_armonia_mapa_fundamentales.png"),
         (fuente / "microtonal_banda_uso.png", "2a_melodia_uso_cuartos_de_tono.png"),
-        (OUT / "figuras_album_c_circulo_haba.png", "2b_melodia_circulo_24edo.png"),
+        (fuente / "figuras_album_c_circulo_haba.png", "2b_melodia_circulo_24edo.png"),
         (fuente / "ciclos_banda.png", "3a_sintesis_ciclos_metricos.png"),
-        (OUT / "figuras_album_a_clasificacion.png", "3b_sintesis_clasificacion_album.png"),
+        (fuente / "figuras_album_a_clasificacion.png", "3b_sintesis_clasificacion_album.png"),
+        # Apoyo: matriz con solo rock y pop (diapositiva 17), una mini-gráfica por fórmula (13) y el acierto (16).
+        (fuente / "verosimilitud_banda_rock_pop_matriz.png", "1a_armonia_matriz_rock_pop.png"),
+        (fuente / "presentacion_formula_js.png", "formula_js.png"),
+        (fuente / "presentacion_formula_percentil.png", "formula_percentil.png"),
+        (fuente / "presentacion_formula_repeticion.png", "formula_repeticion.png"),
+        (fuente / "presentacion_formula_campos.png", "formula_campos.png"),
+        (fuente / "presentacion_acierto.png", "acierto_herramienta.png"),
     ]
     failures: list[str] = []
     # Matplotlib hereda esta ruta en cada subproceso; evita la caché no escribible de macOS.
@@ -159,7 +166,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def clave(banda, primus, king_gizzard, todos, externos, paths, failures: list[str]) -> int:
-    """Solo los scripts de las seis gráficas de la presentación; las copia numeradas en diapositivas/."""
+    """Solo los scripts de las gráficas de la presentación; las copia en diapositivas/ (las seis principales, numeradas)."""
     call(["scripts/comparacion/verosimilitud_estilos.py", *paths(todos), "--salida", str(OUT / "verosimilitud")], failures)
     call(["scripts/comparacion/microtonal.py", *paths(todos), "--salida", str(OUT / "microtonal")], failures)
     call(["scripts/comparacion/ciclos_metricos.py", *paths(todos), "--salida", str(OUT / "ciclos_metricos")], failures)
@@ -169,14 +176,25 @@ def clave(banda, primus, king_gizzard, todos, externos, paths, failures: list[st
           "--comparar", *paths(king_gizzard), "--bloques", str(OUT / "bloques.json"), "--salida", str(OUT / "figuras_album")],
          failures)
     # Versiones para diapositiva (no tocan las salidas normales de arriba): solo las 6 canciones de la banda en la
-    # matriz, los cuartos de tono y los ciclos; en el mapa, la banda frente a Primus con estrellas grandes.
+    # matriz, los cuartos de tono y los ciclos; en el mapa, la banda frente a Primus con estrellas grandes. Sin
+    # subtítulos ni notas al pie: esos textos van como leyenda debajo de cada imagen en la presentación.
     fuente = OUT / "fuente_diapositivas"
     fuente.mkdir(exist_ok=True)
-    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda), "--salida", str(fuente / "verosimilitud_banda")], failures)
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda), "--diapositiva",
+          "--salida", str(fuente / "verosimilitud_banda")], failures)
     call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda + primus), "--diapositiva",
           "--salida", str(fuente / "verosimilitud_banda_primus")], failures)
     call(["scripts/comparacion/microtonal.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "microtonal_banda")], failures)
     call(["scripts/comparacion/ciclos_metricos.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "ciclos_banda")], failures)
+    call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda), "--estilos", "rock,pop", "--diapositiva",
+          "--salida", str(fuente / "verosimilitud_banda_rock_pop")], failures)
+    # Clasificación y círculo de 24-EDO sin subtítulos ni notas, con los círculos de cada canción más grandes.
+    call(["scripts/comparacion/figuras_album.py", *paths(banda), "--bloques", str(OUT / "bloques.json"), "--diapositiva",
+          "--salida", str(fuente / "figuras_album")], failures)
+    # El acierto se mide en las corridas congeladas «_repro», las mismas de docs/evaluacion_melodia.md y docs/armonia.md.
+    repro = sorted(r for r in OUTPUTS.iterdir() if r.name.endswith("_repro") and (r / "evaluacion_melodia.json").exists())
+    call(["scripts/comparacion/figuras_presentacion.py", *paths(banda), "--evaluaciones", *map(str, repro),
+          "--salida", str(fuente / "presentacion")], failures)
     destino = OUT / "diapositivas"
     destino.mkdir(exist_ok=True)
     faltan = []

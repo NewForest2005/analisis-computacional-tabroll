@@ -102,6 +102,48 @@ canciones salen igual que antes.
 | 3a ciclos | Solo las 6 canciones, en 3 columnas; marcas del eje horizontal y su rótulo («Distancia ℓ entre repeticiones (corcheas)») en cada panel. |
 | 3b clasificación | Sin cambios (ya muestra solo la banda). |
 
+## 8. Gráficas de apoyo para la presentación
+
+`make graficas-diapositivas` deja además en `diapositivas/` estas gráficas, que usan las diapositivas 13, 16 y 17:
+
+| Archivo | Script | Qué muestra |
+|---|---|---|
+| `1a_armonia_matriz_rock_pop` | `verosimilitud_estilos.py --estilos rock,pop` | La matriz de la banda con solo rock y pop, que se lee a media diapositiva. Los percentiles no cambian. |
+| `formula_js` | `figuras_presentacion.py` | Las fundamentales de Sarniezz frente al centro del rock y su distancia de Jensen-Shannon (0.52). |
+| `formula_percentil` | `figuras_presentacion.py` | Las distancias de las piezas del rock a su centro; Mata Zyklek (p = 12, área verde) y Sarniezz (p = 0). |
+| `formula_repeticion` | `figuras_presentacion.py` | R(ℓ) de Fabienk, con el pico en 28 corcheas. |
+| `formula_campos` | `figuras_presentacion.py` | El círculo de 24-EDO de Mata Zyklek. |
+| `acierto_herramienta` | `figuras_presentacion.py` | Melodía, bajo, fundamental y fundamental en compases confiables, por canción. |
+
+- Las mini-gráficas de las fórmulas no llevan título: lo pone la diapositiva.
+- El percentil del histograma es el de las fundamentales solas; la matriz promedia ese y el de los cambios de
+  fundamental (en Mata Zyklek coinciden porque es un pedal).
+- La fórmula de R(ℓ) en la diapositiva es la que usa el código (`ciclos_metricos.repeticion`): 0.7 × la fracción de
+  corcheas con la misma clase de altura ℓ corcheas después + 0.3 × la coincidencia de ataques. No es la
+  autocorrelación de `docs/formulas/`.
+- El acierto se mide en las corridas congeladas `_repro`, las mismas de `docs/evaluacion_melodia.md` y
+  `docs/armonia.md` (melodía 66.4, 46.2, 44.9 y 36.8; fundamental 95.4, 81.6 y 57.5). Otras corridas dan cifras
+  algo distintas (por ejemplo, las `_cache` dan 66.5 y 45.4 en melodía).
+
+`make presentacion-imagenes` copia a `presentacion/img/` todo lo que hay en la carpeta `diapositivas/` más reciente.
+
+## 9. Versiones para diapositiva sin textos
+
+En la presentación, el subtítulo y las notas al pie de cada gráfica van como leyenda HTML debajo de la imagen, para que
+el gráfico se vea más grande. Con `--diapositiva`:
+
+- `verosimilitud_estilos.py`: matriz y mapa sin subtítulo ni nota; la leyenda «Corpus y bandas» del mapa sube de 9 a
+  11.5 pt.
+- `ciclos_metricos.py`: sin subtítulo ni nota (además de las 3 columnas y las marcas en cada panel).
+- `figuras_album.py`: solo hace la clasificación (a) y el círculo de 24-EDO (c). La clasificación va sin subtítulo ni
+  nota; el círculo, sin subtítulo ni nota al pie, con la paleta en una franja de 3 columnas y los círculos de cada
+  canción más grandes (con los rótulos y las líneas de paso del panel grande).
+
+`make graficas-diapositivas` usa estas versiones para 1a, 1b, 2b, 3a y 3b; la 2a no tenía subtítulo ni nota.
+
+La mini-gráfica del percentil lleva leyenda: gris, las piezas del rock; verde claro, las que quedan más lejos que Mata
+Zyklek (su percentil).
+
 ## Cómo seguir
 
 Para pasar otra gráfica al mismo esquema:

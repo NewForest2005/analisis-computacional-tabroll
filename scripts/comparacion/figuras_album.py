@@ -85,11 +85,11 @@ def guardar(fig, ruta: str) -> None:
 
 
 # ---------------------------------------------------------------- (a) clasificación por corpus
-def fig_clasificacion(bloques: dict, salida: str) -> None:
-    guardar(figura_clasificacion(bloques), salida + "_a_clasificacion.png")
+def fig_clasificacion(bloques: dict, salida: str, textos: bool = True) -> None:
+    guardar(figura_clasificacion(bloques, textos), salida + "_a_clasificacion.png")
 
 
-def figura_clasificacion(bloques: dict):
+def figura_clasificacion(bloques: dict, textos: bool = True):
     """Percentil medio por canción y corpus (arriba) y qué corpus gana cada bloque (abajo)."""
     import matplotlib.pyplot as plt
     from matplotlib.colors import LinearSegmentedColormap
@@ -142,7 +142,7 @@ def figura_clasificacion(bloques: dict):
     alto_mapa = 0.42 * (len(filas) + 1) + 1.3
     alto_barras = 0.3 * len(bl) + 1.8
     fig, cuerpo = estilo_figuras.figura(12.5, alto_mapa + alto_barras, "Clasificación del álbum por corpus",
-                                        subtitulo=subtitulo, nota=nota)
+                                        subtitulo=subtitulo if textos else "", nota=nota if textos else "")
     arriba, abajo = cuerpo.subfigures(2, 1, height_ratios=[alto_mapa, alto_barras])
 
     ax = arriba.subplots()
@@ -275,7 +275,7 @@ def angulo(d: int) -> float:
     return np.pi / 2 - 2 * np.pi * k / 12
 
 
-def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bool) -> None:
+def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bool, letra: float = 1.0) -> None:
     from matplotlib.patches import Circle
     ax.set_aspect("equal")
     ax.axis("off")
@@ -300,28 +300,39 @@ def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bo
         ax.scatter([x], [y], s=12 + esc * p[d], color=CAMPO_Q if d % 2 else CAMPO_REG, edgecolor=FONDO, linewidth=1.2, zorder=3,
                    alpha=0.95 if p[d] > 0.005 else 0.25)
         f = 1.17 if d % 2 == 0 else 0.80
-        ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=8.5 if grande else 7.2,
+        ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=(8.5 if grande else 7.2) * letra,
                 color=TINTA if p[d] >= 0.02 else MUTED, fontweight="bold" if p[d] >= 0.08 else "normal")
     cuartos = 100 * p[1::2].sum()
-    ax.set_title(f"{titulo}\n¼ de tono {cuartos:.0f} %", fontsize=10.5 if grande else 8.5, color=TINTA, pad=4)
+    ax.set_title(f"{titulo}\n¼ de tono {cuartos:.0f} %", fontsize=(10.5 if grande else 8.5) * letra, color=TINTA, pad=4)
     ax.set_xlim(-1.3, 1.3)
     ax.set_ylim(-1.3, 1.3)
 
 
-def fig_circulo(runs: list[Path], salida: str) -> None:
+def fig_circulo(runs: list[Path], salida: str, diapositiva: bool = False) -> None:
+    """Círculo de quintas de 24-EDO del álbum y de cada canción.
+
+    En la diapositiva: sin subtítulo ni nota al pie (van como leyenda debajo de la imagen), círculos de cada canción
+    más grandes y la paleta en una franja baja."""
     import matplotlib.pyplot as plt
     rs = sorted(runs, key=lambda r: orden_banda(nombre(r.name)))
     datos = [(nombre(r.name), *reparto(r)) for r in rs]
     alt_tot = sum(a / a.sum() for _, a, _ in datos if a.sum())
     tr_tot = sum(t for _, _, t in datos)
-    fig = plt.figure(figsize=(16, 8.8), facecolor=FONDO)
-    gs = fig.add_gridspec(2, 5, width_ratios=[3.2, 3.2, 2, 2, 2], wspace=0.34, hspace=0.55)
-    dibujar_circulo(fig.add_subplot(gs[:, :2]), alt_tot, tr_tot, "Vol. II completo (media de las canciones)", True)
+    if diapositiva:
+        fig = plt.figure(figsize=(16, 8.2), facecolor=FONDO)
+        gs = fig.add_gridspec(2, 5, width_ratios=[2.6, 2.6, 2.5, 2.5, 2.5], wspace=0.12, hspace=0.32,
+                              left=0.01, right=0.99, top=0.9, bottom=0.13)
+    else:
+        fig = plt.figure(figsize=(16, 8.8), facecolor=FONDO)
+        gs = fig.add_gridspec(2, 5, width_ratios=[3.2, 3.2, 2, 2, 2], wspace=0.34, hspace=0.55)
+    dibujar_circulo(fig.add_subplot(gs[:, :2]), alt_tot, tr_tot, "Vol. II completo (media de las canciones)", True,
+                    1.25 if diapositiva else 1.0)
     for i, (n, a, t) in enumerate(datos[:6]):
-        dibujar_circulo(fig.add_subplot(gs[i // 3, 2 + i % 3]), a, t, n, False)
+        dibujar_circulo(fig.add_subplot(gs[i // 3, 2 + i % 3]), a, t, n, diapositiva, 1.0)
     fig.suptitle("Círculo de quintas en 24-EDO: campos regulares y de cuarto de tono",
                  x=0.5, y=0.98, ha="center", fontsize=16, fontweight="bold", color=TINTA)
-    fig.text(0.5, 0.925, "El círculo muestra cómo se reparte la melodía de Angine de Poitrine entre los dos campos de quintas de 24-EDO.\n"
+    if not diapositiva:
+        fig.text(0.5, 0.925, "El círculo muestra cómo se reparte la melodía de Angine de Poitrine entre los dos campos de quintas de 24-EDO.\n"
              "El panel grande resume el álbum y los paneles pequeños muestran cada canción.",
              ha="center", va="top", fontsize=9.5, color=GRIS, linespacing=1.25)
     from matplotlib.lines import Line2D
@@ -334,6 +345,10 @@ def fig_circulo(runs: list[Path], salida: str) -> None:
         Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, markersize=10, label="Punto grande: mayor tiempo melódico en el grado"),
         Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, alpha=0.3, markersize=5, label="Punto pequeño o tenue: menor uso del grado"),
     ]
+    if diapositiva:
+        fig.legend(handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, 0.0), ncol=3, frameon=False, fontsize=11)
+        guardar(fig, salida + "_c_circulo_haba.png")
+        return
     fig.legend(handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, 0.12), ncol=2,
                frameon=False, fontsize=8.5, title="Paleta y marcas de los círculos", title_fontsize=9.5)
     fig.text(0.02, 0.035, "En 24-EDO la quinta mide 14 pasos y divide el ciclo en dos campos. Cada grado «+» está junto a su vecino regular.\n"
@@ -492,6 +507,8 @@ def main() -> None:
     ap.add_argument("--extra-bucle", nargs="*", default=["Flying microtonal banana", "Doom city"], help="temas comparados a incluir en (f)")
     ap.add_argument("--alfa", type=float, default=0.003, help="umbral de p (≈ Bonferroni para ~18 canciones)")
     ap.add_argument("--salida", default="outputs/figuras_album")
+    ap.add_argument("--diapositiva", action="store_true",
+                    help="solo (a) y (c), sin subtítulos ni notas (van en la diapositiva) y con los círculos más grandes")
     a = ap.parse_args()
     import matplotlib
     matplotlib.use("Agg")
@@ -500,7 +517,10 @@ def main() -> None:
     runs = {"banda": sorted(unicas(a.corridas), key=lambda r: orden_banda(nombre(r.name))), "comparar": unicas(a.comparar), "control": unicas(a.control)}
     print("Vol. II:", ", ".join(nombre(r.name) for r in runs["banda"]))
     if a.bloques and Path(a.bloques).exists():
-        fig_clasificacion(json.loads(Path(a.bloques).read_text(encoding="utf-8")), a.salida)
+        fig_clasificacion(json.loads(Path(a.bloques).read_text(encoding="utf-8")), a.salida, textos=not a.diapositiva)
+    if a.diapositiva:
+        fig_circulo(runs["banda"], a.salida, diapositiva=True)
+        return
     fig_perfil(runs, a.salida)
     fig_circulo(runs["banda"], a.salida)
     if a.campos and Path(a.campos + "_compases.csv").exists():

@@ -127,6 +127,8 @@ def _textos_dibujados(fig):
         for eje in (ax.xaxis, ax.yaxis):
             for t in eje.get_major_ticks() + eje.get_minor_ticks():
                 de_marcas.update({id(t.label1), id(t.label2)})
+            if not ax.axison:                  # ejes ocultos (axis("off")): sus marcas no se dibujan
+                continue
             for t in eje._update_ticks():
                 dibujadas += [lab for lab in (t.label1, t.label2) if lab.get_visible()]
     otros = [t for t in fig.findobj(Text) if id(t) not in de_marcas]

@@ -48,6 +48,7 @@ Resultado actual (F de la melodía principal): Mata Zyklek 66.4, Fabienk 46.2, S
 
 - **Yor Zarad** se reservó sin abrir ninguna salida del cuaderno. La referencia se armó con las tablaturas de los PDF y los audios por pista de Guitar Pro, y la verificó el autor de oído (26 clips, 6 de ellos a ciegas).
 - **Medida única:** melodía principal 36.8, sin contar la octava 47.7, bajo 68.6. El centro de la canción está al nivel de las otras (48–67).
+- **Armonía, medida después sobre la misma corrida:** fundamental 87.8 % (90.2 % en los compases confiables) y el centro (Sol) igual al de la partitura. Con la melodía más baja del álbum, la armonía sale entre las mejores.
 - **Fallo encontrado:** el riff grave sale una octava arriba, porque la voz aguda nunca baja de Si2. El autor confirmó a ciegas que la referencia tenía razón.
 - **Utzp** era la segunda prueba a ciegas. Su referencia no pasó la verificación de oído (ritmo de las guitarras de acordes) y se aparcó. Después se usó como una canción más.
 

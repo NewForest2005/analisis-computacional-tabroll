@@ -3,206 +3,760 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Análisis computacional microtonal</title>
+<title>Análisis computacional de Angine de Poitrine</title>
 <link rel="stylesheet" href="lib/reveal/reset.min.css">
 <link rel="stylesheet" href="lib/reveal/reveal.min.css">
-<style>
-  /* Fuentes institucionales (copias locales: funciona sin conexión) */
-  @font-face { font-family: "Ancizar Sans"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSans.woff2) format("woff2"); }
-  @font-face { font-family: "Ancizar Sans"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSans-Italic.woff) format("woff"); }
-  @font-face { font-family: "Ancizar Serif"; font-style: normal; font-weight: 100 900; src: url(fuentes/AncizarSerif.woff2) format("woff2"); }
-  @font-face { font-family: "Ancizar Serif"; font-style: italic; font-weight: 400; src: url(fuentes/AncizarSerif-Italic.woff) format("woff"); }
-
-  :root {
-    --verde: #06784f;          /* accent3 de la plantilla */
-    --verde-oscuro: #033c27;   /* accent3 al 50 % */
-    --verde-claro: #14c486;    /* accent4 */
-    --amarillo: #ffb93e;
-    --crema: #f8eccd;          /* bg2 */
-    --tinta: #29272d;          /* dk1 */
-    --gris: #8a8984;
-    --marco: #36373a;          /* alrededor de la diapositiva */
-    --barra: #444447;          /* barra de navegación */
-    --alto-barra: 52px;
-  }
-
-  html, body, .reveal-viewport { height: 100%; margin: 0; background: var(--marco); overflow: hidden; }
-
-  /* ---------- área de la diapositiva (todo menos la barra inferior) ---------- */
-  .reveal { position: absolute; inset: 0 0 var(--alto-barra) 0; width: auto; height: auto; }
-  .reveal .slides { text-align: left; }
-  .reveal .slides > section {
-    width: 960px; height: 540px; padding: 0 !important; top: 0 !important;
-    background: #fff center / 100% 100% no-repeat;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.35);
-    font-family: "Ancizar Sans", sans-serif; color: var(--tinta);
-  }
-  .reveal .slides > section > * { position: absolute; margin: 0; }
-
-  /* número de diapositiva arriba a la izquierda (lo llena el script) */
-  .numero { left: 42px; top: 10px; font-size: 10px; color: var(--gris); }
-
-  /* ---------- fondos de la plantilla ---------- */
-  section.portada  { background-image: url(plantilla/fondo_portada.png) !important; }
-  section.titulo,
-  section.contenido { background-image: url(plantilla/fondo_contenido.png) !important; }
-  section.contenido.claro { background-image: url(plantilla/fondo_contenido_claro.png) !important; }
-  section.cierre   { background-image: url(plantilla/fondo_cierre.png) !important; }
-  section.cierre .numero { color: rgba(255,255,255,.55); }
-
-  /* ---------- diapositiva de título ---------- */
-  .titulo h1 {
-    left: 153px; top: 170px; width: 651px; height: 76px; display: flex; align-items: center; justify-content: center;
-    font: 400 53px/1.1 "Ancizar Serif", serif; color: var(--verde); text-align: center;
-  }
-  .titulo .subtitulo {
-    left: 294px; top: 232px; width: 372px; height: 39px; display: flex; align-items: center; justify-content: center;
-    font: italic 700 24px/1.1 "Ancizar Sans", sans-serif; color: var(--verde-claro); text-align: center; white-space: nowrap;
-  }
-  .titulo .linea { left: 176px; top: 266px; width: 610px; border-top: 1.33px solid var(--verde-oscuro); }
-  .titulo .facultad {
-    left: 155px; top: 310px; width: 651px; height: 76px; display: flex; align-items: center; justify-content: center;
-    font: 400 24px/1.2 "Ancizar Serif", serif; color: var(--verde); text-align: center;
-  }
-
-  /* ---------- diapositiva de contenido ---------- */
-  .contenido h2 {
-    left: 50px; top: 32px; width: 694px; height: 59px; display: flex; align-items: center;
-    font: 800 29px/1.1 "Ancizar Serif", serif; color: var(--verde);
-  }
-  .contenido .subtitulo {
-    left: 50px; top: 82px; width: 827px;
-    font: 400 18.7px/1 "Ancizar Sans", sans-serif; letter-spacing: 4px; text-transform: uppercase; color: var(--verde);
-  }
-  .contenido .cuerpo { left: 59px; top: 137px; width: 848px; height: 300px; font: 300 18.7px/2 "Ancizar Sans", sans-serif; }
-  .cuerpo ol, .cuerpo ul { margin: 0; padding-left: 36px; }
-  .cuerpo ol li::marker { color: var(--verde-claro); font-weight: 400; }
-  .cuerpo ul { list-style: none; }
-  .cuerpo ul li { position: relative; }
-  .cuerpo ul li::before { content: ""; position: absolute; left: -24px; top: .8em; width: 7px; height: 7px; background: var(--verde-claro); }
-  .contenido .pie {
-    left: 27px; top: 503px; font: italic 400 12px/1.35 "Ancizar Sans", sans-serif; color: #fff;
-  }
-  .contenido.claro .pie { color: var(--verde); }
-
-  /* ---------- cierre ---------- */
-  .cierre .gracias {
-    left: 369px; top: 230px; width: 220px; height: 53px; display: flex; align-items: center; justify-content: center;
-    font: italic 400 42.7px/1 "Ancizar Serif", serif; color: var(--crema);
-  }
-
-  /* ---------- barra de navegación inferior ---------- */
-  .navegacion {
-    position: fixed; left: 0; right: 0; bottom: 0; height: var(--alto-barra);
-    display: flex; align-items: center; justify-content: center; gap: 34px;
-    background: var(--barra); border-top: 1px solid #5a5a5e;
-    font: 500 19px/1 "Segoe UI", system-ui, -apple-system, sans-serif; letter-spacing: .02em; color: #fff;
-    user-select: none;
-  }
-  .navegacion button {
-    width: 40px; height: 40px; display: grid; place-items: center; padding: 0;
-    background: none; border: 0; border-radius: 4px; cursor: pointer; color: #fff;
-  }
-  .navegacion button:hover:not(:disabled) { background: rgba(255,255,255,.1); }
-  .navegacion button:focus-visible { outline: 2px solid var(--amarillo); }
-  .navegacion button:disabled { opacity: .3; cursor: default; }
-  .navegacion svg { width: 14px; height: 20px; fill: currentColor; }
-  .navegacion .contador { min-width: 170px; text-align: center; text-transform: uppercase; }
-</style>
+<link rel="stylesheet" href="lib/katex/katex.min.css">
+<link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
 <div class="reveal">
-  <div class="slides">
+<div class="slides">
 
-    <!-- 1 · Portada -->
-    <section class="portada" aria-label="Portada"></section>
+<!-- ============================== 1 · TÍTULO ============================== -->
+<section class="titulo">
+  <span class="numero"></span>
+  <h1>Análisis computacional de la banda Angine de Poitrine</h1>
+  <p class="subtitulo">Microtonalidad, armonía y ritmo</p>
+  <div class="linea"></div>
+  <div class="facultad">
+    <span data-campo="autor"></span>
+    <span data-campo="facultad"></span>
+  </div>
+</section>
 
-    <!-- 2 · Título -->
-    <section class="titulo">
-      <span class="numero"></span>
-      <h1>Título Ancízar Serif 40pt</h1>
-      <p class="subtitulo">Subtítulo Ancízar Sans Italic 18 pt</p>
-      <div class="linea"></div>
-      <p class="facultad">Facultad –Departamento- Sede Ancízar Serif 18pt</p>
-    </section>
+<!-- ============================== INTRODUCCIÓN ============================== -->
 
-    <!-- 3 · Contenido -->
-    <section class="contenido">
-      <span class="numero"></span>
-      <h2>Contenido</h2>
-      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
-      <div class="cuerpo">
-        <ol>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-          <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-          <li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</li>
-          <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</li>
-        </ol>
+<!-- 2 · Motivación -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Motivación</h2>
+  <p class="subtitulo">Introducción · escuchar antes de medir</p>
+  <div class="area">
+    <div class="cols c-fig-texto">
+      <div class="video" data-video="0Ssi-9wS1so" data-inicio="32" data-fin="152"></div>
+      <div class="pila" style="justify-content:center">
+        <p class="idea">¿La música de Angine de Poitrine encaja en un estilo existente o es una propuesta nueva?</p>
+        <ul class="lista cuadros">
+          <li>Guitarra y bajo con trastes de <span class="resalta">cuarto de tono</span>.</li>
+          <li>Canciones construidas con un <span class="resalta">looper</span>, capa por capa.</li>
+          <li>Más de 11 millones de reproducciones de esta sesión en vivo.</li>
+        </ul>
+        <p class="nota">KEXP, sesión en Rennes (Trans Musicales).</p>
       </div>
-      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
-    </section>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Poner el video unos 20-30 segundos. Plantear la pregunta de la tesis: ¿estilo existente o propuesta nueva?</aside>
+</section>
 
-    <!-- 4 · Contenido con pie claro -->
-    <section class="contenido claro">
-      <span class="numero"></span>
-      <h2>Título Ancízar Serif Extrabold 22 pt</h2>
-      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
-      <div class="cuerpo"></div>
-      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
-    </section>
-
-    <!-- 5 · Referencias -->
-    <section class="contenido">
-      <span class="numero"></span>
-      <h2>Referencias</h2>
-      <p class="subtitulo">Subtítulo Ancízar Sans – espaciado interletra separado – 14pt</p>
-      <div class="cuerpo">
-        <ul>
-          <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-          <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+<!-- 3 · Quiénes son -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>¿Quiénes son Angine de Poitrine?</h2>
+  <p class="subtitulo">Introducción · la banda y su instrumento</p>
+  <div class="area">
+    <div class="cols c-texto-fig">
+      <div class="pila" style="justify-content:center">
+        <ul class="lista cuadros">
+          <li>Dúo de <span class="resalta">Saguenay, Quebec</span>, formado en 2019: <b>Khn</b> y <b>Klek</b> de Poitrine.</li>
+          <li>Khn toca guitarra y bajo <span class="resalta">microtonales</span>; Klek, la batería.</li>
+          <li>Math rock instrumental: riffs en <span class="resalta">loop</span> que se superponen y compases de 5 y 7 tiempos.</li>
+          <li>Su afinación es <span class="resalta">24-EDO</span>: 24 notas iguales por octava, el doble que la guitarra común.</li>
+          <li>Analizamos su álbum <span class="resalta"><i>Vol. II</i></span> (abril de 2026) completo: seis canciones.</li>
         </ul>
       </div>
-      <p class="pie">Facultad Ancízar Sans Itálica 9 pt<br>Sede Ancízar Sans Itálica 9 pt</p>
-    </section>
-
-    <!-- 6 · Cierre -->
-    <section class="cierre">
-      <span class="numero"></span>
-      <p class="gracias">Gracias</p>
-    </section>
-
+      <div class="fig sin-borde">
+        <svg id="mastiles" viewBox="0 0 440 250" width="440" height="250" role="img" aria-label="Mástil de 12 y de 24 trastes por octava"></svg>
+        <figcaption>Una octava del mástil: 12 trastes en la guitarra común, 24 en la de Khn (cada traste nuevo = ¼ de tono, 50 cents).</figcaption>
+      </div>
+    </div>
   </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 4 · Influencias (hipótesis) -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Influencias de la banda: la hipótesis</h2>
+  <p class="subtitulo">Introducción · lo que dicen ellos y lo que suponemos</p>
+  <div class="area">
+    <div class="cols c-fig-texto">
+      <div class="fig sin-borde">
+        <svg viewBox="0 0 470 330" width="470" height="330" role="img" aria-label="Mapa de influencias">
+          <g font-family="Ancizar Sans" font-size="13" text-anchor="middle">
+            <!-- líneas -->
+            <g stroke="#06784f" stroke-width="1.6">
+              <line x1="235" y1="165" x2="90" y2="50"/><line x1="235" y1="165" x2="235" y2="30"/>
+              <line x1="235" y1="165" x2="380" y2="50"/><line x1="235" y1="165" x2="420" y2="165"/>
+              <line x1="235" y1="165" x2="60" y2="165"/>
+            </g>
+            <g stroke="#ffb93e" stroke-width="1.6"><line x1="235" y1="165" x2="120" y2="290"/><line x1="235" y1="165" x2="350" y2="290"/></g>
+            <line x1="235" y1="165" x2="235" y2="300" stroke="#8a8984" stroke-width="1.6" stroke-dasharray="5 4"/>
+            <!-- nodos citados -->
+            <g fill="#eef6f2" stroke="#06784f">
+              <rect x="40" y="34" width="100" height="30" rx="15"/><rect x="180" y="14" width="110" height="30" rx="15"/>
+              <rect x="330" y="34" width="100" height="30" rx="15"/><rect x="372" y="150" width="96" height="30" rx="15"/>
+              <rect x="2" y="150" width="116" height="30" rx="15"/>
+            </g>
+            <g fill="#29272d">
+              <text x="90" y="54">King Gizzard</text><text x="235" y="34">Rock turco</text>
+              <text x="380" y="54">Frank Zappa</text><text x="420" y="170">Scofield</text><text x="60" y="170">Gentle Giant</text>
+            </g>
+            <!-- podcast -->
+            <g fill="#fff4df" stroke="#ffb93e"><rect x="55" y="276" width="130" height="30" rx="15"/><rect x="285" y="276" width="130" height="30" rx="15"/></g>
+            <g fill="#29272d"><text x="120" y="295">Loops y techno</text><text x="350" y="295">5 y 7 tiempos</text></g>
+            <!-- comparación propia -->
+            <rect x="200" y="300" width="70" height="26" rx="13" fill="#fff" stroke="#8a8984" stroke-dasharray="5 4"/>
+            <text x="235" y="318" fill="#6b6a66">Primus</text>
+            <!-- centro -->
+            <circle cx="235" cy="165" r="58" fill="#06784f"/>
+            <text x="235" y="160" fill="#fff" font-weight="700" font-size="14">Angine de</text>
+            <text x="235" y="178" fill="#fff" font-weight="700" font-size="14">Poitrine</text>
+          </g>
+        </svg>
+        <figcaption>Verde: influencias que cita la banda · amarillo: lo que dicen en el podcast · gris: comparación propia.</figcaption>
+      </div>
+      <div class="pila" style="justify-content:center">
+        <div class="tarjeta">
+          <h3>Hipótesis</h3>
+          <p>La banda puede ser <b>típica en cada dimensión</b> (armonía, melodía, ritmo) de un estilo distinto, pero
+             <b>atípica en la combinación</b>: una recombinación nueva de lenguajes existentes.</p>
+        </div>
+        <div class="tarjeta gris">
+          <h3>Primus</h3>
+          <p>Lo elegimos nosotros al investigar su armonía en Hooktheory. Ninguna fuente pública lo cita como influencia.</p>
+        </div>
+        <p class="nota">Fuentes: podcast <i>Aucard de Tours</i> y entrevistas en video (ver referencias).</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 5 · Por qué nos interesa -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>¿Por qué nos interesa?</h2>
+  <p class="subtitulo">Introducción · el vacío y el aporte</p>
+  <div class="area">
+    <div class="pila" style="height:100%; gap:14px">
+      <div class="tarjeta amarilla">
+        <h3>El vacío</h3>
+        <p>Las herramientas estándar piensan en 12 notas: <b>music21</b> comprime todo a 12 clases y los transcriptores
+           automáticos redondean el cuarto de tono al semitono más cercano. Para esta música, medir en 12 es borrar lo que la hace distinta.</p>
+      </div>
+      <div class="regla24" data-tam="grande"></div>
+      <p class="leyenda" style="margin-top:-6px">Las 24 clases de altura de una octava: amarillo, las 12 de siempre; azul, las 12 en cuarto de tono que un análisis en 12 notas pierde.</p>
+      <div class="cols c3" style="height:auto; gap:14px">
+        <div class="tarjeta"><h3>1 · Una herramienta</h3><p>Transcripción y análisis armónico abiertos en 24-EDO, desde el audio.</p></div>
+        <div class="tarjeta"><h3>2 · Un método</h3><p>Comparación con corpus reales de estilos, calibrada para no exagerar la novedad.</p></div>
+        <div class="tarjeta"><h3>3 · Un resultado</h3><p>Una respuesta medida a la pregunta: ¿estilo existente o propuesta nueva?</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- ============================== METODOLOGÍA ============================== -->
+
+<!-- 6 · Idea inicial y primeros datos -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>La idea inicial y lo que el audio nos enseñó</h2>
+  <p class="subtitulo">Metodología · supuesto → evidencia → decisión</p>
+  <div class="area alta">
+    <div class="cols" style="grid-template-columns: 0.78fr 1.22fr">
+      <div class="pila">
+        <div class="fig" style="height:205px"><img src="img/cuaderno_original_sarniezz.png" alt="Piano roll de la partitura de Sarniezz en el cuaderno original"></div>
+        <p class="leyenda">Primer cuaderno (Colab): la partitura de Sarniezz leída como MIDI y MusicXML.</p>
+        <p class="nota"><b>Primera idea del trabajo de grado</b> (tres meses): el bajo de Sarniezz (279 s) y su partitura de MuseScore (196 notas), con Fabienk como segunda canción.</p>
+      </div>
+      <table class="datos">
+        <tr><th>Suponíamos…</th><th>El audio mostró…</th><th>Adoptamos…</th></tr>
+        <tr><td>Cuartos de tono solo en una zona del mástil (Z<sub>24</sub> abajo, Z<sub>12</sub> arriba)</td>
+            <td>Un árbol por registro decide de antemano dónde puede haber microtonos</td>
+            <td>Toda la transcripción en la rejilla de 24-EDO</td></tr>
+        <tr><td>La partitura publicada es la verdad</td>
+            <td>La partitura también se equivoca; la de Fabienk es de una versión en vivo</td>
+            <td>Referencias corregidas de oído y arbitraje a ciegas</td></tr>
+        <tr><td>pYIN sobre la mezcla basta para la melodía</td>
+            <td>Las capas del looper se tapan unas a otras</td>
+            <td>Separar guitarra y bajo (Demucs) y consenso entre vueltas</td></tr>
+        <tr><td>Secciones por timbre: MFCC y una red neuronal</td>
+            <td>43 % de acierto; la forma la marca el looper, no el timbre</td>
+            <td>Detectar los ciclos por repetición</td></tr>
+      </table>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Mostrar el método científico: cada fila es una hipótesis que el audio corrigió.</aside>
+</section>
+
+<!-- 7 · Primeras fórmulas -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Primeras fórmulas: medir en cuartos de tono</h2>
+  <p class="subtitulo">Metodología · de la frecuencia a la casilla de 24-EDO</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila" style="gap:9px">
+        <div class="formula">\( c = 1200\,\log_2\!\left(\dfrac{f}{f_0}\right) \)</div>
+        <div class="produce">la distancia en cents; la evaluación acepta una nota si cae a ±25 cents (su casilla de 24-EDO)</div>
+        <div class="formula">\( \alpha = 2^{1/24} \approx 1.0293 \)</div>
+        <div class="produce">el paso de ¼ de tono (50 cents): la rejilla vertical del tabroll</div>
+        <div class="formula">\( M_{\text{frac}} = 69 + 12\,\log_2\!\left(\dfrac{f}{440}\right) \)</div>
+        <div class="produce">la altura como MIDI fraccionario: 52.5 es un cuarto de tono sobre Mi</div>
+        <div class="formula">\( v \in \mathbb{R}^{24},\quad v_k = \dfrac{\text{tiempo en la clase } k}{\text{tiempo total}} \)</div>
+        <div class="produce">el perfil de 24 clases de cada compás y de cada canción: la base del círculo de 24-EDO</div>
+      </div>
+      <div class="pila" style="justify-content:center">
+        <div class="regla24" data-tam="mediana" data-marca="9"></div>
+        <p class="leyenda">Una octava en 24-EDO. La nota marcada es Mi+ (MIDI 52.5): un cuarto de tono que el redondeo a 12 notas convertiría en Mi o Fa.</p>
+        <p class="nota">También se usaron la transformada de Fourier, la escala Mel y los MFCC para describir el audio. Quedaron como contexto: el análisis final trabaja con alturas y tiempos.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 8 · Primer algoritmo -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>El primer algoritmo y sus resultados</h2>
+  <p class="subtitulo">Metodología · por qué no bastó</p>
+  <div class="area">
+    <div class="cols" style="grid-template-columns: 0.92fr 1.08fr">
+      <div class="pila" style="gap:8px">
+        <div class="flujo flujo-compacto">
+          <div class="paso"><b>Bajo</b>Sarniezz, 279 s</div><div class="flecha">→</div>
+          <div class="paso"><b>pYIN</b>una altura por instante</div><div class="flecha">→</div>
+          <div class="paso"><b>Cents</b>desviación de 12-TET</div><div class="flecha">→</div>
+          <div class="paso"><b>Red (MLP)</b>sección por MFCC</div>
+        </div>
+        <ul class="lista cuadros" style="font-size:14.5px; line-height:1.38">
+          <li><b>pYIN</b> da una sola altura por instante: no separa las capas del looper ni da acordes.</li>
+          <li>La <b>desviación</b> respecto del semitono más cercano siempre cae entre −50 y +50 cents: un cuarto de tono queda en el borde, sin distinguirse de una nota desafinada.</li>
+          <li>La <b>red neuronal</b> que reconoce la sección por el timbre acertó el <b>43 %</b> (3 de 7 fragmentos de prueba, con 28 etiquetados a mano).</li>
+        </ul>
+        <p class="idea" style="font-size:15.5px">Conclusión: había que pasar de describir la señal a <b>transcribir</b> notas, compases y acordes.</p>
+      </div>
+      <div class="pila" style="gap:4px">
+        <div class="fig" style="height:150px"><img src="img/original_pyin.png" alt="Contorno pYIN del bajo de Sarniezz"></div>
+        <div class="cols" style="grid-template-columns: 1.45fr 1fr; gap:8px; height:150px">
+          <div class="fig"><img src="img/original_cents.png" alt="Desviación en cents"></div>
+          <div class="fig"><img src="img/original_secciones_mlp.png" alt="Matriz de confusión de la red"></div>
+        </div>
+        <p class="leyenda">Primer cuaderno: contorno pYIN del bajo (arriba), desviación en cents y matriz de confusión de la red por sección.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Tres meses de la primera idea del trabajo de grado. La red: StandardScaler + MLP (64, 32) sobre media y desviación de 13 MFCC por fragmento de 10 s; 21 de entrenamiento y 7 de prueba.</aside>
+</section>
+
+<!-- 9 · Idea del tabroll -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>La idea del tabroll</h2>
+  <p class="subtitulo">Metodología · de Hooktheory a 24-EDO</p>
+  <div class="area">
+    <div class="pila" style="height:100%; gap:8px">
+      <p style="font-size:15px">Al estudiar a Primus en <b>Hooktheory</b> encontramos su formato: la melodía en un piano roll y el acorde de cada compás debajo. Nuestro <b>tabroll</b> hace lo mismo en <span class="resalta">24 filas por octava</span> y lo saca todo del audio.</p>
+      <div class="cols" style="grid-template-columns: 1.3fr 1fr; gap:16px; height:278px">
+        <figure class="fig" style="margin:0"><img src="img/hooktheory_fabienk.png" alt="TheoryTab de Fabienk en Hooktheory">
+          <figcaption>Hooktheory, Fabienk (transcrita a mano): Mi dórico, 4/4 y 12 notas por octava.</figcaption></figure>
+        <figure class="fig" style="margin:0"><img src="img/tabroll_fabienk.png" alt="Tabroll de Fabienk">
+          <figcaption>Nuestro tabroll, Fabienk (desde el audio): compases de 7 tiempos y filas de ¼ de tono.</figcaption></figure>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Hooktheory solo tiene una canción de la banda: el riff de Fabienk. Su métrica (4/4) es la de su transcripción; en el audio, Fabienk pasa el 52 % del tiempo en compases de 7.</aside>
+</section>
+
+<!-- 10 · Partituras, transcripciones y Piston -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Partituras, transcripciones y Walter Piston</h2>
+  <p class="subtitulo">Metodología · una referencia para medir y una teoría para nombrar</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila">
+        <div class="tarjeta"><h3>Referencias para medir</h3>
+          <p>Guitar Pro y MuseScore (Sarniezz, Fabienk, Yor Zarad) y la transcripción de la sesión de KEXP (Mata Zyklek), <b>corregidas de oído</b> contra clips de la grabación.</p></div>
+        <div class="tarjeta"><h3>Piston, <i>Harmony</i></h3>
+          <p>Calidades de acorde, grados tonales y modales, y una medida del centro en tres partes para música <b>sin dominante</b>. Las funciones siguen a Riemann y los ejes a Lendvai.</p></div>
+        <p class="nota">Piston deja fuera las escalas microtonales: los grados en cuarto de tono quedan con función «neutra».</p>
+      </div>
+      <div class="pila">
+        <table class="datos">
+          <tr><th>Calidad</th><th>Tercera</th><th class="num">Pasos de ¼</th></tr>
+          <tr><td>5 (quinta sola)</td><td>—</td><td class="num">—</td></tr>
+          <tr><td>m (menor)</td><td>3m · 300 cents</td><td class="num">6</td></tr>
+          <tr style="background:var(--amarillo-suave)"><td><b>n (neutra)</b></td><td><b>350 cents</b></td><td class="num"><b>7</b></td></tr>
+          <tr><td>M (mayor)</td><td>3M · 400 cents</td><td class="num">8</td></tr>
+          <tr><td>dism · aum</td><td>3m · 3M</td><td class="num">6 · 8</td></tr>
+          <tr><td>sus2 · sus4</td><td>2.ª · 4.ª</td><td class="num">4 · 10</td></tr>
+        </table>
+        <p class="leyenda">Las calidades de Piston extendidas a 24-EDO: la tercera neutra (n) solo existe con cuartos de tono.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 11 · Mejorar la melodía -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Mejorar la melodía: hipótesis que se prueban</h2>
+  <p class="subtitulo">Metodología · cada idea se mide y se adopta o se descarta</p>
+  <div class="area alta">
+    <div class="cols" style="grid-template-columns: 1.25fr 0.75fr">
+      <table class="datos" style="font-size:12.8px">
+        <tr><th>Idea</th><th>Qué pasó</th><th></th></tr>
+        <tr><td>Consenso entre vueltas del looper</td><td>Más rápido y estable</td><td><span class="etq si">adoptada</span></td></tr>
+        <tr><td>Atracción al registro de la melodía</td><td>Mata Zyklek: 57 → 64</td><td><span class="etq si">adoptada</span></td></tr>
+        <tr><td>Quitar notas sueltas</td><td>+3 en las tres canciones</td><td><span class="etq si">adoptada</span></td></tr>
+        <tr><td>Guiarse por la partitura (.gp)</td><td>La herramienta debe servir sin partitura</td><td><span class="etq no">descartada</span></td></tr>
+        <tr><td>REPET (separar lo repetido)</td><td>Deja solo el 1–18 % de la melodía</td><td><span class="etq no">descartada</span></td></tr>
+        <tr><td>Basic Pitch (Spotify)</td><td>Menos melodía y sin cuartos de tono</td><td><span class="etq no">descartada</span></td></tr>
+        <tr><td>Unir notas iguales seguidas</td><td>Borra re-ataques reales</td><td><span class="etq no">descartada</span></td></tr>
+      </table>
+      <div class="pila">
+        <div class="tarjeta"><h3>Cómo se mide</h3>
+          <p>Medida F de notas: el ataque a <b>±75 ms</b> y la altura a <b>±25 cents</b> (la misma casilla de 24-EDO).</p></div>
+        <div class="tarjeta amarilla"><h3>Arbitraje a ciegas</h3>
+          <p>Donde el cuaderno y la partitura no coinciden, se escucha en orden al azar. En la primera ronda la partitura tenía razón <b>la mitad</b> de las veces.</p></div>
+        <div class="tarjeta gris"><h3>Reproducible</h3>
+          <p>Semilla fija y huellas SHA-256: dos separaciones daban 57 y 62, así que un hallazgo solo cuenta si se mantiene en ambas.</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 12 · Demucs y BS-RoFormer -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Separar instrumentos: Demucs y BS-RoFormer</h2>
+  <p class="subtitulo">Metodología · un resultado negativo que también enseña</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila">
+        <div class="barras">
+          <div class="g">Calidad pública de separación (SDR de guitarra, dB)</div>
+          <span>Demucs</span><div class="b gris" style="width:57.6%"></div><span class="v">5.22</span>
+          <span>BS-RoFormer</span><div class="b" style="width:100%"></div><span class="v">9.05</span>
+          <div class="g">Melodía de Sarniezz (F, %)</div>
+          <span>Demucs</span><div class="b gris" style="width:86.8%"></div><span class="v">44.9</span>
+          <span>BS-RoFormer</span><div class="b" style="width:86.8%"></div><span class="v">44.9</span>
+          <div class="g">Bajo de Sarniezz (F, %)</div>
+          <span>Demucs</span><div class="b gris" style="width:100%"></div><span class="v">78.6</span>
+          <span>BS-RoFormer</span><div class="b" style="width:97.3%"></div><span class="v">76.5</span>
+        </div>
+        <p class="nota">BS-RoFormer tardó una hora en separar Sarniezz en CPU (unas 13 veces lo que dura la canción).</p>
+      </div>
+      <div class="pila">
+        <div class="tarjeta"><h3>¿Por qué no mejoró?</h3>
+          <p>Un separador mejor limpia la <b>guitarra</b> del resto, pero la dificultad está <b>dentro</b> de la guitarra: el looper superpone varias capas del mismo instrumento, y ningún separador las distingue.</p></div>
+        <div class="tarjeta amarilla"><h3>¿Por qué no invalida el trabajo?</h3>
+          <p>Muestra que el resultado <b>no depende del separador</b>: con dos modelos distintos la medida es la misma. Y ubica con precisión el cuello de botella, que es el siguiente problema a resolver.</p></div>
+        <p class="nota">Decisión: Demucs sigue por defecto; BS-RoFormer queda como opción (<code>make run-roformer</code>).</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 13 · Segundas fórmulas -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Segundas fórmulas: comparar con estilos</h2>
+  <p class="subtitulo">Metodología · cada fórmula y lo que produce</p>
+  <div class="area alta">
+    <div class="cols c2" style="gap:10px 26px; grid-template-rows: 1fr 1fr">
+      <div class="cols formula-celda">
+        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Distancia de Jensen-Shannon</b>
+          <div class="formula" style="font-size:13.5px">\( D_{JS}=\tfrac12 D_{KL}(P\|M)+\tfrac12 D_{KL}(Q\|M) \)</div>
+          <div class="produce">Sarniezz frente al centro del rock: 0.52 (0 = iguales, 1 = nada en común)</div></div>
+        <div class="fig sin-borde"><img src="img/formula_js.png" alt="Reparto de fundamentales de Sarniezz y del rock"></div>
+      </div>
+      <div class="cols formula-celda">
+        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Percentil de tipicidad</b>
+          <div class="formula" style="font-size:13.5px">\( p(s)=100\cdot\dfrac{\#\{x\in C:\ d(x)\ge d(s)\}}{|C|} \)</div>
+          <div class="produce">gris: distancia de cada pieza del rock a su centro. Líneas: Mata Zyklek (azul) y Sarniezz (verde oscuro). El área verde son las piezas más lejos que Mata Zyklek: su percentil (12). Sarniezz queda más lejos que todas: 0</div></div>
+        <div class="fig sin-borde"><img src="img/formula_percentil.png" alt="Histograma de distancias del rock"></div>
+      </div>
+      <div class="cols formula-celda">
+        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Repetición a distancia ℓ</b>
+          <div class="formula" style="font-size:13.5px">\( R(\ell)=0.7\,\Pr[c_t=c_{t+\ell}]+0.3\,\big(1-\overline{|a_t-a_{t+\ell}|}\big) \)</div>
+          <div class="produce">c: clase de altura, a: ataque, por corchea. Fabienk se repite cada 28 corcheas (3a)</div></div>
+        <div class="fig sin-borde"><img src="img/formula_repeticion.png" alt="R(ℓ) de Fabienk"></div>
+      </div>
+      <div class="cols formula-celda">
+        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Dos campos de quintas</b>
+          <div class="formula" style="font-size:13.5px">\( \text{quinta}=14 \text{ pasos},\quad \gcd(14,24)=2 \)</div>
+          <div class="produce">anillo exterior: grados regulares; interior: cuartos de tono. Mata Zyklek fija ♭2+ y ♭6+ (2b)</div></div>
+        <div class="fig sin-borde"><img src="img/formula_campos.png" alt="Círculo de 24-EDO de Mata Zyklek"></div>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">El mapa 1b usa además componentes principales sobre la raíz de cada reparto de fundamentales. La matriz promedia el percentil de las fundamentales y el de los cambios de fundamental.</aside>
+</section>
+
+<!-- 14 · Datos para comparar -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Datos para comparar estilos e influencias</h2>
+  <p class="subtitulo">Metodología · las mismas medidas para todas las canciones</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila">
+        <b class="resalta">36 canciones medidas con el mismo cuaderno</b>
+        <div class="barras">
+          <span>Angine de Poitrine</span><div class="b" style="width:66.7%"></div><span class="v">6</span>
+          <span>King Gizzard</span><div class="b clara" style="width:100%"></div><span class="v">9</span>
+          <span>Frank Zappa</span><div class="b clara" style="width:66.7%"></div><span class="v">6</span>
+          <span>King Crimson</span><div class="b clara" style="width:66.7%"></div><span class="v">6</span>
+          <span>Gentle Giant</span><div class="b clara" style="width:66.7%"></div><span class="v">6</span>
+          <span>Primus</span><div class="b gris" style="width:33.3%"></div><span class="v">3</span>
+        </div>
+        <p class="nota">Influencias que la banda cita (verde claro) y la comparación propia (gris).</p>
+      </div>
+      <div class="pila">
+        <b class="resalta">Corpus de estilos descargados</b>
+        <table class="datos">
+          <tr><th>Estilo</th><th>Corpus</th><th class="num">Piezas</th></tr>
+          <tr><td>Rock</td><td>Rolling Stone 200</td><td class="num">200</td></tr>
+          <tr><td>Práctica común</td><td>Kostka-Payne</td><td class="num">—</td></tr>
+          <tr><td>Jazz</td><td>iRealPro</td><td class="num">1 186</td></tr>
+          <tr><td>Pop</td><td>Hooktheory, 9 álbumes</td><td class="num">121</td></tr>
+          <tr><td>Persa</td><td>Radif Corpus</td><td class="num">228</td></tr>
+          <tr><td>Makam turco</td><td>SymbTr</td><td class="num">≈ 2 200</td></tr>
+          <tr><td>Folk irlandés</td><td>The Session</td><td class="num">—</td></tr>
+        </table>
+        <p class="nota">Sin corpus simbólico abierto: maqam árabe.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- ============================== RESULTADOS ============================== -->
+
+<!-- 15 · Repositorio -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>El repositorio en GitHub</h2>
+  <p class="subtitulo">Resultados · una herramienta reproducible</p>
+  <div class="area alta">
+    <div class="cols" style="grid-template-columns: 1.05fr 0.95fr">
+<div class="arbol"><span class="d">analisis-computacional-tabroll/</span>
+├── <span class="d">notebooks/</span>
+│   └── <span class="fv">Tabroll_Angine_de_Poitrine.ipynb</span>  <span class="c">← fuente de verdad</span>
+├── <span class="d">src/tabroll/cells/</span>   <span class="c">una celda = un módulo</span>
+├── <span class="d">scripts/</span>
+│   ├── run_song.py           <span class="c">una canción, de punta a punta</span>
+│   ├── evaluar_melodia.py    <span class="c">medida F contra la referencia</span>
+│   ├── <span class="d">comparacion/</span>          <span class="c">estilos, corpus, gráficas</span>
+│   └── graficas_completas.py
+│   └── presentacion_imagenes.py
+├── <span class="d">references/</span>          <span class="c">partituras y corpus</span>
+├── <span class="d">docs/</span>                <span class="c">notas, artículo, fórmulas</span>
+├── <span class="d">presentacion/</span>        <span class="c">esta presentación</span>
+├── <span class="d">tests/</span>               <span class="c">103 pruebas</span>
+└── Makefile</div>
+      <div class="pila">
+        <div class="flujo flujo-vertical">
+          <div class="paso"><b>Cuaderno</b>se edita aquí</div><div class="flecha" style="transform:rotate(90deg)">→</div>
+          <div class="paso"><b>make extract</b>una celda por archivo, con huella</div><div class="flecha" style="transform:rotate(90deg)">→</div>
+          <div class="paso"><b>run_song.py</b>corre todas las celdas sobre una canción</div><div class="flecha" style="transform:rotate(90deg)">→</div>
+          <div class="paso"><b>outputs/</b>tabroll, armonía, ciclos, resumen</div>
+        </div>
+        <p class="nota">Si un módulo se edita a mano, <code>make extract</code> se detiene: el cuaderno siempre manda.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 16 · ¿La herramienta acierta? -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>¿La herramienta acierta?</h2>
+  <p class="subtitulo">Resultados · por qué la armonía es fiable aunque la melodía no lo sea tanto</p>
+  <div class="area alta">
+    <div class="cols" style="grid-template-columns: 0.95fr 1.05fr">
+      <figure class="fig sin-borde" style="margin:0"><img src="img/acierto_herramienta.png" alt="Acierto de la herramienta por canción">
+        <figcaption>Contra las referencias corregidas de oído (corridas congeladas). Yor Zarad: prueba a ciegas, melodía 37 % y fundamental 88 %.</figcaption></figure>
+      <div class="pila compacta" style="gap:5px">
+        <div class="tarjeta"><h3>1 · El bajo manda</h3><p>En la fundamental pesa más el bajo (1 frente a 0.6), que es lo mejor transcrito.</p></div>
+        <div class="tarjeta"><h3>2 · Se suma sobre las vueltas del loop</h3><p>Un error en una vuelta queda en minoría frente a las demás.</p></div>
+        <div class="tarjeta"><h3>3 · La octava no importa</h3><p>Una nota una octava arriba es la misma clase de altura.</p></div>
+        <div class="tarjeta"><h3>4 · Por compás, no por nota</h3><p>La melodía exige el ataque a ±75 ms; el acorde, solo qué notas suenan en el compás.</p></div>
+        <div class="tarjeta amarilla"><h3>Comprobado</h3><p>Al cambiar un ajuste de la melodía, Fabienk varió de 41 a 44 % y Sarniezz de 46 a 48 %, y su fundamental no se movió (82 y 72 %).</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 17 · Armonía (con sub-diapositivas a pantalla completa) -->
+<section>
+  <section class="contenido">
+    <span class="numero"></span>
+    <h2>Armonía: fuera de todos los corpus</h2>
+    <p class="subtitulo">Resultados · ninguna canción es típica de ningún estilo</p>
+    <div class="area alta">
+      <div class="cols c2" style="gap:18px">
+        <figure class="fig" style="margin:0"><img src="img/1a_armonia_matriz_rock_pop.png" alt="Matriz de verosimilitud: rock y pop"><figcaption class="leyenda-grafica">Frente a rock y pop, los estilos más cercanos, el máximo es <b>17.7</b> (50 = pieza típica). En rock real, «sin vecino» sale el 5.2 % de las veces; en la banda, el 37.5 %.</figcaption></figure>
+        <figure class="fig" style="margin:0"><img src="img/1b_armonia_mapa_fundamentales.png" alt="Mapa de fundamentales"><figcaption class="leyenda-grafica">Mata Zyklek y Utzp (pedales) quedan en el borde del rock; Sarniezz y Fabienk, donde no hay piezas de ningún corpus, por el peso de ♭VII y ♭III.</figcaption></figure>
+      </div>
+    </div>
+    <p class="pie" data-campo="pie"></p>
+    <aside class="notes">Calibración: en 388 piezas reales de rock, el método da «sin vecino» solo el 5.2 % de las veces.</aside>
+  </section>
+  <section class="contenido"><span class="numero"></span><h2>Armonía · matriz de verosimilitud</h2><p class="subtitulo">Resultados · 1a</p>
+    <div class="grafica-completa fig"><img src="img/1a_armonia_matriz_verosimilitud.png" alt=""></div>
+    <p class="leyenda-grafica">Cada casilla es un percentil: el % de piezas del estilo que están igual o más lejos de su centro que la canción (50 = pieza típica; 0 = más rara que todas). «¼ %»: tiempo con la fundamental en cuarto de tono, llevada al grado de abajo porque ningún corpus tiene cuartos de tono. Corpus: RS 200, Kostka-Payne, iRealPro y 9 álbumes de Hooktheory.</p>
+    <p class="pie" data-campo="pie"></p></section>
+  <section class="contenido"><span class="numero"></span><h2>Armonía · mapa de fundamentales</h2><p class="subtitulo">Resultados · 1b</p>
+    <div class="grafica-completa fig"><img src="img/1b_armonia_mapa_fundamentales.png" alt=""></div>
+    <p class="leyenda-grafica">Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones comparadas. La cercanía resume el parecido entre sus repartos de fundamentales. Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan en ella (+ y − indican el sentido).</p>
+    <p class="pie" data-campo="pie"></p></section>
+</section>
+
+<!-- 18 · Melodía -->
+<section>
+  <section class="contenido">
+    <span class="numero"></span>
+    <h2>Melodía: cuartos de tono como grados fijos</h2>
+    <p class="subtitulo">Resultados · el elemento nuevo</p>
+    <div class="area alta">
+      <div class="cols c2" style="gap:18px">
+        <figure class="fig" style="margin:0"><img src="img/2a_melodia_uso_cuartos_de_tono.png" alt="Uso de cuartos de tono"><figcaption class="leyenda-grafica">Entre el <b>48 y el 82 %</b> de los cuartos de tono caen en <b>dos grados fijos</b> que vuelven en cada vuelta del loop. Angor (5 %) queda bajo el piso de ruido.</figcaption></figure>
+        <figure class="fig" style="margin:0"><img src="img/2b_melodia_circulo_24edo.png" alt="Círculo de 24-EDO"><figcaption class="leyenda-grafica">Dos familias de escala: <b>♭2+ y ♭6+</b> sobre frigio (Mata Zyklek, Yor Zarad, Utzp), cercana al maqam, y <b>7+, 6+ y ♭3+</b> sobre dórico (Sarniezz, Fabienk).</figcaption></figure>
+      </div>
+    </div>
+    <p class="pie" data-campo="pie"></p>
+  </section>
+  <section class="contenido"><span class="numero"></span><h2>Melodía · uso de los cuartos de tono</h2><p class="subtitulo">Resultados · 2a</p>
+    <div class="grafica-completa fig"><img src="img/2a_melodia_uso_cuartos_de_tono.png" alt=""></div>
+    <p class="leyenda-grafica">Porcentaje del tiempo de la melodía en cuartos de tono: como grado sostenido (oscuro) o como adorno de paso (claro). La franja gris es el piso de ruido medido en Primus, que no usa cuartos de tono. A la derecha, qué parte de los cuartos de tono cae en los dos grados más usados.</p>
+    <p class="pie" data-campo="pie"></p></section>
+  <section class="contenido"><span class="numero"></span><h2>Melodía · círculo de 24-EDO</h2><p class="subtitulo">Resultados · 2b</p>
+    <div class="grafica-completa fig"><img src="img/2b_melodia_circulo_24edo.png" alt=""></div>
+    <p class="leyenda-grafica">La quinta de 24-EDO mide 14 pasos y mcd(14, 24) = 2: el ciclo se parte en dos campos, los grados regulares (anillo exterior, amarillo) y los de cuarto de tono (interior, azul); cada grado «+» queda junto a su vecino regular. El área del punto es el tiempo melódico; las líneas, los pasos melódicos más frecuentes. El panel grande resume el álbum.</p>
+    <p class="pie" data-campo="pie"></p></section>
+</section>
+
+<!-- 19 · Síntesis -->
+<section>
+  <section class="contenido">
+    <span class="numero"></span>
+    <h2>Síntesis: ritmo, forma y estilo</h2>
+    <p class="subtitulo">Resultados · un híbrido con un pariente distinto en cada dimensión</p>
+    <div class="area alta">
+      <div class="cols c2" style="gap:18px">
+        <figure class="fig" style="margin:0"><img src="img/3a_sintesis_ciclos_metricos.png" alt="Ciclos métricos"><figcaption class="leyenda-grafica">Picos en <b>20 y 28 corcheas</b>: dos compases de 5 y de 7, los tiempos que la banda menciona (hipótesis). Sarniezz y Utzp, en cambio, van en 4.</figcaption></figure>
+        <figure class="fig" style="margin:0"><img src="img/3b_sintesis_clasificacion_album.png" alt="Clasificación del álbum"><figcaption class="leyenda-grafica">Rock gana 8 de 24 bloques, radif 7 y en <b>9 no hay vecino</b>. El vecino más cercano es <b>King Gizzard</b>: en armonía, Angor es idéntica a «Flying Microtonal Banana».</figcaption></figure>
+      </div>
+    </div>
+    <p class="pie" data-campo="pie"></p>
+  </section>
+  <section class="contenido"><span class="numero"></span><h2>Síntesis · ciclos métricos</h2><p class="subtitulo">Resultados · 3a</p>
+    <div class="grafica-completa fig"><img src="img/3a_sintesis_ciclos_metricos.png" alt=""></div>
+    <p class="leyenda-grafica">Cada barra mide cuánto se repiten las alturas y los ataques al comparar la música consigo misma ℓ corcheas después (0 a 1). Un pico alto y aislado es un ciclo largo y estable; las cifras sobre las barras son los mejores periodos.</p>
+    <p class="pie" data-campo="pie"></p></section>
+  <section class="contenido"><span class="numero"></span><h2>Síntesis · clasificación del álbum</h2><p class="subtitulo">Resultados · 3b</p>
+    <div class="grafica-completa fig"><img src="img/3b_sintesis_clasificacion_album.png" alt=""></div>
+    <p class="leyenda-grafica">Arriba, el percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido; «bl.» = bloques de rasgos con datos). Abajo, en cuántas canciones gana cada corpus en cada bloque; «sin vecino»: ningún corpus pasa el percentil 5.</p>
+    <p class="pie" data-campo="pie"></p></section>
+</section>
+
+<!-- ============================== CIERRE ============================== -->
+
+<!-- 20 · Conclusiones -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Conclusiones</h2>
+  <p class="subtitulo">Un híbrido con un elemento nuevo</p>
+  <div class="area">
+    <div class="cols c3" style="gap:18px; align-items:stretch">
+      <div class="pila tarjeta conclusion">
+        <h3>1 · Armonía: no encaja en ningún estilo</h3>
+        <div class="cifra"><span class="grande">37.5 %</span><span class="frente">frente a 5.2 %</span></div>
+        <p class="clave">de los casos quedan «sin vecino» en la banda, frente a las piezas reales de rock.</p>
+        <p>Ninguna canción es típica de ningún corpus (máximo 17.7 sobre 50), y el método no exagera: con rock real casi siempre encuentra vecino.</p>
+      </div>
+      <div class="pila tarjeta amarilla conclusion">
+        <h3>2 · Melodía: lo nuevo</h3>
+        <div class="cifra"><span class="grande" style="color:#c98500">2 grados</span></div>
+        <p class="clave">en cuarto de tono concentran entre el 48 y el 82 % de los cuartos de tono de cada canción.</p>
+        <p>Son grados de la escala, no adornos: dos familias, frigia (♭2+, ♭6+) y dórica (7+, 6+, ♭3+). Ningún corpus medido las tiene.</p>
+      </div>
+      <div class="pila tarjeta conclusion">
+        <h3>3 · Síntesis: un híbrido</h3>
+        <div class="cifra"><span class="grande">5 y 7</span><span class="frente">tiempos</span></div>
+        <p class="clave">por compás en los ciclos del looper (picos en 20 y 28 corcheas), como dice la banda.</p>
+        <p>Armonía de rock modal, escala cercana al radif y King Gizzard como vecino más próximo; Sarniezz y Fabienk no tienen vecino ni ahí.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 21 · Trabajo futuro -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Trabajo futuro</h2>
+  <p class="subtitulo">Un tabroll que mejore solo, para cualquier canción</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila" style="justify-content:center">
+        <svg viewBox="0 0 400 300" width="400" height="300" role="img" aria-label="Ciclo de mejora autosustentable">
+          <defs><marker id="pf" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#14c486"/></marker></defs>
+          <g fill="none" stroke="#14c486" stroke-width="2.2" marker-end="url(#pf)">
+            <path d="M262 62 Q330 80 330 128"/><path d="M330 178 Q330 236 262 246"/>
+            <path d="M138 246 Q70 236 70 178"/><path d="M70 128 Q70 80 138 62"/>
+          </g>
+          <g font-family="Ancizar Sans" font-size="13" text-anchor="middle">
+            <rect x="130" y="34" width="140" height="48" rx="8" fill="#eef6f2" stroke="#06784f"/>
+            <text x="200" y="54" font-weight="700" fill="#06784f">Sintetizar</text><text x="200" y="71" fill="#29272d">Guitar Pro con ¼ de tono</text>
+            <rect x="262" y="128" width="136" height="50" rx="8" fill="#eef6f2" stroke="#06784f"/>
+            <text x="330" y="149" font-weight="700" fill="#06784f">Entrenar</text><text x="330" y="166" fill="#29272d">transcriptor 24-EDO</text>
+            <rect x="130" y="222" width="140" height="48" rx="8" fill="#eef6f2" stroke="#06784f"/>
+            <text x="200" y="242" font-weight="700" fill="#06784f">Transcribir</text><text x="200" y="259" fill="#29272d">canciones nuevas</text>
+            <rect x="2" y="128" width="136" height="50" rx="8" fill="#fff4df" stroke="#ffb93e"/>
+            <text x="70" y="149" font-weight="700" fill="#9a6200">Validar</text><text x="70" y="166" fill="#29272d">con referencias de oído</text>
+            <text x="200" y="158" font-size="12" fill="#6b6a66">datos sin límite,</text><text x="200" y="174" font-size="12" fill="#6b6a66">sin transcribir a mano</text>
+          </g>
+        </svg>
+      </div>
+      <div class="pila" style="justify-content:center; gap:8px">
+        <div class="tarjeta"><h3>Melodía</h3><p>Tratar las vueltas del looper como varias tomas de la misma frase para separar las capas.</p></div>
+        <div class="tarjeta"><h3>Armonía</h3><p>Elegir el centro tonal de forma robusta en cualquier canción (hoy falla en «Tommy the Cat»).</p></div>
+        <div class="tarjeta"><h3>Datos y producto</h3><p>ProgGP y un corpus de maqam árabe; un tabroll web interactivo; otros microtonales (King Gizzard, Sevish) y uso en la enseñanza.</p></div>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- 22 · Referencias -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Referencias</h2>
+  <p class="subtitulo">Bibliografía, corpus, código y fuentes audiovisuales</p>
+  <div class="area">
+    <div class="cols c2">
+      <div class="pila" style="justify-content:center">
+        <ul class="lista cuadros" style="font-size:15px">
+          <li>Artículo y bibliografía completa.</li>
+          <li>Repositorio con el cuaderno, los scripts y las gráficas.</li>
+          <li>Corpus: RS 200, Kostka-Payne, iRealPro, Hooktheory, Radif, SymbTr, The Session.</li>
+          <li>Entrevistas y podcast de la banda.</li>
+        </ul>
+      </div>
+      <div class="centrar"><div class="pendiente" style="width:240px; height:240px">Código QR</div></div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+</section>
+
+<!-- Cierre -->
+<section class="cierre">
+  <span class="numero"></span>
+  <p class="gracias">Gracias</p>
+</section>
+
+</div>
 </div>
 
 <nav class="navegacion" aria-label="Cambiar diapositiva">
-  <button type="button" id="anterior" aria-label="Diapositiva anterior">
-    <svg viewBox="0 0 14 20"><path d="M14 0v20L0 10z"/></svg>
-  </button>
-  <span class="contador" id="contador" aria-live="polite">Diapositiva 1 de 1</span>
-  <button type="button" id="siguiente" aria-label="Diapositiva siguiente">
-    <svg viewBox="0 0 14 20"><path d="M0 0v20l14-10z"/></svg>
-  </button>
+  <button type="button" id="anterior" aria-label="Diapositiva anterior"><svg viewBox="0 0 14 20"><path d="M14 0v20L0 10z"/></svg></button>
+  <span class="contador" id="contador" aria-live="polite"></span>
+  <button type="button" id="siguiente" aria-label="Diapositiva siguiente"><svg viewBox="0 0 14 20"><path d="M0 0v20l14-10z"/></svg></button>
 </nav>
 
-<script src="lib/reveal/reveal.min.js"></script>
 <script>
+  /* Datos que se repiten en todas las diapositivas: cambiarlos solo aquí. */
+  const DATOS = {
+    autor: "[Nombre del autor]",
+    facultad: "Facultad de Ciencias – Departamento de Matemáticas – Sede Bogotá",
+    pie: "Facultad de Ciencias<br>Sede Bogotá",
+  };
+</script>
+<script src="lib/reveal/reveal.min.js"></script>
+<script src="lib/reveal/notes.min.js"></script>
+<script src="lib/katex/katex.min.js"></script>
+<script src="lib/katex/auto-render.min.js"></script>
+<script>
+  // Campos repetidos
+  document.querySelectorAll("[data-campo]").forEach(el => el.innerHTML = DATOS[el.dataset.campo] ?? "");
+
+  // Fórmulas
+  renderMathInElement(document.body, { delimiters: [{ left: "\\(", right: "\\)", display: false }], throwOnError: false });
+
+  // Video: fragmento de YouTube (necesita conexión; si no hay, queda el enlace)
+  document.querySelectorAll(".video[data-video]").forEach(v => {
+    const { video, inicio, fin } = v.dataset;
+    v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${video}?start=${inicio}&end=${fin}&rel=0&modestbranding=1"
+      title="Angine de Poitrine en KEXP" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  });
+
+  // Una octava de 24-EDO: amarillo = grado regular, azul = cuarto de tono (los colores de la gráfica 2b)
+  const NOMBRES = ["C","C+","C♯","C♯+","D","D+","E♭","E♭+","E","E+","F","F+","F♯","F♯+","G","G+","A♭","A♭+","A","A+","B♭","B♭+","B","B+"];
+  document.querySelectorAll(".regla24").forEach(r => {
+    const grande = r.dataset.tam === "grande", marca = +(r.dataset.marca ?? -1);
+    const w = grande ? 860 : 400, alto = grande ? 46 : 64, paso = w / 24;
+    let s = `<svg viewBox="0 0 ${w} ${alto + 18}" width="${w}" height="${alto + 18}" role="img" aria-label="Una octava en 24-EDO" font-family="Ancizar Sans">`;
+    NOMBRES.forEach((n, i) => {
+      const color = i % 2 ? "#2a78d6" : "#eda100", x = i * paso;
+      s += `<rect x="${x + 1}" y="0" width="${paso - 2}" height="${alto}" rx="2" fill="${color}" opacity="${i === marca ? 1 : 0.8}"
+              ${i === marca ? 'stroke="#033c27" stroke-width="3"' : ""}/>`;
+      s += `<text x="${x + paso / 2}" y="${alto + 13}" font-size="${grande ? 11 : 9}" text-anchor="middle" fill="#29272d">${n}</text>`;
+    });
+    r.innerHTML = s + "</svg>";
+  });
+
+  // Mástiles: una octava con 12 y con 24 trastes
+  (() => {
+    const svg = document.getElementById("mastiles"); if (!svg) return;
+    let s = "";
+    [[12, 30, "Guitarra común · 12 trastes por octava"], [24, 150, "Khn · 24 trastes por octava"]].forEach(([n, y, rotulo]) => {
+      s += `<text x="10" y="${y - 8}" font-family="Ancizar Sans" font-size="13" font-weight="700" fill="#06784f">${rotulo}</text>`;
+      s += `<rect x="10" y="${y}" width="420" height="62" rx="4" fill="#f4efe6" stroke="#c9b79c"/>`;
+      for (let k = 0; k <= n; k++) {
+        const x = 10 + 420 * (1 - Math.pow(2, -k / n)) / (1 - 0.5);   // trastes reales: se acercan hacia el puente
+        const cuarto = n === 24 && k % 2 === 1;
+        s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + 62}" stroke="${cuarto ? "#2a78d6" : "#8a8984"}" stroke-width="${k === 0 || k === n ? 4 : 2}"/>`;
+      }
+      for (let c = 0; c < 4; c++) s += `<line x1="10" y1="${y + 10 + c * 14}" x2="430" y2="${y + 10 + c * 14}" stroke="#b0aaa0" stroke-width="${1 + c * 0.4}"/>`;
+    });
+    svg.innerHTML = s;
+  })();
+
   Reveal.initialize({
-    width: 960, height: 540, margin: 0.04,     // 16:9, como la plantilla (10 × 5.625 in)
+    width: 960, height: 540, margin: 0.04,
     center: false, controls: false, progress: false, slideNumber: false,
     hash: true, transition: "fade", transitionSpeed: "fast", backgroundTransition: "none",
+    plugins: [RevealNotes],
   }).then(() => {
-    const total = Reveal.getTotalSlides();
-    Reveal.getSlides().forEach((s, i) => s.querySelectorAll(".numero").forEach(n => n.textContent = i + 1));
+    // Número de cada diapositiva (las sub-diapositivas de una gráfica llevan el de su diapositiva)
+    const principales = [...document.querySelectorAll(".reveal .slides > section")];
+    principales.forEach((s, i) => s.querySelectorAll(".numero").forEach(n => n.textContent = i + 1));
+    const total = principales.length;
 
-    const anterior = document.getElementById("anterior");
-    const siguiente = document.getElementById("siguiente");
-    const contador = document.getElementById("contador");
+    const anterior = document.getElementById("anterior"), siguiente = document.getElementById("siguiente"), contador = document.getElementById("contador");
     const actualizar = () => {
-      const i = Reveal.getSlidePastCount() + 1;
-      contador.textContent = `Diapositiva ${i} de ${total}`;
-      anterior.disabled = i === 1;
-      siguiente.disabled = i === total;
+      const { h, v } = Reveal.getIndices();
+      contador.textContent = `Diapositiva ${h + 1} de ${total}` + (v ? ` · gráfica ${v}` : "");
+      anterior.disabled = Reveal.isFirstSlide();
+      siguiente.disabled = Reveal.isLastSlide();
     };
     anterior.addEventListener("click", () => { Reveal.prev(); anterior.blur(); });
     siguiente.addEventListener("click", () => { Reveal.next(); siguiente.blur(); });

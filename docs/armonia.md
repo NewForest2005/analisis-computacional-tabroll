@@ -285,6 +285,24 @@ y dice cuánto coinciden entre sí. `evaluar` y `run_song.py` lo guardan en `eva
 | Sarniezz | 57.5 | 58.6 | 37.8 | 47.3 | 51.6 | 34.6 |
 | Fabienk | 81.6 | 82.9 | 58.8 | 63.4 | 64.1 | 40.1 |
 
+**Yor Zarad, la prueba a ciegas.** Su armonía no se había medido: `evaluacion_armonia.json` no existía en la corrida
+congelada (`*_yor_zarad_*_repro`). Se midió una sola vez con `scripts/completar_evaluacion.py`, contra la referencia hecha
+a ciegas (todas las pistas de Guitar Pro), sin tocar el cuaderno: fundamental 87.8 % en 99 compases (90.2 % en los
+confiables), fundamental y calidad 43.0 %, bajo 94.2 % y el mismo centro (Sol) que la partitura. La melodía de esa
+corrida sigue en 36.8.
+
+**La armonía casi no depende de la melodía.** En las corridas `edad_05`, `edad_07` y `edad_085` solo cambió el peso de
+edad de la voz aguda (`EDAD_MELODIA`), con la misma referencia:
+
+| | Melodía principal | Fundamental |
+|---|---|---|
+| Sarniezz | 46.0 · 46.8 · 47.9 | 72.3 · 72.3 · 72.3 |
+| Fabienk | 40.8 · 42.8 · 44.2 | 82.3 · 82.3 · 82.3 |
+| Mata Zyklek | 60.4 · 62.8 · 65.3 | 90.9 · 98.1 · 98.1 |
+
+No hay una medida de la armonía anterior a la corrección de la melodía: la armonía por compás entró al cuaderno después
+de que empezó la evaluación contra las referencias corregidas.
+
 Acuerdo de las referencias entre sí (misma fundamental por compás): corregida y completa, 100 %, 92.6 % y 97.0 %;
 corregida y Guitar Pro sola, 95.4 %, 49.5 % y 75.5 %.
 

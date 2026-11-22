@@ -209,9 +209,9 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
     alto_fila = 2.0 if diapositiva else 1.05
     fig, cuerpo = estilo_figuras.figura(
         12 if diapositiva else 16, alto_fila * filas + 0.9, "Repetición musical según la distancia temporal",
-        subtitulo="Cada barra muestra cuánto se repiten ataques y alturas al separar la música ℓ corcheas. "
-                  "Un pico estable ayuda a identificar ciclos métricos largos del repertorio.",
-        nota="Eje x: distancia en corcheas ℓ. Eje y: repetición en la canción completa (0 a 1). "
+        subtitulo="" if diapositiva else "Cada barra muestra cuánto se repiten ataques y alturas al separar la música ℓ "
+                  "corcheas. Un pico estable ayuda a identificar ciclos métricos largos del repertorio.",
+        nota="" if diapositiva else "Eje x: distancia en corcheas ℓ. Eje y: repetición en la canción completa (0 a 1). "
              "Las cifras sobre las barras son los mejores periodos detectados.")
     ejes = cuerpo.subplots(filas, columnas, sharex=True, sharey=True, squeeze=False)
     ticks = np.arange(0, min(40, int(lags[-1])) + 1, 10)
