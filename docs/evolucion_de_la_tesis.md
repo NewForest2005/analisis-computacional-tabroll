@@ -89,7 +89,7 @@ Se probó en este orden:
   - Tommy the Cat comparte con Fabienk y Sarniezz el centro, el modo dórico y las fundamentales 1, ♭3 y ♭7.
   - My Name Is Mud es un pedal, como Mata Zyklek.
 - **Diferencias:** Primus no tiene ciclos de looper ni cuartos de tono concentrados, y cambia más de acorde.
-- **Aviso:** ninguna fuente pública consultada cita a Primus como influencia de la banda. La banda cita rock turco, King Gizzard, Zappa, Gentle Giant y Scofield. Se presenta como comparación propia.
+- **Aviso:** ninguna fuente pública consultada cita a Primus como influencia de la banda. La banda cita rock turco, Zappa, Gentle Giant, John Scofield y el techno (entrevista en *Noize* y podcast *Aucard de Tours*). King Gizzard no lo cita la banda: lo pone como precedente Mathémusique; David Bennett compara un tema con el maqam hijaz. Primus se presenta como comparación propia.
 
 ## 9. Lo descartado o aparcado
 
@@ -123,5 +123,5 @@ no se identificaron y quedan fuera de las afirmaciones de la tesis.
 
 Fuentes: Khn de Poitrine, *Aucard de Tours* (26-feb-2026, 1:33–2:58); Mathemusique/Paul Lascabettes
 (16-may-2026); Levi McClain (7-sep-2026); y Thomas Little/Classical Nerd (17-ene-2019). David Bennett, «How
-Angine de Poitrine use Microtonality», se conserva como fuente audiovisual sin fecha de publicación identificada.
+Angine de Poitrine use Microtonality» (21-mar-2026); y la entrevista de la banda en *Noize Magazine*.
 Los enlaces completos están en `references/referencias_completas.md`.

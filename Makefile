@@ -90,7 +90,7 @@ presentacion:
 presentacion-imagenes:
 	$(VENV_PYTHON) scripts/presentacion_imagenes.py
 
-# El círculo de 24-EDO interactivo de la diapositiva 18: el fragmento de 30 s con más cuartos de tono del álbum.
+# El círculo de 24-EDO interactivo de la diapositiva 19: Mata Zyklek, 0:42-1:12 (probado contra la referencia corregida de oído).
 CIRCULO_CANCION ?= mata_zyklek
 CIRCULO_DESDE ?= 42
 CIRCULO_HASTA ?= 72

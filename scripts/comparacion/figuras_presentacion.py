@@ -3,13 +3,17 @@
 Uso:
     python scripts/comparacion/figuras_presentacion.py outputs/<corrida> [...] --salida outputs/presentacion
 
-Con las corridas de la banda escribe:
+Las fórmulas se ilustran con Primus (la comparación propia), no con la banda, para no adelantar en la metodología
+los resultados que vienen después. Con las corridas dadas escribe:
 - <salida>_formula_js.png: reparto de fundamentales de una canción frente al centro del rock y su distancia de
-  Jensen-Shannon (la canción de --cancion-js, por defecto Sarniezz).
-- <salida>_formula_percentil.png: distancias de las piezas del rock a su centro y dónde cae esa canción; el área
-  sombreada es su percentil.
-- <salida>_formula_repeticion.png: R(ℓ) de una canción (--cancion-ciclo, por defecto Fabienk), con su mejor periodo.
-- <salida>_formula_campos.png: el círculo de 24-EDO de una canción (--cancion-circulo, por defecto Mata Zyklek).
+  Jensen-Shannon (la canción de --cancion-js, por defecto «My Name Is Mud»).
+- <salida>_formula_percentil.png: distancias de las piezas del rock a su centro, dónde cae esa canción (el área
+  sombreada es su percentil) y una segunda canción de contraste (--cancion-contraste, por defecto «Jerry Was a Race
+  Car Driver»).
+- <salida>_formula_repeticion.png: R(ℓ) de una canción (--cancion-ciclo, por defecto «Jerry Was a Race Car Driver»),
+  con su mejor periodo.
+- <salida>_formula_campos.png: el círculo de 24-EDO de una canción (--cancion-circulo); sin canción (por defecto),
+  solo la geometría de los dos campos.
 - <salida>_acierto.png: melodía, bajo y fundamental del acorde contra la referencia, por canción. Usa
   evaluacion_melodia.json y evaluacion_armonia.json de cada corrida; toma la corrida más reciente de cada canción que
   los tenga (sin las de BS-RoFormer), entre las de --evaluaciones si se dan.
@@ -85,13 +89,13 @@ def formulas_estilo(run: Path, salida: str, contraste: Path | None = None) -> No
     fig, ax = mini()
     bins = np.linspace(0, max(ref.max(), d) * 1.05, 28)
     n, b, parches = ax.hist(ref, bins=bins, color=GRIS_BARRA)
-    sombra = marcas[-1][1]                       # se sombrea el percentil de la última marca (el área que cuenta)
+    sombra = marcas[0][1]                        # se sombrea el percentil de la canción principal
     for pa, izq in zip(parches, b[:-1]):
         if izq + (b[1] - b[0]) / 2 >= sombra:
             pa.set_facecolor(VERDE_CLARO)
     from matplotlib.patches import Patch
     ax.legend(handles=[Patch(color=GRIS_BARRA, label="piezas del rock"),
-                       Patch(color=VERDE_CLARO, label=f"más lejos que {ve.nombre(marcas[-1][0].name)}")],
+                       Patch(color=VERDE_CLARO, label=f"más lejos que {ve.nombre(marcas[0][0].name)}")],
               frameon=False, fontsize=7, loc="upper center", bbox_to_anchor=(0.5, 1.16), ncol=2)
     for k, (r, dk) in enumerate(marcas):
         color = VERDE if k == 0 else "#0b6e99"
@@ -120,18 +124,27 @@ def formula_repeticion(run: Path, salida: str) -> None:
     guardar(fig, salida + "_formula_repeticion.png")
 
 
-def formula_campos(run: Path, salida: str) -> None:
+def formula_campos(run: Path | None, salida: str) -> None:
+    """Círculo de 24-EDO de una canción o, sin canción, solo la geometría: los 24 grados con el mismo peso."""
     import matplotlib.pyplot as plt
     import figuras_album as fa
-    alt, tr = fa.reparto(run)
+    if run is None:
+        alt, tr, titulo = np.ones(24), np.zeros((24, 24)), ""
+    else:
+        alt, tr = fa.reparto(run)
+        titulo = fa.nombre(run.name)
     fig, ax = plt.subplots(figsize=(2.8, 2.8), facecolor="white", layout="constrained")
-    fa.dibujar_circulo(ax, alt, tr, fa.nombre(run.name), True)
+    fa.dibujar_circulo(ax, alt, tr, titulo, True)
+    if run is None:                              # esquema: sin rótulo de % y puntos chicos para que se lean los grados
+        ax.set_title("")
+        for c in ax.collections:
+            c.set_sizes([55])
     fig.savefig(salida + "_formula_campos.png", dpi=220, facecolor="white")
     plt.close(fig)
     print(f"→ {salida}_formula_campos.png")
 
 
-# ---------------------------------------------------------------- acierto (diapositiva 16)
+# ---------------------------------------------------------------- acierto (diapositiva 17)
 
 def datos_acierto(corridas: list[Path]) -> list[dict]:
     por = {}
@@ -181,18 +194,22 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("corridas", nargs="+", type=Path)
     ap.add_argument("--salida", default="outputs/presentacion")
-    ap.add_argument("--cancion-js", default="sarniezz")
-    ap.add_argument("--cancion-contraste", default="mata_zyklek", help="segunda canción en el histograma del percentil")
-    ap.add_argument("--cancion-ciclo", default="fabienk")
-    ap.add_argument("--cancion-circulo", default="mata_zyklek")
+    ap.add_argument("--cancion-js", default="my_name_is_mud")
+    ap.add_argument("--cancion-contraste", default="jerry_was", help="segunda canción en el histograma del percentil")
+    ap.add_argument("--cancion-ciclo", default="jerry_was")
+    ap.add_argument("--cancion-circulo", default="", help="vacío: solo la geometría de los dos campos")
     ap.add_argument("--evaluaciones", nargs="*", type=Path, default=[],
                     help="corridas con evaluacion_melodia.json para la gráfica de acierto (por defecto, las mismas corridas)")
     a = ap.parse_args()
     estilo_figuras.preparar()
     fallos = 0
     contraste = corrida_de(a.corridas, a.cancion_contraste)
+    if not a.cancion_circulo:
+        formula_campos(None, a.salida)
     for clave, funcion in ((a.cancion_js, lambda r, s: formulas_estilo(r, s, contraste)), (a.cancion_ciclo, formula_repeticion),
                            (a.cancion_circulo, formula_campos)):
+        if not clave:
+            continue
         run = corrida_de(a.corridas, clave)
         if run is None:
             print(f"no hay corrida de {clave}", file=sys.stderr)

@@ -109,11 +109,14 @@ canciones salen igual que antes.
 | Archivo | Script | Qué muestra |
 |---|---|---|
 | `1a_armonia_matriz_rock_pop` | `verosimilitud_estilos.py --estilos rock,pop` | La matriz de la banda con solo rock y pop, que se lee a media diapositiva. Los percentiles no cambian. |
-| `formula_js` | `figuras_presentacion.py` | Las fundamentales de Sarniezz frente al centro del rock y su distancia de Jensen-Shannon (0.52). |
-| `formula_percentil` | `figuras_presentacion.py` | Las distancias de las piezas del rock a su centro; Mata Zyklek (p = 12, área verde) y Sarniezz (p = 0). |
-| `formula_repeticion` | `figuras_presentacion.py` | R(ℓ) de Fabienk, con el pico en 28 corcheas. |
-| `formula_campos` | `figuras_presentacion.py` | El círculo de 24-EDO de Mata Zyklek. |
+| `formula_js` | `figuras_presentacion.py` | Las fundamentales de «My Name Is Mud» (Primus) frente al centro del rock y su distancia de Jensen-Shannon (0.15). |
+| `formula_percentil` | `figuras_presentacion.py` | Las distancias de las piezas del rock a su centro; «My Name Is Mud» (p = 37.2, área verde) y «Jerry Was a Race Car Driver» (p = 2.2). |
+| `formula_repeticion` | `figuras_presentacion.py` | R(ℓ) de «Jerry Was a Race Car Driver», con el pico en 8 corcheas (un compás de 4/4). |
+| `formula_campos` | `figuras_presentacion.py` | Solo la geometría de los dos campos de quintas (sin datos de ninguna canción). |
 | `acierto_herramienta` | `figuras_presentacion.py` | Melodía, bajo, fundamental y fundamental en compases confiables, por canción. |
+
+Las cuatro gráficas de fórmulas se ilustran con Primus (la comparación propia) y no con la banda: la diapositiva 13 es
+metodología y no debe adelantar los resultados de las diapositivas 18 a 20.
 
 - Las mini-gráficas de las fórmulas no llevan título: lo pone la diapositiva.
 - El percentil del histograma es el de las fundamentales solas; la matriz promedia ese y el de los cambios de
@@ -148,7 +151,7 @@ Zyklek (su percentil).
 
 `web/circulo24/` (página y `circulo24.js`) anima las notas de una corrida sobre las 24 clases de altura, con el audio
 sincronizado. `make presentacion-circulo` exporta a `presentacion/circulo24/` el fragmento de Mata Zyklek de 42 a 72 s
-(entra el riff en la guitarra 3, luego en la guitarra 4 con el bajo), y la sub-diapositiva 18 · 3 lo muestra en un iframe.
+(entra el riff en la guitarra 3, luego en la guitarra 4 con el bajo), y la sub-diapositiva 19 · 3 lo muestra en un iframe.
 
 Elección del fragmento, con `scripts/comparacion/probar_circulo24.py` (cuadro a cuadro, contra la referencia corregida
 de oído de `references/mata_zyklek_loops.py`; `--barrido` recorre la canción en ventanas de 30 s):
@@ -192,6 +195,54 @@ colores de la plantilla, con los mismos cálculos:
 
 `audio_arrays.npz` viene de `todos_los_outputs_sarniezz.zip` del primer cuaderno (no está en el repositorio). El contorno
 se guarda en `outputs/.f0_cuaderno_original.npz` para no recalcularlo.
+
+La figura de la diapositiva 6 (`cuaderno_original_sarniezz.png`) era una captura del primer cuaderno con letra ilegible.
+Ahora la dibuja el mismo script con `--partitura mxl/score.xml` (del mismo zip).
+- Solo queda el piano roll. La segunda mitad, la misma partitura leída como MusicXML, era igual y se quitó.
+- Muestra las primeras 64 negras (`--hasta`), 77 de las 196 notas, para que no queden apretadas; las alturas son las
+  escritas, como las leía el cuaderno.
+- El eje del original decía «pulsos de negra» pero estaba en semicorcheas (`divisions` = 4: llegaba a ~600). El nuevo
+  está en negras (~152).
+- La leyenda de la diapositiva perdió el párrafo «Primera idea del trabajo de grado».
+
+La red por sección del primer cuaderno (diapositivas 6 y 8), según `CMA_Angine_de_Poitrine_corregido.ipynb`:
+
+| Paso | Detalle |
+|---|---|
+| Datos | 28 fragmentos del bajo de Sarniezz (27 de 10 s y uno de 9.1 s), etiquetados a mano en `etiquetas_sarniezz.csv`: verso 7, riff 6, puente 5, clímax 4, intro 3, outro 3 |
+| Rasgos | 13 MFCC por fragmento (librosa, `n_fft` = 2048, `hop_length` = 512); media y desviación de cada uno: 26 números |
+| Modelo | `StandardScaler` + `MLPClassifier(hidden_layer_sizes=(64, 32), max_iter=500, random_state=1234)` |
+| Partición | `train_test_split` estratificado, 25 % de prueba, semilla 1234: 21 de entrenamiento y 7 de prueba |
+| Resultado | 3 de 7 aciertos (43 %) |
+
+Los MFCC resumen la forma del espectro en bandas Mel: describen el timbre, no la nota. Con 21 ejemplos para 6 secciones
+y un timbre del bajo casi igual en toda la canción, no bastan para reconocer la sección. En la diapositiva 6 se glosan
+como «13 coeficientes del espectro que describen el timbre, no la nota».
+
+## 12. El algoritmo completo (diapositiva 15)
+
+La diapositiva 15 junta todo el método antes del repositorio. Las diapositivas siguientes se corrieron un número.
+- **Principal:** el diagrama de bloques del póster (`02_diagrama_bloques.png`), rehecho en HTML con los colores de la
+  plantilla. Tiene tres etapas: señal, núcleo del looper (en amarillo) y estructura y estilo. Cada bloque dice en qué
+  diapositiva se explicó.
+  - Añade dos pasos que el póster no tenía: la atracción al registro de la melodía y la limpieza de notas sueltas.
+  - Añade también el tabroll como salida.
+- **Sub-diapositiva:** el pseudocódigo, de 15 líneas. Sus parámetros vienen del código:
+
+| Paso | Parámetros | Módulo |
+|---|---|---|
+| Separación | `htdemucs_6s`, semilla 0 | `separate_stems.py` |
+| Saliencia | H = 10, α = 0.82, candidatos cada 25 cents | `pitch_salience.py` |
+| Ciclos | autocorrelación, periodos de 1 a 16 s | `find_cycles.py` |
+| Consenso | media de la misma fase en ±3 vueltas (ciclos ≥ 2 s) | `configuracion_064.py` |
+| Registro | w = 0.7 + 0.3·exp(−½((m − r)/12)²), r = mediana del Viterbi de base | `configuracion_064.py` |
+| Viterbi | salto 0.01 por paso de 25 cents | `viterbi_pitch.py` |
+| Notas sueltas | menos de 80 ms y sin repetición a ±1 vuelta | `drop_loose_notes.py` |
+| Compases | programación dinámica, L de 2 a 8 pulsos | `segment_bars.py` |
+| Acorde | 8 calidades en 24-EDO, bajo + 0.6·aguda; κ = p(fundamental)·acuerdo·cobertura | `chord24.py`, `harmony_by_bar.py` |
+| Test | k = 5 vecinos (Jensen-Shannon), umbral 5 %, error medido en Primus | `verosimilitud_por_bloques.py` |
+
+El pie de cada sub-diapositiva puede llevar un nombre propio con `data-sub` (aquí «pseudocódigo»). Sin él, dice «gráfica n».
 
 ## Cómo seguir
 

@@ -152,8 +152,25 @@ table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric
 .arbol .c { color: var(--gris-claro); }
 .arbol .fv { background: var(--amarillo-suave); border-radius: 3px; padding: 0 3px; }
 
-.formula-celda { grid-template-columns: 1fr 1.05fr; gap: 10px; min-height: 0; }
+/* diapositiva 8: más aire entre las viñetas */
+.lista-aireada li { margin-bottom: 9px; }
+.lista-aireada li:last-child { margin-bottom: 0; }
+/* diapositiva 7: más aire entre fórmulas y entre cada fórmula y su explicación */
+.formulas-aireadas { gap: 10px; height: 100%; justify-content: space-between; }
+.formulas-aireadas + .pila .regla24 svg { width: 100%; height: auto; }
+.formulas-aireadas .formula .katex { font-size: 0.97em; }
+.par-formula { display: flex; flex-direction: column; gap: 9px; }
+.par-formula .produce { line-height: 1.4; }
+.formula-celda { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 10px; min-height: 0; }
+.formula-celda .formula { white-space: nowrap; }   /* KaTeX parte en los signos; aquí cada fórmula va en una línea */
 
+/* más aire entre párrafos, viñetas y tarjetas (diapositivas 2 a 5) */
+.pila.aireada { gap: 22px; }
+.aireada .tarjeta { padding: 12px 15px; }
+.aireada .tarjeta h3 { margin-bottom: 7px; }
+.aireada .tarjeta p { line-height: 1.45; }
+.aireada .lista li { margin-bottom: 13px; }
+.aireada .lista li:last-child { margin-bottom: 0; }
 .compacta .tarjeta { padding: 6px 11px; }
 .compacta .tarjeta h3 { font-size: 14px; margin-bottom: 2px; }
 .compacta .tarjeta p { font-size: 13px; line-height: 1.3; }
@@ -184,6 +201,30 @@ iframe.circulo-vivo { border: 1px solid var(--linea); border-radius: 4px; backgr
 .video-enlace img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .85; }
 .video-enlace span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--verde, #06784f); color: #fff; font-weight: 700; font-size: 18px; padding: 10px 18px; border-radius: 6px; white-space: nowrap; }
 
+/* el algoritmo completo: tres etapas con su diapositiva de origen */
+.algoritmo { display: flex; flex-direction: column; gap: 0; }
+.algoritmo .rotulo { display: block; font: 700 11.5px/1 "Ancizar Sans", sans-serif; letter-spacing: 1.4px; text-transform: uppercase; color: var(--verde); margin: 0 0 4px 2px; }
+.algoritmo .flujo .paso { position: relative; padding-bottom: 13px; }
+.algoritmo .nucleo .paso { background: var(--amarillo-suave); box-shadow: inset 0 0 0 1.5px var(--amarillo); }
+.algoritmo .nucleo .rotulo { color: #9a6200; }
+.algoritmo .baja { text-align: center; color: var(--verde-claro); font-size: 15px; line-height: 1; margin: 3px 0 2px; }
+.algoritmo .ref { position: absolute; right: 5px; bottom: 3px; font: 700 9.5px/1 "Ancizar Sans", sans-serif; color: var(--gris-claro); }
+.algoritmo .leyenda-algoritmo { margin: 12px 0 0; text-align: center; }
+.algoritmo .ref::before { content: "diap. "; font-weight: 400; }
+
+/* pseudocódigo: número, instrucción y comentario por línea */
+.pseudo { margin: 0; padding: 8px 14px; list-style: none; counter-reset: linea; background: #f7f7f4; border: 1px solid var(--linea); border-radius: 5px; font-size: 13px; line-height: 1.25; }
+.pseudo li { counter-increment: linea; display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; column-gap: 8px; align-items: baseline; padding: 1.5px 0; }
+.pseudo li::before { content: counter(linea); color: var(--gris-claro); font-size: 11px; text-align: right; }
+.pseudo li.cab { counter-increment: none; }
+.pseudo li.cab::before { content: ""; }
+.pseudo .i1 > span:first-child { padding-left: 18px; }
+.pseudo .cab { grid-template-columns: 22px minmax(0, 1fr); margin-bottom: 3px; }
+.pseudo .c { color: var(--gris); font-size: 11.5px; text-align: right; white-space: nowrap; }
+.pseudo .c::before { content: "▷ "; color: var(--verde-claro); }
+.pseudo .kw { font-weight: 700; color: var(--verde); }
+.pseudo .katex { font-size: 1em; }
+
 /* diapositiva de gráfica a pantalla completa (sub-diapositivas) */
 .grafica-completa { left: 40px; top: 118px; width: 880px; height: 318px; }
 .grafica-completa + .leyenda-grafica { position: absolute; left: 60px; top: 440px; width: 840px; }
@@ -197,7 +238,7 @@ iframe.circulo-vivo { border: 1px solid var(--linea); border-radius: 4px; backgr
 
 /* ---------- navegación en el centro del pie de cada diapositiva ---------- */
 .reveal .slides section .nav-pie {
-  left: 300px; top: 497px; width: 360px; height: 28px;
+  left: 250px; top: 497px; width: 460px; height: 28px; white-space: nowrap;
   display: flex; align-items: center; justify-content: center; gap: 14px;
   font: 600 13px/1 "Segoe UI", system-ui, -apple-system, sans-serif; letter-spacing: .05em; text-transform: uppercase;
   color: #fff; user-select: none; z-index: 5;

@@ -11,6 +11,12 @@ Sarniezz a 22 050 Hz. Los cálculos son los mismos del cuaderno:
   de prueba se copian de la salida del cuaderno corregido (classification_report y ConfusionMatrixDisplay), porque
   volver a entrenar la red con otra versión de scikit-learn podría dar otra partición.
 El contorno de pYIN se guarda en outputs/.f0_cuaderno_original.npz para no recalcularlo (tarda un par de minutos).
+
+Con --partitura <score.xml> dibuja también la figura de la diapositiva 6 (cuaderno_original_sarniezz.png): el piano roll
+de la partitura de MuseScore de Sarniezz que leyó el primer cuaderno (mxl/score.xml de sus salidas), con letra grande y
+solo las primeras --hasta negras (64 por defecto), para que las notas no queden apretadas.
+Es la mitad de arriba de la figura del cuaderno; la de abajo (la misma partitura leída como MusicXML) era igual y se
+quitó. Las alturas son las escritas (el bajo suena una octava abajo), como las leía el cuaderno.
 """
 from __future__ import annotations
 
@@ -43,6 +49,53 @@ def contorno(arrays: Path, cache: Path) -> tuple[np.ndarray, np.ndarray, np.ndar
     return t, f0, sonoro
 
 
+def notas_partitura(xml: Path) -> list[tuple[float, float, int]]:
+    """(inicio, duración, altura MIDI escrita) de cada nota, en negras, desde un MusicXML de una sola parte."""
+    import xml.etree.ElementTree as ET
+    semitono = {"C": 0, "D": 2, "E": 4, "F": 5, "G": 7, "A": 9, "B": 11}
+    divisiones, t, notas = 1, 0.0, []
+    for compas in ET.parse(xml).getroot().find("part").iter("measure"):
+        inicio_acorde = t
+        for e in compas:
+            if e.tag == "attributes" and e.find("divisions") is not None:
+                divisiones = int(e.find("divisions").text)
+            elif e.tag in ("backup", "forward"):
+                t += (-1 if e.tag == "backup" else 1) * int(e.find("duration").text) / divisiones
+            elif e.tag == "note" and e.find("grace") is None:
+                d = int(e.find("duration").text) / divisiones
+                if e.find("chord") is not None:
+                    t = inicio_acorde
+                inicio_acorde = t
+                alt = e.find("pitch")
+                if alt is not None:
+                    m = 12 * (int(alt.find("octave").text) + 1) + semitono[alt.find("step").text]
+                    m += int(float(alt.find("alter").text)) if alt.find("alter") is not None else 0
+                    notas.append((t, d, m))
+                t += d
+    return notas
+
+
+def figura_partitura(xml: Path, salida: Path, plt, hasta: float = 64.0) -> int:
+    """Piano roll de las primeras `hasta` negras (zoom en el tiempo para que las notas no queden apretadas)."""
+    notas = [n for n in notas_partitura(xml) if n[0] < hasta]
+    fig, ax = plt.subplots(figsize=(6.0, 4.4), layout="constrained", facecolor="white")
+    ejes(ax)
+    alturas = np.array([m for _, _, m in notas])
+    colores = plt.get_cmap("viridis")((alturas - alturas.min()) / max(np.ptp(alturas), 1) * 0.85)
+    ax.barh(alturas, [d for _, d, _ in notas], left=[t for t, _, _ in notas], height=0.8, color=colores, lw=0)
+    nombres = ["Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si"]
+    marcas = [m for m in range(alturas.min(), alturas.max() + 1) if m % 12 in (4, 9)]      # Mi y La
+    ax.set_yticks(marcas, [f"{nombres[m % 12]}{m // 12 - 1}" for m in marcas])
+    ax.set_xlim(0, hasta)
+    ax.set_xticks(np.arange(0, hasta + 1, 8))
+    ax.set_xlabel("tiempo (negras)", fontsize=16, color=GRIS, labelpad=12)
+    ax.set_ylabel("altura (MIDI)", fontsize=16, color=GRIS, labelpad=14)
+    ax.tick_params(labelsize=15)
+    fig.savefig(salida / "cuaderno_original_sarniezz.png", dpi=200)
+    plt.close(fig)
+    return len(notas)
+
+
 def ejes(ax) -> None:
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
@@ -62,8 +115,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("arrays", type=Path)
     ap.add_argument("--salida", type=Path, default=Path("presentacion/img"))
+    ap.add_argument("--partitura", type=Path, help="mxl/score.xml del primer cuaderno: figura de la diapositiva 6")
+    ap.add_argument("--hasta", type=float, default=64.0, help="negras que muestra el piano roll de la partitura")
     a = ap.parse_args()
     a.salida.mkdir(parents=True, exist_ok=True)
+    if a.partitura:
+        print(f"partitura: {figura_partitura(a.partitura, a.salida, plt, a.hasta)} notas → {a.salida / 'cuaderno_original_sarniezz.png'}")
     t, f0, sonoro = contorno(a.arrays, Path("outputs") / ".f0_cuaderno_original.npz")
     ok = sonoro & np.isfinite(f0) & (f0 > 0)
 
