@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa presentacion presentacion-imagenes graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa presentacion presentacion-imagenes presentacion-circulo presentacion-video graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -23,6 +23,8 @@ help:
 		'make defensa        PDF con los puntos para la defensa (docs/defensa) y copia en ~/Downloads' \
 		'make presentacion   Servir la presentación (presentacion/index.html) en http://localhost:8000' \
 		'make presentacion-imagenes Copiar a presentacion/img/ las gráficas y el tabroll más recientes' \
+		'make presentacion-video    Descargar el fragmento del video de KEXP (0:32-2:32) a presentacion/video' \
+		'make presentacion-circulo  Exportar el círculo de 24-EDO interactivo (Mata Zyklek, 0:42-1:12) a presentacion/circulo24' \
 		'make graficas-actuales Reunir gráficas básicas usando las corridas existentes más recientes' \
 		'make graficas-primus Correr las cinco y comparar también con las corridas de Primus' \
 		'make roformer-entorno Crear .venv-rof (conda-forge) con audio-separator para BS-RoFormer SW' \
@@ -87,6 +89,27 @@ presentacion:
 
 presentacion-imagenes:
 	$(VENV_PYTHON) scripts/presentacion_imagenes.py
+
+# El círculo de 24-EDO interactivo de la diapositiva 18: el fragmento de 30 s con más cuartos de tono del álbum.
+CIRCULO_CANCION ?= mata_zyklek
+CIRCULO_DESDE ?= 42
+CIRCULO_HASTA ?= 72
+presentacion-circulo:
+	@run=$$(ls -d outputs/*_$(CIRCULO_CANCION)_*/line_diagnostics.json 2>/dev/null | grep -v roformer | tail -1 | xargs dirname); \
+	test -n "$$run" || { echo 'No hay una corrida de $(CIRCULO_CANCION) con line_diagnostics.json.' >&2; exit 1; }; \
+	audio=$$(ls "$$run"/*.mp3 | grep -v -e _guitar -e _bass -e _drums | head -1); \
+	$(VENV_PYTHON) scripts/comparacion/exportar_circulo24.py "$$run" --audio "$$audio" --desde $(CIRCULO_DESDE) \
+		--hasta $(CIRCULO_HASTA) --recortar --titulo "Mata Zyklek" --salida presentacion/circulo24
+
+VIDEO_ID ?= 0Ssi-9wS1so
+VIDEO_DESDE ?= 32
+VIDEO_HASTA ?= 152
+presentacion-video:
+	$(VENV_PYTHON) -m pip install -q yt-dlp
+	mkdir -p presentacion/video
+	$(VENV_PYTHON) -m yt_dlp --download-sections "*$(VIDEO_DESDE)-$(VIDEO_HASTA)" --force-keyframes-at-cuts \
+		-f "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=mp4]/b" --merge-output-format mp4 \
+		-o presentacion/video/kexp_fragmento.mp4 --force-overwrites "https://www.youtube.com/watch?v=$(VIDEO_ID)"
 
 DEFENSA_TMP := .tmp_defensa
 DESCARGAS ?= $(HOME)/Downloads

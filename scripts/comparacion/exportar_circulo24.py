@@ -3,7 +3,7 @@
 Uso:
     python scripts/comparacion/exportar_circulo24.py outputs/<corrida> --desde 30 --hasta 60
         [--audio <mezcla.mp3|wav>] [--guitar <guitarra.mp3|wav>] [--bass <bajo.mp3|wav>]
-        [--drums <bateria.mp3|wav>] [--titulo "Fabienk"]
+        [--drums <bateria.mp3|wav>] [--titulo "Fabienk"] [--recortar] [--salida carpeta]
 
 Lee line_diagnostics.json (notas de la voz aguda y del bajo: inicio, fin y altura) y armonia.json (tónica estimada).
 Escribe en outputs/<corrida>/circulo24/ (o en --salida): index.html, circulo24.js, datos.js y copias de las pistas.
@@ -11,7 +11,10 @@ Si se pasa la mezcla, busca automáticamente sus vecinos con los sufijos `_guita
 La página permite escuchar guitarra, bajo, ambos o ambos con batería por separado.
 
 Con --audio la animación sigue al audio, que debe ser la grabación con la que se hizo la corrida (los tiempos son los
-del cuaderno). Sin audio, la animación va con su propio reloj.
+del cuaderno). Sin audio, la animación va con su propio reloj. Con --recortar, cada pista se corta al fragmento con
+ffmpeg (la página pesa unos cientos de KB en vez de varios MB) y datos.js lleva audio_inicio = 0.
+
+La página se puede abrir con ?disposicion=quintas para empezar con los dos campos de quintas (como la gráfica 2b).
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ import argparse
 import json
 import re
 import shutil
+import subprocess
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[2]
@@ -66,6 +70,7 @@ def main() -> None:
     ap.add_argument("--drums", type=Path, help="pista de batería; si falta, se busca junto a --audio")
     ap.add_argument("--titulo")
     ap.add_argument("--salida", type=Path, help="carpeta de salida (por defecto <corrida>/circulo24)")
+    ap.add_argument("--recortar", action="store_true", help="cortar cada pista al fragmento (necesita ffmpeg)")
     a = ap.parse_args()
 
     J = json.loads((a.corrida / "line_diagnostics.json").read_text(encoding="utf-8"))
@@ -91,11 +96,17 @@ def main() -> None:
             continue
         if not origen.exists():
             raise SystemExit(f"no existe la pista {nombre_pista}: {origen}")
-        destino = f"{nombre_pista}{origen.suffix.lower()}"
-        shutil.copyfile(origen, salida / destino)
+        if a.recortar:
+            destino = f"{nombre_pista}.mp3"
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(origen), "-ss", f"{a.desde:.3f}", "-t", f"{hasta - a.desde:.3f}",
+                            "-ac", "2", "-b:a", "160k", str(salida / destino)], check=True)
+        else:
+            destino = f"{nombre_pista}{origen.suffix.lower()}"
+            shutil.copyfile(origen, salida / destino)
         audios[nombre_pista] = destino
 
     datos = dict(titulo=a.titulo or nombre(a.corrida.name), corrida=a.corrida.name, desde=a.desde, hasta=hasta,
+                 audio_inicio=0.0 if a.recortar else a.desde,
                  tonica_pc24=H.get("tonica_pc24"), tempo_bpm=J.get("tempo_bpm"),
                  audio=audios.get("mezcla"), audios=audios,
                  voces=dict(aguda=notas(J.get("raw_high"), a.desde, hasta), grave=notas(J.get("raw_bass"), a.desde, hasta)))

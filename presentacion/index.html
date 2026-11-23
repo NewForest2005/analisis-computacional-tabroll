@@ -226,8 +226,7 @@
   <span class="numero"></span>
   <h2>El primer algoritmo y sus resultados</h2>
   <p class="subtitulo">Metodología · por qué no bastó</p>
-  <div class="area">
-    <div class="cols" style="grid-template-columns: 0.92fr 1.08fr">
+  <div class="area" style="width:375px">
       <div class="pila" style="gap:8px">
         <div class="flujo flujo-compacto">
           <div class="paso"><b>Bajo</b>Sarniezz, 279 s</div><div class="flecha">→</div>
@@ -242,15 +241,15 @@
         </ul>
         <p class="idea" style="font-size:15.5px">Conclusión: había que pasar de describir la señal a <b>transcribir</b> notas, compases y acordes.</p>
       </div>
-      <div class="pila" style="gap:4px">
-        <div class="fig" style="height:150px"><img src="img/original_pyin.png" alt="Contorno pYIN del bajo de Sarniezz"></div>
-        <div class="cols" style="grid-template-columns: 1.45fr 1fr; gap:8px; height:150px">
-          <div class="fig"><img src="img/original_cents.png" alt="Desviación en cents"></div>
-          <div class="fig"><img src="img/original_secciones_mlp.png" alt="Matriz de confusión de la red"></div>
-        </div>
-        <p class="leyenda">Primer cuaderno: contorno pYIN del bajo (arriba), desviación en cents y matriz de confusión de la red por sección.</p>
-      </div>
-    </div>
+  </div>
+  <figure class="fig" style="left:522px; top:60px; width:393px; height:212px">
+    <img src="img/original_pyin.png" alt="Contorno pYIN del bajo de Sarniezz">
+    <figcaption>Contorno pYIN del bajo de Sarniezz: una sola frecuencia por instante.</figcaption></figure>
+  <div class="cols" style="left:440px; top:286px; width:475px; height:188px; grid-template-columns: 1.7fr 1fr; gap:16px">
+    <figure class="fig" style="margin:0"><img src="img/original_cents.png" alt="Desviación en cents">
+      <figcaption>Desviación respecto del semitono: siempre entre −50 y +50 cents.</figcaption></figure>
+    <figure class="fig" style="margin:0"><img src="img/original_secciones_mlp.png" alt="Matriz de confusión de la red">
+      <figcaption>Red por sección: 3 de 7 aciertos (diagonal).</figcaption></figure>
   </div>
   <p class="pie" data-campo="pie"></p>
   <aside class="notes">Tres meses de la primera idea del trabajo de grado. La red: StandardScaler + MLP (64, 32) sobre media y desviación de 13 MFCC por fragmento de 10 s; 21 de entrenamiento y 7 de prueba.</aside>
@@ -551,6 +550,10 @@
     <div class="grafica-completa fig"><img src="img/2b_melodia_circulo_24edo.png" alt=""></div>
     <p class="leyenda-grafica">La quinta de 24-EDO mide 14 pasos y mcd(14, 24) = 2: el ciclo se parte en dos campos, los grados regulares (anillo exterior, amarillo) y los de cuarto de tono (interior, azul); cada grado «+» queda junto a su vecino regular. El área del punto es el tiempo melódico; las líneas, los pasos melódicos más frecuentes. El panel grande resume el álbum.</p>
     <p class="pie" data-campo="pie"></p></section>
+  <section class="contenido"><span class="numero"></span><h2>Melodía · el círculo de 24-EDO en movimiento</h2><p class="subtitulo">Resultados · Mata Zyklek, 0:42 – 1:12</p>
+    <iframe class="grafica-completa circulo-vivo" src="circulo24/index.html?disposicion=quintas" title="Círculo de 24-EDO interactivo de Mata Zyklek"></iframe>
+    <p class="leyenda-grafica">Notas del cuaderno sincronizadas con el audio; en «quintas», los dos campos de la 2b. Con tónica Sol, las voces giran sobre Sol y Sol#+ (♭2+), el cuarto de tono del riff. Frente a la partitura corregida de oído: mismo grado el <b>87 %</b> del tiempo en la voz aguda y el <b>94 %</b> en la grave; si falla, lee Sol#+ como Sol.</p>
+    <p class="pie" data-campo="pie"></p></section>
 </section>
 
 <!-- 19 · Síntesis -->
@@ -661,7 +664,8 @@
           <li>Entrevistas y podcast de la banda.</li>
         </ul>
       </div>
-      <div class="centrar"><div class="pendiente" style="width:240px; height:240px">Código QR</div></div>
+      <figure class="fig sin-borde" style="margin:0"><img src="img/qr_referencias.png" alt="Código QR de las referencias" style="width:250px; height:250px">
+        <figcaption>Escanea para ver todas las referencias.</figcaption></figure>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
@@ -676,16 +680,10 @@
 </div>
 </div>
 
-<nav class="navegacion" aria-label="Cambiar diapositiva">
-  <button type="button" id="anterior" aria-label="Diapositiva anterior"><svg viewBox="0 0 14 20"><path d="M14 0v20L0 10z"/></svg></button>
-  <span class="contador" id="contador" aria-live="polite"></span>
-  <button type="button" id="siguiente" aria-label="Diapositiva siguiente"><svg viewBox="0 0 14 20"><path d="M0 0v20l14-10z"/></svg></button>
-</nav>
-
 <script>
   /* Datos que se repiten en todas las diapositivas: cambiarlos solo aquí. */
   const DATOS = {
-    autor: "[Nombre del autor]",
+    autor: "Santiago Forero Rosales",
     facultad: "Facultad de Ciencias – Departamento de Matemáticas – Sede Bogotá",
     pie: "Facultad de Ciencias<br>Sede Bogotá",
   };
@@ -701,11 +699,29 @@
   // Fórmulas
   renderMathInElement(document.body, { delimiters: [{ left: "\\(", right: "\\)", display: false }], throwOnError: false });
 
-  // Video: fragmento de YouTube (necesita conexión; si no hay, queda el enlace)
-  document.querySelectorAll(".video[data-video]").forEach(v => {
+  // Video. Primero el fragmento local (presentacion/video/kexp_fragmento.mp4, `make presentacion-video`): se reproduce en
+  // la diapositiva aunque se abra como archivo y sin conexión. Si no existe, YouTube: exige saber desde qué página se
+  // incrusta (encabezado Referer) y abierta como archivo (file://) da «Error 153», así que ahí va la miniatura con enlace.
+  function videoYouTube(v) {
     const { video, inicio, fin } = v.dataset;
-    v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${video}?start=${inicio}&end=${fin}&rel=0&modestbranding=1"
-      title="Angine de Poitrine en KEXP" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+    if (location.protocol === "file:") {
+      v.innerHTML = `<a class="video-enlace" href="https://www.youtube.com/watch?v=${video}&t=${inicio}s" target="_blank" rel="noopener">
+        <img src="https://i.ytimg.com/vi/${video}/hqdefault.jpg" alt="Angine de Poitrine en KEXP">
+        <span>▶ Ver el fragmento en YouTube</span></a>`;
+      return;
+    }
+    const origen = encodeURIComponent(location.origin);
+    v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${video}?start=${inicio}&end=${fin}&rel=0&playsinline=1&origin=${origen}"
+      title="Angine de Poitrine en KEXP" referrerpolicy="strict-origin-when-cross-origin"
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  }
+  document.querySelectorAll(".video[data-video]").forEach(v => {
+    const local = document.createElement("video");
+    Object.assign(local, { controls: true, preload: "metadata", playsInline: true });
+    local.className = "video-local";
+    local.addEventListener("error", () => videoYouTube(v), { once: true });
+    local.src = (v.dataset.local || "video/kexp_fragmento.mp4") + "#t=0.5";   // #t: muestra un cuadro, no negro
+    v.replaceChildren(local);
   });
 
   // Una octava de 24-EDO: amarillo = grado regular, azul = cuarto de tono (los colores de la gráfica 2b)
@@ -741,7 +757,7 @@
   })();
 
   Reveal.initialize({
-    width: 960, height: 540, margin: 0.04,
+    width: 960, height: 540, margin: 0.03,
     center: false, controls: false, progress: false, slideNumber: false,
     hash: true, transition: "fade", transitionSpeed: "fast", backgroundTransition: "none",
     plugins: [RevealNotes],
@@ -751,17 +767,30 @@
     principales.forEach((s, i) => s.querySelectorAll(".numero").forEach(n => n.textContent = i + 1));
     const total = principales.length;
 
-    const anterior = document.getElementById("anterior"), siguiente = document.getElementById("siguiente"), contador = document.getElementById("contador");
-    const actualizar = () => {
-      const { h, v } = Reveal.getIndices();
-      contador.textContent = `Diapositiva ${h + 1} de ${total}` + (v ? ` · gráfica ${v}` : "");
-      anterior.disabled = Reveal.isFirstSlide();
-      siguiente.disabled = Reveal.isLastSlide();
-    };
-    anterior.addEventListener("click", () => { Reveal.prev(); anterior.blur(); });
-    siguiente.addEventListener("click", () => { Reveal.next(); siguiente.blur(); });
-    Reveal.on("slidechanged", actualizar);
-    actualizar();
+    // Navegación en el centro del pie de cada diapositiva: ◀ DIAPOSITIVA n DE N ▶
+    const flecha = d => `<svg viewBox="0 0 14 20"><path d="${d}"/></svg>`;
+    principales.forEach((p, h) => {
+      const hojas = p.querySelector(":scope > section") ? [...p.querySelectorAll(":scope > section")] : [p];
+      hojas.forEach((s, v) => {
+        const primera = h === 0 && v === 0, ultima = h === total - 1 && v === hojas.length - 1;
+        const nav = document.createElement("nav");
+        nav.className = "nav-pie";
+        nav.setAttribute("aria-label", "Cambiar diapositiva");
+        nav.innerHTML = `<button type="button" data-ir="anterior" aria-label="Diapositiva anterior" ${primera ? "disabled" : ""}>${flecha("M14 0v20L0 10z")}</button>
+          <span>Diapositiva ${h + 1} de ${total}${v ? ` · gráfica ${v}` : ""}</span>
+          <button type="button" data-ir="siguiente" aria-label="Diapositiva siguiente" ${ultima ? "disabled" : ""}>${flecha("M0 0v20l14-10z")}</button>`;
+        s.appendChild(nav);
+      });
+    });
+    // Al salir de una diapositiva, el círculo interactivo deja de sonar
+    Reveal.on("slidechanged", () => document.querySelectorAll("iframe.circulo-vivo").forEach(f => f.contentWindow?.postMessage("circulo24:pausar", "*")));
+    Reveal.on("slidechanged", () => document.querySelectorAll("video.video-local").forEach(v => v.pause()));
+    document.querySelector(".reveal").addEventListener("click", e => {
+      const b = e.target.closest(".nav-pie button");
+      if (!b) return;
+      b.dataset.ir === "anterior" ? Reveal.prev() : Reveal.next();
+      b.blur();
+    });
   });
 </script>
 </body>

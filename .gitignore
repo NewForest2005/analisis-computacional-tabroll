@@ -34,3 +34,4 @@ __MACOSX/
 # Separación con BS-RoFormer SW (entorno aparte y pistas generadas)
 .venv-rof/
 pistas_roformer/
+*.mp4

@@ -144,6 +144,55 @@ el gráfico se vea más grande. Con `--diapositiva`:
 La mini-gráfica del percentil lleva leyenda: gris, las piezas del rock; verde claro, las que quedan más lejos que Mata
 Zyklek (su percentil).
 
+## 10. Círculo de 24-EDO interactivo en la presentación
+
+`web/circulo24/` (página y `circulo24.js`) anima las notas de una corrida sobre las 24 clases de altura, con el audio
+sincronizado. `make presentacion-circulo` exporta a `presentacion/circulo24/` el fragmento de Mata Zyklek de 42 a 72 s
+(entra el riff en la guitarra 3, luego en la guitarra 4 con el bajo), y la sub-diapositiva 18 · 3 lo muestra en un iframe.
+
+Elección del fragmento, con `scripts/comparacion/probar_circulo24.py` (cuadro a cuadro, contra la referencia corregida
+de oído de `references/mata_zyklek_loops.py`; `--barrido` recorre la canción en ventanas de 30 s):
+
+| Fragmento | Voz aguda: mismo grado | Voz grave: mismo grado | Cuartos de tono (referencia · círculo) |
+|---|---:|---:|---|
+| 162–192 s (el anterior) | 69.0 % | 86.8 % | 25 % · 38 % |
+| 42–72 s (el actual) | 86.9 % | 94.4 % | 23 % · 17 % |
+
+- El anterior se había elegido por tener más cuartos de tono, pero la mitad de ellos eran errores: es la melodía 1,
+  donde el cuaderno da el Fa un cuarto de tono abajo (Mi+) y el Ré un cuarto de tono arriba (Ré+). El arbitraje a
+  ciegas de oído ya había decidido que esas notas son Fa y Ré, como en la partitura. Además, en el corte (165–191 s) el
+  bajo 1 suelto quedó fuera de la referencia por dudoso, y el círculo pintaba ahí 8.5 s de Ré grave sin poder comprobarlo.
+- En el actual los cuartos de tono son reales (Sol#+, el ♭2+ del riff). Cuando falla, el círculo se queda corto: lee
+  Sol#+ como Sol, no inventa cuartos de tono.
+- Sincronía: la altura medida con pYIN en las pistas recortadas coincide con el círculo en el 80 % de los cuadros sin
+  desfase y baja con ±50 ms, así que el audio y las notas van alineados.
+
+- Estilo: fuentes y colores de la plantilla; amarillo = grado regular y azul = cuarto de tono, como en la gráfica 2b;
+  voz aguda en rojo y grave en verde (antes azul, que se confundía con el cuarto de tono).
+- Disposición nueva «quintas (dos campos)», además de la cromática: el anillo exterior es el ciclo de quintas de los
+  grados regulares y el interior el de los cuartos de tono, como en la 2b. Se elige en la página o con
+  `?disposicion=quintas`; la diapositiva empieza así.
+- Dentro de la presentación: tema claro, solo la clave de colores (la explicación va en la leyenda de la diapositiva),
+  pausa al cambiar de diapositiva y las flechas del teclado siguen pasando diapositivas.
+- `exportar_circulo24.py --recortar` corta cada pista al fragmento con ffmpeg (unos 600 KB por pista) y escribe
+  `audio_inicio = 0` en `datos.js`.
+- Errores corregidos: sin audio, el reloj propio nunca avanzaba (`!usarAudio` en vez de `!usarAudio()`); la barra
+  espaciadora con un botón enfocado se activaba dos veces; al cambiar de pista mientras sonaba quedaba en «Pausa» sin
+  sonido; guitarra y bajo juntos se desfasaban (ahora se realinean si se separan más de 60 ms); el anillo interior y
+  las huellas en cero se veían porque la opacidad del CSS pisaba el atributo SVG.
+
+## 11. Figuras del primer cuaderno (diapositiva 8)
+
+Las imágenes que guardó el primer cuaderno tenían letra demasiado pequeña para la diapositiva.
+`scripts/comparacion/figuras_cuaderno_original.py <audio_arrays.npz>` las vuelve a dibujar con letra de 12-13 pt y los
+colores de la plantilla, con los mismos cálculos:
+- el contorno pYIN del bajo de Sarniezz (fmin Do2, fmax Do7, ventana de 2048);
+- la desviación en cents respecto del semitono más cercano (sale entre −50 y +50, como en el cuaderno);
+- la matriz de confusión de la red por sección, copiada de la salida del cuaderno (3 de 7 aciertos).
+
+`audio_arrays.npz` viene de `todos_los_outputs_sarniezz.zip` del primer cuaderno (no está en el repositorio). El contorno
+se guarda en `outputs/.f0_cuaderno_original.npz` para no recalcularlo.
+
 ## Cómo seguir
 
 Para pasar otra gráfica al mismo esquema:

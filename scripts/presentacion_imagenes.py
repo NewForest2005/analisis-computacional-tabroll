@@ -7,7 +7,8 @@ Uso:
   (la crea `make graficas-diapositivas`).
 - Los tabroll de ejemplo son páginas de Sarniezz y Fabienk de la corrida más reciente con Demucs (sin «_roformer»).
 Las imágenes que no salen de este repositorio se ponen a mano en presentacion/img/: la captura de Hooktheory
-(hooktheory_fabienk.png) y las figuras del primer cuaderno (original_*.png, cuaderno_original_sarniezz.png).
+(hooktheory_fabienk.png) y las figuras del primer cuaderno: cuaderno_original_sarniezz.png se copió de sus salidas y
+original_*.png las dibuja scripts/comparacion/figuras_cuaderno_original.py con su audio_arrays.npz.
 """
 from __future__ import annotations
 
