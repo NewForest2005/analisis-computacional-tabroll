@@ -18,6 +18,26 @@ bloques y después de forma conjunta:
 La hipótesis más interesante es que la banda puede ser típica en cada dimensión de un corpus distinto, pero atípica en
 la combinación de las tres: una recombinación nueva de lenguajes existentes.
 
+## Corpus usados en la comparación final
+
+Este documento reúne corpus abiertos recomendados; **no todos entraron en la comparación**. Los que se usaron en el test
+de verosimilitud por bloques (todas las corridas desde el 17-nov-2026, por ejemplo
+`outputs/graficas_completas_2026-11-18_1208/bloques.json`) y en la matriz de armonía son estos seis:
+
+| Estilo | Corpus | Familia | Bloques que aporta | Piezas |
+|---|---|---|---|---:|
+| Rock | Rolling Stone 200 (de Clercq y Temperley, 2011) | rock/pop | armonía, escala, metro | 200 canciones, 400 análisis (dos analistas) |
+| Práctica común | Kostka-Payne (Temperley, 2009) | clásica | armonía | 46 |
+| Jazz | iRealPro (Shanahan y Broze, 2017) | jazz | armonía, metro | 1 186 |
+| Pop | 9 álbumes de Hooktheory | rock/pop | armonía | 121 temas (91 en los bloques) |
+| Persa | Radif Corpus (Kanani et al., 2025) | microtonal | escala, cuartos de tono | 229 |
+| Indostánica | Hindustani Classical Music Transcription Dataset (Singh et al., 2022) | microtonal | escala, cuartos de tono | 50 |
+
+**Descargados pero no usados:** SymbTr (makam turco) y The Session (folk irlandés). Se convirtieron a bloques el
+15-nov-2026 y se retiraron ese mismo día (commit `0923b84`); ninguna corrida posterior los usa. Sus datos crudos quedan en
+`references/corpus/raw/` (fuera de git) y `scripts/comparacion/corpus_bloques.py --symbtr / --session` los puede volver
+a convertir. **Sin corpus simbólico abierto:** maqam árabe.
+
 ## Hallazgos provisionales
 
 La armonía I–♭III–♭VII, los acordes de potencia y los acordes suspendidos son compatibles con el rock y el metal. Los
@@ -41,13 +61,13 @@ precisión de la melodía medida hasta ahora está aproximadamente entre 45 y 66
 
 ### Tradiciones microtonales y modales
 
-**SymbTr** es la referencia simbólica principal para makam turco. Contiene aproximadamente 2200 piezas, 155 makams,
+**SymbTr** es la referencia simbólica principal para makam turco (descargado, pero no usado en la comparación final). Contiene aproximadamente 2200 piezas, 155 makams,
 88 usuls y unas 865 000 notas, con alturas en comas de Holder (53 divisiones). El usul aporta información métrica,
 incluidos ciclos irregulares. Debe compararse en bins de 53 y, solo como aproximación, reducirse a 24 o 12 clases.
 
 **Radif Corpus / ShourCorpus** ofrece repertorio persa con koron y sori codificados mediante pitch bend. Es especialmente
 útil para la comparación 24-EDO, aunque la práctica instrumental persa no se reduce completamente a 24 divisiones.
-El corpus principal contiene 228 piezas y 43 441 notas, según sus autores.
+El corpus principal contiene 228 piezas y 43 441 notas, según sus autores; la conversión del proyecto da 229 (la usada en la comparación).
 
 Para música árabe no se localizó un corpus simbólico abierto equivalente. El corpus arabo-andaluz de CompMusic es el
 sustituto más cercano: combina partituras MusicXML, metadatos y distribuciones de altura extraídas de audio.
@@ -75,7 +95,7 @@ tonalidad.
 El **DCML Distant Listening Corpus** y *When in Rome* ofrecen análisis RomanText/TSV de música clásica, incluyendo
 Debussy y Bartók. Son adecuados para contrastar armonía modal, cromatismo y metro, pero no son corpus microtonales.
 
-**The Session** y **Essen** permiten comparar repertorio modal, pentatónico y metros irregulares de tradición folk.
+**The Session** y **Essen** permiten comparar repertorio modal, pentatónico y metros irregulares de tradición folk. The Session está descargado, pero no se usó en la comparación final; Essen no se descargó.
 
 ## Método de comparación
 

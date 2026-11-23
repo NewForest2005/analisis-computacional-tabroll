@@ -87,10 +87,14 @@ def guardar(fig, ruta: str) -> None:
 # ---------------------------------------------------------------- (a) clasificación por corpus
 def fig_clasificacion(bloques: dict, salida: str, textos: bool = True) -> None:
     guardar(figura_clasificacion(bloques, textos), salida + "_a_clasificacion.png")
+    if not textos:                                   # diapositiva: además, cada mitad por separado, para que se lean
+        guardar(figura_clasificacion(bloques, textos, parte="mapa"), salida + "_a_clasificacion_mapa.png")
+        guardar(figura_clasificacion(bloques, textos, parte="barras"), salida + "_a_clasificacion_barras.png")
 
 
-def figura_clasificacion(bloques: dict, textos: bool = True):
-    """Percentil medio por canción y corpus (arriba) y qué corpus gana cada bloque (abajo)."""
+def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas"):
+    """Percentil medio por canción y corpus (arriba) y qué corpus gana cada bloque (abajo).
+    parte = "mapa" o "barras" dibuja solo una de las dos mitades, cada una con su título."""
     import matplotlib.pyplot as plt
     from matplotlib.colors import LinearSegmentedColormap
 
@@ -141,10 +145,31 @@ def figura_clasificacion(bloques: dict, textos: bool = True):
             "«sin vecino» = ningún corpus supera el umbral.")
     alto_mapa = 0.42 * (len(filas) + 1) + 1.3
     alto_barras = 0.3 * len(bl) + 1.8
-    fig, cuerpo = estilo_figuras.figura(12.5, alto_mapa + alto_barras, "Clasificación del álbum por corpus",
-                                        subtitulo=subtitulo if textos else "", nota=nota if textos else "")
-    arriba, abajo = cuerpo.subfigures(2, 1, height_ratios=[alto_mapa, alto_barras])
+    if parte == "mapa":
+        fig, arriba = estilo_figuras.figura(12.5, alto_mapa, "Clasificación del álbum por corpus",
+                                            subtitulo=subtitulo if textos else "")
+        abajo = None
+    elif parte == "barras":
+        fig, abajo = estilo_figuras.figura(12.5, alto_barras + 0.4, "Qué corpus gana cada bloque")
+        arriba = None
+    else:
+        fig, cuerpo = estilo_figuras.figura(12.5, alto_mapa + alto_barras, "Clasificación del álbum por corpus",
+                                            subtitulo=subtitulo if textos else "", nota=nota if textos else "")
+        arriba, abajo = cuerpo.subfigures(2, 1, height_ratios=[alto_mapa, alto_barras])
+    if arriba is not None:
+        _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, bloques.get("corpus", {}))
+    if abajo is not None:
+        _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo=parte != "barras")
+    return fig
 
+
+def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None = None, minimo: int = 100) -> None:
+    """Los corpus con menos de `minimo` piezas no cuentan para el veredicto (verosimilitud_por_bloques.veredicto):
+    en uno chico y disperso casi todo parece típico. Se muestran atenuados y marcados con *."""
+    from matplotlib.colors import LinearSegmentedColormap
+    from matplotlib.patches import Rectangle
+    info = info or {}
+    chico = [info.get(c, {}).get("piezas", minimo) < minimo for c in corpora]
     ax = arriba.subplots()
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
     imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
@@ -152,27 +177,46 @@ def figura_clasificacion(bloques: dict, textos: bool = True):
     barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
     barra.ax.tick_params(labelsize=8, colors=GRIS, length=0)
     barra.outline.set_visible(False)
+    for j, ch in enumerate(chico):
+        if ch:                                       # velo blanco sobre la columna: no cuenta para el veredicto
+            ax.add_patch(Rectangle((j - 0.5, -0.5), 1, M.shape[0], facecolor="white", alpha=0.62, edgecolor="none", zorder=2))
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             if np.isnan(M[i, j]):
                 ax.text(j, i, "—", ha="center", va="center", fontsize=8, color=MUTED)
                 continue
             txt = f"{M[i, j]:.0f}" + (f"\n{nb[i, j]} bl." if i < len(filas) else "")
-            ax.text(j, i, txt, ha="center", va="center", fontsize=8 if i < len(filas) else 9, color="#ffffff" if M[i, j] > 30 else TINTA,
+            claro = M[i, j] > 30 and not chico[j]
+            ax.text(j, i, txt, ha="center", va="center", fontsize=8 if i < len(filas) else 9, zorder=3,
+                    color="#ffffff" if claro else (MUTED if chico[j] else TINTA),
                     fontweight="bold" if i == len(filas) and corpora[j] in pred else "normal")
     ax.axhline(len(filas) - 0.5, color=FONDO, lw=4)
     ax.set_yticks(range(M.shape[0]), [f["cancion"] for f in filas] + ["Álbum (media)"], fontsize=9.5, color=TINTA)
-    ax.set_xticks(range(len(corpora)), corpora, fontsize=9, color=TINTA)
+    rotulos = [f"{c}*" if ch else c for c, ch in zip(corpora, chico)]
+    rotulos = [f"{r}\n{info[c]['piezas']} piezas" if c in info else r for r, c in zip(rotulos, corpora)]
+    ax.set_xticks(range(len(corpora)), rotulos, fontsize=9, color=TINTA)
+    for etiqueta, ch in zip(ax.get_xticklabels(), chico):
+        if ch:
+            etiqueta.set_color(MUTED)
+    if any(chico):
+        barra.set_label(f"Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor\n"
+                        f"* Corpus con menos de {minimo} piezas: atenuados, no cuentan para el veredicto (en uno chico casi todo parece típico)",
+                        fontsize=8.5, color=GRIS, labelpad=5)
     ax.xaxis.tick_top()
     ax.tick_params(length=0)
     for s in ax.spines.values():
         s.set_visible(False)
 
+
+def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: bool = True) -> None:
+    import matplotlib.pyplot as plt
+    titulo_b = {"armonia": "Armonía", "escala": "Escala (12)", "microtono": "Cuartos de tono", "metro": "Metro"}
     todos = sorted({c for b in bl for c in cuenta[b]}, key=lambda c: (c == "sin vecino", c))
     paleta = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
     color = {c: paleta[k % len(paleta)] for k, c in enumerate([c for c in todos if c != "sin vecino"])}
     color["sin vecino"] = "#c9c8c2"
-    abajo.suptitle("Qué corpus gana cada bloque", fontsize=12.5, fontweight="bold", color=TINTA)
+    if titulo:
+        abajo.suptitle("Qué corpus gana cada bloque", fontsize=12.5, fontweight="bold", color=TINTA)
     ax2 = abajo.subplots()
     estilo(ax2, grid_x=True)
     for i, b in enumerate(bl):
@@ -192,7 +236,6 @@ def figura_clasificacion(bloques: dict, textos: bool = True):
                           label=f"{c} — {n_c[c]} {'casos' if c == 'sin vecino' else 'victorias'}") for c in todos]
     abajo.legend(handles=estilo_figuras.sin_repetidas(handles), loc="outside lower center", ncol=len(handles),
                  frameon=False, fontsize=8.5)
-    return fig
 
 
 # ---------------------------------------------------------------- (b) perfil al estilo Hooktheory

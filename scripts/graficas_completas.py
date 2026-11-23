@@ -72,7 +72,9 @@ def main(argv: list[str] | None = None) -> int:
         (fuente / "figuras_album_c_circulo_haba.png", "2b_melodia_circulo_24edo.png"),
         (fuente / "ciclos_banda.png", "3a_sintesis_ciclos_metricos.png"),
         (fuente / "figuras_album_a_clasificacion.png", "3b_sintesis_clasificacion_album.png"),
-        # Apoyo: matriz con solo rock y pop (diapositiva 18), una mini-gráfica por fórmula (13) y el acierto (17).
+        (fuente / "figuras_album_a_clasificacion_mapa.png", "3b_sintesis_clasificacion_mapa.png"),
+        (fuente / "figuras_album_a_clasificacion_barras.png", "3c_sintesis_corpus_por_bloque.png"),
+        # Apoyo: matriz con solo rock y pop (diapositiva 19), una mini-gráfica por fórmula (14) y el acierto (18).
         (fuente / "verosimilitud_banda_rock_pop_matriz.png", "1a_armonia_matriz_rock_pop.png"),
         (fuente / "presentacion_formula_js.png", "formula_js.png"),
         (fuente / "presentacion_formula_percentil.png", "formula_percentil.png"),
@@ -193,7 +195,7 @@ def clave(banda, primus, king_gizzard, todos, externos, paths, failures: list[st
           "--salida", str(fuente / "figuras_album")], failures)
     # El acierto se mide en las corridas congeladas «_repro», las mismas de docs/evaluacion_melodia.md y docs/armonia.md.
     repro = sorted(r for r in OUTPUTS.iterdir() if r.name.endswith("_repro") and (r / "evaluacion_melodia.json").exists())
-    # Las fórmulas de la diapositiva 13 se ilustran con Primus para no adelantar los resultados de la banda.
+    # Las fórmulas de la diapositiva 14 se ilustran con Primus para no adelantar los resultados de la banda.
     call(["scripts/comparacion/figuras_presentacion.py", *paths(banda + primus), "--evaluaciones", *map(str, repro),
           "--salida", str(fuente / "presentacion")], failures)
     destino = OUT / "diapositivas"

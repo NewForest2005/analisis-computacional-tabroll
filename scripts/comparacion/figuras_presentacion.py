@@ -1,4 +1,4 @@
-"""Gráficas pequeñas para la presentación: una por fórmula (diapositiva 13) y el acierto de la herramienta (16).
+"""Gráficas pequeñas para la presentación: una por fórmula (diapositiva 14) y el acierto de la herramienta (18).
 
 Uso:
     python scripts/comparacion/figuras_presentacion.py outputs/<corrida> [...] --salida outputs/presentacion
@@ -32,6 +32,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import estilo_figuras  # noqa: E402
 from estilo_figuras import GRIS, MUTED, REJILLA, TINTA  # noqa: E402
 
+LETRA = 1.4                 # escala del texto de las mini-gráficas de fórmulas: se ven a ~200 px en la diapositiva
+CORTOS = {"my_name_is_mud": "My Name Is Mud", "jerry_was": "Jerry"}   # rótulos cortos en el histograma
 VERDE, VERDE_CLARO, AMARILLO, GRIS_BARRA = "#06784f", "#14c486", "#ffb93e", "#c9c8c2"
 NOMBRES = {"mata_zyklek": "Mata Zyklek", "fabienk": "Fabienk", "sarniezz": "Sarniezz", "yor_zarad": "Yor Zarad",
            "utzp": "Utzp", "angor": "Angor"}
@@ -47,6 +49,7 @@ def mini(ancho: float = 3.6, alto: float = 2.4):
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(ancho, alto), facecolor="white", layout="constrained")
     estilo_figuras.estilo_ejes(ax)
+    ax.tick_params(labelsize=8.5 * LETRA)
     ax.set_facecolor("white")
     return fig, ax
 
@@ -62,7 +65,7 @@ def guardar(fig, ruta: str) -> None:
             print(f"   aviso de distribución: {p}")
 
 
-# ---------------------------------------------------------------- fórmulas (diapositiva 13)
+# ---------------------------------------------------------------- fórmulas (diapositiva 14)
 
 def formulas_estilo(run: Path, salida: str, contraste: Path | None = None) -> None:
     import verosimilitud_estilos as ve
@@ -76,10 +79,11 @@ def formulas_estilo(run: Path, salida: str, contraste: Path | None = None) -> No
     x = np.arange(12)
     ax.bar(x - 0.2, 100 * p, 0.4, color=VERDE, label=ve.nombre(run.name))
     ax.bar(x + 0.2, 100 * q, 0.4, color=GRIS_BARRA, label="centro del rock")
-    ax.set_xticks(x, ve.GRADOS, fontsize=7)
-    ax.set_ylabel("% del tiempo", fontsize=8, color=GRIS)
-    ax.legend(frameon=False, fontsize=7.5, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2)
-    ax.set_title(f"$D_{{JS}}$ = {d:.2f}", fontsize=9.5, color=TINTA, loc="right", pad=18)
+    ax.set_xticks(x, ve.GRADOS, fontsize=7 * 1.15)                  # 12 grados: más grandes se juntan
+    ax.set_ylabel("% del tiempo", fontsize=8 * LETRA, color=GRIS)
+    ax.legend(frameon=False, fontsize=7.5 * LETRA, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2)
+    ax.text(0.98, 0.96, f"$D_{{JS}}$ = {d:.2f}", transform=ax.transAxes, ha="right", va="top", fontsize=9.5 * LETRA,
+            color=TINTA)
     guardar(fig, salida + "_formula_js.png")
 
     ref = np.array(R["rock"]["du"])
@@ -94,16 +98,16 @@ def formulas_estilo(run: Path, salida: str, contraste: Path | None = None) -> No
         if izq + (b[1] - b[0]) / 2 >= sombra:
             pa.set_facecolor(VERDE_CLARO)
     from matplotlib.patches import Patch
-    ax.legend(handles=[Patch(color=GRIS_BARRA, label="piezas del rock"),
-                       Patch(color=VERDE_CLARO, label=f"más lejos que {ve.nombre(marcas[0][0].name)}")],
-              frameon=False, fontsize=7, loc="upper center", bbox_to_anchor=(0.5, 1.16), ncol=2)
+    ax.legend(handles=[Patch(color=GRIS_BARRA, label="piezas del rock"), Patch(color=VERDE_CLARO, label="más lejos")],
+              frameon=False, fontsize=7 * LETRA, loc="lower center", bbox_to_anchor=(0.5, 1.0), ncol=2)
     for k, (r, dk) in enumerate(marcas):
         color = VERDE if k == 0 else "#0b6e99"
         ax.axvline(dk, color=color, lw=2)
-        ax.text(dk, n.max() * (0.95 - 0.3 * k), f" {ve.nombre(r.name)}\n p = {ve.percentil(dk, list(ref)):.1f}",
-                fontsize=7.5, color=color, va="top", ha="left" if dk < bins[-1] * 0.75 else "right")
-    ax.set_xlabel("distancia al centro del rock", fontsize=8, color=GRIS)
-    ax.set_ylabel("piezas", fontsize=8, color=GRIS)
+        corto = next((v for c, v in CORTOS.items() if c in r.name.lower()), ve.nombre(r.name))
+        ax.text(dk, n.max() * (0.98 - 0.42 * k), f" {corto}\n p = {ve.percentil(dk, list(ref)):.1f}",
+                fontsize=7.5 * LETRA, color=color, va="top", ha="left" if dk < bins[-1] * 0.75 else "right")
+    ax.set_xlabel("distancia al centro del rock", fontsize=8 * LETRA, color=GRIS)
+    ax.set_ylabel("piezas", fontsize=8 * LETRA, color=GRIS)
     guardar(fig, salida + "_formula_percentil.png")
 
 
@@ -116,11 +120,11 @@ def formula_repeticion(run: Path, salida: str) -> None:
     mejor = cm.picos(R, lags, 1)[0][0]
     fig, ax = mini()
     ax.bar(lags, R, 0.8, color=[VERDE if l == mejor else GRIS_BARRA for l in lags])
-    ax.text(mejor, R[lags == mejor][0] + 0.015, f"ℓ = {mejor}", ha="center", fontsize=8.5, color=VERDE, fontweight="bold")
+    ax.text(mejor, R[lags == mejor][0] + 0.015, f"ℓ = {mejor}", ha="center", fontsize=8.5 * LETRA, color=VERDE, fontweight="bold")
     ax.set_ylim(max(0, R.min() - 0.05), R.max() + 0.08)
     ax.set_xticks([4, 8, 12, 16, 20, 24, 28, 32, 36, 40])
-    ax.set_xlabel(f"ℓ (corcheas) · {cm.nombre(run.name)}", fontsize=8, color=GRIS)
-    ax.set_ylabel("R(ℓ)", fontsize=8, color=GRIS)
+    ax.set_xlabel("ℓ (corcheas)", fontsize=8 * LETRA, color=GRIS)
+    ax.set_ylabel("R(ℓ)", fontsize=8 * LETRA, color=GRIS)
     guardar(fig, salida + "_formula_repeticion.png")
 
 
@@ -134,7 +138,7 @@ def formula_campos(run: Path | None, salida: str) -> None:
         alt, tr = fa.reparto(run)
         titulo = fa.nombre(run.name)
     fig, ax = plt.subplots(figsize=(2.8, 2.8), facecolor="white", layout="constrained")
-    fa.dibujar_circulo(ax, alt, tr, titulo, True)
+    fa.dibujar_circulo(ax, alt, tr, titulo, True, letra=1.15)   # más grande, los grados tapan los puntos
     if run is None:                              # esquema: sin rótulo de % y puntos chicos para que se lean los grados
         ax.set_title("")
         for c in ax.collections:
@@ -144,7 +148,7 @@ def formula_campos(run: Path | None, salida: str) -> None:
     print(f"→ {salida}_formula_campos.png")
 
 
-# ---------------------------------------------------------------- acierto (diapositiva 17)
+# ---------------------------------------------------------------- acierto (diapositiva 18)
 
 def datos_acierto(corridas: list[Path]) -> list[dict]:
     por = {}
@@ -167,22 +171,41 @@ def figura_acierto(filas: list[dict]):
     series = [("melodia", "Melodía principal", GRIS_BARRA), ("bajo", "Bajo", VERDE_CLARO),
               ("fundamental", "Fundamental del acorde", VERDE),
               ("fundamental_confiables", "Fundamental en compases confiables", AMARILLO)]
-    fig, ax = plt.subplots(figsize=(6.4, 4.4), facecolor="white", layout="constrained")
+    # Fila final con la media simple de las canciones medidas: resume que la armonía acierta mucho más que la melodía.
+    medidas = [f for f in filas if f.get("fundamental") is not None]
+    if len(medidas) > 1:
+        media = {"cancion": f"Media ({len(medidas)} canciones)"}
+        for campo, _, _ in series:
+            vals = [f[campo] for f in medidas if f.get(campo) is not None]
+            media[campo] = float(np.mean(vals)) if vals else None
+        filas = filas + [media]
+    fig, ax = plt.subplots(figsize=(6.4, 5.0), facecolor="white", layout="constrained")
     estilo_figuras.estilo_ejes(ax, grid_x=True)
     ax.set_facecolor("white")
     alto = 0.19
-    y = np.arange(len(filas))[::-1]
+    y = np.arange(len(filas))[::-1].astype(float)
+    if len(medidas) > 1:
+        y[-1] -= 0.25                                   # la media, un poco aparte de las canciones
+        ax.axhline(y[-1] + 0.6, color=REJILLA, lw=1)
+        conf = media.get("fundamental_confiables")
+        if conf is not None:
+            ax.axvline(conf, color=AMARILLO, lw=1.4, ls="--", zorder=0)
+            ax.text(conf, y[0] + 0.62, f"armonía ≈ {conf:.0f} %", ha="center", va="bottom", fontsize=8.5,
+                    color="#9a6200", fontweight="bold")
     for k, (campo, rotulo, color) in enumerate(series):
         pos = y + (1.5 - k) * alto
         vals = [f.get(campo) for f in filas]
         ax.barh(pos, [v or 0 for v in vals], alto * 0.92, color=color, label=rotulo)
         for yy, v in zip(pos, vals):
             if v is not None:
-                ax.text(v + 1, yy, f"{v:.0f}", va="center", fontsize=7.5, color=TINTA)
+                ax.text(v + 1, yy, f"{v:.0f}", va="center", fontsize=7.5, color=TINTA,
+                        bbox=dict(facecolor="white", edgecolor="none", pad=0.6), zorder=3)
     for yy, f in zip(y, filas):
         if f.get("fundamental") is None:
             ax.text(1, yy - alto, "sin referencia armónica", va="center", fontsize=7.5, color=MUTED)
     ax.set_yticks(y, [f["cancion"] + (" (a ciegas)" if f["cancion"] == "Yor Zarad" else "") for f in filas], fontsize=9, color=TINTA)
+    if len(medidas) > 1:
+        ax.get_yticklabels()[-1].set_fontweight("bold")
     ax.set_xlim(0, 112)
     ax.set_xticks([0, 20, 40, 60, 80, 100])
     ax.set_xlabel("acierto contra la referencia corregida de oído (%)", fontsize=8.5, color=GRIS)

@@ -104,7 +104,7 @@ canciones salen igual que antes.
 
 ## 8. Gráficas de apoyo para la presentación
 
-`make graficas-diapositivas` deja además en `diapositivas/` estas gráficas, que usan las diapositivas 13, 16 y 17:
+`make graficas-diapositivas` deja además en `diapositivas/` estas gráficas, que usan las diapositivas 14, 17 y 18:
 
 | Archivo | Script | Qué muestra |
 |---|---|---|
@@ -115,8 +115,8 @@ canciones salen igual que antes.
 | `formula_campos` | `figuras_presentacion.py` | Solo la geometría de los dos campos de quintas (sin datos de ninguna canción). |
 | `acierto_herramienta` | `figuras_presentacion.py` | Melodía, bajo, fundamental y fundamental en compases confiables, por canción. |
 
-Las cuatro gráficas de fórmulas se ilustran con Primus (la comparación propia) y no con la banda: la diapositiva 13 es
-metodología y no debe adelantar los resultados de las diapositivas 18 a 20.
+Las cuatro gráficas de fórmulas se ilustran con Primus (la comparación propia) y no con la banda: la diapositiva 14 es
+metodología y no debe adelantar los resultados de las diapositivas 19 a 21.
 
 - Las mini-gráficas de las fórmulas no llevan título: lo pone la diapositiva.
 - El percentil del histograma es el de las fundamentales solas; la matriz promedia ese y el de los cambios de
@@ -151,7 +151,7 @@ Zyklek (su percentil).
 
 `web/circulo24/` (página y `circulo24.js`) anima las notas de una corrida sobre las 24 clases de altura, con el audio
 sincronizado. `make presentacion-circulo` exporta a `presentacion/circulo24/` el fragmento de Mata Zyklek de 42 a 72 s
-(entra el riff en la guitarra 3, luego en la guitarra 4 con el bajo), y la sub-diapositiva 19 · 3 lo muestra en un iframe.
+(entra el riff en la guitarra 3, luego en la guitarra 4 con el bajo), y la sub-diapositiva 20 · 3 lo muestra en un iframe.
 
 Elección del fragmento, con `scripts/comparacion/probar_circulo24.py` (cuadro a cuadro, contra la referencia corregida
 de oído de `references/mata_zyklek_loops.py`; `--barrido` recorre la canción en ventanas de 30 s):
@@ -184,7 +184,7 @@ de oído de `references/mata_zyklek_loops.py`; `--barrido` recorre la canción e
   sonido; guitarra y bajo juntos se desfasaban (ahora se realinean si se separan más de 60 ms); el anillo interior y
   las huellas en cero se veían porque la opacidad del CSS pisaba el atributo SVG.
 
-## 11. Figuras del primer cuaderno (diapositiva 8)
+## 11. Figuras del primer cuaderno (diapositiva 9)
 
 Las imágenes que guardó el primer cuaderno tenían letra demasiado pequeña para la diapositiva.
 `scripts/comparacion/figuras_cuaderno_original.py <audio_arrays.npz>` las vuelve a dibujar con letra de 12-13 pt y los
@@ -196,7 +196,7 @@ colores de la plantilla, con los mismos cálculos:
 `audio_arrays.npz` viene de `todos_los_outputs_sarniezz.zip` del primer cuaderno (no está en el repositorio). El contorno
 se guarda en `outputs/.f0_cuaderno_original.npz` para no recalcularlo.
 
-La figura de la diapositiva 6 (`cuaderno_original_sarniezz.png`) era una captura del primer cuaderno con letra ilegible.
+La figura de la diapositiva 7 (`cuaderno_original_sarniezz.png`) era una captura del primer cuaderno con letra ilegible.
 Ahora la dibuja el mismo script con `--partitura mxl/score.xml` (del mismo zip).
 - Solo queda el piano roll. La segunda mitad, la misma partitura leída como MusicXML, era igual y se quitó.
 - Muestra las primeras 64 negras (`--hasta`), 77 de las 196 notas, para que no queden apretadas; las alturas son las
@@ -205,7 +205,7 @@ Ahora la dibuja el mismo script con `--partitura mxl/score.xml` (del mismo zip).
   está en negras (~152).
 - La leyenda de la diapositiva perdió el párrafo «Primera idea del trabajo de grado».
 
-La red por sección del primer cuaderno (diapositivas 6 y 8), según `CMA_Angine_de_Poitrine_corregido.ipynb`:
+La red por sección del primer cuaderno (diapositivas 7 y 9), según `CMA_Angine_de_Poitrine_corregido.ipynb`:
 
 | Paso | Detalle |
 |---|---|
@@ -216,12 +216,12 @@ La red por sección del primer cuaderno (diapositivas 6 y 8), según `CMA_Angine
 | Resultado | 3 de 7 aciertos (43 %) |
 
 Los MFCC resumen la forma del espectro en bandas Mel: describen el timbre, no la nota. Con 21 ejemplos para 6 secciones
-y un timbre del bajo casi igual en toda la canción, no bastan para reconocer la sección. En la diapositiva 6 se glosan
+y un timbre del bajo casi igual en toda la canción, no bastan para reconocer la sección. En la diapositiva 7 se glosan
 como «13 coeficientes del espectro que describen el timbre, no la nota».
 
-## 12. El algoritmo completo (diapositiva 15)
+## 12. El algoritmo completo (diapositiva 16)
 
-La diapositiva 15 junta todo el método antes del repositorio. Las diapositivas siguientes se corrieron un número.
+La diapositiva 16 junta todo el método antes del repositorio. Las diapositivas siguientes se corrieron un número.
 - **Principal:** el diagrama de bloques del póster (`02_diagrama_bloques.png`), rehecho en HTML con los colores de la
   plantilla. Tiene tres etapas: señal, núcleo del looper (en amarillo) y estructura y estilo. Cada bloque dice en qué
   diapositiva se explicó.
@@ -244,9 +244,9 @@ La diapositiva 15 junta todo el método antes del repositorio. Las diapositivas 
 
 El pie de cada sub-diapositiva puede llevar un nombre propio con `data-sub` (aquí «pseudocódigo»). Sin él, dice «gráfica n».
 
-## 13. El tabroll de Fabienk en la diapositiva 9
+## 13. El tabroll de Fabienk en la diapositiva 10
 
-La diapositiva 9 compara Hooktheory con el tabroll. Se usa la página 32 de Fabienk, de 4:42 a 4:52 (melodía «Fabien»
+La diapositiva 10 compara Hooktheory con el tabroll. Se usa la página 32 de Fabienk, de 4:42 a 4:52 (melodía «Fabien»
 con la segunda voz en el loop), de la corrida más reciente con Demucs. Se eligió comparando cada página después de las
 3:00 con la partitura corregida de oído (`references/fabienk_partitura.py`, alineada como en `melodia.py`):
 
@@ -264,7 +264,7 @@ Entera, la página quedaba a una quinta parte de su tamaño y no se leían las n
 `zoom_guitarra` (en `scripts/presentacion_imagenes.py`) la rehace:
 - Recorta el registro de la guitarra, de Re♯3+ a Mi4+, y estira las filas al doble.
 - Rehace la columna de notas con letra grande: las notas regulares a la izquierda y los cuartos de tono («+», en azul) a
-  la derecha, como la regla de la diapositiva 7. Al lado va el grado de Mi dórico en color.
+  la derecha, como la regla de la diapositiva 8. Al lado va el grado de Mi dórico en color.
 - Rehace también la cabecera de pulsos («6 pulsos», en español) y la franja de acordes: cifrado romano con su índice,
   función en palabras («Tónica relativa», «Dominante modal», en lugar de «T rel.» y «D modal»; en dos renglones si no
   cabe; «(menor)» debajo cuando el cuaderno la escribe en minúscula, como «t») y nombre del acorde, todo con letra grande. Los datos salen de `armonia.json` (con `harmony_labels`, como en

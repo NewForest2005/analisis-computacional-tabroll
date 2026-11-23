@@ -12,6 +12,9 @@ Uso:
     python scripts/comparacion/corpus_bloques.py --dcml distant_listening_corpus/debussy_suite_bergamasque --nombre debussy --familia clasica
     python scripts/comparacion/corpus_bloques.py --chordonomicon chordonomicon.csv --subgeneros "progressive rock,math rock,funk metal" --nombre prog
 
+En la comparación final se usan rock, clasica (Kostka-Payne), jazz, pop, radif e hindustani; SymbTr y The Session
+se probaron y se retiraron (no hay bloques/symbtr.json ni bloques/session.json).
+
 Escribe references/corpus/bloques/<nombre>.json con, por pieza (lo que el corpus tenga; lo que no, null):
 - armonía: «fundamentales» (12 grados respecto de la tónica, por duración) y «cambios» (pares de fundamentales seguidas);
 - altura: «altura», 24 grados (cuartos de tono) respecto de la tónica, por duración; un corpus de 12 notas usa solo los

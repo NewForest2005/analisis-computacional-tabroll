@@ -152,12 +152,12 @@ table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric
 .arbol .c { color: var(--gris-claro); }
 .arbol .fv { background: var(--amarillo-suave); border-radius: 3px; padding: 0 3px; }
 
-/* texto justificado en las tarjetas (diapositiva 10) */
+/* texto justificado en las tarjetas (diapositiva 11) */
 .justificada .tarjeta p { text-align: justify; hyphens: auto; }
-/* diapositiva 8: más aire entre las viñetas */
+/* diapositiva 9: más aire entre las viñetas */
 .lista-aireada li { margin-bottom: 9px; }
 .lista-aireada li:last-child { margin-bottom: 0; }
-/* diapositiva 7: más aire entre fórmulas y entre cada fórmula y su explicación */
+/* diapositiva 8: más aire entre fórmulas y entre cada fórmula y su explicación */
 .formulas-aireadas { gap: 10px; height: 100%; justify-content: space-between; }
 .formulas-aireadas + .pila .regla24 svg { width: 100%; height: auto; }
 .formulas-aireadas .formula .katex { font-size: 0.97em; }
@@ -166,7 +166,7 @@ table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric
 .formula-celda { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 10px; min-height: 0; }
 .formula-celda .formula { white-space: nowrap; }   /* KaTeX parte en los signos; aquí cada fórmula va en una línea */
 
-/* más aire entre párrafos, viñetas y tarjetas (diapositivas 2 a 5 y 10) */
+/* más aire entre párrafos, viñetas y tarjetas (diapositivas 2 a 5 y 11) */
 .pila.aireada { gap: 22px; }
 .aireada .tarjeta { padding: 12px 15px; }
 .aireada .tarjeta h3 { margin-bottom: 7px; }
@@ -205,11 +205,11 @@ iframe.circulo-vivo { border: 1px solid var(--linea); border-radius: 4px; backgr
 
 /* el algoritmo completo: tres etapas con su diapositiva de origen */
 .algoritmo { display: flex; flex-direction: column; gap: 0; }
-.algoritmo .rotulo { display: block; font: 700 11.5px/1 "Ancizar Sans", sans-serif; letter-spacing: 1.4px; text-transform: uppercase; color: var(--verde); margin: 0 0 4px 2px; }
+.algoritmo .rotulo { display: block; font: 700 11.5px/1 "Ancizar Sans", sans-serif; letter-spacing: 1.4px; text-transform: uppercase; color: var(--verde); margin: 0 0 6px 2px; }
 .algoritmo .flujo .paso { position: relative; padding-bottom: 13px; }
 .algoritmo .nucleo .paso { background: var(--amarillo-suave); box-shadow: inset 0 0 0 1.5px var(--amarillo); }
 .algoritmo .nucleo .rotulo { color: #9a6200; }
-.algoritmo .baja { text-align: center; color: var(--verde-claro); font-size: 15px; line-height: 1; margin: 3px 0 2px; }
+.algoritmo .baja { text-align: center; color: var(--verde-claro); font-size: 15px; line-height: 1; margin: 10px 0 8px; }
 .algoritmo .ref { position: absolute; right: 5px; bottom: 3px; font: 700 9.5px/1 "Ancizar Sans", sans-serif; color: var(--gris-claro); }
 .algoritmo .leyenda-algoritmo { margin: 12px 0 0; text-align: center; }
 .algoritmo .ref::before { content: "diap. "; font-weight: 400; }
@@ -256,3 +256,35 @@ section.contenido.claro .nav-pie button:hover:not(:disabled) { background: rgba(
 .nav-pie button:focus-visible { outline: 2px solid var(--amarillo); }
 .nav-pie button:disabled { opacity: .3; cursor: default; }
 .nav-pie svg { width: 10px; height: 14px; fill: currentColor; }
+
+/* Estado del arte: tabla formal con citas */
+table.estado { font-size: 12px; table-layout: fixed; }
+table.estado td { padding: 4px 7px; line-height: 1.25; }
+table.estado th { padding: 4px 7px; }
+table.estado .propio { background: var(--verde-suave); }
+.vacio { color: #9a6200; }
+table.estado td:first-child { font-weight: 700; color: var(--verde); }
+table.estado td.cita { font-size: 11px; color: var(--gris); }
+
+/* barras con más aire entre grupos (diapositiva 13) */
+.barras.aireadas { row-gap: 9px; }
+.barras.aireadas .g { margin-top: 14px; }
+.barras.aireadas .g:first-child { margin-top: 0; }
+
+/* pseudocódigo al estilo algorithm2e / CLRS: recuadro con filetes, leyenda debajo, bloques con línea vertical y «fin» */
+.pseudo-caja { background: #f7f7f4; border-top: 1.5px solid var(--verde); border-bottom: 1.5px solid var(--verde); padding: 8px 18px 10px; }
+.pseudo-cab { margin: 0 0 2px; font-size: 13.5px; }
+.pseudo-caja .kw, .pseudo-leyenda .kw { font-weight: 700; color: var(--verde); }
+.pseudo-caja .fn, .pseudo-leyenda .fn { font-variant: small-caps; letter-spacing: .3px; }
+.pseudo-caja .pseudo { background: none; border: 0; border-radius: 0; padding: 0; font-size: 13.5px; line-height: 1.35; }
+.pseudo-caja .pseudo li { padding: 2.5px 0; }
+.pseudo-caja .pseudo .i1 > span:first-child { margin-left: 5px; padding-left: 14px; border-left: 1px solid var(--gris-claro); }
+.pseudo li.sec { counter-increment: none; grid-template-columns: 22px minmax(0, 1fr); margin-top: 8px; color: var(--verde-claro); font-size: 11.5px; font-weight: 700; letter-spacing: .4px; }
+.pseudo li.sec::before { content: ""; }
+.pseudo li.fin { counter-increment: none; }
+.pseudo li.fin::before { content: ""; }
+.pseudo-leyenda { margin: 7px 0 0; text-align: center; font-size: 13.5px; }
+
+/* referencias (diapositiva 24): más aire entre viñetas */
+.lista-aireada.cuadros li { margin-bottom: 18px; }
+.lista-aireada.cuadros li:last-child { margin-bottom: 0; }

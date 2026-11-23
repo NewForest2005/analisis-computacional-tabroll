@@ -11,8 +11,8 @@ Cuatro bloques por canción, cada uno comparado con cada corpus que lo tenga:
 - Escala (12 notas): la melodía (voz aguda; si no hay, la grave) en 12 grados respecto de la tónica, por duración; cada
   cuarto de tono se reparte mitad y mitad entre los dos semitonos vecinos. ¿Existe esta escala en algún estilo?
 - Cuartos de tono: qué grados en cuarto de tono usa la melodía (reparto del tiempo entre los 12 grados en ¼, sin los
-  semitonos), comparado solo con corpus microtonales (familia «microtonal»: SymbTr, Radif,
-  andalusí). Antes se filtra con los controles: si la concentración de los cuartos de tono (% de su tiempo en los dos
+  semitonos), comparado solo con corpus microtonales (familia «microtonal»; en la comparación final, Radif e
+  indostánico: SymbTr y el andalusí se pueden convertir, pero no se usaron). Antes se filtra con los controles: si la concentración de los cuartos de tono (% de su tiempo en los dos
   grados en cuarto de tono más usados) no supera a la de los controles por al menos 2 desviaciones (z ≥ 2), la canción
   se trata como de 12 notas y este bloque no cuenta. El % de tiempo en cuartos de tono no sirve de filtro: Primus marca
   9-13 % y Utzp 11 %; la concentración sí separa (Primus 28-37 %, la banda 48-82 %): en la banda caen en grados fijos.

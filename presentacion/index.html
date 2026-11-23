@@ -160,9 +160,60 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <p class="pie" data-campo="pie"></p>
 </section>
 
+<!-- 6 · Estado del arte -->
+<section class="contenido">
+  <span class="numero"></span>
+  <h2>Estado del arte</h2>
+  <p class="subtitulo">Introducción · qué se ha hecho y qué le falta para esta música</p>
+  <div class="area">
+    <div class="pila" style="height:100%; gap:14px">
+      <table class="datos estado">
+        <colgroup><col style="width:13%"><col style="width:21%"><col style="width:19%"><col style="width:24%"><col style="width:23%"></colgroup>
+        <tr><th>Línea</th><th>Trabajos</th><th>Qué resuelven</th><th>Qué les falta aquí</th><th class="propio">En este trabajo</th></tr>
+        <tr><td>Altura desde el audio</td>
+            <td class="cita">Mauch y Dixon (2014, pYIN); Bittner et al. (2022, Basic Pitch)</td>
+            <td>Melodía y notas a partir de la grabación</td>
+            <td>pYIN sigue una sola voz; Basic Pitch da notas MIDI enteras y el cuarto de tono queda como desafinación</td>
+            <td class="propio">Saliencia armónica y consenso entre vueltas del looper (diap. 8 y 12)</td></tr>
+        <tr><td>Separación de fuentes</td>
+            <td class="cita">Rouard et al. (2023, Demucs); Lu et al. (2024, BS&#8209;RoFormer)</td>
+            <td>Aislar bajo, guitarra y batería</td>
+            <td>No transcriben: solo preparan la señal</td>
+            <td class="propio">Demucs para guitarra y bajo (diap. 13)</td></tr>
+        <tr><td>MIR microtonal</td>
+            <td class="cita">Bozkurt (2008); Gedik y Bozkurt (2010)</td>
+            <td>Histogramas de altura finos para el makam turco</td>
+            <td>Música de una sola voz, sin acordes ni looper</td>
+            <td class="propio">Rejilla de 24-EDO con casillas de ±25 cents (diap. 8)</td></tr>
+        <tr><td>Armonía funcional</td>
+            <td class="cita">Riemann (1893); Lendvai (1971); Piston (1987)</td>
+            <td>Función de cada acorde: tónica, subdominante o dominante</td>
+            <td>Pensada en 12 notas; Piston deja fuera lo microtonal</td>
+            <td class="propio">Calidades, funciones y ejes extendidos a 24-EDO (diap. 11)</td></tr>
+        <tr><td>Estilo con corpus</td>
+            <td class="cita">de Clercq y Temperley (2011); Broze y Shanahan (2013)</td>
+            <td>Perfiles de armonía del rock y del jazz</td>
+            <td>Datos simbólicos en 12 notas</td>
+            <td class="propio">Perfiles de 24 clases, Jensen-Shannon y percentil (diap. 14 y 15)</td></tr>
+        <tr><td>Métrica irregular</td>
+            <td class="cita">Holzapfel et al. (2014); Srinivasamurthy et al. (2016)</td>
+            <td>Compases no occidentales desde el audio</td>
+            <td>Sin la dimensión de altura</td>
+            <td class="propio">Pulsos y compases de 2 a 8 pulsos (diap. 16)</td></tr>
+      </table>
+      <div class="tarjeta amarilla">
+        <p><b class="vacio">El vacío:</b> ningún trabajo consultado junta <b>audio polifónico</b>, <b>24-EDO</b>, <b>armonía funcional</b> y
+           <b>comparación con corpus</b>. Este trabajo une las seis líneas para una banda de rock con cuartos de tono y looper.</p>
+      </div>
+    </div>
+  </div>
+  <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Seis líneas de trabajo, y en la última columna lo que este trabajo usa de cada una. Altura: pYIN sigue una sola voz y Basic Pitch da notas MIDI enteras, así que un cuarto de tono le sale como nota desafinada. Separación: Demucs y BS-RoFormer aíslan instrumentos pero no transcriben. MIR microtonal: Bozkurt y Gedik miden el makam turco con histogramas finos, en música de una sola voz. Armonía funcional: Riemann, Lendvai y Piston, pensados en 12 notas. Corpus: de Clercq y Temperley, Broze y Shanahan comparan estilos en 12 notas. Métrica: Holzapfel y Srinivasamurthy siguen compases no occidentales, sin la altura. Ningún trabajo consultado junta todo eso: eso es lo que hace este.</aside>
+</section>
+
 <!-- ============================== METODOLOGÍA ============================== -->
 
-<!-- 6 · Idea inicial y primeros datos -->
+<!-- 7 · Idea inicial y primeros datos -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>La idea inicial y lo que mostró el audio</h2>
@@ -190,7 +241,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <aside class="notes">Método científico: cada fila es una hipótesis con su prueba. Qué respondió el audio se ve en las diapositivas siguientes; no adelantarlo aquí.</aside>
 </section>
 
-<!-- 7 · Background matemático -->
+<!-- 8 · Background matemático -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Background matemático: medir en cuartos de tono</h2>
@@ -224,7 +275,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 8 · Primer algoritmo -->
+<!-- 9 · Primer algoritmo -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>El primer algoritmo y sus resultados</h2>
@@ -258,7 +309,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <aside class="notes">Tres meses de la primera idea del trabajo de grado. La red: StandardScaler + MLP (64, 32) sobre media y desviación de 13 MFCC por fragmento de 10 s; 21 de entrenamiento y 7 de prueba.</aside>
 </section>
 
-<!-- 9 · Idea del tabroll -->
+<!-- 10 · Idea del tabroll -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>La idea del tabroll</h2>
@@ -278,7 +329,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <aside class="notes">Hooktheory solo tiene una canción de la banda: el riff de Fabienk. Su métrica (4/4) es la de su transcripción; la que mide el audio se ve en los resultados. El tabroll es de 4:42 a 4:52, la melodía «Fabien»: frente a la partitura corregida de oído, la voz aguda da la misma nota el 78 % del tiempo y 6 de sus 8 cuartos de tono están en la partitura.</aside>
 </section>
 
-<!-- 10 · Partituras, transcripciones y Piston -->
+<!-- 11 · Partituras, transcripciones y Piston -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Partituras, transcripciones y Walter Piston</h2>
@@ -303,14 +354,13 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
           <tr><td>sus2 · sus4</td><td>2.ª · 4.ª</td><td class="num">4 · 10</td></tr>
         </table>
         <p class="leyenda">Las calidades de Piston extendidas a 24-EDO: la tercera neutra (n) solo existe con cuartos de tono.</p>
-        <p class="nota">Piston deja fuera las escalas microtonales: los grados en cuarto de tono quedan con función «neutra».</p>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 11 · Mejorar la melodía -->
+<!-- 12 · Mejorar la melodía -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Mejorar la melodía: hipótesis que se prueban</h2>
@@ -327,28 +377,28 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
         <tr><td>Basic Pitch (Spotify)</td><td>Menos melodía y sin cuartos de tono</td><td><span class="etq no">descartada</span></td></tr>
         <tr><td>Unir notas iguales seguidas</td><td>Borra re-ataques reales</td><td><span class="etq no">descartada</span></td></tr>
       </table>
-      <div class="pila">
+      <div class="pila" style="gap:18px; padding-top:2px">
         <div class="tarjeta"><h3>Cómo se mide</h3>
           <p>Medida F de notas: el ataque a <b>±75 ms</b> y la altura a <b>±25 cents</b> (la misma casilla de 24-EDO).</p></div>
         <div class="tarjeta amarilla"><h3>Arbitraje a ciegas</h3>
           <p>Donde el notebook y la partitura no coinciden, se escucha en orden al azar. En la primera ronda la partitura tenía razón <b>la mitad</b> de las veces.</p></div>
         <div class="tarjeta gris"><h3>Reproducible</h3>
-          <p>Semilla fija y huellas SHA-256: dos separaciones de guitarra y bajo daban 57 y 62, así que un hallazgo solo cuenta si se mantiene en ambas.</p></div>
+          <p>Semilla fija (el azar queda fijo y cada corrida da lo mismo) y huellas SHA-256 (un código por archivo que cambia si el archivo cambia): dos separaciones de guitarra y bajo daban 57 y 62, así que un hallazgo solo cuenta si se mantiene en ambas.</p></div>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 12 · Demucs y BS-RoFormer -->
+<!-- 13 · Demucs y BS-RoFormer -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Separar instrumentos: Demucs y BS-RoFormer</h2>
   <p class="subtitulo">Metodología · un resultado negativo que también enseña</p>
   <div class="area">
     <div class="cols c2">
-      <div class="pila">
-        <div class="barras">
+      <div class="pila" style="gap:22px">
+        <div class="barras aireadas">
           <div class="g">Calidad pública de separación (SDR de guitarra, dB)</div>
           <span>Demucs</span><div class="b gris" style="width:57.6%"></div><span class="v">5.22</span>
           <span>BS-RoFormer</span><div class="b" style="width:100%"></div><span class="v">9.05</span>
@@ -361,46 +411,45 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
         </div>
         <p class="nota">BS-RoFormer tardó una hora en separar Sarniezz en CPU (unas 13 veces lo que dura la canción).</p>
       </div>
-      <div class="pila">
+      <div class="pila aireada" style="gap:26px">
         <div class="tarjeta"><h3>¿Por qué no mejoró?</h3>
-          <p>Un separador mejor limpia la <b>guitarra</b> del resto, pero la dificultad está <b>dentro</b> de la guitarra: el looper superpone varias capas del mismo instrumento, y ningún separador las distingue.</p></div>
+          <p>El <b>SDR</b> (qué tan limpia sale la guitarra separada frente a la grabada por aparte, en dB; más es mejor) sube de 5.22 a 9.05: un separador mejor limpia la <b>guitarra</b> del resto, pero la dificultad está <b>dentro</b> de la guitarra: el looper superpone varias capas del mismo instrumento, y ningún separador las distingue.</p></div>
         <div class="tarjeta amarilla"><h3>¿Por qué no invalida el trabajo?</h3>
           <p>Muestra que el resultado <b>no depende del separador</b>: con dos modelos distintos la medida es la misma. Y ubica con precisión el cuello de botella, que es el siguiente problema a resolver.</p></div>
-        <p class="nota">Decisión: Demucs sigue por defecto; BS-RoFormer queda como opción (<code>make run-roformer</code>).</p>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 13 · Background matemático: comparar con estilos -->
+<!-- 14 · Background matemático: comparar con estilos -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Background matemático: comparar con estilos</h2>
   <p class="subtitulo">Metodología · cada fórmula y lo que produce, con Primus de ejemplo</p>
   <div class="area alta">
-    <div class="cols c2" style="gap:10px 26px; grid-template-rows: 1fr 1fr">
-      <div class="cols formula-celda">
-        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Distancia de Jensen-Shannon</b>
-          <div class="formula" style="font-size:12.5px">\( D_{JS}=\tfrac12 D_{KL}(P\|M)+\tfrac12 D_{KL}(Q\|M) \)</div>
+    <div class="cols c2" style="gap:26px 34px; grid-template-rows: 1fr 1fr">
+      <div class="cols formula-celda" style="gap:14px; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr)">
+        <div class="pila" style="gap:11px; justify-content:center"><b class="resalta">Distancia de Jensen&#8209;Shannon</b>
+          <div class="formula" style="font-size:10.5px">\( D_{JS}=\tfrac12 D_{KL}(P\|M)+\tfrac12 D_{KL}(Q\|M) \)</div>
           <div class="produce">«My Name Is Mud» frente al centro del rock: 0.15 (0 = iguales, 1 = nada en común)</div></div>
         <div class="fig sin-borde"><img src="img/formula_js.png" alt="Reparto de fundamentales de My Name Is Mud y del rock"></div>
       </div>
-      <div class="cols formula-celda">
-        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Percentil de tipicidad</b>
-          <div class="formula" style="font-size:12.5px">\( p(s)=100\cdot\dfrac{\#\{x\in C:\ d(x)\ge d(s)\}}{|C|} \)</div>
+      <div class="cols formula-celda" style="gap:14px; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr)">
+        <div class="pila" style="gap:11px; justify-content:center"><b class="resalta">Percentil de tipicidad</b>
+          <div class="formula" style="font-size:11.5px">\( p(s)=100\cdot\dfrac{\#\{x\in C:\ d(x)\ge d(s)\}}{|C|} \)</div>
           <div class="produce">gris: distancia de cada pieza del rock a su centro. Verde: las piezas más lejos que «My Name Is Mud», su percentil (37; 50 = típica). «Jerry Was a Race Car Driver»: 2.2</div></div>
         <div class="fig sin-borde"><img src="img/formula_percentil.png" alt="Histograma de distancias del rock"></div>
       </div>
-      <div class="cols formula-celda">
-        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Repetición a distancia ℓ</b>
-          <div class="formula" style="font-size:13px">\( \begin{aligned} R(\ell)&=0.7\,\Pr[c_t=c_{t+\ell}]\\ &\quad+0.3\,\big(1-\overline{|a_t-a_{t+\ell}|}\big) \end{aligned} \)</div>
+      <div class="cols formula-celda" style="gap:14px; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr)">
+        <div class="pila" style="gap:11px; justify-content:center"><b class="resalta">Repetición a distancia ℓ</b>
+          <div class="formula" style="font-size:12px">\( \begin{aligned} R(\ell)&=0.7\,\Pr[c_t=c_{t+\ell}]\\ &\quad+0.3\,\big(1-\overline{|a_t-a_{t+\ell}|}\big) \end{aligned} \)</div>
           <div class="produce">c: clase de altura, a: ataque, por corchea. «Jerry Was a Race Car Driver» se repite cada 8 corcheas: un compás de 4/4</div></div>
         <div class="fig sin-borde"><img src="img/formula_repeticion.png" alt="R(ℓ) de Jerry Was a Race Car Driver"></div>
       </div>
-      <div class="cols formula-celda">
-        <div class="pila" style="gap:4px; justify-content:center"><b class="resalta">Dos campos de quintas</b>
-          <div class="formula" style="font-size:13.5px">\( \text{quinta}=14 \text{ pasos},\quad \operatorname{mcd}(14,24)=2 \)</div>
+      <div class="cols formula-celda" style="gap:14px; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr)">
+        <div class="pila" style="gap:11px; justify-content:center"><b class="resalta">Dos campos de quintas</b>
+          <div class="formula" style="font-size:12px">\( \text{quinta}=14 \text{ pasos},\quad \operatorname{mcd}(14,24)=2 \)</div>
           <div class="produce">el ciclo de quintas se parte en dos: anillo exterior, los 12 grados regulares; interior, los 12 en cuarto de tono</div></div>
         <div class="fig sin-borde"><img src="img/formula_campos.png" alt="Los dos campos de quintas en 24-EDO"></div>
       </div>
@@ -410,13 +459,13 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <aside class="notes">Los ejemplos son de Primus para no adelantar los resultados de la banda. Más adelante, el mapa 1b usa además componentes principales sobre la raíz de cada reparto de fundamentales. La matriz promedia el percentil de las fundamentales y el de los cambios de fundamental.</aside>
 </section>
 
-<!-- 14 · Datos para comparar -->
+<!-- 15 · Datos para comparar -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Datos para comparar estilos e influencias</h2>
   <p class="subtitulo">Metodología · las mismas medidas para todas las canciones</p>
   <div class="area">
-    <div class="cols c2">
+    <div class="cols c2" style="gap:60px">
       <div class="pila">
         <b class="resalta">36 canciones medidas con el mismo notebook</b>
         <div class="barras">
@@ -427,28 +476,27 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
           <span>Gentle Giant</span><div class="b clara" style="width:66.7%"></div><span class="v">6</span>
           <span>Primus</span><div class="b gris" style="width:33.3%"></div><span class="v">3</span>
         </div>
-        <p class="nota">Influencias que la banda cita (verde claro) y la comparación propia (gris).</p>
+        <p class="nota">La banda (verde oscuro), las influencias que cita (verde claro) y la comparación propia (gris).</p>
       </div>
       <div class="pila">
-        <b class="resalta">Corpus de estilos descargados</b>
+        <b class="resalta">Corpus de estilos usados</b>
         <table class="datos">
           <tr><th>Estilo</th><th>Corpus</th><th class="num">Piezas</th></tr>
           <tr><td>Rock</td><td>Rolling Stone 200</td><td class="num">200</td></tr>
-          <tr><td>Práctica común</td><td>Kostka-Payne</td><td class="num">—</td></tr>
+          <tr><td>Práctica común</td><td>Kostka-Payne</td><td class="num">46</td></tr>
           <tr><td>Jazz</td><td>iRealPro</td><td class="num">1 186</td></tr>
           <tr><td>Pop</td><td>Hooktheory, 9 álbumes</td><td class="num">121</td></tr>
-          <tr><td>Persa</td><td>Radif Corpus</td><td class="num">228</td></tr>
-          <tr><td>Makam turco</td><td>SymbTr</td><td class="num">≈ 2 200</td></tr>
-          <tr><td>Folk irlandés</td><td>The Session</td><td class="num">—</td></tr>
+          <tr><td>Persa</td><td>Radif Corpus</td><td class="num">229</td></tr>
+          <tr><td>Indostánica</td><td>Hindustani Transcription Dataset</td><td class="num">50</td></tr>
         </table>
-        <p class="nota">Sin corpus simbólico abierto: maqam árabe.</p>
+        <p class="nota">Rock: 200 canciones con dos analistas (400 análisis). Descargados pero no usados: makam turco (SymbTr) y folk irlandés (The Session). Sin corpus simbólico abierto: maqam árabe.</p>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 15 · El algoritmo completo (con el pseudocódigo como sub-diapositiva) -->
+<!-- 16 · El algoritmo completo (con el pseudocódigo como sub-diapositiva) -->
 <section>
   <section class="contenido">
     <span class="numero"></span>
@@ -458,28 +506,28 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
       <div class="etapa"><span class="rotulo">1 · Señal</span>
         <div class="flujo flujo-compacto">
           <div class="paso"><b>Audio oficial</b>mezcla estéreo de cada canción</div><div class="flecha">→</div>
-          <div class="paso"><b>Separación</b>Demucs 6s, semilla 0: guitarra y bajo<span class="ref">12</span></div><div class="flecha">→</div>
-          <div class="paso"><b>Saliencia armónica</b>10 armónicos; una altura candidata cada 25 cents<span class="ref">7</span></div>
+          <div class="paso"><b>Separación</b>Demucs 6s, semilla 0: guitarra y bajo<span class="ref">13</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Saliencia armónica</b>10 armónicos; una altura candidata cada 25 cents<span class="ref">8</span></div>
         </div>
       </div>
       <div class="baja">↓</div>
       <div class="etapa nucleo"><span class="rotulo">2 · Núcleo: transcripción en 24-EDO guiada por el looper</span>
         <div class="flujo flujo-compacto">
           <div class="paso"><b>Ciclo del looper</b>autocorrelación: periodo \(\ell^*\) de 1 a 16 s</div><div class="flecha">→</div>
-          <div class="paso"><b>Consenso de vueltas</b>media de la misma fase en ±3 vueltas<span class="ref">11</span></div><div class="flecha">→</div>
-          <div class="paso"><b>Registro</b>atracción suave a la altura típica de la melodía<span class="ref">11</span></div><div class="flecha">→</div>
-          <div class="paso"><b>Viterbi de altura</b>contorno continuo; notas en la rejilla de ¼ de tono<span class="ref">7</span></div><div class="flecha">→</div>
-          <div class="paso"><b>Limpieza</b>fuera las notas cortas que no vuelven en la vuelta vecina<span class="ref">11</span></div>
+          <div class="paso"><b>Consenso de vueltas</b>media de la misma fase en ±3 vueltas<span class="ref">12</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Registro</b>atracción suave a la altura típica de la melodía<span class="ref">12</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Viterbi de altura</b>contorno continuo; notas en la rejilla de ¼ de tono<span class="ref">8</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Limpieza</b>fuera las notas cortas que no vuelven en la vuelta vecina<span class="ref">12</span></div>
         </div>
       </div>
       <div class="baja">↓</div>
       <div class="etapa"><span class="rotulo">3 · Estructura y estilo</span>
         <div class="flujo flujo-compacto">
           <div class="paso"><b>Pulso y compases</b>programación dinámica, de 2 a 8 pulsos</div><div class="flecha">→</div>
-          <div class="paso"><b>Acorde por compás</b>calidades de Piston en 24-EDO y confianza \(\kappa\)<span class="ref">10</span></div><div class="flecha">→</div>
-          <div class="paso"><b>Tabroll</b>notas, compases y acordes en una página<span class="ref">9</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Acorde por compás</b>calidades de Piston en 24-EDO y confianza \(\kappa\)<span class="ref">11</span></div><div class="flecha">→</div>
+          <div class="paso"><b>Tabroll</b>notas, compases y acordes en una página<span class="ref">10</span></div><div class="flecha">→</div>
           <div class="paso"><b>Cuatro bloques</b>armonía · escala · ¼ de tono · metro</div><div class="flecha">→</div>
-          <div class="paso"><b>Test contra corpus</b>Jensen-Shannon, 5 vecinos y percentil<span class="ref">13</span></div>
+          <div class="paso"><b>Test contra corpus</b>Jensen-Shannon, 5 vecinos y percentil<span class="ref">14</span></div>
         </div>
       </div>
       <p class="nota leyenda-algoritmo">En amarillo, el núcleo propio del trabajo. «diap. n»: dónde se explicó cada paso. El pseudocódigo está en la sub-diapositiva de abajo.</p>
@@ -492,33 +540,45 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     <h2>El algoritmo en pseudocódigo</h2>
     <p class="subtitulo">Metodología · lo esencial, con los parámetros del código</p>
     <div class="area alta">
-      <ol class="pseudo">
-        <li class="cab"><span><span class="kw">Entrada:</span> audio estéreo \(x\) &nbsp; <span class="kw">Salida:</span> notas en 24-EDO, compases, acorde por compás y veredicto por bloque</span></li>
-        <li><span>\((g,\,b) \leftarrow \operatorname{Demucs}(x)\)</span><span class="c">guitarra y bajo, semilla 0</span></li>
-        <li><span>\(S(m,n) \leftarrow \sum_{h=1}^{10} 0.82^{\,h-1}\,W\big(n,\ h\,f_0(m)\big)\), &nbsp;\(m\) cada 25 cents</span><span class="c">saliencia armónica</span></li>
-        <li><span>\(\ell^* \leftarrow\) picos de la autocorrelación de cada voz, \(1 \le \ell \le 16\) s</span><span class="c">ciclo del looper</span></li>
-        <li><span>\(\hat S(m,n) \leftarrow \operatorname{media}_{|k|\le 3}\ S(m,\ n + k\ell^*)\)</span><span class="c">consenso de vueltas</span></li>
-        <li><span>\(r \leftarrow \operatorname{mediana}\ \operatorname{Viterbi}(\hat S)\); &nbsp;\(w(m) = 0.7 + 0.3\,e^{-\frac12 \left(\frac{m-r}{12}\right)^2}\)</span><span class="c">atracción al registro</span></li>
-        <li><span>\(m^*_{1:T} \leftarrow \operatorname{Viterbi}\big(\log(1 + w\hat S/\theta) - 0.01\,|m_n - m_{n-1}|\big)\)</span><span class="c">contorno de altura</span></li>
-        <li><span>\(N \leftarrow \operatorname{Notas}(m^*,\ \text{ataques de } g \text{ y } b)\), &nbsp;\(q = \operatorname{round}(2p)\)</span><span class="c">notas en 24-EDO</span></li>
-        <li><span>quitar de \(N\) las notas \(&lt; 80\) ms que no vuelven en \(t \pm \ell^*\)</span><span class="c">notas sueltas</span></li>
-        <li><span>\(B \leftarrow \operatorname{CompasesPD}\big(\operatorname{Pulso}(x),\ L \in \{2,\dots,8\}\big)\)</span><span class="c">programación dinámica</span></li>
-        <li><span><span class="kw">para</span> cada compás \(c \in B\): &nbsp;(fundamental, calidad) \(\leftarrow \arg\max\) plantillas de Piston sobre bajo + 0.6·aguda</span><span class="c">acorde en 24-EDO</span></li>
-        <li class="i1"><span>\(\kappa_c \leftarrow p(\text{fundamental}) \cdot \text{acuerdo entre vueltas} \cdot \text{cobertura}\)</span><span class="c">confianza</span></li>
-        <li><span><span class="kw">para</span> cada bloque \(\beta\) (armonía, escala, ¼ de tono, metro) y corpus \(C\):</span><span class="c">rasgos por canción</span></li>
-        <li class="i1"><span>aplicar a las piezas de \(C\) el error del notebook medido en Primus</span><span class="c">comparar en igualdad</span></li>
-        <li class="i1"><span>\(\text{pct}_{\beta,C} \leftarrow\) % de piezas de \(C\) con su 5.ª vecina (\(D_{JS}\)) igual o más lejos</span><span class="c">tipicidad</span></li>
-        <li><span>\(\beta\) es «sin vecino» si \(\max_C \text{pct}_{\beta,C} &lt; 5\)</span><span class="c">veredicto</span></li>
-      </ol>
+      <div class="pseudo-caja">
+        <p class="pseudo-cab"><span class="kw">Entrada:</span> audio estéreo \(x\) &nbsp;&nbsp; <span class="kw">Salida:</span> notas \(N\) en 24-EDO, compases \(B\), acordes \(A\) y veredicto \(V\) por bloque</p>
+        <div class="cols c2" style="gap:28px; height:auto">
+        <ol class="pseudo">
+          <li class="sec"><span>▷ 1 · Señal</span></li>
+          <li><span>\((g,\,b) \leftarrow\) <span class="fn">Separar</span>\((x)\)</span><span class="c">Demucs 6s, semilla 0</span></li>
+          <li><span>\(S \leftarrow\) <span class="fn">Saliencia</span>\((g,\,b)\)</span><span class="c">10 armónicos, cada 25 cents</span></li>
+          <li class="sec"><span>▷ 2 · Núcleo: guiado por el looper</span></li>
+          <li><span>\(\ell^* \leftarrow\) <span class="fn">Ciclo</span>\((S)\)</span><span class="c">autocorrelación, 1 a 16 s</span></li>
+          <li><span>\(\hat S \leftarrow\) <span class="fn">Consenso</span>\((S, \ell^*)\)</span><span class="c">media en ±3 vueltas</span></li>
+          <li><span>\(w \leftarrow\) <span class="fn">Registro</span>\((\hat S)\)</span><span class="c">altura típica de la melodía</span></li>
+          <li><span>\(m^* \leftarrow\) <span class="fn">Viterbi</span>\((w \hat S)\)</span><span class="c">contorno sin saltos raros</span></li>
+          <li><span>\(N \leftarrow\) <span class="fn">Notas</span>\((m^*)\)</span><span class="c">redondeo a ¼ de tono</span></li>
+          <li><span>\(N \leftarrow\) <span class="fn">Limpiar</span>\((N, \ell^*)\)</span><span class="c">fuera notas sueltas</span></li>
+        </ol>
+        <ol class="pseudo" style="counter-reset: linea 8">
+          <li class="sec"><span>▷ 3 · Estructura y estilo</span></li>
+          <li><span>\(B \leftarrow\) <span class="fn">Compases</span>(<span class="fn">Pulso</span>\((x)\))</span><span class="c">de 2 a 8 pulsos</span></li>
+          <li><span><span class="kw">para cada</span> compás \(c \in B\) <span class="kw">hacer</span></span></li>
+          <li class="i1"><span>\(A[c],\ \kappa_c \leftarrow\) <span class="fn">Acorde</span>\((c)\)</span><span class="c">Piston y confianza</span></li>
+          <li class="fin"><span><span class="kw">fin</span></span></li>
+          <li><span><span class="kw">para cada</span> bloque \(\beta\), corpus \(C\) <span class="kw">hacer</span></span></li>
+          <li class="i1"><span>\(\mathrm{pct}[\beta, C] \leftarrow\) <span class="fn">Percentil</span>\((\beta, C)\)</span><span class="c">5.ª vecina, \(D_{JS}\)</span></li>
+          <li class="fin"><span><span class="kw">fin</span></span></li>
+          <li><span>\(V[\beta] \leftarrow\) «sin vecino» <span class="kw">si</span> \(\max_C \mathrm{pct} &lt; 5\)</span><span class="c">veredicto</span></li>
+          <li><span><span class="kw">devolver</span> \(N, B, A, V\)</span></li>
+        </ol>
+        </div>
+      </div>
+      <p class="pseudo-leyenda"><b>Algoritmo 1:</b> <span class="fn">TabRoll24</span>\((x)\), del audio al veredicto de estilo</p>
     </div>
     <p class="pie" data-campo="pie"></p>
-    <aside class="notes">Las líneas 3 a 8 son el núcleo del looper; la 2 y la 7 usan las fórmulas de la diapositiva 7, y la 14 y la 15, las de la 13.</aside>
+    <aside class="notes">Convenciones de CLRS y algorithm2e: palabras clave en negrita, procedimientos en versalitas, ← es asignación, ▷ un comentario y la sangría con su línea vertical marca el bloque, que se cierra con «fin» (como en algorithm2e). Las líneas 3 a 8 son el núcleo del looper. Saliencia (línea 2) y Notas (línea 7, q = round(2p)) usan las fórmulas de la diapositiva 8; Percentil (línea 13), las de la 14. Detalles que no caben: Saliencia pondera cada armónico por 0.82^(h−1); Viterbi penaliza 0.01 por cuarto de tono de salto; Limpiar quita notas de menos de 80 ms que no vuelven en t ± ℓ*; Acorde pesa el bajo 1 y la voz aguda 0.6; a cada corpus se le aplica el error del notebook medido en Primus.</aside>
   </section>
 </section>
 
 <!-- ============================== RESULTADOS ============================== -->
 
-<!-- 16 · Repositorio -->
+<!-- 17 · Repositorio -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>El repositorio en GitHub</h2>
@@ -533,12 +593,12 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
 │   ├── run_song.py           <span class="c">una canción, de punta a punta</span>
 │   ├── evaluar_melodia.py    <span class="c">medida F contra la referencia</span>
 │   ├── <span class="d">comparacion/</span>          <span class="c">estilos, corpus, gráficas</span>
-│   └── graficas_completas.py
+│   ├── graficas_completas.py
 │   └── presentacion_imagenes.py
 ├── <span class="d">references/</span>          <span class="c">partituras y corpus</span>
 ├── <span class="d">docs/</span>                <span class="c">notas, artículo, fórmulas</span>
 ├── <span class="d">presentacion/</span>        <span class="c">esta presentación</span>
-├── <span class="d">tests/</span>               <span class="c">103 pruebas</span>
+├── <span class="d">tests/</span>               <span class="c">107 pruebas</span>
 └── Makefile</div>
       <div class="pila">
         <div class="flujo flujo-vertical">
@@ -554,7 +614,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 17 · ¿La herramienta acierta? -->
+<!-- 18 · ¿La herramienta acierta? -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>¿La herramienta acierta?</h2>
@@ -562,20 +622,20 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area alta">
     <div class="cols" style="grid-template-columns: 0.95fr 1.05fr">
       <figure class="fig sin-borde" style="margin:0"><img src="img/acierto_herramienta.png" alt="Acierto de la herramienta por canción">
-        <figcaption>Contra las referencias corregidas de oído (corridas congeladas). Yor Zarad: prueba a ciegas, melodía 37 % y fundamental 88 %.</figcaption></figure>
-      <div class="pila compacta" style="gap:5px">
+        <figcaption>Contra las referencias corregidas de oído (corridas congeladas). En promedio, la fundamental del acorde acierta el 85 % en los compases confiables y la melodía el 49 %.</figcaption></figure>
+      <div class="pila compacta" style="gap:13px">
         <div class="tarjeta"><h3>1 · El bajo manda</h3><p>En la fundamental pesa más el bajo (1 frente a 0.6), que es lo mejor transcrito.</p></div>
         <div class="tarjeta"><h3>2 · Se suma sobre las vueltas del loop</h3><p>Un error en una vuelta queda en minoría frente a las demás.</p></div>
         <div class="tarjeta"><h3>3 · La octava no importa</h3><p>Una nota una octava arriba es la misma clase de altura.</p></div>
         <div class="tarjeta"><h3>4 · Por compás, no por nota</h3><p>La melodía exige el ataque a ±75 ms; el acorde, solo qué notas suenan en el compás.</p></div>
-        <div class="tarjeta amarilla"><h3>Comprobado</h3><p>Al cambiar un ajuste de la melodía, Fabienk varió de 41 a 44 % y Sarniezz de 46 a 48 %, y su fundamental no se movió (82 y 72 %).</p></div>
+        <div class="tarjeta amarilla"><h3>Comprobado</h3><p>En un experimento aparte se cambió solo el peso de la melodía: Fabienk varió de 41 a 44 % y Sarniezz de 46 a 48 %, y su fundamental quedó idéntica en las tres corridas.</p></div>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 18 · Armonía (con sub-diapositivas a pantalla completa) -->
+<!-- 19 · Armonía (con sub-diapositivas a pantalla completa) -->
 <section>
   <section class="contenido">
     <span class="numero"></span>
@@ -600,7 +660,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     <p class="pie" data-campo="pie"></p></section>
 </section>
 
-<!-- 19 · Melodía -->
+<!-- 20 · Melodía -->
 <section>
   <section class="contenido">
     <span class="numero"></span>
@@ -628,7 +688,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     <p class="pie" data-campo="pie"></p></section>
 </section>
 
-<!-- 20 · Síntesis -->
+<!-- 21 · Síntesis -->
 <section>
   <section class="contenido">
     <span class="numero"></span>
@@ -637,7 +697,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     <div class="area alta">
       <div class="cols c2" style="gap:18px">
         <figure class="fig" style="margin:0"><img src="img/3a_sintesis_ciclos_metricos.png" alt="Ciclos métricos"><figcaption class="leyenda-grafica">Picos en <b>20 y 28 corcheas</b>: dos compases de 5 y de 7, los tiempos que la banda menciona (hipótesis). Sarniezz y Utzp, en cambio, van en 4.</figcaption></figure>
-        <figure class="fig" style="margin:0"><img src="img/3b_sintesis_clasificacion_album.png" alt="Clasificación del álbum"><figcaption class="leyenda-grafica">Rock gana 8 de 24 bloques, radif 7 y en <b>9 no hay vecino</b>. El vecino más cercano es <b>King Gizzard</b>: en armonía, Angor es idéntica a «Flying Microtonal Banana».</figcaption></figure>
+        <figure class="fig" style="margin:0"><img src="img/3b_sintesis_clasificacion_mapa.png" alt="Clasificación del álbum por corpus"><figcaption class="leyenda-grafica">Rock gana 8 de 24 bloques, radif 7 y en <b>9 no hay vecino</b>. El vecino más cercano es <b>King Gizzard</b>: en armonía, Angor es idéntica a «Flying Microtonal Banana».</figcaption></figure>
       </div>
     </div>
     <p class="pie" data-campo="pie"></p>
@@ -646,15 +706,19 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     <div class="grafica-completa fig"><img src="img/3a_sintesis_ciclos_metricos.png" alt=""></div>
     <p class="leyenda-grafica">Cada barra mide cuánto se repiten las alturas y los ataques al comparar la música consigo misma ℓ corcheas después (0 a 1). Un pico alto y aislado es un ciclo largo y estable; las cifras sobre las barras son los mejores periodos.</p>
     <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Síntesis · clasificación del álbum</h2><p class="subtitulo">Resultados · 3b</p>
-    <div class="grafica-completa fig"><img src="img/3b_sintesis_clasificacion_album.png" alt=""></div>
-    <p class="leyenda-grafica">Arriba, el percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido; «bl.» = bloques de rasgos con datos). Abajo, en cuántas canciones gana cada corpus en cada bloque; «sin vecino»: ningún corpus pasa el percentil 5.</p>
+  <section class="contenido"><span class="numero"></span><h2>Síntesis · clasificación por corpus</h2><p class="subtitulo">Resultados · 3b</p>
+    <div class="grafica-completa fig"><img src="img/3b_sintesis_clasificacion_mapa.png" alt=""></div>
+    <p class="leyenda-grafica">Percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido; 50 = pieza típica). «bl.» = bloques de rasgos con datos para esa canción y ese corpus. La fila «Álbum» es la media. Atenuados (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica no es un parecido real.</p>
+    <p class="pie" data-campo="pie"></p></section>
+  <section class="contenido"><span class="numero"></span><h2>Síntesis · qué corpus gana cada bloque</h2><p class="subtitulo">Resultados · 3c</p>
+    <div class="grafica-completa fig"><img src="img/3c_sintesis_corpus_por_bloque.png" alt=""></div>
+    <p class="leyenda-grafica">En cuántas canciones del disco gana cada corpus en cada bloque de rasgos. «Sin vecino»: ningún corpus pasa el percentil 5. Rock gana 8 de 24, radif 7 y en 9 no hay vecino.</p>
     <p class="pie" data-campo="pie"></p></section>
 </section>
 
 <!-- ============================== CIERRE ============================== -->
 
-<!-- 21 · Conclusiones -->
+<!-- 22 · Conclusiones -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Conclusiones</h2>
@@ -671,20 +735,20 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
         <h3>2 · Melodía: lo nuevo</h3>
         <div class="cifra"><span class="grande" style="color:#c98500">2 grados</span></div>
         <p class="clave">en cuarto de tono concentran entre el 48 y el 82 % de los cuartos de tono de cada canción.</p>
-        <p>Son grados de la escala, no adornos: dos familias, frigia (♭2+, ♭6+) y dórica (7+, 6+, ♭3+). Ningún corpus medido las tiene.</p>
+        <p>Son grados de la escala, no adornos: dos familias. La frigia (♭2+, ♭6+) es la más común en el radif persa y en King Gizzard; la dórica (7+, 6+, ♭3+) no la tiene ningún corpus medido.</p>
       </div>
       <div class="pila tarjeta conclusion">
         <h3>3 · Síntesis: un híbrido</h3>
         <div class="cifra"><span class="grande">5 y 7</span><span class="frente">tiempos</span></div>
         <p class="clave">por compás en los ciclos del looper (picos en 20 y 28 corcheas), como dice la banda.</p>
-        <p>Armonía de rock modal, escala cercana al radif y King Gizzard como vecino más próximo; Sarniezz y Fabienk no tienen vecino ni ahí.</p>
+        <p>Armonía de rock modal, cuartos de tono repartidos como en el radif y King Gizzard como vecino más próximo; Sarniezz y Fabienk no tienen vecino ni ahí.</p>
       </div>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 22 · Trabajo futuro -->
+<!-- 23 · Trabajo futuro -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Trabajo futuro</h2>
@@ -711,7 +775,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
           </g>
         </svg>
       </div>
-      <div class="pila" style="justify-content:center; gap:8px">
+      <div class="pila aireada" style="justify-content:center; gap:22px">
         <div class="tarjeta"><h3>Melodía</h3><p>Tratar las vueltas del looper como varias tomas de la misma frase para separar las capas.</p></div>
         <div class="tarjeta"><h3>Armonía</h3><p>Elegir el centro tonal de forma robusta en cualquier canción (hoy falla en «Tommy the Cat»).</p></div>
         <div class="tarjeta"><h3>Datos y producto</h3><p>Un corpus de maqam árabe; un tabroll web interactivo; otros microtonales (King Gizzard, Sevish) y uso en la enseñanza.</p></div>
@@ -721,7 +785,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <p class="pie" data-campo="pie"></p>
 </section>
 
-<!-- 23 · Referencias -->
+<!-- 24 · Referencias -->
 <section class="contenido">
   <span class="numero"></span>
   <h2>Referencias</h2>
@@ -729,10 +793,10 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area">
     <div class="cols c2">
       <div class="pila" style="justify-content:center">
-        <ul class="lista cuadros" style="font-size:15px">
+        <ul class="lista cuadros lista-aireada" style="font-size:15px">
           <li>Artículo y bibliografía completa.</li>
           <li>Repositorio con el notebook, los scripts y las gráficas.</li>
-          <li>Corpus: RS 200, Kostka-Payne, iRealPro, Hooktheory, Radif, SymbTr, The Session.</li>
+          <li>Corpus: RS 200, Kostka-Payne, iRealPro, Hooktheory, Radif e Hindustani Transcription Dataset.</li>
           <li>Entrevistas y podcast de la banda.</li>
         </ul>
       </div>

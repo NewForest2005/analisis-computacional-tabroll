@@ -9,6 +9,9 @@ matemáticos elaborados. Las entradas marcadas «por verificar» requieren compr
 - README.md: descripción general del repositorio, corpus y scripts.
 - docs/corpus_estilos.md: corpus abiertos, método de comparación y límites.
 - docs/verosimilitud_por_bloques.md: interpretación de los bloques de armonía, escala, cuartos de tono y metro.
+- docs/guion_defensa.md: guion de la defensa por diapositiva, con los términos de cada una (por ahora, diapositivas 12 a 23).
+- Corridas congeladas `outputs/*_repro` (13-nov-2026): fuente de las cifras de acierto de la diapositiva 18 y del glosario.
+- docs/glosario.md: glosario de la presentación (24-EDO, MIDI, MIDI fraccionario, perfil de 24 clases, MFCC, pYIN, desviación en cents, piano roll, compás, funciones de Riemann, ejes de Lendvai…).
 - docs/armonia.md: fundamentos de armonía, funciones, progresiones, Piston, Riemann y Lendvai.
 - docs/evaluacion_melodia.md: evaluación de melodía, alineaciones y referencias anotadas.
 - docs/evolucion_de_la_tesis.md: evolución conceptual y bibliográfica del proyecto.
@@ -43,6 +46,8 @@ Verificadas durante la investigación, salvo las marcadas «por verificar». Ant
 
 - Paulus, J., Müller, M., y Klapuri, A. (2010). State of the art report: Audio-based music structure analysis. *Proc. ISMIR*, 625-636.
 
+- Rafii, Z., y Pardo, B. (2013). REpeating Pattern Extraction Technique (REPET): A simple method for music/voice separation. *IEEE Transactions on Audio, Speech, and Language Processing*, 21(1), 71-82. https://doi.org/10.1109/TASL.2012.2213249
+
 - Raffel, C., McFee, B., Humphrey, E. J., Salamon, J., Nieto, O., Liang, D., y Ellis, D. P. W. (2014). mir\_eval: A transparent implementation of common MIR metrics. *Proc. ISMIR*, 367-372.
 
 - Rouard, S., Massa, F., y Défossez, A. (2023). Hybrid transformers for music source separation. *Proc. IEEE ICASSP*. https://doi.org/10.1109/ICASSP49357.2023.10096956
@@ -71,6 +76,20 @@ Verificadas durante la investigación, salvo las marcadas «por verificar». Ant
 - Pearce, M. T. (2018). Statistical learning and probabilistic prediction in music cognition: Mechanisms of stylistic enculturation. *Annals of the New York Academy of Sciences*, 1423(1), 378-395. https://doi.org/10.1111/nyas.13654
 - Shanahan, D., Broze, Y., y Rodgers, R. (2012). A diachronic analysis of harmonic schemata in jazz. *Proc. ICMPC 12 / ESCOM 8*, 909-917.
 - Temperley, D., y de Clercq, T. (2013). Statistical analysis of harmony and melody in rock music. *Journal of New Music Research*, 42(3), 187-204.
+
+**Glosario: conceptos y teoría** (fuentes de [`docs/glosario.md`](glosario.md); Piston y Lendvai verificados en catálogos; las demás, por verificar)
+
+- Christen, P., Hand, D. J., y Kirielle, N. (2024). A review of the F-measure: Its history, properties, criticism, and alternatives. *ACM Computing Surveys*, 56(3). https://doi.org/10.1145/3606367 (historia de la medida F; por verificar volumen y año)
+- Davis, S. B., y Mermelstein, P. (1980). Comparison of parametric representations for monosyllabic word recognition in continuously spoken sentences. *IEEE Transactions on Acoustics, Speech, and Signal Processing*, 28(4), 357-366. https://doi.org/10.1109/TASSP.1980.1163420 (origen de los MFCC; por verificar)
+- de Cheveigné, A., y Kawahara, H. (2002). YIN, a fundamental frequency estimator for speech and music. *Journal of the Acoustical Society of America*, 111(4), 1917-1930. https://doi.org/10.1121/1.1458024 (base de pYIN; por verificar)
+- Lendvai, E. (1971). *Béla Bartók: An Analysis of His Music*. Kahn & Averill. ISBN 0900707046. (sistema de ejes)
+- MIDI Manufacturers Association. (1996). *The Complete MIDI 1.0 Detailed Specification*. MMA. (estándar MIDI de 1983; por verificar)
+- NIST (2015). *Secure Hash Standard (SHS)*. FIPS PUB 180-4. National Institute of Standards and Technology. https://doi.org/10.6028/NIST.FIPS.180-4 (define SHA-256)
+- Piston, W. (1987). *Harmony* (5.ª ed., revisada y ampliada por M. DeVoto). W. W. Norton. ISBN 0393954803. (calidades de acorde, grados tonales y modales, centro sin dominante; docs/armonia.md cita pp. 22-24 y 474)
+- Riemann, H. (1893). *Vereinfachte Harmonielehre oder die Lehre von den tonalen Funktionen der Akkorde*. Augener. (teoría funcional; por verificar el año de la 1.ª edición alemana; trad. inglesa: *Harmony Simplified*, Augener, 1896)
+- Stevens, S. S., Volkmann, J., y Newman, E. B. (1937). A scale for the measurement of the psychological magnitude pitch. *Journal of the Acoustical Society of America*, 8(3), 185-190. https://doi.org/10.1121/1.1915893 (escala Mel; por verificar)
+- van Rijsbergen, C. J. (1979). *Information Retrieval* (2.ª ed.). Butterworths. (medida de efectividad E; la medida F es F = 1 − E)
+- Viterbi, A. J. (1967). Error bounds for convolutional codes and an asymptotically optimum decoding algorithm. *IEEE Transactions on Information Theory*, 13(2), 260-269. https://doi.org/10.1109/TIT.1967.1054010 (por verificar)
 
 **Ritmo y métrica**
 

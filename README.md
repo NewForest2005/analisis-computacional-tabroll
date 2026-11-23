@@ -1,137 +1,146 @@
-# Análisis Computacional — Tabroll para Angine de Poitrine
+# Tabroll 24-EDO: análisis computacional de Angine de Poitrine
 
-En este repositorio se encuentra el código fundamental para el análisis computacional de audio y la generación de un piano roll armónico/melódico estilo TheoryTab.
+![Python](https://img.shields.io/badge/python-3.10–3.12-blue)
+![Afinación](https://img.shields.io/badge/afinación-24--EDO-orange)
 
-El notebook original se conserva en [`notebooks/Tabroll_Angine_de_Poitrine.ipynb`](notebooks/Tabroll_Angine_de_Poitrine.ipynb). Cada una de sus celdas de código se extrae a un módulo Python independiente dentro de [`src/tabroll/cells`](src/tabroll/cells); el inventario actualizado, con el número de celda original, está en [`docs/cell-index.md`](docs/cell-index.md). **El notebook es la fuente de verdad**: los cambios se hacen en el notebook y después se regeneran los módulos (ver [Regenerar los módulos](#regenerar-los-módulos)). Las celdas que definen una función o clase usan ese nombre como archivo (`find_stem.py`, `scale.py`, `render_song_graphic.py`); las celdas con varias funciones o configuración usan un nombre descriptivo.
+Herramienta de transcripción y análisis en **24-EDO** (cuartos de tono) a partir del audio, aplicada al álbum de la
+banda microtonal Angine de Poitrine. Desde la grabación produce notas en cuartos de tono, compases, un acorde por compás
+y un **tabroll**: un piano roll de 24 filas por octava con los acordes debajo. Después compara cada canción con corpus de
+estilos (rock, jazz, práctica común, pop, radif persa, indostánica) para responder si la banda es un estilo existente o
+una recombinación nueva.
 
-## Estructura
+Trabajo de grado · Facultad de Ciencias, Departamento de Matemáticas · Universidad Nacional de Colombia, sede Bogotá.
 
-- `notebooks/`: fuente interactiva original.
-- `src/tabroll/cells/`: extracción ordenada, una celda de código por archivo.
-- `docs/cell-index.md`: inventario y trazabilidad entre notebook y módulos.
-- `docs/architecture.md`: cómo se separan funciones, clases, inicialización, configuración y ejecución.
-- `docs/*.md`: notas de análisis (armonía, melodía, corpus y estilos, verosimilitud por bloques, evolución de la tesis).
-- `docs/articulo/`: artículo final en LaTeX y su PDF.
-- `docs/poster/`: póster en LaTeX (`poster_version_1_Santi.tex` incrusta `poster_original.pdf`), su PDF y `LEEME_nuevos_graficos.md` con el contenido propuesto por sección.
-- `docs/defensa/`: puntos para la defensa ordenados, con la fuente de cada cifra (`make defensa` genera el PDF y lo copia a `~/Downloads`).
-- `presentacion/`: presentación de la defensa en reveal.js con la plantilla institucional (fondos, fuentes Ancízar y reveal.js copiados localmente, funciona sin conexión); `make presentacion` la sirve y la abre en el navegador; `make presentacion-imagenes` copia a `presentacion/img/` las gráficas de `make graficas-diapositivas` y un tabroll de Sarniezz. Notas del orador con la tecla S. El video de la diapositiva 2: `make presentacion-video` descarga el fragmento de KEXP (0:32–2:32) a `presentacion/video/kexp_fragmento.mp4` (no se sube a git) y la diapositiva lo reproduce ahí mismo, aunque se abra como archivo y sin conexión. Sin ese archivo usa YouTube, que solo funciona servido por http (`make presentacion`): abierta como archivo, YouTube no sabe desde qué página se incrusta y da «Error 153», así que ahí se muestra la miniatura con enlace al fragmento. `make presentacion-circulo` exporta el círculo de 24-EDO interactivo (`web/circulo24/`, con `scripts/comparacion/exportar_circulo24.py`) a `presentacion/circulo24/`; las pistas recortadas son .mp3 y no se suben a git.
-- `docs/formulas/`: resumen de fórmulas (tono logarítmico, Mel, Fourier, MFCC, KL, repetición temporal) en LaTeX y PDF.
-- `docs/referencias_compiladas.md`: bibliografía y fuentes del proyecto, compiladas.
-- `references/partituras/`: partituras y archivos Guitar Pro de referencia.
-- `references/corpus/`: corpus y datos de comparación estilística.
-- `trabajo/`: materiales de trabajo y diagnósticos archivados.
-- `docs/historial/`: historial auxiliar de la investigación.
-- `scripts/`: flujo principal.
-  - `run_song.py`: corre el notebook completo sobre una canción y guarda los resultados en `outputs/`.
-  - `todo.py` y `graficas_completas.py`: corren todas las canciones y reúnen las gráficas (`make todo`, `make graficas`).
-  - `extract_cells.py`: regenera la extracción cuando cambia el notebook (`--check` solo verifica).
-  - `parse_gp.py`, `evaluar_melodia.py` y `completar_evaluacion.py`: partituras Guitar Pro y evaluación contra ellas.
-  - `separar_roformer.py`: separación alternativa con BS-RoFormer SW en un entorno aparte (ver
-    [`docs/separacion_roformer.md`](docs/separacion_roformer.md)); `run_song.py --separador roformer` usa esas pistas.
-- `scripts/cuaderno/`: pasos del análisis que modifican el notebook (armonía en 24-EDO, funciones, ejes de Lendvai,
-  notas columna, análisis melódico, limpieza de notas…). Ya están aplicados; se pueden volver a correr sin duplicar cambios.
-- `scripts/diagnostico/`: diagnósticos de la línea melódica, las capas del looper, Basic Pitch y el ruido de muestreo.
-- `scripts/comparacion/`: comparación con corpus y repertorios (estilos, verosimilitud por bloques, campos de Hába,
-  ciclos métricos, equivalencias EDO) y gráficas comparativas (tarjetas, tiras de ciclos, radares, figuras del álbum).
-  `estilo_figuras.py` compone las figuras sin solapes y avisa si algo se monta (ver [`docs/graficas.md`](docs/graficas.md)).
-- `references/mata_zyklek_loops.py`: referencia anotada de loops y alturas para evaluar la melodía de Mata Zyklek.
-- `tests/`: validaciones estructurales básicas.
+## Resultados principales
+
+| Dimensión | Resultado |
+|---|---|
+| Armonía | 37.5 % de los casos sin vecino en ningún corpus, frente a 5.2 % en rock real |
+| Melodía | 2 grados en cuarto de tono concentran entre el 48 y el 82 % de los cuartos de tono de cada canción |
+| Metro | ciclos de dos compases de 5 y de 7 (picos en 20 y 28 corcheas) |
+| Acierto | fundamental del acorde: 85 % en compases confiables; melodía: 49 % (media de 4 canciones) |
+
+El detalle y la fuente de cada cifra están en [`docs/defensa/`](docs/defensa) y [`docs/guion_defensa.md`](docs/guion_defensa.md).
+
+## Estructura del repositorio
+
+```text
+analisis-computacional-tabroll/
+├── notebooks/            Tabroll_Angine_de_Poitrine.ipynb: fuente de verdad del análisis
+├── src/tabroll/cells/    una celda del notebook = un módulo (generados, no se editan a mano)
+├── scripts/
+│   ├── run_song.py       corre el notebook completo sobre una canción
+│   ├── extract_cells.py  regenera src/tabroll/cells/ desde el notebook
+│   ├── evaluar_melodia.py, completar_evaluacion.py, parse_gp.py   evaluación contra partituras
+│   ├── todo.py, graficas_completas.py, presentacion_imagenes.py   lotes y gráficas
+│   ├── separar_roformer.py                                        separación alternativa (BS-RoFormer)
+│   ├── comparacion/      corpus, verosimilitud por bloques, ciclos métricos, figuras del álbum
+│   ├── cuaderno/         pasos ya aplicados al notebook (armonía 24-EDO, funciones, ejes de Lendvai…)
+│   └── diagnostico/      diagnósticos de la melodía, el looper y Basic Pitch
+├── references/           partituras corregidas de oído, Guitar Pro y corpus de estilos
+├── docs/                 notas de método, glosario, guion, referencias, artículo, póster y defensa
+├── presentacion/         presentación de la defensa (reveal.js, funciona sin conexión)
+├── web/                  círculo de 24-EDO interactivo
+├── tests/                pruebas (pytest)
+├── trabajo/              materiales y diagnósticos archivados
+└── Makefile
+```
+
+`outputs/`, el audio y las pistas separadas no se suben a git.
 
 ## Instalación
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -e ".[dev]"
-```
-
-Demucs es opcional y solo se necesita para separar guitarra y bajo. La ejecución completa requiere además `ffmpeg` disponible en el sistema.
-
-### Requisitos en macOS Intel
-
-El proyecto requiere Python 3.10–3.12. En Mac Intel se recomienda Python 3.12, porque `numpy==1.26.4` no ofrece una combinación compatible con Python 3.13 y algunas versiones de `llvmlite` tampoco ofrecen ruedas binarias para Intel. Si `python3 --version` muestra otra versión, instala una compatible y crea el entorno con ella:
+Requiere Python 3.10–3.12 y, para separar guitarra y bajo, `ffmpeg`.
 
 ```bash
-brew install python@3.12
-/usr/local/bin/python3.12 -m venv .venv
+make install      # crea .venv e instala el proyecto con las dependencias de desarrollo
+make demucs       # opcional: Demucs para la separación de fuentes
 ```
 
-En Mac Intel se fija un conjunto compatible: `numpy==1.26.4`, `librosa==0.10.2.post1`, `scipy==1.14.1`, `matplotlib==3.9.4`, `numba==0.62.1` y `llvmlite==0.45.1`. Esta combinación evita que Torch/Demucs intente usar NumPy 2.x y conserva ruedas binarias para macOS Intel.
-
-FFmpeg solo es necesario para Demucs: los MP3 pueden leerse sin él, pero Demucs lo usa para leer y guardar las pistas separadas.
-
-```bash
-brew install ffmpeg
-```
-
-Demucs funciona sin GPU. En un Mac Intel se ejecuta por CPU y puede tardar varios minutos por canción; las pistas quedan guardadas junto al audio y no se vuelven a separar en ejecuciones posteriores. La separación usa una semilla fija: dos separaciones del mismo audio en la misma máquina dan las mismas pistas.
+En macOS Intel conviene Python 3.12 (`brew install python@3.12 ffmpeg`). El proyecto fija `numpy==1.26.4`,
+`librosa==0.10.2.post1`, `scipy==1.14.1`, `matplotlib==3.9.4`, `numba==0.62.1` y `llvmlite==0.45.1`, que tienen ruedas
+binarias para esa plataforma y evitan que Demucs use NumPy 2.x. Demucs corre en CPU (varios minutos por canción) con
+semilla fija.
 
 ## Uso
 
-La extracción conserva el orden de ejecución del notebook. Para reproducir el análisis completo, abrir el notebook en Jupyter/Colab y ejecutar las celdas en orden. Los módulos extraídos funcionan como una base auditable para migrar progresivamente el flujo a una API Python más desacoplada.
-
-## Correr una canción desde la terminal
+Los audios van en `Angine de Poitrine Audios/`. Para analizar una canción sin abrir Jupyter:
 
 ```bash
 .venv/bin/python scripts/run_song.py Fabienk
 .venv/bin/python scripts/run_song.py "Mata Zyklek" --set "BAR_LENGTHS=(5, 4, 2)"
 ```
 
-Si se ejecuta con `python3` global y existe `.venv`, el script se reinicia automáticamente usando el entorno del
-proyecto. También se puede activar el entorno antes: `source .venv/bin/activate` y después usar `python`.
+Cada corrida queda en `outputs/<fecha>_<hora>_<canción>/`:
 
-Se puede indicar una ruta o una parte del nombre dentro de `Angine de Poitrine Audios/`. Corre todas las celdas del notebook sobre esa canción, sin abrir Jupyter, y guarda la corrida en `outputs/<fecha>_<hora>_<canción>/`:
+| Archivo | Contenido |
+|---|---|
+| `harmony_outputs/` | tabroll por páginas, imagen completa y mapa de ciclos |
+| `resumen.md`, `resumen.json` | tempo, tonalidad, compases, ciclos, capas y huellas SHA-256 del audio usado |
+| `salida.txt` | todo lo que imprime el notebook, con el tiempo de cada celda |
 
-- `harmony_outputs/`: tabroll por páginas, imagen completa, mapa de ciclos y ciclos.
-- `salida.txt`: todo lo que imprime el notebook, los avisos y el tiempo de cada celda.
-- `resumen.md`: tempo, tonalidad, compases, ciclos y capas, para leer o pegar en el chat.
-- `resumen.json`: lo mismo en formato estructurado, para comparar corridas.
-  Guarda la huella SHA-256 de la mezcla y de las dos pistas (`pistas.sha256`): dos corridas con las mismas huellas usaron exactamente el mismo audio.
-
-Las pistas `<canción>_guitar` y `<canción>_bass` se buscan junto a la canción. Si no están, Demucs las crea y quedan guardadas junto a la canción para la próxima vez. El notebook no se modifica: los cambios se aplican solo a esa corrida.
+Si las pistas `<canción>_guitar` y `<canción>_bass` no existen junto al audio, Demucs las crea y las guarda. El notebook
+no se modifica: los ajustes se aplican solo a esa corrida.
 
 | Opción | Para qué |
 |---|---|
-| `--preset nombre` | Aplica un preset de la celda de ajustes, si la trae; hoy no trae ninguno (`--presets` los lista). |
-| `--set GRID=0.5` | Cambia una variable del notebook en esa corrida; se puede repetir. |
-| `--guitar ruta --bass ruta` | Usa pistas con otro nombre o en otra carpeta. |
-| `--sin-pistas` | Analiza solo la mezcla: no usa pistas ni corre Demucs. |
-| `--nombre prueba-grid` | Agrega una etiqueta al nombre de la carpeta. |
-| `--conservar 10` | Después de correr, deja solo las 10 corridas más recientes. |
+| `--set VARIABLE=valor` | cambia una variable del notebook en esa corrida; se puede repetir |
+| `--guitar ruta --bass ruta` | usa pistas con otro nombre o en otra carpeta |
+| `--sin-pistas` | analiza solo la mezcla, sin pistas ni Demucs |
+| `--separador roformer` | usa las pistas de BS-RoFormer ([`docs/separacion_roformer.md`](docs/separacion_roformer.md)) |
+| `--nombre etiqueta` | agrega una etiqueta al nombre de la carpeta |
+| `--conservar N` | deja solo las N corridas más recientes |
 
-`outputs/` no se sube a git. Para compartir una corrida, se puede subir solo su resumen con `git add -f outputs/<corrida>/resumen.md`.
+## Reproducir los resultados
 
-## Calidad
+| Comando | Qué hace |
+|---|---|
+| `make run-sarniezz` | analiza Sarniezz de punta a punta |
+| `make todo` | corre todas las canciones |
+| `make graficas` | gráficas comparativas de la banda, los repertorios y los corpus |
+| `make graficas-diapositivas` | solo las gráficas de la presentación |
+| `make presentacion` | sirve la presentación en `http://localhost:8000` (notas del orador con la tecla S) |
+| `make presentacion-imagenes` | copia a `presentacion/img/` las gráficas y el tabroll más recientes |
+| `make presentacion-video` | descarga el fragmento de KEXP de la diapositiva 2 |
+| `make defensa` | PDF con los puntos de la defensa |
 
-```bash
-make check   # extracción al día (sin escribir nada), sintaxis y dependencias
-make test    # todas las pruebas (unos 3 minutos)
-```
+`make help` lista todos los objetivos.
 
-Los comandos de shell propios de Jupyter se conservan como comentarios en el módulo correspondiente para que todos los archivos `.py` sean sintácticamente válidos.
+## Desarrollo
 
-## Makefile
-
-Con el audio de Sarniezz dentro de `Angine de Poitrine Audios/`, el análisis completo se ejecuta con:
-
-```bash
-make run-sarniezz
-```
-
-Ese objetivo instala Demucs, comprueba FFmpeg y ejecuta el notebook sobre `Angine de Poitrine - Sarniezz (audio officiel).mp3`. Si las pistas correspondientes `_guitar` y `_bass` no existen, Demucs las genera junto al audio. El resultado queda en `outputs/`, con `harmony_outputs/`, gráficos Tabroll, gráficos de ciclos, mapa de capas, `salida.txt`, `resumen.md` y `resumen.json`.
-
-## Regenerar los módulos
-
-Los módulos de `src/tabroll/cells/` se generan desde el notebook: **no los edites a mano**. Haz el cambio en la celda del notebook y regenera:
+El notebook es la fuente de verdad. Los módulos de `src/tabroll/cells/` se generan desde él: el cambio se hace en la
+celda y después se regenera.
 
 ```bash
-make extract                                        # regenera módulos y docs/cell-index.md
-.venv/bin/python scripts/extract_cells.py --check   # solo informa diferencias, no escribe
+make extract   # regenera los módulos y docs/cell-index.md
+make check     # verifica la extracción (sin escribir), la sintaxis y las dependencias
+make test      # todas las pruebas (unos 3 minutos)
 ```
 
-La extracción guarda en `src/tabroll/cells/.extraccion.json` la huella de cada módulo que escribe. Si un módulo cambió a mano desde la última extracción, `make extract` se detiene y lista esos archivos en lugar de borrar el cambio. Hay dos salidas:
+`make extract` guarda la huella de cada módulo en `src/tabroll/cells/.extraccion.json`. Si un módulo se editó a mano, se
+detiene y lo lista: hay que pasar el cambio al notebook o descartarlo con `scripts/extract_cells.py --force`.
+`tests/test_extracted_cells.py` falla si notebook y módulos no coinciden.
 
-- Pasar el cambio a la celda correspondiente del notebook y volver a correr `make extract` (lo normal).
-- Descartar el cambio manual con `.venv/bin/python scripts/extract_cells.py --force`.
+## Documentación
 
-La prueba `tests/test_extracted_cells.py` falla si notebook y módulos no coinciden.
+| Documento | Contenido |
+|---|---|
+| [`docs/architecture.md`](docs/architecture.md), [`docs/cell-index.md`](docs/cell-index.md) | organización del código y correspondencia notebook ↔ módulos |
+| [`docs/armonia.md`](docs/armonia.md) | armonía en 24-EDO: fundamentales, calidades de Piston, funciones de Riemann y ejes de Lendvai |
+| [`docs/evaluacion_melodia.md`](docs/evaluacion_melodia.md), [`docs/analisis_melodico.md`](docs/analisis_melodico.md) | evaluación y análisis de la melodía |
+| [`docs/corpus_estilos.md`](docs/corpus_estilos.md), [`docs/verosimilitud_por_bloques.md`](docs/verosimilitud_por_bloques.md) | corpus usados, método de comparación y sus límites |
+| [`docs/graficas.md`](docs/graficas.md) | cómo se generan y leen las gráficas |
+| [`docs/glosario.md`](docs/glosario.md), [`docs/guion_defensa.md`](docs/guion_defensa.md) | glosario y guion de la defensa |
+| [`docs/referencias_compiladas.md`](docs/referencias_compiladas.md) | bibliografía, corpus y fuentes |
+| [`docs/articulo/`](docs/articulo), [`docs/poster/`](docs/poster), [`docs/formulas/`](docs/formulas) | artículo, póster y resumen de fórmulas (LaTeX y PDF) |
+
+## Datos y licencias
+
+El audio de la banda no se distribuye. Los corpus de `references/corpus/` conservan la licencia de su fuente: antes de
+redistribuirlos hay que revisarla (ver [`docs/corpus_estilos.md`](docs/corpus_estilos.md)). Los pesos de BS-RoFormer SW no
+declaran licencia y se usan solo con fines académicos.
+
+## Cómo citar
+
+> Forero Rosales, S. (2026). *Análisis computacional de la banda Angine de Poitrine*. Departamento de Matemáticas,
+> Facultad de Ciencias, Universidad Nacional de Colombia, sede Bogotá.

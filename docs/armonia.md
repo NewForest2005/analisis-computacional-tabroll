@@ -300,6 +300,11 @@ edad de la voz aguda (`EDAD_MELODIA`), con la misma referencia:
 | Fabienk | 40.8 · 42.8 · 44.2 | 82.3 · 82.3 · 82.3 |
 | Mata Zyklek | 60.4 · 62.8 · 65.3 | 90.9 · 98.1 · 98.1 |
 
+Estas corridas son del 10-nov-2026, de una versión del cuaderno anterior a las corridas congeladas `_repro` del 13-nov.
+Los valores absolutos no coinciden con los de la gráfica de acierto (diapositiva 18: Sarniezz 57.5, Fabienk 81.6), porque
+entre ambas versiones cambió el código; lo que se cita es que la fundamental no varía con la melodía. La diapositiva 18 lo
+dice sin valores absolutos.
+
 No hay una medida de la armonía anterior a la corrección de la melodía: la armonía por compás entró al cuaderno después
 de que empezó la evaluación contra las referencias corregidas.
 

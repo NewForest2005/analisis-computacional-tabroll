@@ -6,7 +6,7 @@ Uso:
 - Las seis gráficas de resultados salen de la carpeta outputs/graficas_clave_*/diapositivas/ más reciente
   (la crea `make graficas-diapositivas`).
 - Los tabroll de ejemplo son páginas de Sarniezz y Fabienk de la corrida más reciente con Demucs (sin «_roformer»).
-  La de Fabienk (diapositiva 9, 4:42-4:52) se recorta al registro de la guitarra (Re♯3+ a Mi4+), con las filas al doble de alto y
+  La de Fabienk (diapositiva 10, 4:42-4:52) se recorta al registro de la guitarra (Re♯3+ a Mi4+), con las filas al doble de alto y
   la columna de notas rehecha con letra grande: notas regulares a la izquierda, cuartos de tono («+», en azul) a la
   derecha y el grado de Mi dórico en color. En la diapositiva la página entera quedaba a una quinta parte de su tamaño.
 Las imágenes que no salen de este repositorio se ponen a mano en presentacion/img/: la captura de Hooktheory

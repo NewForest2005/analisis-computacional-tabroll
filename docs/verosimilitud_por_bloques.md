@@ -10,6 +10,22 @@ En ese bloque los cuartos de tono se reparten entre los dos semitonos vecinos y 
 
 **3. El compás cambiante queda «sin vecino», no demostrado como nuevo.**
 
-Mata Zyklek, Fabienk y Yor Zarad mezclan compases dentro de la misma canción (Fabienk: 52 % del tiempo en 7, 28 % en 4 y 18 % en 3). Ninguna pieza del RS 200, del iRealPro ni de SymbTr hace eso: cada pieza de esos corpus tiene un solo compás o usul, aunque SymbTr incluye muchos de 7, 9 y 10 tiempos. Por eso el resultado dice que no hay antecedente en los corpus revisados, no que no lo haya en ninguna música. El estilo más cercano en la literatura es el rock progresivo y el math rock. El corpus que permitiría comprobarlo, ProgGP (173 temas de metal progresivo en Guitar Pro; Loth et al. 2023), solo se obtiene pidiéndolo por correo a sus autores y no estuvo disponible para esta tesis.
+Mata Zyklek, Fabienk y Yor Zarad mezclan compases dentro de la misma canción (Fabienk: 52 % del tiempo en 7, 28 % en 4 y 18 % en 3). Ninguna pieza del RS 200 ni del iRealPro, los dos corpus con compás de la comparación final, hace eso: cada pieza tiene un solo compás. SymbTr (makam turco), con usules de 7, 9 y 10 tiempos pero también uno solo por pieza, se revisó en una prueba del 15-nov-2026 y no entró en la comparación final. Por eso el resultado dice que no hay antecedente en los corpus revisados, no que no lo haya en ninguna música. El estilo más cercano en la literatura es el rock progresivo y el math rock. El corpus que permitiría comprobarlo, ProgGP (173 temas de metal progresivo en Guitar Pro; Loth et al. 2023), solo se obtiene pidiéndolo por correo a sus autores y no estuvo disponible para esta tesis.
+
+**4. Las familias de cuartos de tono frente a los corpus.**
+
+Se contaron los dos grados en cuarto de tono más usados de cada pieza (bloque de altura en 24 grados, desde la tónica):
+
+| | Piezas con cuartos de tono (≥ 2 %) | Par más usado = ♭2+ y ♭6+ (familia frigia) | Par más usado dentro de 7+, 6+, ♭3+ (familia dórica) |
+|---|---:|---:|---:|
+| Radif Corpus | 190 de 229 | 43 (el par más común del corpus) | 0 |
+| Indostánico | 0 de 50 | — | — |
+| King Gizzard (medido con el cuaderno) | 9 de 9 | 6 | 0 |
+| Banda | 6 de 6 | Mata Zyklek, Yor Zarad, Utzp | Fabienk (7+, 6+), Sarniezz (7+, ♭3+) |
+
+La familia frigia no es exclusiva de la banda: es la más común del radif y la de King Gizzard. Lo que ningún corpus medido
+tiene es la familia dórica. El corpus indostánico no aporta cuartos de tono: sus 22 *shrutis* caen todos en los 12 grados
+regulares al pasarlos a 24. La tónica del radif se toma como la última nota de cada pieza, así que el reparto por grados es
+aproximado.
 
 Las cifras del punto 2 y el reparto de compases de Fabienk son los de la corrida final. Si vuelves a correr el test con otras corridas del cuaderno, revísalas antes de citarlas.
