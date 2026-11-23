@@ -152,6 +152,8 @@ table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric
 .arbol .c { color: var(--gris-claro); }
 .arbol .fv { background: var(--amarillo-suave); border-radius: 3px; padding: 0 3px; }
 
+/* texto justificado en las tarjetas (diapositiva 10) */
+.justificada .tarjeta p { text-align: justify; hyphens: auto; }
 /* diapositiva 8: más aire entre las viñetas */
 .lista-aireada li { margin-bottom: 9px; }
 .lista-aireada li:last-child { margin-bottom: 0; }
@@ -164,7 +166,7 @@ table.datos td.num, table.datos th.num { text-align: right; font-variant-numeric
 .formula-celda { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 10px; min-height: 0; }
 .formula-celda .formula { white-space: nowrap; }   /* KaTeX parte en los signos; aquí cada fórmula va en una línea */
 
-/* más aire entre párrafos, viñetas y tarjetas (diapositivas 2 a 5) */
+/* más aire entre párrafos, viñetas y tarjetas (diapositivas 2 a 5 y 10) */
 .pila.aireada { gap: 22px; }
 .aireada .tarjeta { padding: 12px 15px; }
 .aireada .tarjeta h3 { margin-bottom: 7px; }

@@ -244,6 +244,33 @@ La diapositiva 15 junta todo el método antes del repositorio. Las diapositivas 
 
 El pie de cada sub-diapositiva puede llevar un nombre propio con `data-sub` (aquí «pseudocódigo»). Sin él, dice «gráfica n».
 
+## 13. El tabroll de Fabienk en la diapositiva 9
+
+La diapositiva 9 compara Hooktheory con el tabroll. Se usa la página 32 de Fabienk, de 4:42 a 4:52 (melodía «Fabien»
+con la segunda voz en el loop), de la corrida más reciente con Demucs. Se eligió comparando cada página después de las
+3:00 con la partitura corregida de oído (`references/fabienk_partitura.py`, alineada como en `melodia.py`):
+
+| Página | Tramo | Voz aguda: misma nota que la melodía | Notas en alguna guitarra | Cuartos de tono en la partitura |
+|---|---|---:|---:|---:|
+| 25 | 3:43-3:53 | 73 % | 34 de 48 | 4 de 11 |
+| 32 | 4:42-4:52 | 78 % | 53 de 59 | 6 de 8 |
+| 33 | 4:52-5:01 | 80 % | 48 de 52 | 3 de 4 |
+
+La 25, la primera elegida (vuelve la guitarra), marcaba cuartos de tono que la partitura no tiene: Fa+ y Fa♯+ donde
+suena Sol, y Do♯+ donde suena Re. La 32 tiene la melodía principal y casi todos sus cuartos de tono están en la
+partitura. De 3:07 a 3:34 no suena la guitarra.
+
+Entera, la página quedaba a una quinta parte de su tamaño y no se leían las notas de la izquierda.
+`zoom_guitarra` (en `scripts/presentacion_imagenes.py`) la rehace:
+- Recorta el registro de la guitarra, de Re♯3+ a Mi4+, y estira las filas al doble.
+- Rehace la columna de notas con letra grande: las notas regulares a la izquierda y los cuartos de tono («+», en azul) a
+  la derecha, como la regla de la diapositiva 7. Al lado va el grado de Mi dórico en color.
+- Rehace también la cabecera de pulsos («6 pulsos», en español) y la franja de acordes: cifrado romano con su índice,
+  función en palabras («Tónica relativa», «Dominante modal», en lugar de «T rel.» y «D modal»; en dos renglones si no
+  cabe; «(menor)» debajo cuando el cuaderno la escribe en minúscula, como «t») y nombre del acorde, todo con letra grande. Los datos salen de `armonia.json` (con `harmony_labels`, como en
+  el cuaderno). Los compases de la página se reparten como `_pages` (hasta 21 pulsos), con el tempo de `salida.txt`.
+- Se detiene si las líneas de octava no están donde espera o si los compases no caben en la página.
+
 ## Cómo seguir
 
 Para pasar otra gráfica al mismo esquema:
