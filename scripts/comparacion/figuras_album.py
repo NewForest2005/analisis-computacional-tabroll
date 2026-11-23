@@ -92,6 +92,10 @@ def fig_clasificacion(bloques: dict, salida: str, textos: bool = True) -> None:
         guardar(figura_clasificacion(bloques, textos, parte="barras"), salida + "_a_clasificacion_barras.png")
 
 
+LETRA_BLOQUE = {"armonia": "A", "escala": "E", "microtono": "¼", "metro": "M"}
+ORDEN_BLOQUE = ["armonia", "escala", "microtono", "metro"]
+
+
 def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas"):
     """Percentil medio por canción y corpus (arriba) y qué corpus gana cada bloque (abajo).
     parte = "mapa" o "barras" dibuja solo una de las dos mitades, cada una con su título."""
@@ -109,14 +113,21 @@ def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas
     corpora = sorted({c for f in filas for c in f["percentiles"]})
     M = np.full((len(filas) + 1, len(corpora)), np.nan)
     nb = np.zeros((len(filas), len(corpora)), dtype=int)
+    detalle: dict = {}
     for i, f in enumerate(filas):
         for j, c in enumerate(corpora):
             v = [x for x in f["percentiles"].get(c, {}).values() if x is not None]
             if v:
                 M[i, j], nb[i, j] = float(np.mean(v)), len(v)
+                # detalle por bloque, para que se vea de dónde sale el promedio (A armonía, E escala, ¼ cuartos, M metro)
+                detalle[(f["cancion"], c)] = " · ".join(f"{LETRA_BLOQUE.get(b, b[:1].upper())} {x:.0f}"
+                                                        for b, x in sorted(f["percentiles"][c].items(),
+                                                                           key=lambda kv: ORDEN_BLOQUE.index(kv[0]) if kv[0] in ORDEN_BLOQUE else 9)
+                                                        if x is not None)
     M[-1] = np.nanmean(M[:-1], axis=0)
     orden_c = np.argsort(-np.nan_to_num(M[-1], nan=-1))
     M, nb, corpora = M[:, orden_c], nb[:, orden_c], [corpora[j] for j in orden_c]
+    det = [[detalle.get((f["cancion"], c), "") for c in corpora] for f in filas]
     medias = [(corpora[j], M[-1, j]) for j in range(len(corpora)) if not np.isnan(M[-1, j])]
     empate = len(medias) > 1 and medias[0][1] - medias[1][1] < 3
 
@@ -157,52 +168,56 @@ def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas
                                             subtitulo=subtitulo if textos else "", nota=nota if textos else "")
         arriba, abajo = cuerpo.subfigures(2, 1, height_ratios=[alto_mapa, alto_barras])
     if arriba is not None:
-        _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, bloques.get("corpus", {}), rotulo=textos)
+        _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, bloques.get("corpus", {}), rotulo=textos,
+                            det=None if textos else det)
     if abajo is not None:
         _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo=parte != "barras", leyenda=textos)
     return fig
 
 
 def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None = None, minimo: int = 100,
-                        rotulo: bool = True) -> None:
+                        rotulo: bool = True, det: list | None = None) -> None:
     """Los corpus con menos de `minimo` piezas no cuentan para el veredicto (verosimilitud_por_bloques.veredicto):
-    en uno chico y disperso casi todo parece típico. Se muestran atenuados y marcados con *."""
+    en uno chico y disperso casi todo parece típico. Se muestran en gris liso (sin la escala de color) y marcados con *.
+    Con rotulo=False (diapositiva) la letra es más grande."""
     from matplotlib.colors import LinearSegmentedColormap
-    from matplotlib.patches import Rectangle
     info = info or {}
     chico = [info.get(c, {}).get("piezas", minimo) < minimo for c in corpora]
+    L = 1.0 if rotulo else 1.3
     ax = arriba.subplots()
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
-    imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
+    cmap.set_bad("#efeeea")                          # columnas que no cuentan: gris liso, nítido (antes, velo blanco)
+    datos = np.ma.masked_array(np.nan_to_num(M, nan=0), mask=np.repeat([chico], M.shape[0], axis=0))
+    imagen = ax.imshow(datos, cmap=cmap, vmin=0, vmax=60, aspect="auto", interpolation="nearest")
     barra = arriba.colorbar(imagen, ax=ax, location="bottom", shrink=0.45, aspect=40, pad=0.04, ticks=[0, 15, 30, 45, 60])
     if rotulo:                                       # en la diapositiva queda solo la paleta
         barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
-    barra.ax.tick_params(labelsize=8, colors=GRIS, length=0)
+    barra.ax.tick_params(labelsize=8 * L, colors=GRIS, length=0)
     barra.outline.set_visible(False)
-    for j, ch in enumerate(chico):
-        if ch:                                       # velo blanco sobre la columna: no cuenta para el veredicto
-            ax.add_patch(Rectangle((j - 0.5, -0.5), 1, M.shape[0], facecolor="white", alpha=0.62, edgecolor="none", zorder=2))
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
             if np.isnan(M[i, j]):
                 ax.text(j, i, "—", ha="center", va="center", fontsize=8, color=MUTED)
                 continue
-            txt = f"{M[i, j]:.0f}" + (f"\n{nb[i, j]} bl." if i < len(filas) else "")
+            if det is not None and i < len(filas):
+                txt = f"{M[i, j]:.0f}\n{det[i][j]}"
+            else:
+                txt = f"{M[i, j]:.0f}" + (f"\n{nb[i, j]} bl." if i < len(filas) else "")
             claro = M[i, j] > 30 and not chico[j]
-            ax.text(j, i, txt, ha="center", va="center", fontsize=8 if i < len(filas) else 9, zorder=3,
-                    color="#ffffff" if claro else (MUTED if chico[j] else TINTA),
+            ax.text(j, i, txt, ha="center", va="center", fontsize=(8 if i < len(filas) else 9) * L, zorder=3,
+                    color="#ffffff" if claro else (GRIS if chico[j] else TINTA),
                     fontweight="bold" if i == len(filas) and corpora[j] in pred else "normal")
     ax.axhline(len(filas) - 0.5, color=FONDO, lw=4)
-    ax.set_yticks(range(M.shape[0]), [f["cancion"] for f in filas] + ["Álbum (media)"], fontsize=9.5, color=TINTA)
+    ax.set_yticks(range(M.shape[0]), [f["cancion"] for f in filas] + ["Álbum (media)"], fontsize=9.5 * L, color=TINTA)
     rotulos = [f"{c}*" if ch else c for c, ch in zip(corpora, chico)]
     rotulos = [f"{r}\n{info[c]['piezas']} piezas" if c in info else r for r, c in zip(rotulos, corpora)]
-    ax.set_xticks(range(len(corpora)), rotulos, fontsize=9, color=TINTA)
+    ax.set_xticks(range(len(corpora)), rotulos, fontsize=9 * L, color=TINTA)
     for etiqueta, ch in zip(ax.get_xticklabels(), chico):
         if ch:
-            etiqueta.set_color(MUTED)
+            etiqueta.set_color(GRIS)
     if any(chico) and rotulo:
         barra.set_label(f"Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor\n"
-                        f"* Corpus con menos de {minimo} piezas: atenuados, no cuentan para el veredicto (en uno chico casi todo parece típico)",
+                        f"* Corpus con menos de {minimo} piezas: en gris, no cuentan para el veredicto (en uno chico casi todo parece típico)",
                         fontsize=8.5, color=GRIS, labelpad=5)
     ax.xaxis.tick_top()
     ax.tick_params(length=0)

@@ -179,7 +179,7 @@ def figura_acierto(filas: list[dict]):
             vals = [f[campo] for f in medidas if f.get(campo) is not None]
             media[campo] = float(np.mean(vals)) if vals else None
         filas = filas + [media]
-    fig, ax = plt.subplots(figsize=(6.4, 5.0), facecolor="white", layout="constrained")
+    fig, ax = plt.subplots(figsize=(6.8, 5.2), facecolor="white", layout="constrained")
     estilo_figuras.estilo_ejes(ax, grid_x=True)
     ax.set_facecolor("white")
     alto = 0.19
@@ -190,7 +190,7 @@ def figura_acierto(filas: list[dict]):
         conf = media.get("fundamental_confiables")
         if conf is not None:
             ax.axvline(conf, color=AMARILLO, lw=1.4, ls="--", zorder=0)
-            ax.text(conf, y[0] + 0.62, f"armonía ≈ {conf:.0f} %", ha="center", va="bottom", fontsize=8.5,
+            ax.text(conf, y[0] + 0.62, f"armonía ≈ {conf:.0f} %", ha="center", va="bottom", fontsize=10.5,
                     color="#9a6200", fontweight="bold")
     for k, (campo, rotulo, color) in enumerate(series):
         pos = y + (1.5 - k) * alto
@@ -198,18 +198,19 @@ def figura_acierto(filas: list[dict]):
         ax.barh(pos, [v or 0 for v in vals], alto * 0.92, color=color, label=rotulo)
         for yy, v in zip(pos, vals):
             if v is not None:
-                ax.text(v + 1, yy, f"{v:.0f}", va="center", fontsize=7.5, color=TINTA,
+                ax.text(v + 1, yy, f"{v:.0f}", va="center", fontsize=9, color=TINTA,
                         bbox=dict(facecolor="white", edgecolor="none", pad=0.6), zorder=3)
     for yy, f in zip(y, filas):
         if f.get("fundamental") is None:
-            ax.text(1, yy - alto, "sin referencia armónica", va="center", fontsize=7.5, color=MUTED)
-    ax.set_yticks(y, [f["cancion"] + (" (a ciegas)" if f["cancion"] == "Yor Zarad" else "") for f in filas], fontsize=9, color=TINTA)
+            ax.text(1, yy - alto, "sin referencia armónica", va="center", fontsize=9, color=MUTED)
+    ax.set_yticks(y, [f["cancion"] + (" (a ciegas)" if f["cancion"] == "Yor Zarad" else "") for f in filas], fontsize=11.5, color=TINTA)
     if len(medidas) > 1:
         ax.get_yticklabels()[-1].set_fontweight("bold")
     ax.set_xlim(0, 112)
     ax.set_xticks([0, 20, 40, 60, 80, 100])
-    ax.set_xlabel("acierto contra la referencia corregida de oído (%)", fontsize=8.5, color=GRIS)
-    fig.legend(loc="outside lower center", ncol=2, frameon=False, fontsize=8)
+    ax.tick_params(axis="x", labelsize=11)
+    ax.set_xlabel("acierto contra la referencia corregida de oído (%)", fontsize=11, color=GRIS)
+    fig.legend(loc="outside lower center", ncol=2, frameon=False, fontsize=10)
     return fig
 
 

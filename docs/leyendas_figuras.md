@@ -26,7 +26,7 @@ poner estas leyendas en el pie.
 | 3b · clasificación por corpus | Barra de color: percentil medio de tipicidad, blanco = menor, azul oscuro = mayor. * Corpus con menos de 100 piezas: atenuados, no cuentan para el veredicto (en uno chico casi todo parece típico) |
 | 3c · qué corpus gana cada bloque | Azul: radif, 7 victorias. Naranja: rock, 8 victorias. Gris: sin vecino, 9 casos |
 
-## Diapositiva 16 · El algoritmo completo (diagrama por bloques)
+## Diapositiva 7 · El algoritmo completo (diagrama por bloques)
 
 **Pie descriptivo.** En amarillo, el núcleo propio del trabajo. «diap. n»: dónde se explicó cada paso. El pseudocódigo
 está en la sub-diapositiva de abajo.
@@ -34,7 +34,28 @@ está en la sub-diapositiva de abajo.
 Para el escrito: «En amarillo, el núcleo propio del trabajo: la transcripción en 24-EDO guiada por el looper. Cada bloque
 indica la sección donde se explica.»
 
-## Diapositiva 18 · ¿La herramienta acierta?
+### Sub-diapositiva · pseudocódigo
+
+**Pie descriptivo.** **Algoritmo 1:** TabRoll24(x), del audio al veredicto de estilo. Es el pie al estilo algorithm2e
+(«Algoritmo 1: …» debajo del recuadro). En el escrito puede usarse tal cual como título del algoritmo.
+
+## Diapositiva 8 · El repositorio en GitHub
+
+**Nota.** Si un módulo se edita a mano, `make extract` se detiene: el notebook siempre manda.
+
+## Diapositiva 9 · La idea inicial y lo que mostró el audio
+
+**Pie descriptivo.** Primer notebook de Python (Colab): la transcripción de MuseScore del audio de Sarniezz, en piano
+roll (primeras 64 negras).
+
+## Diapositiva 17 · Datos para comparar estilos e influencias
+
+- **Barras (36 canciones).** La banda (verde oscuro), las influencias que cita (verde claro) y la comparación propia
+  (gris).
+- **Tabla de corpus.** Rock: 200 canciones con dos analistas (400 análisis). Descargados pero no usados: makam turco
+  (SymbTr) y folk irlandés (The Session). Sin corpus simbólico abierto: maqam árabe.
+
+## Diapositiva 18 · ¿Qué detecta la metodología usada?
 
 **Pie descriptivo (versión final).** Contra las referencias corregidas de oído (corridas congeladas). En promedio, la
 fundamental del acorde acierta el 85 % en los compases confiables y la melodía el 49 %.
@@ -89,11 +110,11 @@ regulares (anillo exterior, amarillo) y los de cuarto de tono (interior, azul); 
 regular. El área del punto es el tiempo melódico; las líneas, los pasos melódicos más frecuentes. El panel grande
 resume el álbum.
 
-### Círculo en movimiento (se conserva en la diapositiva)
+### Círculo en movimiento (quitada de la diapositiva; está en las notas del orador)
 
 Notas del notebook sincronizadas con el audio; en «quintas», los dos campos de la 2b. Con tónica Sol, las voces giran
-sobre Sol y Sol#+ (♭2+), el cuarto de tono del riff. Frente a la partitura corregida de oído: mismo grado el **87 %** del
-tiempo en la voz aguda y el **94 %** en la grave; si falla, lee Sol#+ como Sol.
+sobre Sol y Sol#+ (♭2+), el cuarto de tono del riff. Frente a la partitura corregida de oído: mismo grado el **90 %** del
+tiempo en la voz aguda y el **88 %** en la grave; si falla, lee Sol#+ como Sol.
 
 ## Diapositiva 21 · Síntesis
 
@@ -113,8 +134,8 @@ periodos.
 ### 3b · Clasificación por corpus
 
 **Pie descriptivo.** Percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido;
-50 = pieza típica). «bl.» = bloques de rasgos con datos para esa canción y ese corpus. La fila «Álbum» es la media.
-Atenuados (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica
+50 = pieza típica). Debajo, el percentil de cada bloque (A armonía, E escala, ¼ cuartos de tono, M metro): el color es su promedio; por ejemplo, Sarniezz en rock (34) sale de A 0, E 3 y M 100. La fila «Álbum» es la media.
+En gris (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica
 no es un parecido real.
 
 ### 3c · Qué corpus gana cada bloque
@@ -124,6 +145,6 @@ corpus pasa el percentil 5. Rock gana 8 de 24, radif 7 y en 9 no hay vecino.
 
 ## Otras notas retiradas de las diapositivas
 
-- **Diapositiva 11 (Piston).** «Piston deja fuera las escalas microtonales: los grados en cuarto de tono quedan con
+- **Diapositiva 13 (Piston).** «Piston deja fuera las escalas microtonales: los grados en cuarto de tono quedan con
   función «neutra».» Se quitó de la diapositiva; la idea sigue en la tabla del estado del arte (diap. 6) y en
   [`armonia.md`](armonia.md).

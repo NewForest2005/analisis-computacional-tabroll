@@ -210,9 +210,13 @@ iframe.circulo-vivo { border: 1px solid var(--linea); border-radius: 4px; backgr
 .algoritmo .flujo .paso { position: relative; padding-bottom: 13px; }
 .algoritmo .nucleo .paso { background: var(--amarillo-suave); box-shadow: inset 0 0 0 1.5px var(--amarillo); }
 .algoritmo .nucleo .rotulo { color: #9a6200; }
-.algoritmo .baja { text-align: center; color: var(--verde-claro); font-size: 15px; line-height: 1; margin: 10px 0 8px; }
+.algoritmo .baja { text-align: center; color: var(--verde-claro); font-size: 17px; line-height: 1; margin: 14px 0 11px; }
 .algoritmo .ref { position: absolute; right: 5px; bottom: 3px; font: 700 9.5px/1 "Ancizar Sans", sans-serif; color: var(--gris-claro); }
-.algoritmo .leyenda-algoritmo { margin: 12px 0 0; text-align: center; }
+/* sin leyenda: las tres etapas se reparten la altura y los bloques son más grandes */
+.algoritmo { justify-content: center; }
+.algoritmo .flujo-compacto .paso { padding: 7px 7px 15px; font-size: 13px; line-height: 1.25; }
+.algoritmo .flujo-compacto .paso b { font-size: 14px; margin-bottom: 3px; }
+.algoritmo .rotulo { font-size: 12.5px; margin-bottom: 7px; }
 .algoritmo .ref::before { content: "diap. "; font-weight: 400; }
 
 /* pseudocódigo: número, instrucción y comentario por línea */
@@ -260,13 +264,13 @@ section.contenido.claro .nav-pie button:hover:not(:disabled) { background: rgba(
 .nav-pie svg { width: 7px; height: 10px; fill: currentColor; }
 
 /* Estado del arte: tabla formal con citas */
-table.estado { font-size: 12px; table-layout: fixed; }
-table.estado td { padding: 4px 7px; line-height: 1.25; }
-table.estado th { padding: 4px 7px; }
+table.estado { font-size: 13px; table-layout: fixed; }
+table.estado td { padding: 5.5px 8px; line-height: 1.25; }
+table.estado th { padding: 4px 8px; font-size: 13px; }
 table.estado .propio { background: var(--verde-suave); }
 .vacio { color: #9a6200; }
 table.estado td:first-child { font-weight: 700; color: var(--verde); }
-table.estado td.cita { font-size: 11px; color: var(--gris); }
+table.estado td.cita { font-size: 11.5px; color: var(--gris); }
 
 /* barras con más aire entre grupos (diapositiva 13) */
 .barras.aireadas { row-gap: 9px; }
@@ -286,9 +290,29 @@ table.estado td.cita { font-size: 11px; color: var(--gris); }
 .pseudo li.fin { counter-increment: none; }
 .pseudo li.fin::before { content: ""; }
 .pseudo-leyenda { margin: 7px 0 0; text-align: center; font-size: 13.5px; }
+/* sin leyenda: el recuadro ocupa toda la zona útil, con letra y renglones más amplios */
+.pseudo-caja.llena { height: 100%; box-sizing: border-box; padding: 14px 24px 16px; display: flex; flex-direction: column; justify-content: center; }
+.pseudo-caja.llena .pseudo-cab { font-size: 15px; margin-bottom: 6px; }
+.pseudo-caja.llena .pseudo { font-size: 15px; }
+.pseudo-caja.llena .pseudo li { padding: 4px 0; }
+.pseudo-caja.llena .pseudo .c { font-size: 12.5px; }
+.pseudo-caja.llena .pseudo li.sec { font-size: 12.5px; margin-top: 10px; }
 
 /* referencias (diapositiva 24): más aire entre viñetas */
 .lista-aireada.cuadros li { margin-bottom: 18px; }
 .lista-aireada.cuadros li:last-child { margin-bottom: 0; }
 .lista-aireada.espaciada li { margin-bottom: 26px; }   /* referencias (diap. 24) */
 .lista-aireada.espaciada li:last-child { margin-bottom: 0; }
+
+/* diapositiva 15: barras y tabla de datos sin notas al pie, más grandes */
+.datos-grandes .pila { justify-content: center; gap: 18px; }
+.datos-grandes .resalta { font-size: 18px; }
+.datos-grandes .barras { font-size: 16.5px; row-gap: 15px; column-gap: 14px; }
+.datos-grandes .barras .b { height: 24px; }
+.datos-grandes table.datos { font-size: 16px; }
+.datos-grandes table.datos th, .datos-grandes table.datos td { padding: 8px 10px; }
+
+/* diapositiva 17: bloques del flujo del repositorio, más grandes */
+.repo-flujo .paso { font-size: 15px; padding: 10px 14px; }
+.repo-flujo .paso b { font-size: 16.5px; margin-bottom: 3px; }
+.repo-flujo .flecha { font-size: 19px; margin: 4px 0; }

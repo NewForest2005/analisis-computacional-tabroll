@@ -35,15 +35,31 @@ def nombre(corrida: str) -> str:
     return n.replace("_", " ").strip().capitalize()
 
 
-def notas(lista: list[dict], desde: float, hasta: float) -> list[list]:
-    """[[inicio, fin, grado24]] relativos a `desde`, recortados al fragmento y ordenados por inicio."""
+def notas(lista: list[dict], desde: float, hasta: float, desfase: float = 0.0) -> list[list]:
+    """[[inicio, fin, grado24]] relativos a `desde`, recortados al fragmento y ordenados por inicio.
+    `desfase` (s) corre todas las notas: el cuaderno marca las notas unos 50 ms antes de que suenen."""
     out = []
     for n in lista or []:
-        a, e = float(n["start_s"]), float(n["end_s"])
+        a, e = float(n["start_s"]) + desfase, float(n["end_s"]) + desfase
         if e <= desde or a >= hasta or e <= a:
             continue
         out.append([round(max(a, desde) - desde, 3), round(min(e, hasta) - desde, 3), round(float(n["midi"]) * 2) % 24])
     return sorted(out)
+
+
+def sin_sueltas(lista: list[list], min_uso: float, max_dur: float) -> tuple[list[list], list[list]]:
+    """Quita las notas cortas (< max_dur s) de un grado que casi no suena en el fragmento (< min_uso del tiempo de la voz).
+
+    Son, sobre todo, errores de quinta de la saliencia armónica (un Do donde suena Fa, su tercer armónico). Devuelve las
+    notas que quedan y las quitadas."""
+    total = sum(b - a for a, b, _ in lista) or 1.0
+    uso: dict[int, float] = {}
+    for a, b, g in lista:
+        uso[g] = uso.get(g, 0.0) + (b - a)
+    quedan, quitadas = [], []
+    for n in lista:
+        (quitadas if n[1] - n[0] < max_dur and uso[n[2]] / total < min_uso else quedan).append(n)
+    return quedan, quitadas
 
 
 def buscar_pista(audio: Path | None, sufijos: tuple[str, ...]) -> Path | None:
@@ -71,6 +87,13 @@ def main() -> None:
     ap.add_argument("--titulo")
     ap.add_argument("--salida", type=Path, help="carpeta de salida (por defecto <corrida>/circulo24)")
     ap.add_argument("--recortar", action="store_true", help="cortar cada pista al fragmento (necesita ffmpeg)")
+    # El cuaderno marca cada nota antes de que suene: su espectro (ventana de 4096 muestras, 186 ms, centrada) ya ve la
+    # nota cuando la ventana empieza a cubrirla. Medido en Mata Zyklek 42-72 s con sincronia_circulo24.py (pYIN y ataques).
+    ap.add_argument("--desfase-aguda", type=float, default=0.060, help="segundos que se atrasan las notas agudas")
+    ap.add_argument("--desfase-grave", type=float, default=0.055, help="segundos que se atrasan las notas graves")
+    ap.add_argument("--min-uso", type=float, default=0.02,
+                    help="quita notas cortas de grados con menos de esta fracción del tiempo de la voz (0 = no quitar)")
+    ap.add_argument("--max-suelta", type=float, default=0.15, help="duración máxima (s) de una nota suelta que se puede quitar")
     a = ap.parse_args()
 
     J = json.loads((a.corrida / "line_diagnostics.json").read_text(encoding="utf-8"))
@@ -105,11 +128,19 @@ def main() -> None:
             shutil.copyfile(origen, salida / destino)
         audios[nombre_pista] = destino
 
+    voces = {}
+    for voz, clave, desfase in (("aguda", "raw_high", a.desfase_aguda), ("grave", "raw_bass", a.desfase_grave)):
+        voces[voz], quitadas = sin_sueltas(notas(J.get(clave), a.desde, hasta, desfase), a.min_uso, a.max_suelta) \
+            if a.min_uso > 0 else (notas(J.get(clave), a.desde, hasta, desfase), [])
+        if quitadas:
+            print(f"   voz {voz}: {len(quitadas)} notas sueltas quitadas ({sum(b - x for x, b, _ in quitadas):.2f} s): "
+                  + ", ".join(f"{x:.2f} s grado {g}" for x, _, g in quitadas))
     datos = dict(titulo=a.titulo or nombre(a.corrida.name), corrida=a.corrida.name, desde=a.desde, hasta=hasta,
                  audio_inicio=0.0 if a.recortar else a.desde,
                  tonica_pc24=H.get("tonica_pc24"), tempo_bpm=J.get("tempo_bpm"),
                  audio=audios.get("mezcla"), audios=audios,
-                 voces=dict(aguda=notas(J.get("raw_high"), a.desde, hasta), grave=notas(J.get("raw_bass"), a.desde, hasta)))
+                 desfase_notas=dict(aguda=a.desfase_aguda, grave=a.desfase_grave),
+                 voces=voces)
     (salida / "datos.js").write_text("window.CIRCULO24 = " + json.dumps(datos, ensure_ascii=False) + ";\n", encoding="utf-8")
     shutil.copyfile(WEB / "circulo24.js", salida / "circulo24.js")
     shutil.copyfile(WEB / "index.html", salida / "index.html")

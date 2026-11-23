@@ -42,7 +42,64 @@ bibliografía completa está en la diapositiva de referencias.» Todas las citas
 
 ---
 
-## 12 · Mejorar la melodía: hipótesis que se prueban
+## 7 · El algoritmo completo
+
+«Este es el mapa de todo el método, del audio al veredicto de estilo, en tres etapas.
+
+**Primera, la señal:** el audio oficial se separa con Demucs en guitarra y bajo. Luego se calcula la saliencia armónica,
+que da evidencia de cada altura posible cada 25 cents.
+
+**Segunda, el núcleo, en amarillo, que es la parte propia del trabajo.** Como la banda repite cada riff con el looper,
+primero se busca el ciclo del looper. Después se promedia la altura entre vueltas, se atrae la melodía a su registro
+típico, Viterbi traza el contorno y las notas caen en la rejilla de cuartos de tono. Al final se quitan las notas
+sueltas. Por eso el método funciona con cuartos de tono.
+
+**Tercera, estructura y estilo:** se detectan pulsos y compases, se elige un acorde por compás con su confianza, se
+dibuja el tabroll y se comparan cuatro bloques de rasgos con los corpus.
+
+Cada caja dice en qué diapositiva se explicó ese paso. Abajo está el pseudocódigo con los parámetros reales del código.»
+
+*(Sub-diapositiva del pseudocódigo: no hace falta leerla. Si preguntan, las líneas 3 a 8 son el núcleo del looper.)*
+
+> **Términos**
+> - **Saliencia armónica:** evidencia de cada altura en cada instante, sumando la energía de sus armónicos. A diferencia de pYIN, mira todas las alturas a la vez.
+> - **Autocorrelación:** comparar la señal consigo misma desplazada en el tiempo; un pico indica cada cuánto se repite.
+> - **Viterbi:** algoritmo que elige la secuencia de notas más probable sin saltos innecesarios (Viterbi, 1967).
+> - **Programación dinámica:** resolver un problema grande combinando las mejores soluciones de sus partes; aquí, la mejor división en compases (Ellis, 2007).
+> - **Confianza κ:** qué tan segura está la herramienta del acorde de un compás.
+> - **Pseudocódigo:** el algoritmo escrito paso a paso en lenguaje matemático, sin un lenguaje de programación concreto.
+
+---
+
+## 8 · El repositorio en GitHub
+
+«Todo el trabajo es reproducible y está en un repositorio público.
+
+**El notebook es la fuente de verdad:** todos los cambios se hacen ahí. `make extract` lo parte en un archivo por celda
+y guarda la huella de cada uno. `run_song.py` corre todas las celdas sobre una canción, de punta a punta, y las salidas
+quedan en `outputs/`: el tabroll, la armonía, los ciclos y un resumen.
+
+Si alguien edita un módulo a mano, su huella deja de coincidir y la extracción se detiene en vez de borrar el cambio. El
+notebook siempre manda.
+
+Además están las referencias (partituras y corpus), la documentación, esta misma presentación y 107 pruebas
+automáticas.»
+
+> **Términos**
+> - **Repositorio (GitHub):** la carpeta del proyecto con todo su historial de cambios, publicada en línea.
+> - **Reproducible:** otra persona puede correrlo y obtener los mismos resultados.
+> - **Notebook:** documento que mezcla código, texto y gráficas, y se ejecuta celda por celda (aquí, Jupyter/Colab).
+> - **Celda:** cada bloque de código del notebook.
+> - **Fuente de verdad:** el único lugar donde se edita; todo lo demás se genera desde ahí.
+> - **Módulo:** un archivo de código; aquí, una celda del notebook convertida en archivo.
+> - **Script:** un programa corto que se corre desde la consola, como `run_song.py`.
+> - **make:** herramienta que ejecuta tareas con un solo comando (`make extract`, `make presentacion`…).
+> - **Huella:** la huella SHA-256 de cada módulo (ver diapositiva 14): si el archivo cambia, la huella cambia.
+> - **Pruebas automáticas:** pequeños programas que verifican que el código sigue dando lo que debe (`pytest`).
+
+---
+
+## 14 · Mejorar la melodía: hipótesis que se prueban
 
 «Para mejorar la melodía probamos varias ideas. Cada una se midió y, según el resultado, se adoptó o se descartó.
 
@@ -74,7 +131,7 @@ mantiene en las dos.»
 
 ---
 
-## 13 · Separar instrumentos: Demucs y BS-RoFormer
+## 15 · Separar instrumentos: Demucs y BS-RoFormer
 
 «BS-RoFormer separa la guitarra mucho mejor que Demucs: 9.05 dB frente a 5.22. Aun así, la melodía de Sarniezz quedó
 igual con los dos, en 44.9, y el bajo hasta bajó un poco, de 78.6 a 76.5. Además, BS-RoFormer tardó una hora en separar
@@ -96,7 +153,7 @@ botella. Por eso Demucs sigue por defecto y BS-RoFormer queda como opción.»
 
 ---
 
-## 14 · Background matemático: comparar con estilos
+## 16 · Background matemático: comparar con estilos
 
 «Para comparar con estilos usamos cuatro fórmulas. Las ilustramos con Primus para no adelantar los resultados de la
 banda.
@@ -123,7 +180,7 @@ banda.
 
 ---
 
-## 15 · Datos para comparar estilos e influencias
+## 17 · Datos para comparar estilos e influencias
 
 «Medimos 36 canciones con el mismo notebook: las 6 del álbum, las influencias que cita la banda (King Gizzard, Zappa,
 King Crimson y Gentle Giant) y Primus, que es la comparación propia. Además usamos seis corpus de estilos: rock
@@ -142,64 +199,7 @@ pero no entraron en la comparación, y el maqam árabe no tiene un corpus simbó
 
 ---
 
-## 16 · El algoritmo completo
-
-«Este es el mapa de todo el método, del audio al veredicto de estilo, en tres etapas.
-
-**Primera, la señal:** el audio oficial se separa con Demucs en guitarra y bajo. Luego se calcula la saliencia armónica,
-que da evidencia de cada altura posible cada 25 cents.
-
-**Segunda, el núcleo, en amarillo, que es la parte propia del trabajo.** Como la banda repite cada riff con el looper,
-primero se busca el ciclo del looper. Después se promedia la altura entre vueltas, se atrae la melodía a su registro
-típico, Viterbi traza el contorno y las notas caen en la rejilla de cuartos de tono. Al final se quitan las notas
-sueltas. Por eso el método funciona con cuartos de tono.
-
-**Tercera, estructura y estilo:** se detectan pulsos y compases, se elige un acorde por compás con su confianza, se
-dibuja el tabroll y se comparan cuatro bloques de rasgos con los corpus.
-
-Cada caja dice en qué diapositiva se explicó ese paso. Abajo está el pseudocódigo con los parámetros reales del código.»
-
-*(Sub-diapositiva del pseudocódigo: no hace falta leerla. Si preguntan, las líneas 3 a 8 son el núcleo del looper.)*
-
-> **Términos**
-> - **Saliencia armónica:** evidencia de cada altura en cada instante, sumando la energía de sus armónicos. A diferencia de pYIN, mira todas las alturas a la vez.
-> - **Autocorrelación:** comparar la señal consigo misma desplazada en el tiempo; un pico indica cada cuánto se repite.
-> - **Viterbi:** algoritmo que elige la secuencia de notas más probable sin saltos innecesarios (Viterbi, 1967).
-> - **Programación dinámica:** resolver un problema grande combinando las mejores soluciones de sus partes; aquí, la mejor división en compases (Ellis, 2007).
-> - **Confianza κ:** qué tan segura está la herramienta del acorde de un compás.
-> - **Pseudocódigo:** el algoritmo escrito paso a paso en lenguaje matemático, sin un lenguaje de programación concreto.
-
----
-
-## 17 · El repositorio en GitHub
-
-«Todo el trabajo es reproducible y está en un repositorio público.
-
-**El notebook es la fuente de verdad:** todos los cambios se hacen ahí. `make extract` lo parte en un archivo por celda
-y guarda la huella de cada uno. `run_song.py` corre todas las celdas sobre una canción, de punta a punta, y las salidas
-quedan en `outputs/`: el tabroll, la armonía, los ciclos y un resumen.
-
-Si alguien edita un módulo a mano, su huella deja de coincidir y la extracción se detiene en vez de borrar el cambio. El
-notebook siempre manda.
-
-Además están las referencias (partituras y corpus), la documentación, esta misma presentación y 107 pruebas
-automáticas.»
-
-> **Términos**
-> - **Repositorio (GitHub):** la carpeta del proyecto con todo su historial de cambios, publicada en línea.
-> - **Reproducible:** otra persona puede correrlo y obtener los mismos resultados.
-> - **Notebook:** documento que mezcla código, texto y gráficas, y se ejecuta celda por celda (aquí, Jupyter/Colab).
-> - **Celda:** cada bloque de código del notebook.
-> - **Fuente de verdad:** el único lugar donde se edita; todo lo demás se genera desde ahí.
-> - **Módulo:** un archivo de código; aquí, una celda del notebook convertida en archivo.
-> - **Script:** un programa corto que se corre desde la consola, como `run_song.py`.
-> - **make:** herramienta que ejecuta tareas con un solo comando (`make extract`, `make presentacion`…).
-> - **Huella:** la huella SHA-256 de cada módulo (ver diapositiva 12): si el archivo cambia, la huella cambia.
-> - **Pruebas automáticas:** pequeños programas que verifican que el código sigue dando lo que debe (`pytest`).
-
----
-
-## 18 · ¿La herramienta acierta?
+## 18 · ¿Qué detecta la metodología usada?
 
 «Comparamos lo que da la herramienta con las partituras corregidas de oído, en corridas congeladas. La melodía queda en
 valores medios: 49 % en promedio. La fundamental del acorde, en cambio, acierta el **85 %** de las veces en los compases
@@ -220,7 +220,7 @@ pase a la melodía.»
 > **Términos**
 > - **Referencia corregida de oído:** la partitura revisada escuchando la grabación; es la respuesta correcta con la que se compara.
 > - **Corrida congelada:** una ejecución guardada que no se vuelve a tocar, para que los números citados no cambien.
-> - **Acierto de la melodía:** la medida F de notas (diapositiva 12): ataque a ±75 ms y misma casilla de 24-EDO.
+> - **Acierto de la melodía:** la medida F de notas (diapositiva 14): ataque a ±75 ms y misma casilla de 24-EDO.
 > - **Acierto de la fundamental:** el porcentaje de compases en que la fundamental del acorde coincide con la de la partitura.
 > - **Compás confiable:** un compás en el que la herramienta tiene suficiente evidencia para decidir el acorde (su confianza κ supera el umbral).
 > - **Media (4 canciones):** el promedio simple de Mata Zyklek, Fabienk, Sarniezz y Yor Zarad.
@@ -284,8 +284,8 @@ de las nueve canciones de King Gizzard; la dórica no aparece en ningún corpus.
 - **20·2:** el círculo de dos campos por canción. El área de cada punto es el tiempo en ese grado y las líneas son los
   pasos melódicos más frecuentes.
 - **20·3, el círculo en movimiento:** Mata Zyklek de 0:42 a 1:12, con tónica Sol. Las voces giran sobre Sol y Sol♯+
-  (♭2+), el cuarto de tono del riff. Frente a la partitura corregida, el círculo da el mismo grado el 87 % del tiempo en
-  la voz aguda y el 94 % en la grave. Cuando falla, lee Sol♯+ como Sol.
+  (♭2+), el cuarto de tono del riff. Frente a la partitura corregida, el círculo da el mismo grado el 90 % del tiempo en
+  la voz aguda y el 88 % en la grave. Cuando falla, lee Sol♯+ como Sol.
 
 > **Términos**
 > - **Grado fijo:** una nota que pertenece a la escala y vuelve siempre en el mismo lugar.

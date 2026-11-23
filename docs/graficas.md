@@ -167,9 +167,22 @@ de oído de `references/mata_zyklek_loops.py`; `--barrido` recorre la canción e
   bajo 1 suelto quedó fuera de la referencia por dudoso, y el círculo pintaba ahí 8.5 s de Ré grave sin poder comprobarlo.
 - En el actual los cuartos de tono son reales (Sol#+, el ♭2+ del riff). Cuando falla, el círculo se queda corto: lee
   Sol#+ como Sol, no inventa cuartos de tono.
-- Sincronía: la altura medida con pYIN en las pistas recortadas coincide con el círculo en el 80 % de los cuadros sin
-  desfase y baja con ±50 ms, así que el audio y las notas van alineados.
-
+- Sincronía (revisada el 23-nov con `scripts/comparacion/sincronia_circulo24.py`, que prueba el paquete exportado, el
+  mismo que abre la diapositiva):
+  - Las tres pistas recortadas duran 30.00 s y coinciden al milisegundo con el audio original.
+  - Las notas del cuaderno iban adelantadas. Su espectro usa una ventana de 4096 muestras (186 ms) centrada, que ya
+    «ve» la nota cuando empieza a cubrirla. Corriendo las notas de 5 en 5 ms, el mejor acuerdo con el audio fue: voz
+    grave +55 ms (pYIN y ataques coinciden); voz aguda +50 ms con pYIN (meseta de 35 a 70 ms) y +75 ms con los ataques.
+  - En la canción entera no hay deriva (la pendiente del desfase es casi 0): es un corrimiento fijo, no un error de escala.
+  - `exportar_circulo24.py` atrasa las notas al exportar (`--desfase-aguda 0.060`, `--desfase-grave 0.055`) y lo anota
+    en `datos.js` (`desfase_notas`). Después, el mejor desfase es −10 ms en la aguda y 0 ms en la grave, dentro del
+    paso de medida; pYIN coincide con el círculo en el 72 % (aguda) y el 80 % (grave) de los cuadros, frente a 64 % y
+    67 % antes.
+- Notas sueltas: el círculo mostraba un Do (3 notas de 0.12 a 0.14 s) que no está en la referencia de oído: errores de
+  quinta (Do es el tercer armónico de Fa; en el bajo, una quinta bajo Sol). `--min-uso 0.02 --max-suelta 0.15` quita
+  las notas de menos de 0.15 s de grados que suman menos del 2 % del tiempo de la voz; en este fragmento quita
+  exactamente esas tres. Con todo, la melodía exportada da el mismo grado que la referencia de oído en el 90 % del
+  tiempo (aguda) y el 88 % (grave), y no muestra ningún grado ausente de la referencia.
 - Estilo: fuentes y colores de la plantilla; amarillo = grado regular y azul = cuarto de tono, como en la gráfica 2b;
   voz aguda en rojo y grave en verde (antes azul, que se confundía con el cuarto de tono).
 - Disposición nueva «quintas (dos campos)», además de la cromática: el anillo exterior es el ciclo de quintas de los

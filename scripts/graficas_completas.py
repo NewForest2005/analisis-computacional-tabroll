@@ -187,7 +187,9 @@ def clave(banda, primus, king_gizzard, todos, externos, paths, failures: list[st
     call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda + primus), "--diapositiva",
           "--salida", str(fuente / "verosimilitud_banda_primus")], failures)
     call(["scripts/comparacion/microtonal.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "microtonal_banda")], failures)
-    call(["scripts/comparacion/ciclos_metricos.py", *paths(banda), "--diapositiva", "--salida", str(fuente / "ciclos_banda")], failures)
+    # En la diapositiva, solo las dos canciones que muestran los ciclos de 5 y de 7 (picos en 20 y 28 corcheas).
+    call(["scripts/comparacion/ciclos_metricos.py", *paths(banda), "--diapositiva", "--solo", "mata_zyklek,fabienk",
+          "--salida", str(fuente / "ciclos_banda")], failures)
     call(["scripts/comparacion/verosimilitud_estilos.py", *paths(banda), "--estilos", "rock,pop", "--diapositiva",
           "--salida", str(fuente / "verosimilitud_banda_rock_pop")], failures)
     # Clasificación y círculo de 24-EDO sin subtítulos ni notas, con los círculos de cada canción más grandes.

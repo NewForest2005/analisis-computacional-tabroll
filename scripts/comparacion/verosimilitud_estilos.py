@@ -200,7 +200,7 @@ def figura_matriz(filas: list[dict], est: list[str], textos: bool = True):
     for s_ in ax.spines.values():
         s_.set_visible(False)
     ax.set_xlabel("Estilo del corpus", color=GRIS)
-    ax.set_ylabel("Canción", color=GRIS)
+    ax.set_ylabel("Canción", color=GRIS, labelpad=12)
     return fig
 
 
@@ -244,7 +244,7 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
         ax.scatter(*q, s=tam, marker=marca, color=color, zorder=6 if banda else 5,
                    edgecolors=FONDO if banda else TINTA, linewidths=1 if banda else 0.5)
     eje = lambda v: ", ".join(f"{GRADOS[k]}{'+' if v[k] > 0 else '−'}" for k in np.argsort(-np.abs(v))[:3])
-    letra_eje = {"fontsize": 13} if diapositiva else {}
+    letra_eje = {"fontsize": 13, "labelpad": 12} if diapositiva else {}   # en la diapositiva, rótulo separado de las marcas
     ax.set_xlabel(f"Componente 1 ({eje(Vt[0])})", color=GRIS, **letra_eje)
     ax.set_ylabel(f"Componente 2 ({eje(Vt[1])})", color=GRIS, **letra_eje)
     handles, _ = ax.get_legend_handles_labels()

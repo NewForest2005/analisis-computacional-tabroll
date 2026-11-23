@@ -122,8 +122,9 @@ def dibujar(filas: list[dict], salida: str, diapositiva: bool = False) -> None:
         g2 = " y ".join(x["grado"] for x in f["grados_en_cuarto"][:2])
         ax.text(f["cuartos_de_tono"] + 0.5, yi, f"{f['cuartos_de_tono']:g} %  ·  {f['concentracion_dos_grados']:g} % en {g2}", va="center", fontsize=9,
                 color=tinta)
-    ax.set_yticks(y, [f["cancion"] for f in filas], fontsize=10)
-    ax.set_xlabel("% del tiempo de la melodía en cuartos de tono", color=gris, fontsize=9)
+    ax.set_yticks(y, [f["cancion"] for f in filas], fontsize=12.5 if diapositiva else 10)
+    ax.set_xlabel("% del tiempo de la melodía en cuartos de tono", color=gris, fontsize=12.5 if diapositiva else 9,
+                  labelpad=8 if diapositiva else 4)
     ax.set_xlim(0, max(f["cuartos_de_tono"] for f in filas) * 1.75)
     ax.set_title("Uso estructural de los cuartos de tono en la melodía", loc="left", color=tinta,
                  **({"fontsize": 15, "fontweight": "bold", "pad": 34} if diapositiva else {"fontsize": 12}))
@@ -131,6 +132,8 @@ def dibujar(filas: list[dict], salida: str, diapositiva: bool = False) -> None:
         ax.legend(frameon=False, fontsize=9, loc="lower right")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)
+    if diapositiva:
+        ax.tick_params(axis="x", labelsize=12)
     ax.grid(axis="x", color=rejilla, lw=0.8)
     ax.set_axisbelow(True)
     for s in ax.spines.values():

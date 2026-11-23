@@ -207,6 +207,8 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
     columnas = max(1, min(columnas, len(curvas)))
     filas = -(-len(curvas) // columnas)
     alto_fila = 2.0 if diapositiva else 1.05
+    pocas = diapositiva and len(curvas) <= 2          # pocas canciones: paneles anchos y letra grande
+    L = 1.6 if pocas else 1.0
     fig, cuerpo = estilo_figuras.figura(
         12 if diapositiva else 16, alto_fila * filas + 0.9, "Repetición musical según la distancia temporal",
         subtitulo="" if diapositiva else "Cada barra muestra cuánto se repiten ataques y alturas al separar la música ℓ "
@@ -222,8 +224,9 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
         n, R, grupo = curvas[k]
         ax.bar(lags, R, color=PALETA_ARTISTA[grupo], width=0.75)
         for l, r in picos(R, lags):
-            ax.text(l, r + 0.03, str(l), ha="center", va="bottom", fontsize=6.5, color=TINTA)
-        ax.set_title(n, loc="left", fontsize=8.5, color=TINTA, pad=2)
+            ax.text(l, r + 0.03, str(l), ha="center", va="bottom", fontsize=6.5 * L, color=TINTA,
+                    fontweight="bold" if pocas else "normal")
+        ax.set_title(n, loc="left", fontsize=8.5 * L, color=TINTA, pad=2 * L, fontweight="bold" if pocas else "normal")
         ax.set_ylim(0, 1.25)
         ax.set_yticks([0, 0.5, 1])
         ax.set_xlim(0, lags[-1] + 0.5)
@@ -235,10 +238,11 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
             ax.spines[s_].set_visible(False)
         for s_ in ("left", "bottom"):
             ax.spines[s_].set_color(REJILLA)
-        ax.tick_params(labelsize=7.5, colors=GRIS, length=0)
+        ax.tick_params(labelsize=7.5 * L, colors=GRIS, length=0)
         if diapositiva or k >= len(curvas) - columnas:          # en la diapositiva, todas; si no, la última fila
             ax.xaxis.set_tick_params(labelbottom=True)
-            ax.set_xlabel("Distancia ℓ entre repeticiones (corcheas)" if diapositiva else "ℓ (corcheas)", fontsize=8.5, color=GRIS)
+            ax.set_xlabel("Distancia ℓ entre repeticiones (corcheas)" if diapositiva else "ℓ (corcheas)", fontsize=8.5 * L, color=GRIS,
+                          labelpad=6 if pocas else 4)
     presentes = [g for g in PALETA_ARTISTA if any(c[2] == g for c in curvas)]
     if not diapositiva:          # en la diapositiva, sin leyenda
         cuerpo.legend(handles=[Patch(facecolor=PALETA_ARTISTA[g], label=g) for g in presentes], loc="outside upper center",
@@ -254,6 +258,8 @@ def main() -> None:
     ap.add_argument("--min-tramo", type=int, default=4, help="compases seguidos para listar un tramo")
     ap.add_argument("--salida", default="outputs/ciclos_metricos")
     ap.add_argument("--diapositiva", action="store_true", help="3 columnas, marcas y rótulo del eje x en cada panel")
+    ap.add_argument("--solo", default="", help="canciones de la figura, separadas por comas (p. ej. «mata_zyklek,fabienk»); "
+                    "el informe .md sigue con todas")
     a = ap.parse_args()
 
     por = {}
@@ -311,7 +317,11 @@ def main() -> None:
                 fh.write(f"{n},{Lb},{f['compas']},{f['t0']:.2f},{f['L']},{'' if f['fase'] is None else f['fase']},{'' if f['ajuste'] is None else f['ajuste']}\n")
 
     estilo_figuras.preparar()
-    estilo_figuras.guardar(dibujar(curvas, lags, columnas=3 if a.diapositiva else 4, diapositiva=a.diapositiva),
+    if a.solo:                                   # en la figura, solo las canciones pedidas (en ese orden)
+        claves = [c.strip().lower().replace("_", " ") for c in a.solo.split(",") if c.strip()]
+        curvas = [c for k in claves for c in curvas if k in c[0].lower()]
+    columnas = (1 if len(curvas) <= 2 else 3) if a.diapositiva else 4
+    estilo_figuras.guardar(dibujar(curvas, lags, columnas=columnas, diapositiva=a.diapositiva),
                            a.salida + ".png", dpi=170)
     print(f"→ {a.salida}.md, {a.salida}.png")
 

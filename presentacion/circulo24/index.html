@@ -74,7 +74,13 @@
   .embebido .controles { margin-top: 6px; gap: 8px 10px; font-size: .85rem; }
   .embebido .leyenda { font-size: .76rem; margin-top: 8px; line-height: 1.4; }
   .embebido button, .embebido select { padding: 4px 9px; }
-  .embebido .explicacion { display: none; }      /* en la diapositiva, la explicación va como leyenda debajo */
+  .embebido .explicacion { display: none; }
+  /* en la diapositiva: el círculo ocupa toda la altura del iframe y más ancho que los controles */
+  .embebido main { padding: 2px 8px; align-items: center; }
+  .embebido #circulo svg { max-height: calc(100vh - 6px); }
+  @media (min-aspect-ratio: 4/3) and (min-width: 640px) {
+    .embebido main { grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr); }
+  }      /* en la diapositiva, la explicación va como leyenda debajo */
 </style>
 </head>
 <body>
