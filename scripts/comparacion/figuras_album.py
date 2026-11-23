@@ -157,13 +157,14 @@ def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas
                                             subtitulo=subtitulo if textos else "", nota=nota if textos else "")
         arriba, abajo = cuerpo.subfigures(2, 1, height_ratios=[alto_mapa, alto_barras])
     if arriba is not None:
-        _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, bloques.get("corpus", {}))
+        _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, bloques.get("corpus", {}), rotulo=textos)
     if abajo is not None:
-        _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo=parte != "barras")
+        _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo=parte != "barras", leyenda=textos)
     return fig
 
 
-def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None = None, minimo: int = 100) -> None:
+def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None = None, minimo: int = 100,
+                        rotulo: bool = True) -> None:
     """Los corpus con menos de `minimo` piezas no cuentan para el veredicto (verosimilitud_por_bloques.veredicto):
     en uno chico y disperso casi todo parece típico. Se muestran atenuados y marcados con *."""
     from matplotlib.colors import LinearSegmentedColormap
@@ -174,7 +175,8 @@ def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None =
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
     imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=60, aspect="auto")
     barra = arriba.colorbar(imagen, ax=ax, location="bottom", shrink=0.45, aspect=40, pad=0.04, ticks=[0, 15, 30, 45, 60])
-    barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
+    if rotulo:                                       # en la diapositiva queda solo la paleta
+        barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
     barra.ax.tick_params(labelsize=8, colors=GRIS, length=0)
     barra.outline.set_visible(False)
     for j, ch in enumerate(chico):
@@ -198,7 +200,7 @@ def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None =
     for etiqueta, ch in zip(ax.get_xticklabels(), chico):
         if ch:
             etiqueta.set_color(MUTED)
-    if any(chico):
+    if any(chico) and rotulo:
         barra.set_label(f"Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor\n"
                         f"* Corpus con menos de {minimo} piezas: atenuados, no cuentan para el veredicto (en uno chico casi todo parece típico)",
                         fontsize=8.5, color=GRIS, labelpad=5)
@@ -208,7 +210,7 @@ def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None =
         s.set_visible(False)
 
 
-def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: bool = True) -> None:
+def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: bool = True, leyenda: bool = True) -> None:
     import matplotlib.pyplot as plt
     titulo_b = {"armonia": "Armonía", "escala": "Escala (12)", "microtono": "Cuartos de tono", "metro": "Metro"}
     todos = sorted({c for b in bl for c in cuenta[b]}, key=lambda c: (c == "sin vecino", c))
@@ -234,8 +236,9 @@ def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: b
     n_c = {c: sum(cuenta[b][c] for b in bl) for c in todos}
     handles = [plt.Line2D([0], [0], color=color[c], lw=8,
                           label=f"{c} — {n_c[c]} {'casos' if c == 'sin vecino' else 'victorias'}") for c in todos]
-    abajo.legend(handles=estilo_figuras.sin_repetidas(handles), loc="outside lower center", ncol=len(handles),
-                 frameon=False, fontsize=8.5)
+    if leyenda:
+        abajo.legend(handles=estilo_figuras.sin_repetidas(handles), loc="outside lower center", ncol=len(handles),
+                     frameon=False, fontsize=8.5)
 
 
 # ---------------------------------------------------------------- (b) perfil al estilo Hooktheory
@@ -318,7 +321,9 @@ def angulo(d: int) -> float:
     return np.pi / 2 - 2 * np.pi * k / 12
 
 
-def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bool, letra: float = 1.0) -> None:
+def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bool, letra: float = 1.0,
+                    tam_grado: float | None = None, tam_titulo: float | None = None, escala: float = 1.0,
+                    una_linea: bool = False, lim: float = 1.3) -> None:
     from matplotlib.patches import Circle
     ax.set_aspect("equal")
     ax.axis("off")
@@ -337,18 +342,19 @@ def dibujar_circulo(ax, alt: np.ndarray, tr: np.ndarray, titulo: str, grande: bo
             cruza = (a % 2) != (b % 2)
             (x0, y0), (x1, y1) = pos[a], pos[b]
             ax.plot([x0, x1], [y0, y1], color=CAMPO_Q if cruza else MUTED, lw=0.6 + 3 * tr[a, b] / mx, alpha=0.55, zorder=1)
-    esc = 2600 if grande else 1440
+    esc = (2600 if grande else 1440) * escala
     for d in range(24):
         x, y = pos[d]
-        ax.scatter([x], [y], s=12 + esc * p[d], color=CAMPO_Q if d % 2 else CAMPO_REG, edgecolor=FONDO, linewidth=1.2, zorder=3,
+        ax.scatter([x], [y], s=12 * escala + esc * p[d], color=CAMPO_Q if d % 2 else CAMPO_REG, edgecolor=FONDO, linewidth=1.2, zorder=3,
                    alpha=0.95 if p[d] > 0.005 else 0.25)
         f = 1.17 if d % 2 == 0 else 0.80
-        ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=(8.5 if grande else 7.2) * letra,
+        ax.text(x * f, y * f, grado24(d), ha="center", va="center", fontsize=tam_grado or (8.5 if grande else 7.2) * letra,
                 color=TINTA if p[d] >= 0.02 else MUTED, fontweight="bold" if p[d] >= 0.08 else "normal")
     cuartos = 100 * p[1::2].sum()
-    ax.set_title(f"{titulo}\n¼ de tono {cuartos:.0f} %", fontsize=(10.5 if grande else 8.5) * letra, color=TINTA, pad=4)
-    ax.set_xlim(-1.3, 1.3)
-    ax.set_ylim(-1.3, 1.3)
+    ax.set_title(f"{titulo}{' · ' if una_linea else '\n'}¼ de tono {cuartos:.0f} %", fontsize=tam_titulo or (10.5 if grande else 8.5) * letra, color=TINTA,
+                 pad=10 if tam_titulo else 4)
+    ax.set_xlim(-lim, lim)
+    ax.set_ylim(-lim, lim)
 
 
 def fig_circulo(runs: list[Path], salida: str, diapositiva: bool = False) -> None:
@@ -362,9 +368,20 @@ def fig_circulo(runs: list[Path], salida: str, diapositiva: bool = False) -> Non
     alt_tot = sum(a / a.sum() for _, a, _ in datos if a.sum())
     tr_tot = sum(t for _, _, t in datos)
     if diapositiva:
-        fig = plt.figure(figsize=(16, 8.2), facecolor=FONDO)
-        gs = fig.add_gridspec(2, 5, width_ratios=[2.6, 2.6, 2.5, 2.5, 2.5], wspace=0.12, hspace=0.32,
-                              left=0.01, right=0.99, top=0.9, bottom=0.13)
+        # Proporción del recuadro de la diapositiva (912 × 392 px) y figura más chica en pulgadas: los textos se ven
+        # más grandes al escalarla. El álbum a la izquierda; las seis canciones en dos filas de tres.
+        fig = plt.figure(figsize=(13, 5.6), facecolor=FONDO)
+        gs = fig.add_gridspec(2, 4, width_ratios=[4.6, 2.75, 2.75, 2.75], wspace=0.04, hspace=0.2,
+                              left=0.005, right=0.995, top=0.855, bottom=0.0)
+        dibujar_circulo(fig.add_subplot(gs[:, 0]), alt_tot, tr_tot, "Vol. II completo (media de las canciones)", True,
+                        tam_grado=12.5, tam_titulo=12.5, escala=1.15)
+        for i, (n, a, t) in enumerate(datos[:6]):
+            dibujar_circulo(fig.add_subplot(gs[i // 3, 1 + i % 3]), a, t, n, False, tam_grado=9.5, tam_titulo=11,
+                            escala=1.25, una_linea=True, lim=1.24)
+        fig.suptitle("Círculo de quintas en 24-EDO: campos regulares y de cuarto de tono",
+                     x=0.5, y=0.995, ha="center", fontsize=15, fontweight="bold", color=TINTA)
+        guardar(fig, salida + "_c_circulo_haba.png")
+        return
     else:
         fig = plt.figure(figsize=(16, 8.8), facecolor=FONDO)
         gs = fig.add_gridspec(2, 5, width_ratios=[3.2, 3.2, 2, 2, 2], wspace=0.34, hspace=0.55)
@@ -388,8 +405,7 @@ def fig_circulo(runs: list[Path], salida: str, diapositiva: bool = False) -> Non
         Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, markersize=10, label="Punto grande: mayor tiempo melódico en el grado"),
         Line2D([0], [0], marker="o", color="none", markerfacecolor=CAMPO_REG, alpha=0.3, markersize=5, label="Punto pequeño o tenue: menor uso del grado"),
     ]
-    if diapositiva:
-        fig.legend(handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, 0.0), ncol=3, frameon=False, fontsize=11)
+    if diapositiva:                                  # sin leyenda en la diapositiva
         guardar(fig, salida + "_c_circulo_haba.png")
         return
     fig.legend(handles=leyenda, loc="lower center", bbox_to_anchor=(0.5, 0.12), ncol=2,

@@ -127,9 +127,7 @@ def dibujar(filas: list[dict], salida: str, diapositiva: bool = False) -> None:
     ax.set_xlim(0, max(f["cuartos_de_tono"] for f in filas) * 1.75)
     ax.set_title("Uso estructural de los cuartos de tono en la melodía", loc="left", color=tinta,
                  **({"fontsize": 15, "fontweight": "bold", "pad": 34} if diapositiva else {"fontsize": 12}))
-    if diapositiva:   # leyenda debajo del eje, fuera de las barras y de sus cifras
-        ax.legend(frameon=False, fontsize=9.5, loc="upper center", bbox_to_anchor=(0.5, -0.13), ncol=2)
-    else:
+    if not diapositiva:   # en la diapositiva, sin leyenda
         ax.legend(frameon=False, fontsize=9, loc="lower right")
     ax.set_facecolor(fondo)
     ax.tick_params(colors=gris, length=0)

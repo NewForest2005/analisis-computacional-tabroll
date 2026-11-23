@@ -5,7 +5,40 @@ Lo que se dice en cada diapositiva de `presentacion/index.html`, con la numeraci
 aparece. Los que ya se explicaron antes (24-EDO, MIDI, cents, pYIN, piano roll, compás, Riemann, Piston, Basic Pitch)
 están en [`glosario.md`](glosario.md). Las fuentes citadas están en [`referencias_compiladas.md`](referencias_compiladas.md).
 
-Por ahora cubre de la diapositiva 12 a la 23 (Trabajo futuro).
+Por ahora cubre la diapositiva 6 (Estado del arte) y de la 12 a la 23 (Trabajo futuro).
+
+---
+
+## 6 · Estado del arte
+
+«La tabla resume seis líneas de trabajo previo. Para cada una muestra qué resuelve y qué le falta para esta música.
+
+- **Altura desde el audio:** pYIN sigue una sola voz. Basic Pitch entrega notas MIDI enteras, así que un cuarto de tono
+  le sale como nota desafinada.
+- **Separación de fuentes:** Demucs y BS-RoFormer aíslan los instrumentos, pero no transcriben.
+- **MIR microtonal:** Bozkurt mide el makam turco con precisión, pero en música de una sola voz, sin acordes.
+- **Armonía funcional:** Riemann, Lendvai y Piston pensaron en 12 notas.
+- **Corpus de estilos:** de Clercq y Temperley, y Broze y Shanahan, comparan estilos con datos en 12 notas.
+- **Métrica irregular:** Holzapfel y Srinivasamurthy siguen compases no occidentales, pero sin la altura.
+
+Ningún trabajo consultado reúne audio polifónico, 24-EDO, armonía funcional y comparación con corpus. Ese es el aporte
+de este trabajo.»
+
+> **Términos**
+> - **Estado del arte:** el conjunto de trabajos previos sobre un problema; muestra qué está resuelto y qué falta.
+> - **Audio polifónico:** grabación en la que suenan varias notas o instrumentos a la vez.
+> - **Transcripción automática:** convertir audio en notas escritas por medio de un programa.
+> - **Separación de fuentes:** extraer de una mezcla la pista de cada instrumento.
+> - **MIR (Music Information Retrieval):** el área que analiza música por computador.
+> - **Makam:** sistema de modos de la música turca, con intervalos menores que el semitono.
+> - **Histograma de alturas:** cuánto tiempo suena cada altura, medida con resolución fina.
+> - **Armonía funcional:** la teoría que clasifica cada acorde como tónica, subdominante o dominante.
+> - **Corpus simbólico:** colección de piezas guardadas como notas (partitura), no como audio.
+> - **Métrica no occidental:** sistemas de compás de otras tradiciones, como el usul turco o el tala indio.
+
+**Si preguntan por qué falta la literatura de un área:** «La tabla resume las líneas de las que este trabajo toma algo. La
+bibliografía completa está en la diapositiva de referencias.» Todas las citas de la tabla están en
+[`referencias_compiladas.md`](referencias_compiladas.md); Riemann (1893) sigue marcado «por verificar el año».
 
 ---
 

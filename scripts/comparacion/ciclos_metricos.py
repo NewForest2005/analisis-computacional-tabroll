@@ -240,8 +240,9 @@ def dibujar(curvas: list[tuple[str, np.ndarray, str]], lags: np.ndarray, columna
             ax.xaxis.set_tick_params(labelbottom=True)
             ax.set_xlabel("Distancia ℓ entre repeticiones (corcheas)" if diapositiva else "ℓ (corcheas)", fontsize=8.5, color=GRIS)
     presentes = [g for g in PALETA_ARTISTA if any(c[2] == g for c in curvas)]
-    cuerpo.legend(handles=[Patch(facecolor=PALETA_ARTISTA[g], label=g) for g in presentes], loc="outside upper center",
-                  ncol=len(presentes), frameon=False, fontsize=9.5)
+    if not diapositiva:          # en la diapositiva, sin leyenda
+        cuerpo.legend(handles=[Patch(facecolor=PALETA_ARTISTA[g], label=g) for g in presentes], loc="outside upper center",
+                      ncol=len(presentes), frameon=False, fontsize=9.5)
     return fig
 
 

@@ -130,6 +130,7 @@ detiene y lo lista: hay que pasar el cambio al notebook o descartarlo con `scrip
 | [`docs/evaluacion_melodia.md`](docs/evaluacion_melodia.md), [`docs/analisis_melodico.md`](docs/analisis_melodico.md) | evaluación y análisis de la melodía |
 | [`docs/corpus_estilos.md`](docs/corpus_estilos.md), [`docs/verosimilitud_por_bloques.md`](docs/verosimilitud_por_bloques.md) | corpus usados, método de comparación y sus límites |
 | [`docs/graficas.md`](docs/graficas.md) | cómo se generan y leen las gráficas |
+| [`docs/leyendas_figuras.md`](docs/leyendas_figuras.md) | pies de figura de la presentación, para el artículo |
 | [`docs/glosario.md`](docs/glosario.md), [`docs/guion_defensa.md`](docs/guion_defensa.md) | glosario y guion de la defensa |
 | [`docs/referencias_compiladas.md`](docs/referencias_compiladas.md) | bibliografía, corpus y fuentes |
 | [`docs/articulo/`](docs/articulo), [`docs/poster/`](docs/poster), [`docs/formulas/`](docs/formulas) | artículo, póster y resumen de fórmulas (LaTeX y PDF) |

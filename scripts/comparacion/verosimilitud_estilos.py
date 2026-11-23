@@ -221,7 +221,7 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
     _, _, Vt = np.linalg.svd(X - mu, full_matrices=False)
     P = (X - mu) @ Vt[:2].T
     fig, cuerpo = estilo_figuras.figura(
-        12, 7.2, "Posición de las canciones según sus fundamentales armónicas",
+        12, 5.4 if diapositiva else 7.2, "Posición de las canciones según sus fundamentales armónicas",
         subtitulo="" if diapositiva else "Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones "
                   "comparadas. La cercanía resume el parecido entre sus repartos de fundamentales.",
         nota="" if diapositiva else "Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan "
@@ -244,8 +244,9 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
         ax.scatter(*q, s=tam, marker=marca, color=color, zorder=6 if banda else 5,
                    edgecolors=FONDO if banda else TINTA, linewidths=1 if banda else 0.5)
     eje = lambda v: ", ".join(f"{GRADOS[k]}{'+' if v[k] > 0 else '−'}" for k in np.argsort(-np.abs(v))[:3])
-    ax.set_xlabel(f"Componente 1 ({eje(Vt[0])})", color=GRIS)
-    ax.set_ylabel(f"Componente 2 ({eje(Vt[1])})", color=GRIS)
+    letra_eje = {"fontsize": 13} if diapositiva else {}
+    ax.set_xlabel(f"Componente 1 ({eje(Vt[0])})", color=GRIS, **letra_eje)
+    ax.set_ylabel(f"Componente 2 ({eje(Vt[1])})", color=GRIS, **letra_eje)
     handles, _ = ax.get_legend_handles_labels()
     for h in handles:
         h.set_alpha(1)
@@ -253,13 +254,13 @@ def figura_mapa(filas: list[dict], C: dict, diapositiva: bool = False):
         marca, color, tam_leyenda = SIMBOLO_ARTISTA[quien]
         handles.append(Line2D([0], [0], marker=marca, color="none", markerfacecolor=color, markeredgecolor=color,
                               markersize=tam_leyenda, label=quien))
-    leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=11.5 if diapositiva else 9,
-                            title="Corpus y bandas", title_fontsize=12.5 if diapositiva else 10, labelspacing=1.0,
+    leyenda = cuerpo.legend(handles=handles, loc="outside right upper", frameon=False, fontsize=12 if diapositiva else 9,
+                            title="Corpus y bandas", title_fontsize=13 if diapositiva else 10, labelspacing=1.0,
                             markerscale=1.6 if diapositiva else 1.4)
     leyenda.get_title().set_fontweight("bold")
     leyenda._legend_box.align = "left"
     ax.set_facecolor(FONDO)
-    ax.tick_params(colors=GRIS, length=0)
+    ax.tick_params(colors=GRIS, length=0, labelsize=12 if diapositiva else None)
     ax.grid(color=REJILLA, lw=0.7)
     for s_ in ax.spines.values():
         s_.set_visible(False)

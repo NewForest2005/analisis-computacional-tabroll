@@ -221,7 +221,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area alta">
     <div class="cols" style="grid-template-columns: 1.08fr 0.92fr">
       <div class="pila" style="justify-content:center">
-        <div class="fig" style="height:305px"><img src="img/cuaderno_original_sarniezz.png" alt="Piano roll de la partitura de Sarniezz en el notebook original"></div>
+        <div class="fig" style="height:345px"><img src="img/cuaderno_original_sarniezz.png" alt="Piano roll de la partitura de Sarniezz en el notebook original"></div>
         <p class="leyenda">Primer notebook de Python (Colab): la transcripción de MuseScore del audio de Sarniezz, en piano roll (primeras 64 negras).</p>
       </div>
       <table class="datos">
@@ -296,10 +296,10 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
         <p class="idea" style="font-size:15.5px">Conclusión: había que pasar de describir la señal a <b>transcribir</b> notas, compases y acordes.</p>
       </div>
   </div>
-  <figure class="fig" style="left:540px; top:72px; width:375px; height:200px">
+  <figure class="fig" style="left:530px; top:72px; width:395px; height:218px">
     <img src="img/original_pyin.png" alt="Contorno pYIN del bajo de Sarniezz">
     <figcaption>Contorno pYIN del bajo de Sarniezz: una sola frecuencia por instante.</figcaption></figure>
-  <div class="cols" style="left:462px; top:300px; width:453px; height:158px; grid-template-columns: 1.7fr 1fr; gap:24px">
+  <div class="cols" style="left:440px; top:304px; width:485px; height:196px; grid-template-columns: 1.7fr 1fr; gap:20px">
     <figure class="fig" style="margin:0"><img src="img/original_cents.png" alt="Desviación en cents">
       <figcaption>Desviación respecto del semitono: siempre entre −50 y +50 cents.</figcaption></figure>
     <figure class="fig" style="margin:0"><img src="img/original_secciones_mlp.png" alt="Matriz de confusión de la red">
@@ -317,7 +317,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area">
     <div class="pila" style="height:100%; gap:22px">
       <p style="font-size:15px; margin-top:-14px">Al estudiar a Primus en <b>Hooktheory</b> se encontró su formato: la melodía en un piano roll y el acorde de cada compás debajo. El <b>tabroll</b> de este trabajo hace lo mismo en <span class="resalta">24 filas por octava</span> y lo saca todo del audio.</p>
-      <div class="cols" style="grid-template-columns: 0.92fr 1.08fr; gap:16px; height:278px">
+      <div class="cols" style="grid-template-columns: 0.92fr 1.08fr; gap:16px; height:322px">
         <figure class="fig" style="margin:0"><img src="img/hooktheory_fabienk.png" alt="TheoryTab de Fabienk en Hooktheory">
           <figcaption>Hooktheory, Fabienk (transcrita a mano): Mi dórico, 4/4 y 12 notas por octava.</figcaption></figure>
         <figure class="fig" style="margin:0"><img src="img/tabroll_fabienk.png" alt="Tabroll de Fabienk entre 4:42 y 4:52, en el registro de la guitarra">
@@ -530,7 +530,6 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
           <div class="paso"><b>Test contra corpus</b>Jensen-Shannon, 5 vecinos y percentil<span class="ref">14</span></div>
         </div>
       </div>
-      <p class="nota leyenda-algoritmo">En amarillo, el núcleo propio del trabajo. «diap. n»: dónde se explicó cada paso. El pseudocódigo está en la sub-diapositiva de abajo.</p>
     </div>
     <p class="pie" data-campo="pie"></p>
     <aside class="notes">Mapa de todo lo anterior: cada bloque dice en qué diapositiva se explicó. En amarillo, el núcleo propio: como la banda repite cada riff con el looper, se promedia la altura entre vueltas antes de decidir la nota; por eso funciona en cuartos de tono. Abajo (flecha abajo) está el pseudocódigo. No dar resultados aquí.</aside>
@@ -622,7 +621,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area alta">
     <div class="cols" style="grid-template-columns: 0.95fr 1.05fr">
       <figure class="fig sin-borde" style="margin:0"><img src="img/acierto_herramienta.png" alt="Acierto de la herramienta por canción">
-        <figcaption>Contra las referencias corregidas de oído (corridas congeladas). En promedio, la fundamental del acorde acierta el 85 % en los compases confiables y la melodía el 49 %.</figcaption></figure>
+</figure>
       <div class="pila compacta" style="gap:13px">
         <div class="tarjeta"><h3>1 · El bajo manda</h3><p>En la fundamental pesa más el bajo (1 frente a 0.6), que es lo mejor transcrito.</p></div>
         <div class="tarjeta"><h3>2 · Se suma sobre las vueltas del loop</h3><p>Un error en una vuelta queda en minoría frente a las demás.</p></div>
@@ -633,87 +632,51 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
     </div>
   </div>
   <p class="pie" data-campo="pie"></p>
+  <aside class="notes">Contra las referencias corregidas de oído (corridas congeladas). En promedio, la fundamental del acorde acierta el 85 % en los compases confiables y la melodía el 49 %.</aside>
 </section>
 
-<!-- 19 · Armonía (con sub-diapositivas a pantalla completa) -->
+<!-- 19 · Armonía: gráficas 1a y 1b a pantalla completa -->
 <section>
-  <section class="contenido">
-    <span class="numero"></span>
-    <h2>Armonía: fuera de todos los corpus</h2>
-    <p class="subtitulo">Resultados · ninguna canción es típica de ningún estilo</p>
-    <div class="area alta">
-      <div class="cols c2" style="gap:18px">
-        <figure class="fig" style="margin:0"><img src="img/1a_armonia_matriz_rock_pop.png" alt="Matriz de verosimilitud: rock y pop"><figcaption class="leyenda-grafica">Frente a rock y pop, los estilos más cercanos, el máximo es <b>17.7</b> (50 = pieza típica). En rock real, «sin vecino» sale el 5.2 % de las veces; en la banda, el 37.5 %.</figcaption></figure>
-        <figure class="fig" style="margin:0"><img src="img/1b_armonia_mapa_fundamentales.png" alt="Mapa de fundamentales"><figcaption class="leyenda-grafica">Mata Zyklek y Utzp (pedales) quedan en el borde del rock; Sarniezz y Fabienk, donde no hay piezas de ningún corpus, por el peso de ♭VII y ♭III.</figcaption></figure>
-      </div>
-    </div>
+  <section class="contenido" data-sub="gráfica 1a"><span class="numero"></span><h2>Armonía · matriz de verosimilitud</h2><p class="subtitulo">Resultados · 1a</p>
+    <div class="grafica-completa sola fig"><img src="img/1a_armonia_matriz_verosimilitud.png" alt=""></div>
     <p class="pie" data-campo="pie"></p>
-    <aside class="notes">Calibración: en 388 piezas reales de rock, el método da «sin vecino» solo el 5.2 % de las veces.</aside>
-  </section>
-  <section class="contenido"><span class="numero"></span><h2>Armonía · matriz de verosimilitud</h2><p class="subtitulo">Resultados · 1a</p>
-    <div class="grafica-completa fig"><img src="img/1a_armonia_matriz_verosimilitud.png" alt=""></div>
-    <p class="leyenda-grafica">Cada casilla es un percentil: el % de piezas del estilo que están igual o más lejos de su centro que la canción (50 = pieza típica; 0 = más rara que todas). «¼ %»: tiempo con la fundamental en cuarto de tono, llevada al grado de abajo porque ningún corpus tiene cuartos de tono. Corpus: RS 200, Kostka-Payne, iRealPro y 9 álbumes de Hooktheory.</p>
-    <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Armonía · mapa de fundamentales</h2><p class="subtitulo">Resultados · 1b</p>
-    <div class="grafica-completa fig"><img src="img/1b_armonia_mapa_fundamentales.png" alt=""></div>
-    <p class="leyenda-grafica">Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones comparadas. La cercanía resume el parecido entre sus repartos de fundamentales. Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan en ella (+ y − indican el sentido).</p>
-    <p class="pie" data-campo="pie"></p></section>
+    <aside class="notes">Frente a rock y pop, los estilos más cercanos, el máximo es 17.7 (50 = pieza típica). En rock real, «sin vecino» sale el 5.2 % de las veces; en la banda, el 37.5 %. Mata Zyklek y Utzp (pedales) quedan en el borde del rock; Sarniezz y Fabienk, donde no hay piezas de ningún corpus, por el peso de ♭VII y ♭III. Calibración: en 388 piezas reales de rock, el método da «sin vecino» solo el 5.2 % de las veces. Cada casilla es un percentil: el % de piezas del estilo que están igual o más lejos de su centro que la canción (50 = pieza típica; 0 = más rara que todas). «¼ %»: tiempo con la fundamental en cuarto de tono, llevada al grado de abajo porque ningún corpus tiene cuartos de tono. Corpus: RS 200, Kostka-Payne, iRealPro y 9 álbumes de Hooktheory.</aside></section>
+  <section class="contenido" data-sub="gráfica 1b"><span class="numero"></span><h2>Armonía · mapa de fundamentales</h2><p class="subtitulo">Resultados · 1b</p>
+    <div class="grafica-completa sola fig"><img src="img/1b_armonia_mapa_fundamentales.png" alt=""></div>
+    <p class="pie" data-campo="pie"></p>
+    <aside class="notes">Cada punto del fondo es una pieza de un corpus; los símbolos son las canciones comparadas. La cercanía resume el parecido entre sus repartos de fundamentales. Cada eje es una componente principal; entre paréntesis, los tres grados que más pesan en ella (+ y − indican el sentido).</aside></section>
 </section>
 
-<!-- 20 · Melodía -->
+<!-- 20 · Melodía: gráficas 2a, 2b y el círculo en movimiento -->
 <section>
-  <section class="contenido">
-    <span class="numero"></span>
-    <h2>Melodía: cuartos de tono como grados fijos</h2>
-    <p class="subtitulo">Resultados · el elemento nuevo</p>
-    <div class="area alta">
-      <div class="cols c2" style="gap:18px">
-        <figure class="fig" style="margin:0"><img src="img/2a_melodia_uso_cuartos_de_tono.png" alt="Uso de cuartos de tono"><figcaption class="leyenda-grafica">Entre el <b>48 y el 82 %</b> de los cuartos de tono caen en <b>dos grados fijos</b> que vuelven en cada vuelta del loop. Angor (5 %) queda bajo el piso de ruido.</figcaption></figure>
-        <figure class="fig" style="margin:0"><img src="img/2b_melodia_circulo_24edo.png" alt="Círculo de 24-EDO"><figcaption class="leyenda-grafica">Dos familias de escala: <b>♭2+ y ♭6+</b> sobre frigio (Mata Zyklek, Yor Zarad, Utzp), cercana al maqam, y <b>7+, 6+ y ♭3+</b> sobre dórico (Sarniezz, Fabienk).</figcaption></figure>
-      </div>
-    </div>
+  <section class="contenido" data-sub="gráfica 2a"><span class="numero"></span><h2>Melodía · uso de los cuartos de tono</h2><p class="subtitulo">Resultados · 2a</p>
+    <div class="grafica-completa sola fig"><img src="img/2a_melodia_uso_cuartos_de_tono.png" alt=""></div>
     <p class="pie" data-campo="pie"></p>
-  </section>
-  <section class="contenido"><span class="numero"></span><h2>Melodía · uso de los cuartos de tono</h2><p class="subtitulo">Resultados · 2a</p>
-    <div class="grafica-completa fig"><img src="img/2a_melodia_uso_cuartos_de_tono.png" alt=""></div>
-    <p class="leyenda-grafica">Porcentaje del tiempo de la melodía en cuartos de tono: como grado sostenido (oscuro) o como adorno de paso (claro). La franja gris es el piso de ruido medido en Primus, que no usa cuartos de tono. A la derecha, qué parte de los cuartos de tono cae en los dos grados más usados.</p>
-    <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Melodía · círculo de 24-EDO</h2><p class="subtitulo">Resultados · 2b</p>
-    <div class="grafica-completa fig"><img src="img/2b_melodia_circulo_24edo.png" alt=""></div>
-    <p class="leyenda-grafica">La quinta de 24-EDO mide 14 pasos y mcd(14, 24) = 2: el ciclo se parte en dos campos, los grados regulares (anillo exterior, amarillo) y los de cuarto de tono (interior, azul); cada grado «+» queda junto a su vecino regular. El área del punto es el tiempo melódico; las líneas, los pasos melódicos más frecuentes. El panel grande resume el álbum.</p>
-    <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Melodía · el círculo de 24-EDO en movimiento</h2><p class="subtitulo">Resultados · Mata Zyklek, 0:42 – 1:12</p>
+    <aside class="notes">Entre el 48 y el 82 % de los cuartos de tono caen en dos grados fijos que vuelven en cada vuelta del loop. Angor (5 %) queda bajo el piso de ruido. Dos familias de escala: ♭2+ y ♭6+ sobre frigio (Mata Zyklek, Yor Zarad, Utzp), cercana al maqam, y 7+, 6+ y ♭3+ sobre dórico (Sarniezz, Fabienk). Porcentaje del tiempo de la melodía en cuartos de tono: como grado sostenido (oscuro) o como adorno de paso (claro). La franja gris es el piso de ruido medido en Primus, que no usa cuartos de tono. A la derecha, qué parte de los cuartos de tono cae en los dos grados más usados.</aside></section>
+  <section class="contenido" data-sub="gráfica 2b"><span class="numero"></span><h2>Melodía · círculo de 24-EDO</h2><p class="subtitulo">Resultados · 2b</p>
+    <div class="grafica-completa sola fig"><img src="img/2b_melodia_circulo_24edo.png" alt=""></div>
+    <p class="pie" data-campo="pie"></p>
+    <aside class="notes">La quinta de 24-EDO mide 14 pasos y mcd(14, 24) = 2: el ciclo se parte en dos campos, los grados regulares (anillo exterior, amarillo) y los de cuarto de tono (interior, azul); cada grado «+» queda junto a su vecino regular. El área del punto es el tiempo melódico; las líneas, los pasos melódicos más frecuentes. El panel grande resume el álbum.</aside></section>
+  <section class="contenido" data-sub="círculo en movimiento"><span class="numero"></span><h2>Melodía · el círculo de 24-EDO en movimiento</h2><p class="subtitulo">Resultados · Mata Zyklek, 0:42 – 1:12</p>
     <iframe class="grafica-completa circulo-vivo" src="circulo24/index.html?disposicion=quintas" title="Círculo de 24-EDO interactivo de Mata Zyklek"></iframe>
     <p class="leyenda-grafica">Notas del notebook sincronizadas con el audio; en «quintas», los dos campos de la 2b. Con tónica Sol, las voces giran sobre Sol y Sol#+ (♭2+), el cuarto de tono del riff. Frente a la partitura corregida de oído: mismo grado el <b>87 %</b> del tiempo en la voz aguda y el <b>94 %</b> en la grave; si falla, lee Sol#+ como Sol.</p>
     <p class="pie" data-campo="pie"></p></section>
 </section>
 
-<!-- 21 · Síntesis -->
+<!-- 21 · Síntesis: gráficas 3a, 3b y 3c -->
 <section>
-  <section class="contenido">
-    <span class="numero"></span>
-    <h2>Síntesis: ritmo, forma y estilo</h2>
-    <p class="subtitulo">Resultados · un híbrido con un pariente distinto en cada dimensión</p>
-    <div class="area alta">
-      <div class="cols c2" style="gap:18px">
-        <figure class="fig" style="margin:0"><img src="img/3a_sintesis_ciclos_metricos.png" alt="Ciclos métricos"><figcaption class="leyenda-grafica">Picos en <b>20 y 28 corcheas</b>: dos compases de 5 y de 7, los tiempos que la banda menciona (hipótesis). Sarniezz y Utzp, en cambio, van en 4.</figcaption></figure>
-        <figure class="fig" style="margin:0"><img src="img/3b_sintesis_clasificacion_mapa.png" alt="Clasificación del álbum por corpus"><figcaption class="leyenda-grafica">Rock gana 8 de 24 bloques, radif 7 y en <b>9 no hay vecino</b>. El vecino más cercano es <b>King Gizzard</b>: en armonía, Angor es idéntica a «Flying Microtonal Banana».</figcaption></figure>
-      </div>
-    </div>
+  <section class="contenido" data-sub="gráfica 3a"><span class="numero"></span><h2>Síntesis · ciclos métricos</h2><p class="subtitulo">Resultados · 3a</p>
+    <div class="grafica-completa sola fig"><img src="img/3a_sintesis_ciclos_metricos.png" alt=""></div>
     <p class="pie" data-campo="pie"></p>
-  </section>
-  <section class="contenido"><span class="numero"></span><h2>Síntesis · ciclos métricos</h2><p class="subtitulo">Resultados · 3a</p>
-    <div class="grafica-completa fig"><img src="img/3a_sintesis_ciclos_metricos.png" alt=""></div>
-    <p class="leyenda-grafica">Cada barra mide cuánto se repiten las alturas y los ataques al comparar la música consigo misma ℓ corcheas después (0 a 1). Un pico alto y aislado es un ciclo largo y estable; las cifras sobre las barras son los mejores periodos.</p>
-    <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Síntesis · clasificación por corpus</h2><p class="subtitulo">Resultados · 3b</p>
-    <div class="grafica-completa fig"><img src="img/3b_sintesis_clasificacion_mapa.png" alt=""></div>
-    <p class="leyenda-grafica">Percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido; 50 = pieza típica). «bl.» = bloques de rasgos con datos para esa canción y ese corpus. La fila «Álbum» es la media. Atenuados (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica no es un parecido real.</p>
-    <p class="pie" data-campo="pie"></p></section>
-  <section class="contenido"><span class="numero"></span><h2>Síntesis · qué corpus gana cada bloque</h2><p class="subtitulo">Resultados · 3c</p>
-    <div class="grafica-completa fig"><img src="img/3c_sintesis_corpus_por_bloque.png" alt=""></div>
-    <p class="leyenda-grafica">En cuántas canciones del disco gana cada corpus en cada bloque de rasgos. «Sin vecino»: ningún corpus pasa el percentil 5. Rock gana 8 de 24, radif 7 y en 9 no hay vecino.</p>
-    <p class="pie" data-campo="pie"></p></section>
+    <aside class="notes">Picos en 20 y 28 corcheas: dos compases de 5 y de 7, los tiempos que la banda menciona (hipótesis). Sarniezz y Utzp, en cambio, van en 4. Rock gana 8 de 24 bloques, radif 7 y en 9 no hay vecino. El vecino más cercano es King Gizzard: en armonía, Angor es idéntica a «Flying Microtonal Banana». Cada barra mide cuánto se repiten las alturas y los ataques al comparar la música consigo misma ℓ corcheas después (0 a 1). Un pico alto y aislado es un ciclo largo y estable; las cifras sobre las barras son los mejores periodos.</aside></section>
+  <section class="contenido" data-sub="gráfica 3b"><span class="numero"></span><h2>Síntesis · clasificación por corpus</h2><p class="subtitulo">Resultados · 3b</p>
+    <div class="grafica-completa sola fig"><img src="img/3b_sintesis_clasificacion_mapa.png" alt=""></div>
+    <p class="pie" data-campo="pie"></p>
+    <aside class="notes">Percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido; 50 = pieza típica). «bl.» = bloques de rasgos con datos para esa canción y ese corpus. La fila «Álbum» es la media. Atenuados (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica no es un parecido real.</aside></section>
+  <section class="contenido" data-sub="gráfica 3c"><span class="numero"></span><h2>Síntesis · qué corpus gana cada bloque</h2><p class="subtitulo">Resultados · 3c</p>
+    <div class="grafica-completa sola fig"><img src="img/3c_sintesis_corpus_por_bloque.png" alt=""></div>
+    <p class="pie" data-campo="pie"></p>
+    <aside class="notes">En cuántas canciones del disco gana cada corpus en cada bloque de rasgos. «Sin vecino»: ningún corpus pasa el percentil 5. Rock gana 8 de 24, radif 7 y en 9 no hay vecino.</aside></section>
 </section>
 
 <!-- ============================== CIERRE ============================== -->
@@ -793,7 +756,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
   <div class="area">
     <div class="cols c2">
       <div class="pila" style="justify-content:center">
-        <ul class="lista cuadros lista-aireada" style="font-size:15px">
+        <ul class="lista cuadros lista-aireada espaciada" style="font-size:15px; line-height:1.5">
           <li>Artículo y bibliografía completa.</li>
           <li>Repositorio con el notebook, los scripts y las gráficas.</li>
           <li>Corpus: RS 200, Kostka-Payne, iRealPro, Hooktheory, Radif e Hindustani Transcription Dataset.</li>
@@ -915,7 +878,7 @@ Primus: comparación propia; no decir aún para qué sirve.</aside>
         nav.className = "nav-pie";
         nav.setAttribute("aria-label", "Cambiar diapositiva");
         nav.innerHTML = `<button type="button" data-ir="anterior" aria-label="Diapositiva anterior" ${primera ? "disabled" : ""}>${flecha("M14 0v20L0 10z")}</button>
-          <span>Diapositiva ${h + 1} de ${total}${v ? ` · ${s.dataset.sub || `gráfica ${v}`}` : ""}</span>
+          <span>Diapositiva ${h + 1} de ${total}${s.dataset.sub ? ` · ${s.dataset.sub}` : v ? ` · gráfica ${v}` : ""}</span>
           <button type="button" data-ir="siguiente" aria-label="Diapositiva siguiente" ${ultima ? "disabled" : ""}>${flecha("M0 0v20l14-10z")}</button>`;
         s.appendChild(nav);
       });

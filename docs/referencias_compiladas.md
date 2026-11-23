@@ -9,7 +9,7 @@ matemáticos elaborados. Las entradas marcadas «por verificar» requieren compr
 - README.md: descripción general del repositorio, corpus y scripts.
 - docs/corpus_estilos.md: corpus abiertos, método de comparación y límites.
 - docs/verosimilitud_por_bloques.md: interpretación de los bloques de armonía, escala, cuartos de tono y metro.
-- docs/guion_defensa.md: guion de la defensa por diapositiva, con los términos de cada una (por ahora, diapositivas 12 a 23).
+- docs/guion_defensa.md: guion de la defensa por diapositiva, con los términos de cada una (por ahora, diapositivas 6 y 12 a 23).
 - Corridas congeladas `outputs/*_repro` (13-nov-2026): fuente de las cifras de acierto de la diapositiva 18 y del glosario.
 - docs/glosario.md: glosario de la presentación (24-EDO, MIDI, MIDI fraccionario, perfil de 24 clases, MFCC, pYIN, desviación en cents, piano roll, compás, funciones de Riemann, ejes de Lendvai…).
 - docs/armonia.md: fundamentos de armonía, funciones, progresiones, Piston, Riemann y Lendvai.
