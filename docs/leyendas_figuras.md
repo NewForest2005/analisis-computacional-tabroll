@@ -63,6 +63,10 @@ fundamental del acorde acierta el 85 % en los compases confiables y la melodía 
 Versión anterior, reemplazada: «Contra las referencias corregidas de oído (corridas congeladas). Yor Zarad: prueba a
 ciegas, melodía 37 % y fundamental 88 %.» Se cambió para mostrar la media de las cuatro canciones.
 
+En la gráfica, el rótulo «Yor Zarad (a ciegas)» quedó solo como «Yor Zarad», porque confundía antes de explicar
+el arbitraje. Para el escrito: la de Yor Zarad es la referencia hecha a ciegas, la primera armada sin mirar ninguna
+salida del cuaderno (ver [`evaluacion_melodia.md`](evaluacion_melodia.md)).
+
 ## Diapositiva 19 · Armonía
 
 ### Vista conjunta (diapositiva eliminada)

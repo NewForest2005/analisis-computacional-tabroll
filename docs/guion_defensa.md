@@ -299,28 +299,39 @@ de las nueve canciones de King Gizzard; la dórica no aparece en ningún corpus.
 
 ## 21 · Síntesis: ritmo, forma y estilo
 
-«La repetición muestra picos en 20 y 28 corcheas: ciclos de dos compases de 5 y de 7, justo los tiempos que menciona la
-banda y que planteamos en la hipótesis. Sarniezz y Utzp, en cambio, van en 4. En la clasificación por bloques, el rock
-gana 8 de 24, el radif 7 y en 9 no hay vecino. El vecino más cercano es King Gizzard: en armonía, Angor es idéntica a
-"Flying Microtonal Banana".»
+**3a · ciclos métricos**
+«Esta gráfica mide cuánto se repite la música consigo misma cuando la comparo ℓ corcheas después. Un pico alto y
+aislado es un ciclo largo y estable. Mata Zyklek tiene su pico en 20 corcheas, que son dos compases de 5. Fabienk lo
+tiene en 28, dos compases de 7. Son justo los tiempos que menciona la banda y que planteamos en la hipótesis.»
 
-- **21·1, ciclos métricos:** cuánto se repiten alturas y ataques ℓ corcheas después. Un pico alto y aislado es un ciclo
-  largo y estable.
-- **21·2, clasificación por corpus:** el percentil medio de cada canción frente a cada corpus; la fila «Álbum» es la
-  media.
-- **Si preguntan por el 83 de Mata Zyklek en clásica:** no es un parecido real. Kostka-Payne tiene solo 46 piezas y
-  solo armonía; en un corpus chico y disperso casi todo parece típico, por eso el test no cuenta los corpus de menos de
-  100 piezas (clásica, pop e indostánica salen atenuados con *). Además, la armonía de Mata Zyklek es un pedal: 89 % del
-  tiempo sobre I y 6 % sobre V, un reparto tónica-dominante que cualquier corpus tonal tiene (en Kostka-Payne, I y V
-  suman el 63 % del tiempo). Por eso también sale alta en rock (80) y jazz (73).
-- **21·3, qué corpus gana cada bloque:** en cuántas canciones gana cada corpus en cada bloque (rock 8 de 24, radif 7,
-  sin vecino 9).
+**3b · clasificación por corpus**
+«Cada casilla es el percentil de tipicidad de una canción frente a un corpus: 0 es atípica, 50 es típica y 100 es muy
+típica. El número de abajo separa ese promedio por bloque: A es armonía, E escala, ¼ cuartos de tono y M metro. Así se
+ve de dónde sale cada color. Por ejemplo, Sarniezz da 34 en rock, pero solo por el metro, porque su armonía da 0. Las
+columnas rayadas son corpus de menos de 100 piezas, que no cuentan para el veredicto.»
+
+**3c · qué corpus gana cada bloque**
+«Si cuento qué corpus gana cada bloque, el rock gana 8 de 24, el radif 7 y en 9 casos no hay vecino. El rock gana sobre
+todo en armonía y metro, y el radif en cuartos de tono. El vecino más cercano en general es King Gizzard: en armonía,
+Angor es idéntica a "Flying Microtonal Banana".»
+
+**Si preguntan…**
+- **…por qué solo dos canciones en la 3a:** «Son las que muestran los ciclos de 5 y 7. Sarniezz y Utzp van en 4, con
+  picos en 16 y 32 corcheas. Las seis están en el informe de ciclos.»
+- **…por el 83 de Mata Zyklek en clásica:** «No es un parecido real. Kostka-Payne tiene solo 46 piezas y solo
+  armonía, y en un corpus chico casi todo parece típico; por eso va rayado y no cuenta. Además, la armonía de Mata
+  Zyklek es un pedal: 89 % del tiempo sobre I y 6 % sobre V, un reparto tónica-dominante que tiene cualquier corpus
+  tonal (en Kostka-Payne, I y V suman el 63 % del tiempo). Por eso también sale alta en rock (80) y en jazz (73).»
 
 > **Términos**
 > - **Ciclo métrico:** cada cuántas corcheas se repite el patrón; 20 corcheas son dos compases de 5.
-> - **Bloque de rasgos:** un grupo de medidas de una misma dimensión: armonía, escala, cuartos de tono o metro.
-> - **Ganar un bloque:** que un corpus sea el más parecido a la canción en esa dimensión.
-> - **Vecino más cercano:** la pieza o banda que más se parece según todas las medidas juntas.
+> - **Percentil de tipicidad:** el porcentaje de piezas del corpus que están igual o más lejos de su centro que la
+>   canción.
+> - **Bloque de rasgos:** las medidas de una misma dimensión: armonía, escala, cuartos de tono o metro.
+> - **Ganar un bloque:** que un corpus sea el más parecido a la canción en esa dimensión, con percentil de al menos 5.
+> - **Sin vecino:** ningún corpus llega al percentil 5 en ese bloque.
+> - **Radif:** el repertorio clásico de la música persa, organizado en modos (dastgah) con intervalos menores que el
+>   semitono.
 > - **«Flying Microtonal Banana»:** álbum de King Gizzard tocado con guitarras de cuartos de tono.
 
 ---
@@ -332,41 +343,46 @@ gana 8 de 24, el radif 7 y en 9 no hay vecino. El vecino más cercano es King Gi
 1. **La armonía no encaja en ningún estilo.** El 37.5 % de los casos queda sin vecino, frente al 5.2 % en rock real.
    Ninguna canción pasa de 17.7 sobre 50, y el método no exagera: con rock real casi siempre encuentra vecino.
 2. **La melodía es lo nuevo.** Dos grados en cuarto de tono concentran entre el 48 y el 82 % de los cuartos de tono. Son
-   grados de la escala, en dos familias. La frigia (♭2+, ♭6+) es la más común en el radif persa y en King Gizzard; la
+   grados de la escala, en dos familias. La frigia (♭2+, ♭6+) es la más común en el radif persa y en King Gizzard. La
    dórica (7+, 6+, ♭3+) no la tiene ningún corpus medido.
 3. **El conjunto es un híbrido.** Tiene compases de 5 y 7 tiempos, como dice la banda; armonía de rock modal; cuartos de
-   tono repartidos como en el radif, y King Gizzard como vecino más próximo. Sarniezz y Fabienk no tienen vecino ni
-   siquiera ahí. (El parecido con el radif viene del bloque de cuartos de tono, no del de escala en 12 notas, que no
-   discrimina; y es de escala, no de influencia: ver `verosimilitud_por_bloques.md`.)
+   tono repartidos como en el radif; y King Gizzard como vecino más próximo. Sarniezz y Fabienk no tienen vecino ni
+   siquiera ahí.
 
-La respuesta a la pregunta es que no es un estilo existente: es una recombinación nueva de lenguajes que ya existen, con
-un elemento propio, los cuartos de tono como grados fijos.»
+La respuesta a la pregunta es que no es un estilo existente. Es una recombinación nueva de lenguajes que ya existen, con
+un elemento propio: los cuartos de tono como grados fijos.»
+
+**Si preguntan por el radif:** «El parecido viene del bloque de cuartos de tono, no del de escala en 12 notas, que no
+discrimina. Y es un parecido de escala, no de influencia.» (Ver [`verosimilitud_por_bloques.md`](verosimilitud_por_bloques.md).)
 
 > **Términos**
 > - **Híbrido:** algo que combina rasgos de varios estilos.
 > - **Rock modal:** rock que usa modos (dórico, frigio, mixolidio) en lugar de la escala mayor o menor clásica.
+> - **Familia de escala:** grupo de canciones que ponen sus cuartos de tono en los mismos grados.
+> - **Grado fijo:** una nota de la escala que vuelve en cada vuelta del loop, no un adorno de paso.
 
 ---
 
 ## 23 · Trabajo futuro
 
-«El siguiente paso es un tabroll que mejore solo, para cualquier canción. El ciclo tendría cuatro pasos:
+«El siguiente paso es un tabroll que mejore solo, para cualquier canción. Es un ciclo de cuatro pasos:
 
 1. sintetizar partituras de Guitar Pro con cuartos de tono;
 2. entrenar con ellas un transcriptor en 24-EDO;
 3. transcribir canciones nuevas;
 4. validar con referencias de oído.
 
-Así habría datos sin límite y sin transcribir a mano. Además:
+Así habría datos sin límite, sin transcribir a mano. Además:
 
 - **Melodía:** tratar las vueltas del looper como varias tomas de la misma frase, para separar las capas.
-- **Armonía:** elegir el centro tonal de forma robusta en cualquier canción; hoy falla en «Tommy the Cat».
+- **Armonía:** elegir el centro tonal de forma robusta en cualquier canción; hoy falla en "Tommy the Cat".
 - **Datos y producto:** un corpus de maqam árabe, un tabroll web interactivo, otros músicos microtonales como King
   Gizzard y Sevish, y el uso en la enseñanza.»
 
 > **Términos**
 > - **Sintetizar:** generar con el computador el audio de una partitura.
 > - **Entrenar:** enseñar a un modelo con ejemplos cuya respuesta ya se conoce.
-> - **Toma:** cada grabación de una misma frase. Varias tomas permiten promediar y limpiar.
+> - **Toma:** cada grabación de una misma frase; varias tomas permiten promediar y limpiar.
 > - **Robusto:** que funcione bien también en casos difíciles o distintos.
+> - **Maqam:** sistema de modos de la música árabe, con intervalos de cuarto de tono.
 > - **Sevish:** compositor de música electrónica microtonal.

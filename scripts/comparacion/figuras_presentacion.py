@@ -203,14 +203,16 @@ def figura_acierto(filas: list[dict]):
     for yy, f in zip(y, filas):
         if f.get("fundamental") is None:
             ax.text(1, yy - alto, "sin referencia armónica", va="center", fontsize=9, color=MUTED)
-    ax.set_yticks(y, [f["cancion"] + (" (a ciegas)" if f["cancion"] == "Yor Zarad" else "") for f in filas], fontsize=11.5, color=TINTA)
+    ax.set_yticks(y, [f["cancion"] for f in filas], fontsize=11.5, color=TINTA)
     if len(medidas) > 1:
         ax.get_yticklabels()[-1].set_fontweight("bold")
     ax.set_xlim(0, 112)
     ax.set_xticks([0, 20, 40, 60, 80, 100])
     ax.tick_params(axis="x", labelsize=11)
     ax.set_xlabel("acierto contra la referencia corregida de oído (%)", fontsize=11, color=GRIS)
-    fig.legend(loc="outside lower center", ncol=2, frameon=False, fontsize=10)
+    # Leyenda aireada: más espacio entre filas, columnas y muestra-texto, y separada del rótulo del eje.
+    fig.legend(loc="outside lower center", ncol=2, frameon=False, fontsize=10, labelspacing=0.9,
+               columnspacing=3.2, handletextpad=0.9, handlelength=2.2, borderpad=0.9)
     return fig
 
 
