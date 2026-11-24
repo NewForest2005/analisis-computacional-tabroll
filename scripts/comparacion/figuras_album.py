@@ -178,21 +178,28 @@ def figura_clasificacion(bloques: dict, textos: bool = True, parte: str = "ambas
 def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None = None, minimo: int = 100,
                         rotulo: bool = True, det: list | None = None) -> None:
     """Los corpus con menos de `minimo` piezas no cuentan para el veredicto (verosimilitud_por_bloques.veredicto):
-    en uno chico y disperso casi todo parece típico. Se muestran en gris liso (sin la escala de color) y marcados con *.
+    en uno chico y disperso casi todo parece típico. Conservan su color, con un rayado diagonal encima y marcados con *.
     Con rotulo=False (diapositiva) la letra es más grande."""
     from matplotlib.colors import LinearSegmentedColormap
+    from matplotlib.patches import Rectangle
     info = info or {}
     chico = [info.get(c, {}).get("piezas", minimo) < minimo for c in corpora]
     L = 1.0 if rotulo else 1.3
     ax = arriba.subplots()
     cmap = LinearSegmentedColormap.from_list("seq", SEQ)
-    cmap.set_bad("#efeeea")                          # columnas que no cuentan: gris liso, nítido (antes, velo blanco)
-    datos = np.ma.masked_array(np.nan_to_num(M, nan=0), mask=np.repeat([chico], M.shape[0], axis=0))
-    imagen = ax.imshow(datos, cmap=cmap, vmin=0, vmax=60, aspect="auto", interpolation="nearest")
-    barra = arriba.colorbar(imagen, ax=ax, location="bottom", shrink=0.45, aspect=40, pad=0.04, ticks=[0, 15, 30, 45, 60])
+    imagen = ax.imshow(np.nan_to_num(M, nan=0), cmap=cmap, vmin=0, vmax=100, aspect="auto", interpolation="nearest")   # el percentil va de 0 a 100
+    import matplotlib as mpl
+    mpl.rcParams["hatch.linewidth"] = 0.8
+    for j, ch in enumerate(chico):                  # columnas que no cuentan: mismo color, rayado diagonal encima
+        if ch:
+            ax.add_patch(Rectangle((j - 0.5, -0.5), 1, M.shape[0], fill=False, hatch="///",
+                                   edgecolor=(1, 1, 1, 0.55), linewidth=0, zorder=2))
+    barra = arriba.colorbar(imagen, ax=ax, location="bottom", shrink=0.45, aspect=40, pad=0.04, ticks=[0, 25, 50, 75, 100])
     if rotulo:                                       # en la diapositiva queda solo la paleta
         barra.set_label("Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor", fontsize=8.5, color=GRIS, labelpad=5)
     barra.ax.tick_params(labelsize=8 * L, colors=GRIS, length=0)
+    # qué significan los extremos: 0 = la canción está más lejos del centro del corpus que todas sus piezas
+    barra.ax.set_xticklabels(["0\natípica", "25", "50\ntípica", "75", "100\nmuy típica"])
     barra.outline.set_visible(False)
     for i in range(M.shape[0]):
         for j in range(M.shape[1]):
@@ -203,10 +210,10 @@ def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None =
                 txt = f"{M[i, j]:.0f}\n{det[i][j]}"
             else:
                 txt = f"{M[i, j]:.0f}" + (f"\n{nb[i, j]} bl." if i < len(filas) else "")
-            claro = M[i, j] > 30 and not chico[j]
+            claro = M[i, j] > 50
             ax.text(j, i, txt, ha="center", va="center", fontsize=(8 if i < len(filas) else 9) * L, zorder=3,
-                    color="#ffffff" if claro else (GRIS if chico[j] else TINTA),
-                    fontweight="bold" if i == len(filas) and corpora[j] in pred else "normal")
+                    color="#ffffff" if claro else TINTA,
+                    fontweight="bold" if (det is not None or (i == len(filas) and corpora[j] in pred)) else "normal")   # diapositiva: todo en negrilla
     ax.axhline(len(filas) - 0.5, color=FONDO, lw=4)
     ax.set_yticks(range(M.shape[0]), [f["cancion"] for f in filas] + ["Álbum (media)"], fontsize=9.5 * L, color=TINTA)
     rotulos = [f"{c}*" if ch else c for c, ch in zip(corpora, chico)]
@@ -217,7 +224,7 @@ def _mapa_clasificacion(arriba, M, nb, corpora, filas, pred, info: dict | None =
             etiqueta.set_color(GRIS)
     if any(chico) and rotulo:
         barra.set_label(f"Percentil medio de tipicidad: blanco = menor · azul oscuro = mayor\n"
-                        f"* Corpus con menos de {minimo} piezas: en gris, no cuentan para el veredicto (en uno chico casi todo parece típico)",
+                        f"* Corpus con menos de {minimo} piezas: rayados, no cuentan para el veredicto (en uno chico casi todo parece típico)",
                         fontsize=8.5, color=GRIS, labelpad=5)
     ax.xaxis.tick_top()
     ax.tick_params(length=0)
@@ -234,6 +241,7 @@ def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: b
     color["sin vecino"] = "#c9c8c2"
     if titulo:
         abajo.suptitle("Qué corpus gana cada bloque", fontsize=12.5, fontweight="bold", color=TINTA)
+    L = 1.0 if leyenda else 1.45                      # diapositiva (sin leyenda): letra más grande
     ax2 = abajo.subplots()
     estilo(ax2, grid_x=True)
     for i, b in enumerate(bl):
@@ -243,10 +251,12 @@ def _barras_clasificacion(abajo, bl, cuenta, filas, u, resumen, sin_v, titulo: b
             if n:
                 ax2.barh(i, n, left=x, color=color[c], height=0.6, edgecolor=FONDO, linewidth=2)
                 x += n
-    ax2.set_yticks(range(len(bl)), [titulo_b.get(b, b) for b in bl], fontsize=9, color=TINTA)
+    ax2.set_yticks(range(len(bl)), [titulo_b.get(b, b) for b in bl], fontsize=9 * L, color=TINTA,
+                   fontweight="bold" if L > 1 else "normal")
     ax2.set_xlim(0, len(filas))
-    ax2.set_xlabel("Canciones del disco", fontsize=9.5, color=GRIS)
-    ax2.set_title(f"Percentil ≥ {u:g}: {resumen}; sin vecino: {sin_v}", fontsize=9, color=GRIS)
+    ax2.tick_params(axis="x", labelsize=8 * L)
+    ax2.set_xlabel("Canciones del disco", fontsize=9.5 * L, color=GRIS, labelpad=4 * L)
+    ax2.set_title(f"Percentil ≥ {u:g}: {resumen}; sin vecino: {sin_v}", fontsize=9 * L, color=GRIS, pad=6 * L)
     ax2.invert_yaxis()
     n_c = {c: sum(cuenta[b][c] for b in bl) for c in todos}
     handles = [plt.Line2D([0], [0], color=color[c], lw=8,

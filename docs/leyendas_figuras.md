@@ -135,7 +135,7 @@ periodos.
 
 **Pie descriptivo.** Percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más parecido;
 50 = pieza típica). Debajo, el percentil de cada bloque (A armonía, E escala, ¼ cuartos de tono, M metro): el color es su promedio; por ejemplo, Sarniezz en rock (34) sale de A 0, E 3 y M 100. La fila «Álbum» es la media.
-En gris (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica
+Rayados (*): corpus con menos de 100 piezas, que no cuentan para el veredicto; por eso el 83 de Mata Zyklek en clásica
 no es un parecido real.
 
 ### 3c · Qué corpus gana cada bloque

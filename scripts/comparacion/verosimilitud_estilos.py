@@ -199,8 +199,9 @@ def figura_matriz(filas: list[dict], est: list[str], textos: bool = True):
     ax.tick_params(length=0)
     for s_ in ax.spines.values():
         s_.set_visible(False)
-    ax.set_xlabel("Estilo del corpus", color=GRIS)
+    ax.set_xlabel("Estilo del corpus", color=GRIS, labelpad=12)   # arriba de los encabezados, con aire
     ax.set_ylabel("Canción", color=GRIS, labelpad=12)
+    ax.yaxis.label.set_y(0.68)        # más arriba: a la altura de los nombres cortos, lejos de «Yor zarad · ¼ …»
     return fig
 
 
