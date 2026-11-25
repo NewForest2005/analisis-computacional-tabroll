@@ -1,0 +1,125 @@
+\chapter{Introducción}\label{cap:introduccion}
+
+\section{Motivación}
+
+En 2025 una sesión en vivo de Angine de Poitrine, grabada por KEXP en el festival Trans Musicales de Rennes, superó los
+once millones de reproducciones. Lo que llama la atención al escucharla es una combinación poco frecuente: una guitarra y
+un bajo con trastes de cuarto de tono, canciones que se construyen capa por capa con un looper y compases que no son los
+habituales del rock. \pv[: año y cifra de reproducciones de la sesión de KEXP] Esa combinación plantea la pregunta que
+guía este trabajo:
+
+\begin{quote}
+\itshape ¿La música de Angine de Poitrine encaja en un estilo existente o es una propuesta nueva?
+\end{quote}
+
+Responderla de oído es difícil, porque la banda mezcla rasgos de tradiciones muy distintas. Responderla por computador
+también lo es, porque las herramientas estándar de análisis musical piensan en doce notas por octava: \texttt{music21}
+comprime toda altura a doce clases y los transcriptores automáticos redondean cada cuarto de tono al semitono más
+cercano. Para esta música, medir en doce notas es borrar justamente lo que la hace distinta. Por eso el trabajo empieza
+por construir una herramienta que mida en veinticuatro.
+
+\section{Qué es un análisis computacional}
+
+Un análisis computacional asigna a una pieza una macroestructura (resultados visuales, datos o patrones) a partir de un
+programa que lee la información contenida en su registro. La obra musical es un objeto abstracto, una actividad, pero sus
+registros existen en contextos concretos: una grabación, una partitura, un archivo. El programa permite reconstruir de
+manera empírica, y repetible, el fundamento técnico de esos registros.
+
+La entrada de un análisis así es siempre una representación, y ninguna representación es única. Un mismo audio en WAV y
+en FLAC no contiene el mismo flujo de datos; un MP3 de baja calidad pierde información que un formato sin compresión
+conserva; MusicXML y MIDI hacen explícitos los compases y las alturas, pero solo los que alguien decidió escribir. La
+representación de una pieza queda indeterminada de tres maneras: por cómo se proyectan los datos, por qué datos se
+seleccionan y por la información que se introduce desde fuera (o la incertidumbre sobre si existe). Por eso el diagrama
+de análisis necesita revisión constante para reflejar las variaciones entre entradas, incluso cuando corresponden a la
+misma pieza.
+
+En ese sentido, el análisis computacional busca cómo una pieza establece sus propios principios explicativos. Para que sea
+útil, su resultado debe tener una estructura temporal, contener menos información que la pieza que resume y cumplir un
+protocolo explícito que limite los sesgos de quien analiza. En este trabajo, ese protocolo es concreto: la herramienta
+nunca lee la partitura, la referencia se corrige de oído y a ciegas, el azar queda fijo y el error de la propia
+herramienta se mide y se aplica a los corpus con que se compara.
+
+\section{La banda}
+
+Angine de Poitrine es un dúo formado en 2019 en Saguenay, Quebec. Sus integrantes usan los seudónimos Khn y Klek de
+Poitrine: Khn toca la guitarra y el bajo microtonales y Klek, la batería. Su música es rock instrumental del tipo que se
+suele llamar \emph{math rock}: riffs en bucle que se superponen, en compases poco comunes. Su afinación es 24-EDO, es
+decir, veinticuatro notas igualmente espaciadas por octava, el doble que la guitarra común; cada traste nuevo del
+instrumento agrega un cuarto de tono (50 cents). El objeto de estudio es su álbum \emph{Vol.~II} (abril de 2026)
+completo: Mata Zyklek, Fabienk, Sarniezz, Yor Zarad, Utzp y Angor. \pv[: fecha de publicación y orden de las pistas]
+
+El nombre de la banda es el término francés para la angina de pecho, el dolor torácico causado por la falta de
+oxígeno en el corazón.
+
+\section{Influencias declaradas y comparaciones}\label{sec:influencias}
+
+Las influencias que se ponen a prueba provienen de tres fuentes distintas, y conviene separarlas desde el principio:
+
+\begin{itemize}
+  \item \textbf{Lo que dice la banda.} En la entrevista de \emph{Noize Magazine}, Khn cuenta que al principio tiraban más
+  al rock turco y que siguen escuchando rock turco y música de Medio Oriente; que usa los cuartos de tono con un fraseo
+  «más cubista, más a lo Zappa»; y que la armonía de casi todos sus temas se compara con el \emph{Überjam} de John
+  Scofield o con «So What» de Miles Davis. Klek dice que su banda favorita es Gentle Giant
+  \citep{noize}. En el podcast \emph{Aucard de Tours}, Khn describe una música construida sobre loops, con la
+  repetición del techno en la estructura y no en el timbre, y con la idea de que la gente baile «en 5 y en 7»
+  \citep{aucard2026}.
+  \item \textbf{Lo que dicen los analistas.} Mathémusique (Paul Lascabettes) pone como precedente a King Gizzard and the
+  Lizard Wizard, que en 2017 pasó de doce a veinticuatro notas en \emph{Flying Microtonal Banana}; la banda no lo cita
+  \citep{mathemusique2026}. David Bennett afirma que en uno de sus temas los cuartos de tono se usan como en el maqam
+  hijaz, «casi» un frigio dominante \citep{bennett2026}.
+  \item \textbf{Una comparación propia.} Primus se eligió al estudiar su armonía. Ninguna fuente pública consultada lo
+  cita como influencia de la banda; en este trabajo cumple el papel de control, porque es rock sin cuartos de tono.
+\end{itemize}
+
+Cada influencia apunta a una dimensión que se puede medir: el rock turco y el maqam a la escala; Zappa y Gentle Giant a
+la melodía y la métrica; Scofield y Miles Davis a la armonía; el techno y los loops a la forma en ciclos; y la
+declaración «en 5 y en 7» al metro. Así la pregunta general se descompone en preguntas que se contrastan dimensión por
+dimensión.
+
+\section{Hipótesis}
+
+\begin{quote}
+La banda puede ser típica en cada dimensión (armonía, melodía y ritmo) de un estilo distinto, pero atípica en la
+combinación: una recombinación nueva de lenguajes existentes.
+\end{quote}
+
+La hipótesis nula correspondiente es que, una vez descontado el error de medición de la herramienta, el álbum no se
+distingue del rock. La calibración del método con piezas reales de rock (capítulo~\ref{cap:resultados}) es lo que
+permite rechazarla o no.
+
+\section{Objetivos}
+
+\paragraph{Objetivo general.} Decidir, a partir del audio, si la música de Angine de Poitrine cabe en un estilo
+existente o constituye una propuesta nueva.
+
+\paragraph{Objetivos específicos.}
+\begin{enumerate}
+  \item Transcribir desde el audio la melodía, el bajo, los compases y los acordes en 24-EDO.
+  \item Medir los ciclos del looper y el uso de los cuartos de tono, con un control que estime el error de la propia
+  herramienta.
+  \item Evaluar la transcripción contra referencias corregidas de oído, con un protocolo a ciegas.
+  \item Comparar cada dimensión con corpus de estilos y con repertorios de referencia, y combinar las comparaciones en
+  un veredicto calibrado.
+\end{enumerate}
+
+\section{Aportes}
+
+\begin{enumerate}
+  \item \textbf{Una herramienta:} transcripción y análisis armónico abiertos en 24-EDO, desde el audio polifónico, guiados
+  por la repetición del looper. Su salida es el tabroll.
+  \item \textbf{Un método:} comparación con corpus reales de estilos por bloques de rasgos, con el error de la
+  herramienta aplicado a los corpus y calibrada para no exagerar la novedad.
+  \item \textbf{Un resultado:} una respuesta medida a la pregunta de si la banda es un estilo existente o una propuesta
+  nueva.
+\end{enumerate}
+
+\section{Organización del documento}
+
+El capítulo~\ref{cap:marco} presenta el marco matemático y musical: la medida de la altura en 24-EDO, las herramientas de
+procesamiento de señales, la teoría armónica que se extiende y las medidas estadísticas de comparación. El
+capítulo~\ref{cap:estado} resume el estado del arte y el vacío que cubre el trabajo. El capítulo~\ref{cap:datos}
+describe los datos: el álbum, las referencias, los controles y los corpus. El capítulo~\ref{cap:metodologia} cuenta
+cómo evolucionó el método y describe el algoritmo final, su evaluación y la comparación con estilos, y el
+capítulo~\ref{cap:herramienta}, cómo está construida la herramienta y qué garantiza su reproducibilidad. El
+capítulo~\ref{cap:resultados} presenta los resultados, el capítulo~\ref{cap:discusion} discute sus límites y el
+capítulo~\ref{cap:conclusiones} cierra con las conclusiones y el trabajo futuro.

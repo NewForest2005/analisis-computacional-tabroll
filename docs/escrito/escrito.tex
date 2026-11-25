@@ -1,0 +1,87 @@
+% Borrador del escrito del trabajo de grado.
+% Compilar con XeLaTeX:  make escrito   (o: latexmk -xelatex docs/escrito/escrito.tex)
+% Cada capítulo está en capitulos/; las figuras se toman de presentacion/img/.
+\documentclass[11pt,a4paper,oneside]{report}
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{fontspec}
+\usepackage[spanish,es-noshorthands,es-tabla]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,longtable,multirow}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{csquotes}
+\usepackage[round,authoryear]{natbib}
+\usepackage[algoruled,linesnumbered,spanish,onelanguage]{algorithm2e}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../../presentacion/img/}{figuras/}}
+\setlist{itemsep=2pt,topsep=4pt}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.35em}
+
+% Notación musical y marcas del borrador
+\newcommand{\fl}{\ensuremath{\flat}}
+\newcommand{\sh}{\ensuremath{\sharp}}
+\newcommand{\cuarto}{\ensuremath{\tfrac14}}
+\newcommand{\edo}[1]{#1\nobreakdash-EDO}
+\newcommand{\pv}[1][]{\textcolor{red!70!black}{\,[por verificar#1]}}
+\newcommand{\pendiente}[1]{\textcolor{orange!80!black}{[Pendiente: #1]}}
+\DeclareMathOperator{\mcd}{mcd}
+\DeclareMathOperator{\round}{round}
+
+\theoremstyle{definition}
+\newtheorem{definicion}{Definición}[chapter]
+\newtheorem{proposicion}[definicion]{Proposición}
+\newtheorem{ejemplo}[definicion]{Ejemplo}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\large Universidad Nacional de Colombia, sede Bogotá\\
+  Facultad de Ciencias · Departamento de Matemáticas\par}
+  \vspace{3cm}
+  {\LARGE\bfseries Microtonalidad en 24-EDO, bucles y ciclos armónicos\\[0.3em]
+  en Angine de Poitrine:\\[0.3em] un análisis computacional del \emph{Vol.~II}\par}
+  \vspace{1.5cm}
+  {\large Trabajo de grado\par}
+  \vspace{2cm}
+  {\large Santiago Forero Rosales\par}
+  \vspace{0.8cm}
+  {\normalsize Director: Jorge Eliecer Camargo Mendoza\par}
+  \vfill
+  {\normalsize Bogotá, 2026\par}
+  \vspace{0.5cm}
+  {\small\textcolor{red!70!black}{Primer borrador. Las marcas en rojo («por verificar») y en naranja («Pendiente») señalan lo que falta comprobar o completar.}\par}
+\end{titlepage}
+
+\input{capitulos/00_resumen}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\input{capitulos/01_introduccion}
+\input{capitulos/02_marco_teorico}
+\input{capitulos/03_estado_del_arte}
+\input{capitulos/04_datos}
+\input{capitulos/05_metodologia}
+\input{capitulos/05b_herramienta}
+\input{capitulos/06_resultados}
+\input{capitulos/07_discusion}
+\input{capitulos/08_conclusiones}
+
+\input{capitulos/referencias}
+
+\appendix
+\input{capitulos/apendices}
+\input{capitulos/apendice_experimentos}
+\input{capitulos/apendice_tablas}
+\input{capitulos/apendice_glosario}
+
+\end{document}

@@ -1,0 +1,193 @@
+\chapter{Experimentos detallados}\label{ap:experimentos}
+
+Este apéndice reúne los experimentos que sustentan las decisiones del capítulo~\ref{cap:metodologia}. Salvo que se diga
+otra cosa, las cifras son medidas F contra las referencias corregidas de oído, con las pistas de Demucs de semilla 0.
+
+\section{Altura de la línea: cambios probados y descartados}
+
+Cada cambio se midió con una réplica de la celda de la línea fuera del cuaderno, que reproduce la F guardada con
+$\pm0.9$ puntos en la voz aguda y exactamente en el bajo. Solo se adoptaba si subía en las tres canciones
+(tabla~\ref{tab:ronda-altura}).
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Cambio en puntos de F (Sarniezz / Mata Zyklek / Fabienk).}\label{tab:ronda-altura}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright}X l@{}}
+    \toprule
+    Cambio & Resultado \\
+    \midrule
+    Voto entre vueltas para el cuarto de tono & arregla 1 / 17 / 5 errores, rompe 6 / 4 / 0 aciertos \\
+    Altura fina por el pico de cada armónico & $-0.1$ / $-0.2$ / $+0.1$ \\
+    Bajar una octava cuando suenan los armónicos de la nota grave & $-0.4$ / $+0.2$ / $+0.6$ \\
+    Piso de la voz aguda en MIDI 45 (en lugar de 47) & $-2.9$ / $-1.6$ / $-1.6$ \\
+    Atracción al registro más ancha o local & $-0.3$ a $-0.9$ / $-2.7$ a $-3.8$ / $+0.2$ a $+0.5$ \\
+    Umbral de ataques de la guitarra 0.2 (en lugar de 0.3) & $-0.4$ / $0.0$ / $-0.2$ \\
+    Nota del bajo cuando la guitarra lo dobla & $-0.5$ / $-2.4$ / $-0.2$ \\
+    Bajo: ataques de banda completa & $+0.5$ / $+2.3$ / $-1.1$ \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+Los errores de cuarto de tono se repiten igual en todas las vueltas. En el 74--83\,\% de ellos, el pico de la pista de
+guitarra está más cerca de la altura que leyó la herramienta que de la partitura (mediana: 34--45 cents desde la
+partitura), y se concentran en pocas notas: apuntan a la referencia, lo que motivó el arbitraje a ciegas. En Fabienk, el
+10\,\% de la melodía está por debajo de MIDI 47, donde la guitarra dobla al bajo; ahí la voz aguda toma un armónico, y bajar
+el piso hace caer la línea una octava en todas las canciones. En el bajo, el error mayor son los re-ataques perdidos
+(9--11\,\% en Mata Zyklek y Fabienk).
+
+\section{El peso de la capa más nueva}
+
+Se probó dar más peso a la capa más nueva del looper en la voz aguda, con tres valores del parámetro de edad. La melodía
+cambió, pero la fundamental del acorde no, salvo en un valor extremo para Mata Zyklek (tabla~\ref{tab:edad}). Estas
+corridas son de una versión anterior del cuaderno.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Melodía principal y fundamental con tres pesos de edad (0.5, 0.7 y 0.85).}\label{tab:edad}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Canción & Melodía principal & Fundamental \\
+    \midrule
+    Sarniezz & 46.0 · 46.8 · 47.9 & 72.3 · 72.3 · 72.3 \\
+    Fabienk & 40.8 · 42.8 · 44.2 & 82.3 · 82.3 · 82.3 \\
+    Mata Zyklek & 60.4 · 62.8 · 65.3 & 90.9 · 98.1 · 98.1 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Separación por sección}
+
+La tabla~\ref{tab:sep-seccion} detalla, sección por sección de Sarniezz, la melodía principal con cada separador
+($n$: número de notas de la referencia).
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Melodía principal de Sarniezz por sección: Demucs frente a BS-RoFormer SW.}\label{tab:sep-seccion}
+  \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    Sección & $n$ & Demucs & RoFormer \\
+    \midrule
+    Riff del bajo (c.~9--13) & 2 & 28.6 & 28.6 \\
+    Riff, puente (c.~14) & 9 & 35.3 & 33.3 \\
+    Riff en bajo y guitarra 2 (c.~15--18) & 96 & 82.2 & 84.1 \\
+    Riff y acorde de la guitarra 1 (c.~19--22) & 96 & 81.8 & 83.1 \\
+    Frase 1 de la guitarra 1 sobre el riff (c.~23--26) & 86 & 12.4 & 7.5 \\
+    Frase 1 con bajo suelto (c.~27--30) & 160 & 55.9 & 40.3 \\
+    Frase 1 en 4/4 (c.~31--36) & 80 & 62.4 & 60.5 \\
+    Frase 1 con la guitarra 2 una octava abajo (c.~37--42) & 160 & 7.6 & 10.9 \\
+    Frase 1 y frase 2 aguda de la guitarra 2 (c.~43--51) & 164 & 19.3 & 43.0 \\
+    Patrón del bajo en la guitarra 1 (c.~64--69) & 192 & 59.5 & 54.6 \\
+    Final libre de la guitarra 1 (c.~77--82) & 24 & 45.3 & 40.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Columnas melódicas y patrones frente a la partitura}
+
+La misma regla de columnas aplicada a la partitura permite medir qué tan estable es frente a los errores de transcripción
+(tabla~\ref{tab:columnas}). La nota de la partitura suele estar entre las columnas de pulso de la herramienta aunque no sea
+la principal. La partitura confirma además que la guitarra dobla al bajo en unísono u octava buena parte del tiempo
+(38--73\,\% de las columnas), y que el resto se apoya en quintas y terceras.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Columnas melódicas: coincidencia con la partitura.}\label{tab:columnas}
+  \begin{tabular}{@{}lrrrrr@{}}
+    \toprule
+    Canción & \shortstack{Misma nota\\principal} & \shortstack{Entre las\\columnas} & \shortstack{Mismo\\bajo} &
+    \shortstack{Misma nota\\del acorde} & \shortstack{Mismo\\arco} \\
+    \midrule
+    Sarniezz & 31\,\% & 57\,\% & 33\,\% & 32\,\% & 59\,\% \\
+    Mata Zyklek & 63\,\% & 83\,\% & 81\,\% & 64\,\% & 53\,\% \\
+    Fabienk & 37\,\% & 68\,\% & 29\,\% & 36\,\% & 35\,\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Para los patrones de ciclo, la tabla~\ref{tab:patrones} compara el patrón de cada ciclo de la herramienta con el de la
+partitura, y la fracción de notas de cada vuelta que se acoge al patrón.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Patrones de ciclo frente a la partitura.}\label{tab:patrones}
+  \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    Canción & Parecido de los patrones (F) & Se acogen: herramienta & Se acogen: partitura \\
+    \midrule
+    Sarniezz & 52\,\% & 57\,\% & 62\,\% \\
+    Mata Zyklek & 86\,\% & 56\,\% & 60\,\% \\
+    Fabienk & 78\,\% & 72\,\% & 67\,\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Ruido de muestreo en los cambios de acorde}
+
+Con pocos cambios de fundamental, las distancias entre repartos de transiciones son sobre todo ruido. Para medirlo se
+sacaron dos muestras de $n$ cambios de una misma canción y se midió cuánto difieren (tabla~\ref{tab:ruido}). Con 6
+cambios, como en Utzp y Yor Zarad, el ruido supera la distancia típica entre un audio y su partitura (alrededor de 0.1).
+Por eso, en la distancia combinada entre círculos, las transiciones y los movimientos pesan según el número de cambios:
+nada con menos de 5, $n/20$ entre 5 y 20, y completo desde 20.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Distancia entre dos muestras de una misma canción según el número de cambios.}\label{tab:ruido}
+  \begin{tabular}{@{}rrr@{}}
+    \toprule
+    Cambios & Transiciones & Movimientos \\
+    \midrule
+    6 & 0.28 & 0.12 \\
+    10 & 0.19 & 0.07 \\
+    20 & 0.11 & 0.03 \\
+    40 & 0.06 & 0.02 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Las referencias de Guitar Pro}
+
+La referencia completa de acordes se armó con las tablaturas de los PDF por pista (alturas, cuerdas, trastes, ligados y
+bends) y con los audios que Guitar Pro exporta por pista (tiempos). Entre el 82 y el 88\,\% de las notas tiene su ataque
+medido en el audio; el resto se interpola entre sus vecinas. El render se alinea con la grabación por DTW sobre un croma
+de cuartos de tono. De las notas de la referencia corregida de oído, también están en Guitar Pro (misma altura, $\pm75$~ms)
+el 92\,\% en Mata Zyklek, el 70\,\% en Fabienk y el 57\,\% en Sarniezz; sin contar la octava, el 96, el 80 y el 77\,\%. El
+acuerdo entre referencias en la fundamental por compás es del 100, 92.6 y 97.0\,\% entre la corregida y la completa, y del
+95.4, 49.5 y 75.5\,\% entre la corregida y Guitar Pro sola.
+
+\section{Elección de los fragmentos de las figuras}
+
+\paragraph{El círculo en movimiento.} El fragmento se eligió cuadro a cuadro contra la referencia corregida
+(tabla~\ref{tab:fragmento}). El primero tenía más cuartos de tono, pero la mitad eran errores ya descartados por el
+arbitraje a ciegas (el Fa leído como Mi+ y el Re como Re+). En el elegido, los cuartos de tono son reales y, cuando la
+herramienta falla, se queda corta.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Fragmentos de Mata Zyklek para el círculo en movimiento.}\label{tab:fragmento}
+  \begin{tabular}{@{}lrrl@{}}
+    \toprule
+    Fragmento & Voz aguda & Voz grave & Cuartos de tono (referencia · círculo) \\
+    \midrule
+    162--192 s & 69.0\,\% & 86.8\,\% & 25\,\% · 38\,\% \\
+    42--72 s (elegido) & 86.9\,\% & 94.4\,\% & 23\,\% · 17\,\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\paragraph{El tabroll de Fabienk.} La página de la figura~\ref{fig:tabroll} se eligió comparando las páginas posteriores a
+3:00 con la partitura corregida (tabla~\ref{tab:paginas}). La página 25 marcaba cuartos de tono que la partitura no tiene;
+la 32 tiene la melodía principal y casi todos sus cuartos de tono están en la partitura.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Páginas candidatas del tabroll de Fabienk.}\label{tab:paginas}
+  \begin{tabular}{@{}llrrr@{}}
+    \toprule
+    Página & Tramo & Misma nota que la melodía & Notas en alguna guitarra & \cuarto{} de tono en la partitura \\
+    \midrule
+    25 & 3:43--3:53 & 73\,\% & 34 de 48 & 4 de 11 \\
+    32 & 4:42--4:52 & 78\,\% & 53 de 59 & 6 de 8 \\
+    33 & 4:52--5:01 & 80\,\% & 48 de 52 & 3 de 4 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

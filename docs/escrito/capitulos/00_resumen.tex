@@ -1,0 +1,36 @@
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+
+Angine de Poitrine es un dúo de Saguenay (Quebec) que toca con guitarra y bajo de trastes de cuarto de tono, construye
+sus canciones con un looper y usa compases poco comunes. Este trabajo pregunta si su música encaja en un estilo
+existente o si es una propuesta nueva, y responde la pregunta midiendo desde el audio. Para ello se construyó una
+herramienta abierta que transcribe en 24-EDO (veinticuatro divisiones iguales de la octava): separa la guitarra y el
+bajo, estima la altura con una saliencia armónica en una rejilla de 25 cents, usa la repetición del looper para
+estabilizar la transcripción, segmenta la canción en compases y asigna a cada compás un acorde con las calidades de
+Piston extendidas a 24-EDO, sus funciones (Riemann) y sus ejes (Lendvai). La salida principal es el \emph{tabroll}, un
+piano roll de 24 filas por octava con los acordes debajo.
+
+La herramienta se evaluó contra partituras corregidas de oído, con arbitrajes a ciegas y una canción reservada como
+prueba ciega. La fundamental del acorde acierta en promedio el 85\,\% en los compases confiables, mientras que la
+melodía acierta el 49\,\%; la diferencia se explica por la forma en que se decide la armonía (peso del bajo, suma
+sobre las vueltas del loop, independencia de la octava y resolución por compás). Con esa base, cada canción del álbum
+\emph{Vol.~II} se resumió en cuatro bloques de rasgos (armonía, escala, cuartos de tono y metro) y se comparó con seis
+corpus de estilos mediante la distancia de Jensen-Shannon y un percentil de tipicidad, después de aplicar a los corpus
+el error de medición de la propia herramienta, estimado con canciones de control.
+
+Los resultados indican que la banda es un híbrido con un elemento propio. En armonía, ninguna canción es típica de
+ningún corpus (máximo 17.7 sobre 50) y el 37.5\,\% de los casos queda sin vecino, frente al 5.2\,\% en piezas reales de
+rock. En melodía, dos grados en cuarto de tono concentran entre el 48 y el 82\,\% de los cuartos de tono de cada
+canción: son grados fijos de la escala, no adornos, y forman dos familias (frigia y dórica), de las cuales la dórica no
+aparece en ningún corpus medido. En metro, los ciclos del looper muestran periodos de 20 y 28 corcheas, compatibles con
+compases de 5 y de 7 tiempos. La conclusión es que la música de la banda no corresponde a un estilo existente, sino a
+una recombinación de lenguajes conocidos con un rasgo nuevo: los cuartos de tono como grados fijos de la escala.
+
+\medskip
+\noindent\textbf{Palabras clave:} microtonalidad, 24-EDO, transcripción automática, recuperación de información musical,
+armonía funcional, corpus de estilos, divergencia de Jensen-Shannon, Angine de Poitrine.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\pendiente{traducir el resumen al inglés cuando el texto en español quede estable.}

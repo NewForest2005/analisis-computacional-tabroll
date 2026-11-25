@@ -133,6 +133,7 @@ detiene y lo lista: hay que pasar el cambio al notebook o descartarlo con `scrip
 | [`docs/leyendas_figuras.md`](docs/leyendas_figuras.md) | pies de figura de la presentación, para el artículo |
 | [`docs/glosario.md`](docs/glosario.md), [`docs/guion_defensa.md`](docs/guion_defensa.md) | glosario y guion de la defensa |
 | [`docs/referencias_compiladas.md`](docs/referencias_compiladas.md) | bibliografía, corpus y fuentes |
+| [`docs/escrito/`](docs/escrito) | borrador del escrito del trabajo de grado (LaTeX y PDF; `make escrito`) |
 | [`docs/articulo/`](docs/articulo), [`docs/poster/`](docs/poster), [`docs/formulas/`](docs/formulas) | artículo, póster y resumen de fórmulas (LaTeX y PDF) |
 
 ## Datos y licencias

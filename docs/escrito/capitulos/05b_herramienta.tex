@@ -1,0 +1,98 @@
+\chapter{La herramienta}\label{cap:herramienta}
+
+Este capítulo describe cómo está construida la herramienta y qué garantiza que sus resultados se puedan reproducir.
+Interesa por dos razones: un análisis computacional solo es verificable si otra persona puede correrlo y obtener lo
+mismo, y varias decisiones de diseño (la semilla, las huellas, la prohibición de leer la partitura) son condiciones para
+que la evaluación del capítulo~\ref{cap:resultados} sea honesta.
+
+\section{Del cuaderno al repositorio}
+
+El análisis vive en un cuaderno de Jupyter, que es la \emph{fuente de verdad}: todo cambio se hace en él. El cuaderno
+empezó en Google Colab y pasó a un repositorio de GitHub cuando la memoria disponible dejó de alcanzar. Para poder probar
+y reutilizar cada paso por separado, un script lo divide en módulos de Python, uno por celda: 123 módulos en
+\texttt{src/tabroll/cells/}. Al extraerlos guarda la huella SHA-256 de cada módulo; si alguien edita uno a mano, la
+siguiente extracción lo detecta y se detiene, en lugar de borrar el cambio. Una prueba automática falla si el cuaderno y
+los módulos no coinciden. Así el cuaderno siempre manda.
+
+\section{Una corrida}
+
+Un script corre todas las celdas del cuaderno sobre una canción, de punta a punta, sin abrir Jupyter, y guarda todo en una
+carpeta con la fecha, la hora y el nombre de la canción (tabla~\ref{tab:salidas}). Si las pistas de guitarra y bajo no
+existen junto al audio, Demucs las crea. Los ajustes que se pasen en la línea de comandos solo afectan esa corrida; el
+cuaderno no se modifica.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Lo que guarda cada corrida.}\label{tab:salidas}
+  \begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X@{}}
+    \toprule
+    Archivo & Contenido \\
+    \midrule
+    Imágenes & Tabroll por páginas e imagen completa, tabroll con la armonía en 24-EDO, mapa de ciclos y círculo armónico \\
+    Resumen & Tempo, tonalidad, compases, ciclos, capas del looper y huellas SHA-256 del audio usado \\
+    Salida & Todo lo que imprime el cuaderno, con el tiempo de cada celda \\
+    Armonía & Una fila por compás (fundamental, calidad, grado, bajo, confianza, ciclos, perfiles) y el resumen de la canción \\
+    Diagnóstico de la línea & Las notas de la voz aguda y del bajo, la saliencia y los ciclos, para la evaluación \\
+    Evaluación & Solo en las canciones con referencia: medidas globales y por sección, y la armonía por compás \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\paragraph{La evaluación está separada del análisis.} El módulo de evaluación compara la salida con la referencia
+\emph{después} de la corrida. Ninguna celda del cuaderno lee la partitura ni nombra una canción, salvo la que elige el
+audio; una prueba automática lo verifica. Esto impide que la herramienta se ajuste, sin querer, a las canciones con las que
+se mide.
+
+\section{Reproducibilidad}
+
+\paragraph{Corridas congeladas.} Las cifras de acierto del trabajo vienen de corridas congeladas del 13 de noviembre de
+2026, marcadas con un sufijo propio, que no se vuelven a ejecutar. Las mismas pistas dan las mismas notas: entre 8 y 12
+corridas de cada canción, con distintas versiones del cuaderno, dieron la misma medida F y la misma tabla por compás.
+
+\paragraph{Semilla y huellas.} Demucs desplaza el audio entre 0 y 0.5~s antes de separar, al azar, y eso cambiaba el
+resultado (57.2 frente a 61.6 en Mata Zyklek). La semilla quedó fija en 0, y cada corrida guarda la huella de la mezcla y de
+las dos pistas. Dos corridas con las mismas huellas usaron exactamente el mismo audio.
+
+\paragraph{El separador alternativo.} Para BS-RoFormer, que no publica autor ni licencia de sus pesos, se fijó todo lo que
+puede cambiar el resultado (tabla~\ref{tab:roformer}). Dos separaciones del mismo fragmento salieron idénticas bit a bit.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Parámetros fijados para BS-RoFormer SW.}\label{tab:roformer}
+  \begin{tabularx}{\textwidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+    \toprule
+    Parámetro & Valor & Por qué \\
+    \midrule
+    Herramienta de separación & audio-separator 0.48.0 & el solapamiento por defecto cambió en la 0.47.0 \\
+    Entrada & 44.1 kHz estéreo, 32 bits flotantes & el remuestreo no depende de la herramienta \\
+    Solapamiento & 2 & el de las métricas públicas \\
+    Precisión / dispositivo & 32 bits / CPU & sin precisión mixta \\
+    Hilos & 8, fijos & el número de hilos puede alterar el orden de las sumas \\
+    Semilla & 0, con algoritmos deterministas & \\
+    Salida & FLAC & el MP3 añade artefactos en los parciales que se transcriben \\
+    Modelo & huella SHA-256 \texttt{24e7d35e\dots} & los pesos no tienen versión oficial \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Pruebas y gráficas}
+
+El repositorio tiene 99 funciones de prueba en 23 archivos. Cubren la extracción de celdas y su protección, la lectura de
+las partituras de Guitar Pro y su alineación con el audio, la evaluación de la melodía, la armonía en 24-EDO, el centro,
+las funciones, las columnas melódicas, los patrones de ciclo, la limpieza de notas, la reproducibilidad y las gráficas.
+
+Las gráficas también se prueban. Un módulo común arma cada figura en tres franjas (encabezado, cuerpo y pie) y una función
+de revisión dibuja la figura y detecta textos que se salen, textos que se montan, leyendas sobre los datos y franjas
+vacías. Una prueba arma las figuras principales con datos sintéticos del tamaño real (36 canciones, nombres largos) y exige
+que la revisión no encuentre problemas.
+
+\section{Costo}
+
+En un computador portátil con procesador Intel de 8 núcleos y 16~GB de memoria, sin GPU:
+\begin{itemize}
+  \item Demucs separa una canción en varios minutos.
+  \item El cuaderno completo tarda unos 3 minutos por canción (183.6~s en Sarniezz). Calcular una sola vez lo que comparten
+  las dos saliencias de la voz aguda redujo ese paso de 78 a 40~s en Mata Zyklek, con resultados idénticos.
+  \item BS-RoFormer tardó 3\,616~s en Sarniezz: 13.1 veces la duración de la canción.
+  \item Las gráficas de la comparación con estilos tardan unos 5 a 6 minutos.
+\end{itemize}

@@ -1,0 +1,79 @@
+\chapter{Estado del arte}\label{cap:estado}
+
+El análisis computacional de la música ofrece un marco cuantificable para estudiar la melodía, la armonía, el ritmo y el
+timbre, y resulta especialmente útil frente a músicas que desafían los modelos teóricos convencionales. La
+microtonalidad, el uso de intervalos menores que el semitono, es uno de esos casos: la notación occidental y la mayoría
+de las herramientas de análisis no representan con precisión las alturas que caen entre los semitonos.
+
+Este trabajo toma elementos de seis líneas de investigación. La tabla~\ref{tab:estado} resume, para cada una, qué
+resuelve, qué le falta para esta música y qué se usa aquí.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Líneas de trabajo previo y su relación con este trabajo.}\label{tab:estado}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright}p{2.2cm}>{\raggedright}p{3.1cm}>{\raggedright}X>{\raggedright}X>{\raggedright\arraybackslash}X@{}}
+    \toprule
+    Línea & Trabajos & Qué resuelven & Qué les falta aquí & En este trabajo \\
+    \midrule
+    Altura desde el audio & \citet{mauch2014}; \citet{bittner2022} & Melodía y notas a partir de la grabación &
+      pYIN sigue una sola voz; Basic Pitch da notas MIDI enteras y el cuarto de tono queda como desafinación &
+      Saliencia armónica y consenso entre vueltas del looper \\
+    Separación de fuentes & \citet{rouard2023}; \citet{lu2024} & Aislar bajo, guitarra y batería &
+      No transcriben: solo preparan la señal & Demucs para guitarra y bajo \\
+    MIR microtonal & \citet{bozkurt2008}; \citet{gedik2010} & Histogramas de altura finos para el makam turco &
+      Música de una sola voz, sin acordes ni looper & Rejilla de 24-EDO con casillas de $\pm25$ cents \\
+    Armonía funcional & \citet{riemann1893}; \citet{lendvai1971}; \citet{piston1987} &
+      Función de cada acorde: tónica, subdominante o dominante & Pensada en 12 notas; Piston deja fuera lo microtonal &
+      Calidades, funciones y ejes extendidos a 24-EDO \\
+    Estilo con corpus & \citet{declercq2011}; \citet{broze2013} & Perfiles de armonía del rock y del jazz &
+      Datos simbólicos en 12 notas & Perfiles de 24 clases, Jensen-Shannon y percentil \\
+    Métrica irregular & \citet{holzapfel2014}; \citet{srinivasamurthy2016} & Compases no occidentales desde el audio &
+      Sin la dimensión de altura & Pulsos y compases de 2 a 8 pulsos \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\section{Altura desde el audio}
+
+Los estimadores de frecuencia fundamental como YIN \citep{decheveigne2002} y pYIN \citep{mauch2014} siguen con precisión
+una línea monofónica y entregan alturas continuas que pueden expresarse como MIDI fraccionario o desviación en cents. Los
+modelos de redes neuronales, como CREPE \citep{kim2018}, mejoran la estimación en una sola voz. Para música polifónica, la
+extracción de melodía basada en contornos de saliencia \citep{salamon2012} y los transcriptores multinota, como Basic Pitch
+\citep{bittner2022}, entregan varias notas a la vez, pero cuantizadas a doce notas: un cuarto de tono les sale como una
+nota desafinada.
+
+\section{Separación de fuentes}
+
+Demucs \citep{rouard2023} y BS-RoFormer \citep{lu2024} separan una mezcla en pistas de instrumentos (bajo, batería, voz,
+guitarra y otros). Son un paso previo útil, pero no transcriben. REPET \citep{rafii2013} separa lo que se repite de lo
+que no, una idea cercana al funcionamiento de un looper.
+
+\section{MIR microtonal}
+
+El estudio computacional del makam turco ha desarrollado histogramas de altura de alta resolución y comparaciones entre
+modelos teóricos de afinación y mediciones \citep{bozkurt2008,bozkurt2009,gedik2010,bozkurt2014}. Estas técnicas trabajan
+con música de una sola voz (heterofonía, en el mejor de los casos), sin acordes y sin la estructura en capas de un
+looper. \pv[: Serra (2011), enfoque multicultural en MIR]
+
+\section{Armonía funcional}
+
+Las teorías de \citet{riemann1893}, \citet{lendvai1971} y \citet{piston1987} clasifican los acordes por su función
+tonal. Todas están pensadas para doce notas, y Piston excluye explícitamente las escalas microtonales.
+
+\section{Estilo con corpus}
+
+Los estudios de corpus describen estadísticamente la armonía de un estilo: el rock \citep{declercq2011,temperley2013},
+la práctica común \citep{temperley2009} y el jazz \citep{broze2013,shanahan2012}. La comparación de distribuciones con
+medidas de teoría de la información tiene base en la cognición musical \citep{krumhansl1990,huron2006,pearce2018}. Todos
+estos corpus son simbólicos y están en doce notas.
+
+\section{Métrica irregular}
+
+El seguimiento de compases no occidentales desde el audio, como los usul turcos o los tala indios, se ha estudiado con
+modelos bayesianos \citep{holzapfel2014,srinivasamurthy2016}, y el seguimiento de pulsos por programación dinámica es un
+método clásico \citep{ellis2007}. Estos trabajos no incorporan la dimensión de altura.
+
+\section{El vacío}
+
+Ningún trabajo consultado reúne a la vez audio polifónico, 24-EDO, armonía funcional y comparación con corpus. Este
+trabajo une las seis líneas para estudiar una banda de rock con cuartos de tono y looper.

@@ -7,7 +7,7 @@ VENV_PYTHON := $(VENV)/bin/python
 AUDIO_DIR := Angine de Poitrine Audios
 SARNIEZZ_AUDIO := $(AUDIO_DIR)/Angine de Poitrine - Sarniezz (audio officiel).mp3
 
-.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa presentacion presentacion-imagenes presentacion-circulo presentacion-video graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
+.PHONY: help check-python venv install demucs check-ffmpeg extract check test run-sarniezz todo graficas graficas-completas graficas-diapositivas graficas-clave defensa escrito presentacion presentacion-imagenes presentacion-circulo presentacion-video graficas-actuales graficas-primus roformer-entorno separar-roformer run-roformer clean-outputs
 
 help:
 	@printf '%s\n' \
@@ -21,6 +21,7 @@ help:
 		'make graficas-completas Alias de make graficas' \
 		'make graficas-diapositivas Solo las seis gráficas de la presentación (outputs/graficas_clave_*/diapositivas)' \
 		'make defensa        PDF con los puntos para la defensa (docs/defensa) y copia en ~/Downloads' \
+		'make escrito        PDF del borrador del escrito (docs/escrito/escrito.pdf)' \
 		'make presentacion   Servir la presentación (presentacion/index.html) en http://localhost:8000' \
 		'make presentacion-imagenes Copiar a presentacion/img/ las gráficas y el tabroll más recientes' \
 		'make presentacion-video    Descargar el fragmento del video de KEXP (0:32-2:32) a presentacion/video' \
@@ -122,6 +123,17 @@ defensa:
 	cp $(DEFENSA_TMP)/puntos_defensa.pdf docs/defensa/puntos_defensa.pdf
 	cp docs/defensa/puntos_defensa.pdf "$(DESCARGAS)/puntos_defensa.pdf"
 	@echo "→ docs/defensa/puntos_defensa.pdf y $(DESCARGAS)/puntos_defensa.pdf"
+
+ESCRITO_TMP := .tmp_escrito
+
+escrito:
+	@command -v xelatex >/dev/null || { echo 'Falta xelatex (MacTeX).' >&2; exit 1; }
+	@mkdir -p $(ESCRITO_TMP)
+	cd docs/escrito && for i in 1 2 3; do \
+		xelatex -interaction=nonstopmode -halt-on-error -output-directory=../../$(ESCRITO_TMP) escrito.tex >/dev/null \
+		|| { tail -30 ../../$(ESCRITO_TMP)/escrito.log >&2; exit 1; }; done
+	cp $(ESCRITO_TMP)/escrito.pdf docs/escrito/escrito.pdf
+	@echo "→ docs/escrito/escrito.pdf"
 
 graficas-actuales: check-python
 	$(VENV_PYTHON) scripts/todo.py --otras primus

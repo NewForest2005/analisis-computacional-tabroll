@@ -1,0 +1,105 @@
+\chapter{Datos}\label{cap:datos}
+
+\section{Conjuntos de canciones}
+
+La tabla~\ref{tab:conjuntos} resume las canciones que se analizan con la herramienta. Todas se procesan con el mismo
+cuaderno y los mismos parámetros, a partir del audio oficial.
+
+\begin{table}[ht]
+  \centering
+  \caption{Canciones analizadas con la herramienta.}\label{tab:conjuntos}
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright}p{6.2cm}c>{\raggedright\arraybackslash}X@{}}
+    \toprule
+    Conjunto & Tamaño & Uso \\
+    \midrule
+    Angine de Poitrine, \emph{Vol.~II} & 6 temas & Objeto de estudio (audio oficial) \\
+    Referencias corregidas de oído & 4 temas & Evaluación; Yor Zarad, a ciegas \\
+    Primus & 3 temas & Control sin cuartos de tono: mide el error \\
+    King Gizzard, \emph{Flying Microtonal Banana} (2017) & 9 temas & Rock en 24-EDO (precedente señalado por analistas) \\
+    Zappa / King Crimson / Gentle Giant & 6 / 6 / 6 & Rock progresivo comparado \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+En total se midieron 36 canciones: las 6 del álbum, los 3 controles de Primus y 27 de los repertorios comparados. Las
+referencias de oído son de canciones del álbum, así que no suman al total.
+
+Las seis canciones del álbum son Mata Zyklek, Fabienk, Sarniezz, Yor Zarad, Utzp y Angor. Los controles de Primus son
+«Tommy the Cat», «My Name Is Mud» y «Jerry Was a Race Car Driver». Primus cumple dos papeles: es la comparación propia
+del trabajo y, como no usa cuartos de tono, todo cuarto de tono que la herramienta marque en sus canciones es error de
+medición. Con él se estima el \emph{piso de ruido} de la herramienta.
+
+\section{Referencias para medir el acierto}\label{sec:referencias}
+
+Para saber si la herramienta acierta se necesitan transcripciones verificadas. Se armaron cuatro:
+
+\begin{itemize}
+  \item \textbf{Sarniezz y Fabienk.} Partituras de Guitar Pro y MuseScore, corregidas de oído por el autor. Cada
+  corrección se verificó con clips: la pista de guitarra real en un canal y la partitura sintetizada en el otro.
+  \item \textbf{Mata Zyklek.} La transcripción de la sesión de KEXP, sin cambios en la primera ronda.
+  \item \textbf{Yor Zarad.} La primera referencia armada sin mirar ninguna salida de la herramienta: las alturas salen de
+  la tablatura de los PDF de Guitar Pro y los tiempos, de los audios que Guitar Pro exporta por pista. El autor la
+  verificó de oído con 20 clips y eligió a ciegas entre versiones en 6 clips más.
+\end{itemize}
+
+Además, para Sarniezz, Mata Zyklek y Fabienk se armó una referencia de acordes con \emph{todas} las pistas de la partitura
+de Guitar Pro (guitarras I a VI y bajo), ya alineadas al tiempo de la grabación oficial. Solo sirve para evaluar la
+armonía (sección~\ref{sec:evaluacion}).
+
+Las partituras publicadas no se usan nunca para guiar el análisis: la herramienta tiene que funcionar con canciones sin
+partitura. Utzp era una segunda prueba a ciegas, pero su referencia no pasó la verificación de oído (el ritmo de las
+guitarras de acordes) y se usó después como una canción más.
+
+\section{Corpus de estilos}\label{sec:corpus}
+
+La tabla~\ref{tab:corpus} muestra los seis corpus que entran en la comparación final. Cada uno aporta los bloques de
+rasgos que tiene.
+
+\begin{table}[ht]
+  \centering\small
+  \caption{Corpus de estilos usados en la comparación.}\label{tab:corpus}
+  \begin{tabularx}{\textwidth}{@{}l>{\raggedright}Xlr@{}}
+    \toprule
+    Estilo & Corpus & Bloques & Piezas \\
+    \midrule
+    Rock & Rolling Stone 200 \citep{declercq2011} & armonía, escala, metro & 200 (400 análisis) \\
+    Práctica común & Kostka-Payne \citep{temperley2009} & armonía & 46 \\
+    Jazz & iRealPro \citep{irealpro} & armonía, metro & 1\,186 \\
+    Pop & 9 álbumes de Hooktheory & armonía & 121 \\
+    Persa & Radif Corpus \citep{kanani2025} & escala, cuartos de tono & 229 \\
+    Indostánica & Hindustani Classical Music Transcription Dataset \citep{singh2022} & escala, cuartos de tono & 50 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+El corpus de rock contiene las 200 canciones de la lista de la revista Rolling Stone, analizadas por dos analistas (400
+análisis). El de práctica común proviene de los ejemplos del libro de armonía de Kostka y Payne y solo tiene armonía. El
+de jazz reúne los acordes de los estándares de la aplicación iRealPro. El de pop son 121 temas de 9 álbumes analizados
+en Hooktheory (Adele, Reneé Rapp, Luke Combs, Billie Eilish, Taylor Swift, Lil Nas X, Lorde, Ed Sheeran y Tate McRae). El
+radif es el repertorio clásico de la música persa, organizado en modos (\emph{dastgah}), con intervalos menores que el
+semitono (\emph{koron} y \emph{sori}); la conversión del proyecto da 229 piezas \citep{kanani2025}. El corpus indostánico
+trae alturas en 22 \emph{shrutis}, que al llevarse a 24-EDO caen todas en los doce grados regulares.
+
+\paragraph{Descargados pero no usados.} SymbTr (makam turco, unas 2\,200 piezas con alturas en comas de Holder)
+\citep{karaosmanoglu2012} y The Session (folk irlandés) se convirtieron a bloques y se retiraron de la comparación
+final. El maqam árabe no tiene un corpus simbólico abierto equivalente. ProgGP \citep{loth2023}, el corpus que permitiría
+comparar con el rock progresivo, solo se obtiene pidiéndolo a sus autores y no estuvo disponible.
+
+\paragraph{Corpus pequeños.} Solo cuentan para el veredicto los corpus con 100 piezas o más. En un corpus pequeño y
+disperso casi todo parece típico; en las figuras, las comparaciones con corpus de menos de 100 piezas (Kostka-Payne e
+indostánico) aparecen rayadas.
+
+\section{Fuentes sobre la banda}
+
+Las declaraciones de la banda se documentan con la entrevista de \emph{Noize Magazine} \citep{noize} y el podcast
+\emph{Aucard de Tours} \citep{aucard2026}. Del podcast se usó una transcripción de trabajo, no oficial, del tramo
+1:33--2:58, en la que Khn describe el dúo de guitarra y bajo microtonales, la construcción por loops, la repetición con
+crescendo, la relación estructural con el techno, la tradición del rock instrumental y el uso de 5 y 7 tiempos. Los
+análisis externos provienen de los videos de Mathémusique \citep{mathemusique2026}, David Bennett \citep{bennett2026},
+Levi McClain \citep{mcclain2026} y Thomas Little \citep{little2019}.
+
+\section{Licencias}
+
+El audio de la banda no se distribuye. Los corpus conservan la licencia de su fuente; el repositorio publica agregados,
+huellas, scripts y referencias, y no los conjuntos completos cuando la licencia no lo permite. Los pesos de BS-RoFormer
+SW no declaran licencia y se usaron solo con fines académicos.

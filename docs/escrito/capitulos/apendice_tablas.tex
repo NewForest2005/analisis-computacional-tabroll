@@ -1,0 +1,83 @@
+\chapter{Tablas completas}\label{ap:tablas}
+
+\section{Test por bloques: percentiles de la banda}
+
+La tabla~\ref{tab:bloques-completa} da el percentil de tipicidad por vecinos de cada canción en cada bloque y corpus
+(A armonía, E escala en 12 notas, ¼ cuartos de tono, M metro). Los corpus marcados con $^*$ tienen menos de 100 piezas y no
+cuentan para el veredicto.
+
+\begin{table}[ht]
+  \centering\scriptsize
+  \caption{Percentiles por bloque y corpus (corrida final).}\label{tab:bloques-completa}
+  \setlength{\tabcolsep}{3.2pt}
+  \begin{tabular}{@{}lrrrrrrrrrrr@{}}
+    \toprule
+    Canción & A rock & A pop & A jazz & A clás.$^*$ & E rock & E radif & E ind.$^*$ & ¼ radif & ¼ ind.$^*$ & M rock & M jazz \\
+    \midrule
+    Mata Zyklek & 79.5 & 51.6 & 73.0 & 82.6 & 5.7 & 9.6 & 58.0 & 13.5 & 0.0 & 1.8 & 0.3 \\
+    Fabienk & 0.0 & 11.0 & 2.2 & 0.0 & 9.3 & 3.5 & 52.0 & 0.4 & 30.0 & 0.2 & 0.3 \\
+    Utzp & 89.2 & 26.4 & 16.1 & 4.3 & 7.2 & 9.2 & 58.0 & 32.3 & 0.0 & 100.0 & 100.0 \\
+    Yor Zarad & 69.8 & 1.1 & 14.6 & 0.0 & 2.1 & 8.7 & 64.0 & 10.9 & 0.0 & 0.2 & 0.3 \\
+    Angor & 100.0 & 36.3 & 62.9 & 32.6 & 44.3 & 1.7 & 46.0 & 35.4 & 2.0 & 2.0 & 0.3 \\
+    Sarniezz & 0.0 & 11.0 & 0.9 & 0.0 & 3.1 & 0.9 & 36.0 & 3.9 & 20.0 & 100.0 & 100.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Las 36 canciones medidas}
+
+La tabla~\ref{tab:36} reúne, para todas las canciones medidas con la herramienta, el tiempo de la melodía en cuartos de
+tono, su concentración, el mejor periodo de repetición y el veredicto del test por bloques.
+
+{\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}llrrrr>{\raggedright\arraybackslash}p{3.9cm}@{}}
+  \caption{Medidas de las 36 canciones.}\label{tab:36}\\
+  \toprule
+  Grupo & Canción & \cuarto\,\% & Conc. & BPM & Ciclo ($R$) & Veredicto \\
+  \midrule
+  \endfirsthead
+  \toprule
+  Grupo & Canción & \cuarto\,\% & Conc. & BPM & Ciclo ($R$) & Veredicto \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  Angine de Poitrine & Angor & 5.0 & 58.1 & 99 & 24 (0.83) & sin vecino: metro \\
+   & Fabienk & 14.2 & 62.3 & 129 & 28 (0.867) & sin vecino: armonía, ¼, metro \\
+   & Mata Zyklek & 23.9 & 69.4 & 94 & 20 (0.817) & sin vecino: metro \\
+   & Sarniezz & 25.3 & 48.2 & 115 & 32 (0.83) & sin vecino: armonía, escala, ¼ \\
+   & Utzp & 11.1 & 81.5 & 129 & 32 (0.865) & síntesis de lenguajes existentes \\
+   & Yor Zarad & 16.8 & 70.7 & 108 & 28 (0.795) & sin vecino: metro \\
+  Primus & Jerry was a race car driver & 9.1 & 31.4 & 123 & 8 (0.454) & sin vecino: armonía, escala \\
+   & My name is mud & 13.0 & 36.6 & 98 & 4 (0.43) & estilo existente (rock) \\
+   & Tommy the cat & 11.9 & 27.9 & 129 & 8 (0.439) & estilo existente (rock) \\
+  King Gizzard & anoxia & 3.4 & 59.1 & 157 & 32 (0.565) & estilo existente (rock) \\
+   & billabong valley & 7.9 & 84.3 & 148 & 32 (0.498) & estilo existente (rock) \\
+   & doom city & 28.0 & 95.4 & 161 & 14 (0.69) & sin vecino: metro \\
+   & flying microtonal banana & 5.0 & 61.1 & 120 & 9 (0.816) & sin vecino: metro \\
+   & melting & 14.8 & 95.8 & 120 & 16 (0.751) & sin vecino: armonía, escala, ¼ \\
+   & nuclear fusion & 4.9 & 62.3 & 172 & 16 (0.757) & estilo existente (rock) \\
+   & open water & 11.9 & 84.9 & 129 & 8 (0.685) & sin vecino: ¼ \\
+   & rattlesnake & 7.2 & 62.7 & 172 & 32 (0.699) & sin vecino: escala \\
+   & sleep drifter & 6.3 & 99.5 & 157 & 32 (0.725) & estilo existente (rock) \\
+  Frank Zappa & G spot tornado & 4.8 & 48.6 & 120 & 4 (0.46) & estilo existente (rock) \\
+   & Inca roads & 3.6 & 32.5 & 120 & 8 (0.447) & estilo existente (rock) \\
+   & Peaches en regalia & 1.6 & 39.1 & 101 & 32 (0.498) & sin vecino: armonía \\
+   & The black page 1 & 3.8 & 41.8 & 161 & 10 (0.378) & sin vecino: armonía, metro \\
+   & The black page 2 & 7.0 & 53.5 & 129 & 7 (0.445) & sin vecino: armonía \\
+   & Zomby woof & 4.0 & 30.5 & 178 & 16 (0.474) & estilo existente (rock) \\
+  King Crimson & discipline & 0.1 & 81.8 & 108 & 12 (0.692) & sin vecino: armonía, escala, metro \\
+   & fracture & 3.8 & 36.9 & 129 & 10 (0.446) & sin vecino: armonía, escala, metro \\
+   & frame by frame & 3.1 & 39.2 & 157 & 7 (0.554) & sin vecino: armonía, metro \\
+   & larks tongues in aspic part & 11.9 & 39.1 & 103 & 10 (0.476) & variante atípica de rock \\
+   & level five & 8.6 & 41.2 & 129 & 14 (0.491) & sin vecino: armonía, escala, metro \\
+   & red & 25.0 & 52.8 & 178 & 6 (0.45) & estilo existente (rock) \\
+  Gentle Giant & advent of panurge & 1.7 & 37.6 & 191 & 16 (0.47) & sin vecino: metro \\
+   & experience & 2.2 & 52.9 & 129 & 18 (0.535) & sin vecino: metro \\
+   & free hand & 5.4 & 54.0 & 115 & 16 (0.435) & sin vecino: armonía, metro \\
+   & just the same & 0.9 & 68.7 & 161 & 12 (0.544) & sin vecino: armonía, metro \\
+   & playing the game & 1.0 & 86.8 & 110 & 16 (0.657) & sin vecino: armonía \\
+   & the runaway & 6.4 & 74.9 & 172 & 16 (0.423) & sin vecino: metro \\
+\end{longtable}
+}
