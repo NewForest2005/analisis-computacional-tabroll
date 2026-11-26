@@ -9,6 +9,12 @@ La tabla~\ref{tab:acierto} y la figura~\ref{fig:acierto} comparan la salida de l
 corregidas de oído. En promedio, la melodía principal acierta el 49\,\% y la fundamental del acorde, el 85\,\% en los
 compases confiables.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.72\textwidth]{acierto_herramienta.png}
+  \caption{Acierto de la herramienta por canción, contra la referencia corregida de oído. Gris: melodía principal; verde claro: bajo; verde oscuro: fundamental del acorde; amarillo: fundamental en compases confiables, cuya media (línea punteada) es del 85\,\%.}\label{fig:acierto}
+\end{figure}
+
 \begin{table}[ht]
   \centering
   \caption{Acierto contra las referencias corregidas de oído (medida F para melodía y bajo; \% del tiempo para la
@@ -26,13 +32,6 @@ compases confiables.
     \bottomrule
   \end{tabular}
 \end{table}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.72\textwidth]{acierto_herramienta.png}
-  \caption{Acierto de la herramienta por canción contra las referencias corregidas de oído. La línea punteada marca la
-  media de la fundamental en los compases confiables.}\label{fig:acierto}
-\end{figure}
 
 \subsection{Por qué la armonía es fiable aunque la melodía no lo sea tanto}
 
@@ -81,7 +80,7 @@ representativa. La partitura de Guitar Pro sola solo es fiable en Mata Zyklek.
 
 La función armónica coincide con la de la partitura casi lo mismo que la fundamental (66.0\,\% en Sarniezz, 98.1\,\% en Mata
 Zyklek y 82.9\,\% en Fabienk; 90.4, 98.8 y 83.5\,\% en los compases confiables): los errores vienen de la fundamental, no
-del etiquetado. Sarniezz es el punto débil: su acorde más usado es un sus2, que comparte notas con sus vecinos, y su bajo de
+del etiquetado. Sarniezz es el punto débil: uno de sus acordes más frecuentes, \fl VIIsus2, comparte notas con sus vecinos, y su bajo de
 Mi suena un cuarto de tono bajo y la herramienta lo lee como Re\sh+.
 
 \section{Separación: un resultado negativo}\label{sec:res-separacion}
@@ -114,30 +113,22 @@ looper, no medir los cuartos de tono. Demucs se mantiene como separador por defe
 
 \section{Armonía: fuera de todos los corpus}\label{sec:res-armonia}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{1a_armonia_matriz_verosimilitud.png}
-  \caption{Matriz de verosimilitud: percentil de tipicidad de cada canción en cada estilo (50 = pieza típica; 0 = más
-  rara que todas). «¼\,\%»: tiempo con la fundamental en cuarto de tono, llevada al grado de abajo.}
-  \label{fig:matriz}
-\end{figure}
-
 Frente a los cuatro corpus de armonía, los estilos más cercanos son el rock y el pop, pero ninguna canción pasa de 17.7
 (Utzp en pop), cuando una pieza típica daría 50 (figura~\ref{fig:matriz}). Las canciones con pedal (Mata Zyklek y Utzp)
 quedan cerca del borde del rock (12 y 11.7); Fabienk, Sarniezz y Yor Zarad quedan por debajo de 1 en rock. La práctica
-común y el jazz no encajan con ninguna canción.
+común y el jazz no encajan con ninguna canción. La matriz con las 36 canciones medidas, incluidos los repertorios, está en
+el apéndice (figura~\ref{fig:g-matriz}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{1a_armonia_matriz_verosimilitud.png}
+  \caption{Matriz de verosimilitud armónica del álbum frente a rock (RS~200), práctica común (Kostka-Payne), jazz (iRealPro) y pop (Hooktheory). Percentil: 50 = típica; 0 = más rara que todas. «¼\,\%»: tiempo con fundamental en cuarto de tono.}
+  \label{fig:matriz}
+\end{figure}
 
 El método no exagera la novedad. Calibrado con 388 piezas reales de rock, comparadas contra las demás, da «estilo
 existente» el 92.3\,\% de las veces y «sin vecino» solo el 5.2\,\%. En la banda, el 37.5\,\% de los casos (9 de los 24
 bloques de las seis canciones) queda sin vecino.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{1b_armonia_mapa_fundamentales.png}
-  \caption{Mapa de fundamentales. Cada punto del fondo es una pieza de un corpus; las estrellas son las canciones de
-  Angine de Poitrine y los rombos, las de Primus. Cada eje es una componente principal; entre paréntesis, los tres grados
-  que más pesan en ella.}\label{fig:mapa}
-\end{figure}
 
 El mapa de la figura~\ref{fig:mapa} lo muestra de otra forma. Cada canción y cada pieza de corpus se reduce a su reparto
 de fundamentales en 12 grados desde su tónica, de modo que la tonalidad no importa, y el análisis de componentes
@@ -145,7 +136,16 @@ principales comprime esos doce números en las dos direcciones en que más se di
 crece con el peso de II y VI y decrece con el de la tónica; el vertical baja cuando pesan \fl VI, \fl VII y \fl III. Dos
 puntos cercanos tienen repartos parecidos. Mata Zyklek y Utzp, que se apoyan en un pedal sobre la tónica, quedan en el
 borde del rock; Sarniezz y Fabienk caen donde no hay piezas de ningún corpus, por el peso de \fl VII y \fl III (en
-Sarniezz, \fl III ocupa el 42\,\% del tiempo). \pv[: qué estrella corresponde a cada canción en el mapa]
+Sarniezz, \fl III ocupa el 42\,\% del tiempo). El mismo mapa con los repertorios de King Gizzard, Zappa, King Crimson y Gentle Giant está en el apéndice
+(figura~\ref{fig:g-mapa}). Las estrellas son, de arriba abajo: Mata Zyklek $(-0.48,\ 0.03)$, Angor
+$(-0.52,\ -0.05)$, Utzp $(-0.51,\ -0.10)$, Yor Zarad $(-0.46,\ -0.17)$, Fabienk $(-0.21,\ -0.55)$ y Sarniezz
+$(-0.21,\ -0.63)$. Angor cae en el mismo punto que «Flying Microtonal Banana» de King Gizzard.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{1b_armonia_mapa_fundamentales.png}
+  \caption{Mapa de fundamentales. Puntos del fondo: rock (azul, RS~200, 400 piezas), práctica común (rojo, Kostka-Payne, 46), jazz (verde, iRealPro, 1186) y pop (naranja, Hooktheory, 121). Estrellas: la banda; rombos: Primus. Puntos cercanos tienen repartos de fundamentales parecidos; los ejes son componentes principales (entre paréntesis, los grados que más pesan).}\label{fig:mapa}
+\end{figure}
 
 Frente al pop de Hooktheory, la banda queda a una distancia de Jensen-Shannon de 0.40 a 0.59, cuando los nueve álbumes de
 pop entre sí no pasan de 0.07. Los ejes de Lendvai muestran rasgos que el círculo de quintas no ve: en Sarniezz, el 24\,\%
@@ -181,6 +181,12 @@ de progresiones de Piston.
 
 La tabla~\ref{tab:cuartos} y la figura~\ref{fig:uso} muestran cómo usa cada canción los cuartos de tono.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{2a_melodia_uso_cuartos_de_tono.png}
+  \caption{Cuartos de tono en la melodía (\% del tiempo). Oscuro: como grado sostenido; claro: como adorno. Franja gris: piso de ruido medido en Primus (9--13\,\%). A la derecha de cada barra, la fracción que cae en los dos grados más usados.}\label{fig:uso}
+\end{figure}
+
 \begin{table}[ht]
   \centering
   \caption{Uso de los cuartos de tono en la melodía (\% del tiempo de la voz aguda).}\label{tab:cuartos}
@@ -200,31 +206,22 @@ La tabla~\ref{tab:cuartos} y la figura~\ref{fig:uso} muestran cómo usa cada can
   \end{tabular}
 \end{table}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.9\textwidth]{2a_melodia_uso_cuartos_de_tono.png}
-  \caption{Porcentaje del tiempo de la melodía en cuartos de tono, como grado sostenido (oscuro) o como adorno de paso
-  (claro). La franja gris es el piso de ruido medido en Primus. A la derecha, qué parte de los cuartos de tono cae en los
-  dos grados más usados.}\label{fig:uso}
-\end{figure}
-
 Entre el 48 y el 82\,\% de los cuartos de tono de cada canción caen en solo dos grados, que vuelven en cada vuelta del
 loop; en Primus están repartidos (28--37\,\%). Son grados de la escala, no adornos: la mayor parte del tiempo en cuarto de
-tono es como grado sostenido. Angor, con 5\,\%, queda por debajo del piso de ruido y no cuenta.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{2b_melodia_circulo_24edo.png}
-  \caption{Círculo de 24-EDO. Anillo exterior (amarillo): grados regulares; interior (azul): grados en cuarto de tono. El
-  área de cada punto es el tiempo melódico en ese grado y las líneas, los pasos melódicos más frecuentes. El círculo
-  grande resume el álbum.}\label{fig:circulo}
-\end{figure}
+tono es como grado sostenido. Angor, con 5\,\%, queda por debajo del piso de ruido y no cuenta. Las mismas barras para
+las 36 canciones y la escala de cada una están en el apéndice (figuras~\ref{fig:g-uso} a~\ref{fig:g-escalas2}).
 
 El círculo de 24-EDO (figura~\ref{fig:circulo}) muestra qué escalas forman esos grados. Aparecen dos familias:
 \begin{itemize}
   \item \textbf{Frigia:} \fl2+ y \fl6+ sobre un frigio (Mata Zyklek, Yor Zarad y Utzp).
   \item \textbf{Dórica:} 7+, 6+ y \fl3+ sobre un dórico (Sarniezz: 7+ y \fl3+; Fabienk: 7+ y 6+).
 \end{itemize}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{2b_melodia_circulo_24edo.png}
+  \caption{Círculo de quintas en 24-EDO: el álbum (izquierda) y cada canción. Anillo amarillo: campo regular; anillo azul: campo de cuarto de tono. Área del punto: tiempo melódico en el grado; líneas grises: pasos dentro de un campo; azules: pasos entre campos.}\label{fig:circulo}
+\end{figure}
 
 La tabla~\ref{tab:familias} compara esas familias con los corpus. La frigia no es exclusiva de la banda: es el par más
 común del radif persa y el de King Gizzard. Lo que ningún corpus medido tiene es la familia dórica. El corpus indostánico
@@ -275,29 +272,53 @@ coordinación; $p$ es la fracción de desplazamientos con una mezcla igual o men
     \midrule
     Banda & Sarniezz & 15.4\,\% & 38.5\,\% & $< 0.002$ \\
     & Mata Zyklek & 12.7\,\% & 35.8\,\% & $< 0.002$ \\
-    & Fabienk & 12.7\,\% & 25.3\,\% & $< 0.002$ \\
-    & Yor Zarad & 17.8\,\% & 33.1\,\% & $< 0.002$ \\
+    & Fabienk & 12.7\,\% & 25.2\,\% & $< 0.002$ \\
+    & Yor Zarad & 17.8\,\% & 33.0\,\% & $< 0.002$ \\
     & Utzp & 11.4\,\% & 20.3\,\% & $< 0.002$ \\
-    & Angor & 4.7\,\% & 7.9\,\% & 0.002 \\
+    & Angor & 4.7\,\% & 8.0\,\% & 0.006 \\
     \midrule
-    Primus & Tommy the Cat & 19.6\,\% & 22.7\,\% & 0.002 \\
-    & My Name Is Mud & 20.8\,\% & 22.0\,\% & 0.176 \\
-    & Jerry Was a Race Car Driver & 18.2\,\% & 20.7\,\% & $< 0.002$ \\
+    Primus & Tommy the Cat & 19.6\,\% & 22.7\,\% & 0.006 \\
+    & My Name Is Mud & 20.8\,\% & 21.8\,\% & 0.218 \\
+    & Jerry Was a Race Car Driver & 18.2\,\% & 20.6\,\% & $< 0.002$ \\
     \midrule
-    King Gizzard & Flying Microtonal Banana & 5.8\,\% & 11.8\,\% & $< 0.002$ \\
-    & Doom City & 24.5\,\% & 33.8\,\% & 0.018 \\
-    & Melting & 16.9\,\% & 26.3\,\% & $< 0.002$ \\
+    King Gizzard & Flying Microtonal Banana & 5.8\,\% & 11.6\,\% & $< 0.002$ \\
+    & Doom City & 24.5\,\% & 33.7\,\% & 0.020 \\
+    & Melting & 16.9\,\% & 26.5\,\% & 0.002 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-En la banda, la mezcla observada es entre un 40 y un 65\,\% de la esperada por azar; en Primus, entre un 88 y un 95\,\%
+En la banda, la mezcla observada es entre un 35 y un 60\,\% de la esperada por azar; en Primus, entre un 86 y un 95\,\%
 (tabla~\ref{tab:haba}). Es decir, cuando la guitarra está en un cuarto de tono, el bajo tiende a acompañarla en el mismo
 campo, o a callar, mucho más de lo que daría la casualidad: la banda evita mezclar campos en vertical, como Hába. En
 Primus, donde todo cuarto de tono es error de medición, la mezcla queda cerca del azar. En Mata Zyklek y Fabienk, además,
 los cuartos de tono caen en el pulso menos que las notas regulares (16 frente a 29\,\%, y 15 frente a 34\,\%; $p < 0.002$
-en ambos), lo que es coherente con un uso melódico. \pv[: estas cifras son de corridas de mediados de noviembre; volver a
-calcularlas con las corridas finales]
+en ambos), lo que es coherente con un uso melódico.
+
+El círculo de la figura~\ref{fig:circulo} ya separaba los dos campos: el anillo amarillo es el campo regular y el azul,
+el de cuarto de tono, y la mayoría de los pasos melódicos frecuentes quedan dentro de un mismo campo. La
+figura~\ref{fig:campos-tiempo} añade el tiempo: los cuartos de tono no se reparten de forma pareja, sino que se agrupan en
+tramos de cada canción, y la mezcla de campos entre guitarra y bajo aparece en muchos compases, pero baja: casi siempre ocupa una parte
+pequeña del compás, con pocos picos. La
+figura~\ref{fig:campos-resumen} compara las tres pruebas (mezcla evitada, pasos de cuarto de tono entre las notas que ya
+tocan uno y presencia en el pulso) en la banda, los repertorios comparados y Primus. En la primera, las seis canciones de
+la banda evitan la mezcla entre un 40 y un 65\,\%, lejos del rango del control; los repertorios se reparten a ambos lados,
+y algunos llegan al nivel de la banda: «Open Water» y «Flying Microtonal Banana» de King Gizzard, «The Black Page \#1»
+de Zappa y «The Runaway» de Gentle Giant. En la figura, un punto vacío indica $p \geq 0.003$, el umbral corregido por
+Bonferroni para unas 18 canciones; por eso Angor y «Tommy the Cat» ($p = 0.006$ en la tabla~\ref{tab:haba}) aparecen
+como no significativos.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{g_campos_tiempo.png}
+  \caption{Cuartos de tono a lo largo de cada canción (eje en minutos). Franja: porcentaje de cada compás en cuarto de tono, de blanco (0\,\%) a azul oscuro (60\,\%). Barras negras: compases con guitarra y bajo en campos distintos (alto completo = 50\,\% o más).}\label{fig:campos-tiempo}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{g_campos_resumen.png}
+  \caption{Tres pruebas de separación de campos, una canción por fila. Izquierda: mezcla vertical evitada frente al azar (\%); centro: pasos de cuarto de tono entre las notas que ya están en cuarto de tono (\%); derecha: diferencia entre los cuartos de tono y las notas regulares que caen en el pulso (puntos). Azul: la banda; naranja: repertorios comparados (King Gizzard, Zappa, King Crimson y Gentle Giant); verde: Primus. Círculo vacío: no significativo ($p \ge 0.003$); franja verde: rango del control.}\label{fig:campos-resumen}
+\end{figure}
 
 \section{Metro: ciclos de 5 y de 7}\label{sec:res-metro}
 
@@ -321,19 +342,40 @@ calcularlas con las corridas finales]
   \end{tabular}
 \end{table}
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.9\textwidth]{3a_sintesis_ciclos_metricos.png}
-  \caption{Repetición $R(\ell)$ de Mata Zyklek y Fabienk. Un pico alto y aislado es un ciclo largo y estable.}
-  \label{fig:ciclos}
-\end{figure}
-
 El riff de Mata Zyklek se repite cada 20 corcheas: dos compases de 10 corcheas, es decir, de 5/4. El de Fabienk, cada 28:
 dos compases de 7/4 (tabla~\ref{tab:ciclos} y figura~\ref{fig:ciclos}). Son los compases que menciona la banda y los que
 planteaba la hipótesis. Sarniezz y Utzp, en cambio, van en 4, con picos en 32 corcheas. Los ciclos de la banda son mucho
 más estables que los de Primus ($R \approx 0.8$ frente a 0.44). Varias canciones mezclan compases dentro de la misma
-pieza: Fabienk pasa el 52\,\% del tiempo en 7, el 28\,\% en 4 y el 18\,\% en 3. \pv[: interpretación del periodo de 24
-corcheas de Angor y del de 28 de Yor Zarad]
+pieza: Fabienk pasa el 53\,\% del tiempo en compases de 7, el 18\,\% en 4 y el 9\,\% en 3. El periodo de 28 corcheas de
+Yor Zarad es, como en Fabienk, un par de compases de 7/4: el 7 domina el centro de la canción y el 4 aparece al principio
+y al final. El de 24 corcheas de Angor es un par de compases de 6/4, el compás de 83 de sus 113 compases; Angor no
+tiene referencia de oído, así que esta lectura no está contrastada.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{3a_sintesis_ciclos_metricos.png}
+  \caption{Repetición $R(\ell)$ en Mata Zyklek y Fabienk según la distancia $\ell$ en corcheas. Un pico alto y aislado es un ciclo largo y estable: 20 y 28 corcheas.}
+  \label{fig:ciclos}
+\end{figure}
+
+La figura~\ref{fig:ciclos-todos} extiende la figura~\ref{fig:ciclos} a las 36 canciones. Las de la banda tienen picos
+altos sobre un fondo también alto, porque el looper repite casi idéntico; las de Primus y de los repertorios de rock
+progresivo tienen picos más bajos sobre un fondo bajo. El radar de la figura~\ref{fig:radar-ritmico} resume el perfil
+rítmico de cada grupo con la mediana de sus canciones: la banda destaca en ostinato, más que cualquier repertorio, y
+Fabienk, que se muestra aparte, es la única con ciclos de largo desigual y con compás irregular y cambiante altos; el
+pulso constante es común a todos los grupos.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{g_ciclos_metricos.png}
+  \caption{Repetición $R(\ell)$ de las 36 canciones (eje $x$: $\ell$ en corcheas; eje $y$: $R$ de 0 a 1). Color por artista: azul, la banda; naranja, Primus; verde, King Gizzard; amarillo, Zappa; violeta, King Crimson; rojo, Gentle Giant. Las cifras sobre las barras son los mejores periodos.}\label{fig:ciclos-todos}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.55\textwidth]{g_radar_ritmico.png}
+  \caption{Perfil rítmico por grupo (mediana, 0--100; más lejos del centro, más presente el rasgo). Verde azulado: la banda (5 canciones); azul: Fabienk, aparte; naranja: Primus; amarillo: King Gizzard; rosa: Zappa; violeta: King Crimson; verde: Gentle Giant.}\label{fig:radar-ritmico}
+\end{figure}
 
 \subsection{Bucle contra compás}
 
@@ -341,6 +383,12 @@ El compás que lee la herramienta y el ciclo del riff no siempre coinciden. Para
 cae su primer tiempo (la rotación de la plantilla del bucle que mejor encaja con lo que suena). Si el compás mide lo mismo
 que el bucle o lo divide, esa fase queda fija; si mide otra cosa, la fase avanza en escalera, compás a compás; un salto
 aislado tras un silencio indica que el riff volvió a entrar por otro punto (figura~\ref{fig:bucle}).
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.92\textwidth]{bucle_compas.png}
+  \caption{Fase del riff al inicio de cada compás: cada punto es un compás (eje $x$: minuto; eje $y$: fracción del bucle). Fase fija: compás y bucle coinciden; en escalera: tienen largos distintos; salto aislado: el riff vuelve a entrar tras un silencio. Color: pulsos del compás (verde 3, azul 4, rosa 5, amarillo 6, naranja 7, violeta 8). Las dos últimas son de King Gizzard; en «Flying Microtonal Banana» no queda ningún compás que graficar.}\label{fig:bucle}
+\end{figure}
 
 \begin{table}[ht]
   \centering\small
@@ -359,45 +407,40 @@ aislado tras un silencio indica que el riff volvió a entrar por otro punto (fig
   \end{tabular}
 \end{table}
 
-En Mata Zyklek, el 93\,\% de los compases no encaja con el bucle: la herramienta lee la mayor parte de la canción en 4
+La tabla~\ref{tab:bucle} cuenta, en cada canción, los compases que no encajan. En Mata Zyklek, el 93\,\% no encaja con
+el bucle: la herramienta lee la mayor parte de la canción en 4
 (compases de 8 corcheas), mientras que el riff dura 20 corcheas. En todos los pasos de un compás al siguiente la fase
 avanza exactamente lo que mide el compás, sin saltos: es una escalera regular, como la que produciría un polímetro, un
 riff de 5 sobre un pulso de 4, tal como propone Mathémusique \citep{mathemusique2026}. La otra explicación es que la
 herramienta lea mal el compás. Los datos no permiten decidir entre las dos, y queda como pregunta para comprobar de oído.
 En Sarniezz, en cambio, compás y bucle encajan siempre: todo va en 4.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.92\textwidth]{bucle_compas.png}
-  \caption{Fase del riff al inicio de cada compás. Fase fija: el compás mide lo mismo que el bucle o lo divide. Fase en
-  escalera: compás y bucle tienen longitudes distintas. Las dos últimas canciones son de King Gizzard.}\label{fig:bucle}
-\end{figure}
-
 \section{Síntesis: un híbrido}\label{sec:res-sintesis}
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=\textwidth]{3b_sintesis_clasificacion_album.png}
-  \caption{Clasificación por corpus: percentil medio de tipicidad de cada canción frente a cada corpus (azul oscuro = más
-  parecido; 50 = pieza típica). Debajo, el percentil de cada bloque (A armonía, E escala, ¼ cuartos de tono, M metro).
-  Rayados: corpus de menos de 100 piezas, que no cuentan para el veredicto.}\label{fig:clasificacion}
-\end{figure}
 
 La figura~\ref{fig:clasificacion} reúne los cuatro bloques. Los números de cada casilla muestran de dónde sale el color:
 por ejemplo, Sarniezz da 34 en rock solo por el metro, porque su armonía da 0. El 83 de Mata Zyklek en práctica común no
 es un parecido real: Kostka-Payne tiene solo 46 piezas y solo armonía, y la armonía de Mata Zyklek es un pedal (89\,\% del
 tiempo sobre I y 6\,\% sobre V), un reparto tónica-dominante que tiene cualquier corpus tonal.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.85\textwidth]{3c_sintesis_corpus_por_bloque.png}
-  \caption{En cuántas canciones gana cada corpus en cada bloque. «Sin vecino»: ningún corpus pasa el percentil 5.}
-  \label{fig:ganadores}
+  \includegraphics[width=\textwidth]{g_clasificacion_detalle.png}
+  \caption{Clasificación del álbum por corpus. Color: percentil medio de tipicidad, de blanco (atípica) a azul oscuro (muy típica). En cada casilla, la media y el percentil de cada bloque (A armonía, E escala, \cuarto{} cuartos de tono, M metro). Asterisco y rayado: corpus de menos de 100 piezas, fuera del veredicto. En los encabezados, «clasica» es la práctica común y «hindustani», el corpus indostánico.}\label{fig:clasificacion}
 \end{figure}
 
-Si se cuenta qué corpus se parece más en cada bloque (figura~\ref{fig:ganadores}), el rock gana 8 de 24, sobre todo en
-armonía y metro: es rock modal. El radif gana 7, sobre todo en cuartos de tono. En los 9 restantes ningún corpus llega al
+Las mismas medidas para las 36 canciones, bloque por bloque, están en el apéndice (figuras~\ref{fig:g-bloques}
+y~\ref{fig:g-bloques-sintesis}).
+
+Si se cuenta qué corpus se parece más en cada bloque (figura~\ref{fig:ganadores}), el rock gana 8 de 24, la mitad de
+ellos en armonía (4 de 6 canciones): es rock modal. El radif gana 7, sobre todo en cuartos de tono. En los 9 restantes ningún corpus llega al
 percentil 5. La tabla~\ref{tab:veredictos} da el veredicto de cada canción.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{3c_sintesis_corpus_por_bloque.png}
+  \caption{Qué corpus gana cada bloque, en número de canciones. Azul: radif (7); naranja: rock (8); gris: sin vecino, ningún corpus llega al percentil 5 (9).}
+  \label{fig:ganadores}
+\end{figure}
 
 \begin{table}[ht]
   \centering\small
@@ -455,7 +498,17 @@ cuarto de tono, es decir, con una segunda neutra en lugar de la aumentada; en do
 explica la comparación de David Bennett. Utzp es el mismo esquema sobre un frigio menor (\fl3). Fabienk y Sarniezz son
 dóricos (2, \fl3, 6, \fl7), con los cuartos de tono en la melodía (7+, 6+, \fl3+) y no en el modo de los acordes.
 
+\FloatBarrier
 \subsection{Mata Zyklek}
+
+La figura~\ref{fig:mata} muestra una página del tabroll24 y el mapa de ciclos; la tarjeta y la tira de ciclos son las figuras~\ref{fig:tarjeta-mata} y~\ref{fig:tira-mata}, y su círculo armónico está en el apéndice (figura~\ref{fig:circulos1}).
+
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.78\textwidth]{mata_zyklek_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{mata_zyklek_mapa_ciclos.png}
+  \caption{Mata Zyklek. Arriba, una página del tabroll24: notas en 24-EDO (filas «¼», cuartos de tono), pulsos de cada compás («beats») y acorde debajo. Abajo, mapa de ciclos: cada barra es un tramo repetido de una voz, con su letra y su periodo; la curva gris estima las capas del looper (triángulos verdes: entra una capa; rojos: sale).}\label{fig:mata}
+\end{figure}
 
 \paragraph{Armonía.} Es un pedal: la fundamental está en I el 89\,\% del tiempo (quinta sola el 53\,\% y tríada mayor el
 34\,\%), con V (6\,\%), \fl2+ (3\,\%) y \fl VII (2\,\%). Entre compases confiables solo hay dos cambios, I5 $\to$ Vsus4
@@ -465,20 +518,34 @@ centrada en Sol\sh+ (\fl2+): la canción empieza sobre el cuarto de tono y llega
 
 \paragraph{Melodía.} Es la canción con más tiempo en cuartos de tono como grado (19.1\,\%). Los dos grados principales son
 \fl2+ (11.3\,\% del tiempo de la melodía) y \fl6+ (5.2\,\%); \fl2+ y 1+ aparecen en todas las vueltas del ciclo. En el bajo,
-lo que más varía entre vueltas es Sol\sh+ $\leftrightarrow$ Sol: la fundamental y su vecina un cuarto de tono arriba.
+lo que más varía entre vueltas es Sol\sh+ $\leftrightarrow$ Sol: la fundamental y su segunda neutra (\fl2+), tres cuartos de tono más arriba.
 
 \paragraph{Metro y comparación.} El riff se repite cada 20 corcheas (dos compases de 5/4, $R = 0.82$). En el test por bloques
 su armonía tiene vecinos en el rock (percentil 79.5): el rock tiene piezas de pedal, aunque frente al \emph{centro} del rock
 quede lejos (12 en la matriz). Lo que no tiene vecino es el metro.
 
-\begin{figure}[ht]
+\FloatBarrier
+\subsection{Fabienk}
+
+La figura~\ref{fig:fabienk-tarjeta} reúne la tarjeta y la tira de ciclos; la figura~\ref{fig:fabienk}, una página del tabroll24 y el mapa de ciclos.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=0.78\textwidth]{mata_zyklek_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{mata_zyklek_mapa_ciclos.png}
-  \caption{Mata Zyklek: una página del tabroll24 (arriba) y el mapa de ciclos y capas (abajo).}\label{fig:mata}
+  \begin{subfigure}[c]{0.42\textwidth}\centering
+    \includegraphics[width=\linewidth]{fabienk_tarjeta.png}\caption{Tarjeta.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[c]{0.55\textwidth}\centering
+    \includegraphics[width=\linewidth]{fabienk_tira_de_ciclos.png}\caption{Ciclos repetidos.}
+  \end{subfigure}
+  \caption{Fabienk: tarjeta de medidas crudas (izquierda) y tira de ciclos (derecha; cada fila es un ciclo de la voz indicada, grave o aguda; color = grado de la fundamental, $\times$ = vueltas, s = duración de cada vuelta). Centro Mi, modo 2, \fl3, 6, \fl7; compases confiables: 84.7\,\%; acierto F 45.4 en la melodía y 81.6 en la fundamental.}\label{fig:fabienk-tarjeta}
 \end{figure}
 
-\subsection{Fabienk}
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.7\textwidth]{fabienk_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{fabienk_mapa_ciclos.png}
+  \caption{Fabienk: una página del tabroll24 (arriba) y el mapa de ciclos (abajo); misma lectura que la figura~\ref{fig:mata}.}\label{fig:fabienk}
+\end{figure}
 
 \paragraph{Armonía.} Es la canción con más movimiento armónico: 86 cambios entre compases confiables, la mitad por quintas
 (51\,\%), seguidos de segundas (28\,\%) y terceras abajo (21\,\%). Tres fundamentales se reparten el tiempo casi por igual:
@@ -489,17 +556,33 @@ El centro es dudoso (margen 0.015): el bajo descansa en \fl VII, y por eso se us
 \paragraph{Melodía.} Los cuartos de tono ocupan el 14.2\,\% de la melodía, concentrados en 7+ (4.6\,\%) y 6+ (4.3\,\%); 6+
 aparece en todas las vueltas del ciclo.
 
-\paragraph{Metro.} El ciclo dura 28 corcheas, dos compases de 7/4 ($R = 0.87$, el más estable del álbum). La canción pasa
-el 52\,\% del tiempo en 7, el 28\,\% en 4 y el 18\,\% en 3. Sin vecino en armonía, cuartos de tono y metro.
+\paragraph{Metro.} El ciclo dura 28 corcheas, dos compases de 7/4 ($R = 0.87$, empatado con Utzp como el más estable del álbum). La canción pasa
+el 53\,\% del tiempo en compases de 7, el 18\,\% en 4 y el 9\,\% en 3. La tarjeta de la figura~\ref{fig:fabienk-tarjeta}
+cuenta compases y no tiempo: 41\,\% de 7, 25\,\% de 4 y 15\,\% de 3; como el compás de 7 es el más largo, pesa más en
+tiempo que en número. Sin vecino en armonía, cuartos de tono y metro.
 
-\begin{figure}[ht]
+\clearpage
+\subsection{Sarniezz}
+
+La figura~\ref{fig:sarniezz-tarjeta} reúne la tarjeta y la tira de ciclos; la figura~\ref{fig:sarniezz}, una página del tabroll24 y el mapa de ciclos.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=0.7\textwidth]{fabienk_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{fabienk_mapa_ciclos.png}
-  \caption{Fabienk: una página del tabroll24 y el mapa de ciclos y capas.}\label{fig:fabienk}
+  \begin{subfigure}[c]{0.42\textwidth}\centering
+    \includegraphics[width=\linewidth]{sarniezz_tarjeta.png}\caption{Tarjeta.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[c]{0.55\textwidth}\centering
+    \includegraphics[width=\linewidth]{sarniezz_tira_de_ciclos.png}\caption{Ciclos repetidos.}
+  \end{subfigure}
+  \caption{Sarniezz: tarjeta y tira de ciclos; misma lectura que la figura~\ref{fig:fabienk-tarjeta}. Centro Mi, modo 2, \fl3, 6, \fl7; compases confiables: 57.6\,\%; acierto F 44.9 en la melodía y 57.5 en la fundamental.}\label{fig:sarniezz-tarjeta}
 \end{figure}
 
-\subsection{Sarniezz}
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.7\textwidth]{sarniezz_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{sarniezz_mapa_ciclos.png}
+  \caption{Sarniezz: una página del tabroll24 (arriba) y el mapa de ciclos (abajo); misma lectura que la figura~\ref{fig:mata}.}\label{fig:sarniezz}
+\end{figure}
 
 \paragraph{Armonía.} La fundamental más usada no es la tónica sino \fl III (40\,\%), seguida de \fl VII (29\,\%) y I
 (24\,\%). El vaivén \fl III $\leftrightarrow$ \fl VIIsus2 se repite 31 veces. El 59\,\% de los cambios va por quintas, pero
@@ -514,14 +597,28 @@ Es un riff cromático de cuartos de tono, no una escala con dos grados neutros.
 
 \paragraph{Metro.} Va en 4: el ciclo dura 32 corcheas. Sin vecino en armonía, escala y cuartos de tono.
 
-\begin{figure}[ht]
+\clearpage
+\subsection{Yor Zarad}
+
+La figura~\ref{fig:yor_zarad-tarjeta} reúne la tarjeta y la tira de ciclos; la figura~\ref{fig:yor}, una página del tabroll24 y el mapa de ciclos.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=0.7\textwidth]{sarniezz_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{sarniezz_mapa_ciclos.png}
-  \caption{Sarniezz: una página del tabroll24 y el mapa de ciclos y capas.}\label{fig:sarniezz}
+  \begin{subfigure}[c]{0.42\textwidth}\centering
+    \includegraphics[width=\linewidth]{yor_zarad_tarjeta.png}\caption{Tarjeta.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[c]{0.55\textwidth}\centering
+    \includegraphics[width=\linewidth]{yor_zarad_tira_de_ciclos.png}\caption{Ciclos repetidos.}
+  \end{subfigure}
+  \caption{Yor Zarad: tarjeta y tira de ciclos; misma lectura que la figura~\ref{fig:fabienk-tarjeta}. Centro Sol, modo \fl2+, 3, \fl6+, \fl7; compases confiables: 75.2\,\%; acierto F 36.8 en la melodía.}\label{fig:yor_zarad-tarjeta}
 \end{figure}
 
-\subsection{Yor Zarad}
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.75\textwidth]{yor_zarad_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{yor_zarad_mapa_ciclos.png}
+  \caption{Yor Zarad: una página del tabroll24 (arriba) y el mapa de ciclos (abajo); misma lectura que la figura~\ref{fig:mata}.}\label{fig:yor}
+\end{figure}
 
 \paragraph{Armonía.} La fundamental está en I el 85\,\% del tiempo y en \fl2+ el 13\,\%: los 11 cambios entre compases
 confiables son microtonales, todos entre I y \fl II+5 (el vaivén I5 $\leftrightarrow$ \fl II+5 aparece 6 veces). Es decir,
@@ -533,14 +630,28 @@ Zyklek.
 
 \paragraph{Metro.} El ciclo dura 28 corcheas ($R = 0.80$). Sin vecino en metro.
 
-\begin{figure}[ht]
+\clearpage
+\subsection{Utzp}
+
+La figura~\ref{fig:utzp-tarjeta} reúne la tarjeta y la tira de ciclos; la figura~\ref{fig:utzp}, una página del tabroll24 y el mapa de ciclos.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=0.75\textwidth]{yor_zarad_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{yor_zarad_mapa_ciclos.png}
-  \caption{Yor Zarad: una página del tabroll24 y el mapa de ciclos y capas.}\label{fig:yor}
+  \begin{subfigure}[c]{0.42\textwidth}\centering
+    \includegraphics[width=\linewidth]{utzp_tarjeta.png}\caption{Tarjeta.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[c]{0.55\textwidth}\centering
+    \includegraphics[width=\linewidth]{utzp_tira_de_ciclos.png}\caption{Ciclos repetidos.}
+  \end{subfigure}
+  \caption{Utzp: tarjeta y tira de ciclos; misma lectura que la figura~\ref{fig:fabienk-tarjeta}. Centro Mi, modo \fl2+, \fl3, \fl6+, \fl7; compases confiables: 82.2\,\%.}\label{fig:utzp-tarjeta}
 \end{figure}
 
-\subsection{Utzp}
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.75\textwidth]{utzp_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{utzp_mapa_ciclos.png}
+  \caption{Utzp: una página del tabroll24 (arriba) y el mapa de ciclos (abajo); misma lectura que la figura~\ref{fig:mata}.}\label{fig:utzp}
+\end{figure}
 
 \paragraph{Armonía.} Otro pedal: I el 96\,\% del tiempo (sus4 el 52\,\% y quinta sola el 31\,\%) y \fl VII el 4\,\%. De los
 9 cambios, el 78\,\% son por segunda. La introducción está sobre Si (5) y entra a Mi por quinta abajo, como una cadencia de
@@ -550,17 +661,31 @@ dominante a tónica a gran escala.
 \fl6+ aparece en todas las vueltas.
 
 \paragraph{Metro y comparación.} Va en 4 (32 corcheas). Es la única canción con veredicto «síntesis de lenguajes
-existentes»: su armonía es típica del rock (89), sus cuartos de tono del radif (32) y su metro del rock y del jazz (100),
+existentes»: en percentil por vecinos, su armonía es típica del rock (89), sus cuartos de tono del radif (32) y su metro del rock y del jazz (100),
 pero ningún corpus explica la combinación.
 
-\begin{figure}[ht]
+\clearpage
+\subsection{Angor}
+
+La figura~\ref{fig:angor-tarjeta} reúne la tarjeta y la tira de ciclos; la figura~\ref{fig:angor}, una página del tabroll24 y el mapa de ciclos.
+
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=0.75\textwidth]{utzp_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{utzp_mapa_ciclos.png}
-  \caption{Utzp: una página del tabroll24 y el mapa de ciclos y capas.}\label{fig:utzp}
+  \begin{subfigure}[c]{0.42\textwidth}\centering
+    \includegraphics[width=\linewidth]{angor_tarjeta.png}\caption{Tarjeta.}
+  \end{subfigure}\hfill
+  \begin{subfigure}[c]{0.55\textwidth}\centering
+    \includegraphics[width=\linewidth]{angor_tira_de_ciclos.png}\caption{Ciclos repetidos.}
+  \end{subfigure}
+  \caption{Angor: tarjeta y tira de ciclos; misma lectura que la figura~\ref{fig:fabienk-tarjeta}. Centro Sol, modo \fl2+, \fl3, 6, \fl7; compases confiables: 88.1\,\%.}\label{fig:angor-tarjeta}
 \end{figure}
 
-\subsection{Angor}
+\begin{figure}[p]
+  \centering
+  \includegraphics[width=0.75\textwidth]{angor_tabroll24.png}\\[0.5em]
+  \includegraphics[width=\textwidth]{angor_mapa_ciclos.png}
+  \caption{Angor: una página del tabroll24 (arriba) y el mapa de ciclos (abajo); misma lectura que la figura~\ref{fig:mata}.}\label{fig:angor}
+\end{figure}
 
 \paragraph{Armonía.} Un pedal casi absoluto: la fundamental está en I el 99.5\,\% del tiempo (i el 66\,\% y I5 el 31\,\%), sin
 cambios entre compases confiables. En el test por bloques su armonía es idéntica a la de «Flying Microtonal Banana» de King
@@ -571,10 +696,3 @@ como evidencia. Aun así, \fl2+ aparece en el 92\,\% de las vueltas.
 
 \paragraph{Metro.} La voz aguda repite un ciclo de 14.5~s y el mejor periodo es de 24 corcheas ($R = 0.83$); la voz grave no
 tiene ciclos. Sin vecino en metro. Angor no tiene referencia de oído, así que sus cifras no se pueden evaluar.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.75\textwidth]{angor_tabroll24.png}\\[0.5em]
-  \includegraphics[width=\textwidth]{angor_mapa_ciclos.png}
-  \caption{Angor: una página del tabroll24 y el mapa de ciclos y capas.}\label{fig:angor}
-\end{figure}

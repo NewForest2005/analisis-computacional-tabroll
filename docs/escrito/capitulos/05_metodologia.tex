@@ -43,6 +43,13 @@ esa división: mide cada nota en la rejilla completa de 24-EDO.
 El punto de partida fue la transcripción de Sarniezz en MuseScore, leída como piano roll en un primer cuaderno de Python
 (figura~\ref{fig:primer-cuaderno}).
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{cuaderno_original_sarniezz.png}
+  \caption{Primer cuaderno: la partitura de Sarniezz en piano roll (primeras 64 negras). Aún no se medía el audio.}
+  \label{fig:primer-cuaderno}
+\end{figure}
+
 \section{El primer algoritmo y por qué no bastó}\label{sec:primer-algoritmo}
 
 El primer algoritmo tomó la pista de bajo de Sarniezz y le aplicó pYIN (de Do2 a Do7, ventana de 2048 muestras), que da
@@ -62,39 +69,32 @@ Las tres pruebas mostraron límites (figura~\ref{fig:primer-algoritmo}):
   en toda la canción, los MFCC no bastan para reconocer la sección.
 \end{itemize}
 
-Además, la partitura publicada resultó no ser un criterio fiable: también se equivoca, y la de Fabienk corresponde a la
-versión en vivo. La conclusión fue que había que pasar de describir la señal a \emph{transcribir} notas, compases y
-acordes, y que la referencia tenía que corregirse de oído.
-
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.75\textwidth]{cuaderno_original_sarniezz.png}
-  \caption{Primer cuaderno: la transcripción de MuseScore de Sarniezz en piano roll (primeras 64 negras).}
-  \label{fig:primer-cuaderno}
-\end{figure}
-
-\begin{figure}[ht]
+\begin{figure}[htbp]
   \centering
   \begin{subfigure}{\textwidth}\centering
     \includegraphics[width=0.8\linewidth]{original_pyin.png}
-    \caption{Contorno pYIN del bajo de Sarniezz: una sola frecuencia por instante.}
+    \caption{pYIN da una sola altura por instante: no ve acordes.}
   \end{subfigure}\\[0.6em]
   \begin{subfigure}{0.6\textwidth}\centering
     \includegraphics[width=\linewidth]{original_cents.png}
-    \caption{Desviación respecto del semitono: siempre entre $-50$ y $+50$ cents.}
+    \caption{La desviación del semitono nunca pasa de $\pm50$ cents: el cuarto de tono queda ambiguo.}
   \end{subfigure}\hfill
   \begin{subfigure}{0.36\textwidth}\centering
     \includegraphics[width=\linewidth]{original_secciones_mlp.png}
-    \caption{Red por sección: 3 de 7 aciertos.}
+    \caption{Matriz de confusión de la red por sección: acierta 3 de 7.}
   \end{subfigure}
-  \caption{Resultados del primer algoritmo.}\label{fig:primer-algoritmo}
+  \caption{Primer algoritmo: por qué no bastó.}\label{fig:primer-algoritmo}
 \end{figure}
+
+Además, la partitura publicada resultó no ser un criterio fiable: también se equivoca, y la de Fabienk corresponde a la
+versión en vivo. La conclusión fue que había que pasar de describir la señal a \emph{transcribir} notas, compases y
+acordes, y que la referencia tenía que corregirse de oído.
 
 El cuaderno empezó en Google Colab y pasó a un repositorio de GitHub cuando la memoria disponible dejó de alcanzar.
 
 \section{La idea del tabroll}\label{sec:idea-tabroll}
 
-Al estudiar la armonía de Primus se encontró el formato de Hooktheory: fragmentos de canciones transcritos a mano en un
+Al estudiar la armonía de Primus se encontró el formato de Hooktheory \citep{hooktheory}: fragmentos de canciones transcritos a mano en un
 piano roll dividido por compases, con la melodía arriba y el acorde de cada compás abajo. Hooktheory tiene una sola
 canción de la banda, el riff de Fabienk, en doce notas por octava.
 
@@ -103,17 +103,17 @@ generación automática desde el audio oficial de cualquier canción, sin transc
 (figura~\ref{fig:tabroll}). En el tramo de Fabienk de 4:42 a 4:52 (la melodía «Fabien»), la voz aguda del tabroll da la
 misma nota que la partitura corregida el 78\,\% del tiempo, y 6 de sus 8 cuartos de tono están en la partitura.
 
-\begin{figure}[ht]
+\begin{figure}[htbp]
   \centering
   \begin{subfigure}{0.44\textwidth}\centering
     \includegraphics[width=\linewidth]{hooktheory_fabienk.png}
-    \caption{Hooktheory, Fabienk (transcrita a mano): Mi dórico, 4/4 y 12 notas por octava.}
+    \caption{Hooktheory (a mano): Mi dórico, 4/4, 12 notas.}
   \end{subfigure}\hfill
   \begin{subfigure}{0.53\textwidth}\centering
     \includegraphics[width=\linewidth]{tabroll_fabienk.png}
-    \caption{Tabroll de Fabienk de 4:42 a 4:52, desde el audio: los cuartos de tono caen en las filas «+» (azul).}
+    \caption{Tabroll desde el audio (4:42--4:52): los cuartos de tono, en las filas «+» azules.}
   \end{subfigure}
-  \caption{De Hooktheory al tabroll.}\label{fig:tabroll}
+  \caption{De Hooktheory al tabroll: Fabienk en 12 notas y en 24.}\label{fig:tabroll}
 \end{figure}
 
 \section{Las primeras comparaciones con estilos}\label{sec:primeras-comparaciones}
@@ -125,20 +125,33 @@ La comparación con estilos también pasó por varias versiones antes del test p
   quedó lejos: a una distancia de Jensen-Shannon de 0.40 a 0.59, cuando los álbumes entre sí no pasan de 0.07.
   \item \textbf{Tarjetas al estilo de Hooktheory.} Las cinco métricas de Hooktheory son percentiles frente a su base de unas
   40\,000 canciones y no se pueden recalcular fuera de ella, así que se usaron valores crudos y las de Hooktheory solo
-  como contexto.
+  como contexto. El resultado es una tarjeta por canción (figura~\ref{fig:tarjeta-mata}).
   \item \textbf{Pruebas de estilo con reglas.} Se definieron reglas con cifras publicadas para el rock, la práctica común,
   el jazz, la pentatónica, los tonos enteros, el dodecafonismo, el minimalismo y la música microtonal. Sirvieron para
   descartar: el jazz, la práctica común, los tonos enteros y el dodecafonismo no encajan en ninguna canción, y las
   fundamentales de la banda caen casi por completo en la pentatónica menor (del 86 al 100\,\% del tiempo). Pero los
-  umbrales de las reglas los fijaba el autor, y eso era una debilidad.
+  umbrales de las reglas los fijaba el autor, y eso era una debilidad. Los veredictos y las distancias de esta versión
+  están en el apéndice (figuras~\ref{fig:g-distancias} a~\ref{fig:g-veredictos2}).
   \item \textbf{Matriz de verosimilitud.} Para no depender de umbrales propios, se pasó a ubicar cada canción dentro de la
   distribución real de cada estilo, con corpus: es la matriz de la sección~\ref{sec:comparacion}.
   \item \textbf{Radares.} Una figura de radar con una punta por estilo, separada en armonía, melodía y ritmo, resumía el
-  perfil de cada canción. La primera versión ponía cada punta en su propia escala, lo que impedía comparar puntas; se
-  corrigió usando la verosimilitud.
+  perfil de cada canción (figura~\ref{fig:radar-mata}). La primera versión ponía cada punta en su propia escala, lo que
+  impedía comparar puntas; se corrigió usando la verosimilitud.
   \item \textbf{Test por bloques.} Finalmente, la comparación se separó en bloques y se calibró con el error medido en
   Primus (sección~\ref{sec:comparacion}).
 \end{enumerate}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{mata_zyklek_tarjeta.png}
+  \caption{Tarjeta de Mata Zyklek. Arriba, centro, modo, tempo, compases, ámbito y acorde más usado; abajo, seis métricas en valores crudos (0--100 o \% del tiempo; no son percentiles). Compases confiables: 78.3\,\% del tiempo; acierto contra la referencia: F 66.5 en la melodía y 95.4 en la fundamental.}\label{fig:tarjeta-mata}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{mata_zyklek_radar_estilos.png}
+  \caption{Radar de estilos de Mata Zyklek (versión descartada, 15 de noviembre). Izquierda: armonía; derecha: melodía. Cada punta es un estilo en escala de 0 a 100: más lejos del centro, más parecido.}\label{fig:radar-mata}
+\end{figure}
 
 También la lectura de los cuartos de tono cambió. La primera versión medía solo la \emph{cantidad} de tiempo en cuartos
 de tono, y la banda salía con poca microtonalidad, porque las fundamentales de los acordes casi nunca caen en cuarto de
@@ -247,6 +260,28 @@ al menos dos ventanas son los periodos candidatos. Cada cuadro de la canción se
 y los tramos seguidos con el mismo periodo forman un \emph{ciclo}. Los ciclos con las mismas notas reciben la misma letra
 (A, B, C\dots), lo que produce el mapa de ciclos de cada canción (capítulo~\ref{cap:resultados}).
 
+La figura~\ref{fig:patron-ciclo} muestra dos de esos patrones en Mata Zyklek: la vuelta A de la voz aguda, de 10 pulsos,
+y la vuelta A del bajo, de 5. Cada fila es un grado en 24-EDO y cada rectángulo, una nota del patrón consensuado entre
+vueltas. La figura~\ref{fig:tira-mata} resume, para la misma canción, qué acordes trae cada ciclo y cuántas veces se
+repite.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.6\textwidth}\centering
+    \includegraphics[width=\linewidth]{g_ciclo_aguda_mata.png}\caption{Voz aguda, ciclo A (10 pulsos).}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.37\textwidth}\centering
+    \includegraphics[width=\linewidth]{g_ciclo_grave_mata.png}\caption{Bajo, ciclo A (5 pulsos).}
+  \end{subfigure}
+  \caption{Patrones de ciclo de Mata Zyklek en 24-EDO. Cada fila es un grado y cada rectángulo, una nota que se repite en todas las vueltas. «Beats»: pulsos.}\label{fig:patron-ciclo}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.75\textwidth]{mata_zyklek_tira_de_ciclos.png}
+  \caption{Tira de ciclos de Mata Zyklek (centro Sol; modo \fl2+, 3, \fl6+, \fl7). Cada fila es un ciclo; cada círculo, la fundamental de un compás, con el color de su grado. A la derecha, número de vueltas ($\times$) y duración de cada vuelta.}\label{fig:tira-mata}
+\end{figure}
+
 \subsection{Consenso entre vueltas y atracción al registro}\label{sec:met-consenso}
 
 Dentro de un ciclo de periodo $P \ge 2$~s, la saliencia de cada cuadro se reemplaza por su promedio con los cuadros
@@ -343,6 +378,15 @@ Sol, la tercera neutra ($I = \{0, 7, 14\}$) obtendría el puntaje 1.48 y el acor
 \]
 con $a$ el acuerdo medio entre vueltas del bajo y de la voz aguda (o 1 si la canción no tiene ciclos, y 0.6 si el compás
 queda fuera de ellos en una canción que sí los tiene) y la cobertura, la fracción del compás con notas.
+
+La figura~\ref{fig:tabroll-armonia} muestra el resultado en Sarniezz: cada columna es un compás con el acorde leído en
+24-EDO debajo (grado, calidad y nombre), y el color de la franja inferior indica la confianza.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{g_tabroll_armonia_sarniezz.png}
+  \caption{Tabroll con armonía (Sarniezz). Arriba, las notas en 24-EDO; debajo de cada compás, el acorde leído: grado, calidad, función y nombre. «Beats»: pulsos del compás.}\label{fig:tabroll-armonia}
+\end{figure}
 
 \subsection{Centro, modo y funciones}
 
@@ -500,6 +544,15 @@ respecto de la tónica) y cómo se cambia de fundamental (intervalo del cambio y
 verosimilitud de una canción en un estilo es el percentil de tipicidad respecto del centro, promediado entre esas dos
 partes; con menos de tres cambios de acorde, solo cuenta la de las fundamentales. Las fundamentales de la canción se
 toman de los compases confiables.
+
+La figura~\ref{fig:matriz-rock-pop} muestra la forma del resultado con los dos estilos más cercanos, rock y pop. Cada
+celda es un percentil: 50 es una pieza típica del estilo y 0, una más rara que todas las del corpus.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.6\textwidth]{g_matriz_rock_pop.png}
+  \caption{Matriz de verosimilitud frente a rock (RS~200) y pop (Hooktheory). Cada celda es un percentil: 50 = típica del estilo; 0 = más rara que todo el corpus. Junto al nombre, el tiempo con la fundamental en cuarto de tono.}\label{fig:matriz-rock-pop}
+\end{figure}
 
 \subsection{Test por bloques}
 

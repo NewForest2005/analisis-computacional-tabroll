@@ -1,6 +1,6 @@
 % Borrador del escrito del trabajo de grado.
 % Compilar con XeLaTeX:  make escrito   (o: latexmk -xelatex docs/escrito/escrito.tex)
-% Cada capítulo está en capitulos/; las figuras se toman de presentacion/img/.
+% Cada capítulo está en capitulos/; las figuras se toman de figuras/limpias/, figuras/ y presentacion/img/.
 \documentclass[11pt,a4paper,oneside]{report}
 
 \usepackage[a4paper,margin=2.5cm]{geometry}
@@ -15,11 +15,21 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{csquotes}
+\usepackage[section]{placeins}
 \usepackage[round,authoryear]{natbib}
 \usepackage[algoruled,linesnumbered,spanish,onelanguage]{algorithm2e}
 \usepackage[hidelinks]{hyperref}
 
-\graphicspath{{../../presentacion/img/}{figuras/}}
+% Primero las versiones sin títulos ni notas (los textos van en las leyendas del documento).
+\graphicspath{{figuras/limpias/}{../../presentacion/img/}{figuras/}}
+% Flotantes: más espacio en página para figuras, para que no se acumulen al final de un capítulo.
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{5}
 \setlist{itemsep=2pt,topsep=4pt}
 \captionsetup{font=small,labelfont=bf}
 \setlength{\parskip}{0.35em}
@@ -60,12 +70,15 @@
   {\small\textcolor{red!70!black}{Primer borrador. Las marcas en rojo («por verificar») y en naranja («Pendiente») señalan lo que falta comprobar o completar.}\par}
 \end{titlepage}
 
+\pagenumbering{roman}
 \input{capitulos/00_resumen}
 
 \tableofcontents
 \listoffigures
 \listoftables
 
+\cleardoublepage
+\pagenumbering{arabic}
 \input{capitulos/01_introduccion}
 \input{capitulos/02_marco_teorico}
 \input{capitulos/03_estado_del_arte}
@@ -82,6 +95,7 @@
 \input{capitulos/apendices}
 \input{capitulos/apendice_experimentos}
 \input{capitulos/apendice_tablas}
+\input{capitulos/apendice_galeria}
 \input{capitulos/apendice_glosario}
 
 \end{document}

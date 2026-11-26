@@ -1,30 +1,35 @@
 \chapter*{Resumen}
 \addcontentsline{toc}{chapter}{Resumen}
 
-Angine de Poitrine es un dúo de Saguenay (Quebec) que toca con guitarra y bajo de trastes de cuarto de tono, construye
-sus canciones con un looper y usa compases poco comunes. Este trabajo pregunta si su música encaja en un estilo
-existente o si es una propuesta nueva, y responde la pregunta midiendo desde el audio. Para ello se construyó una
-herramienta abierta que transcribe en 24-EDO (veinticuatro divisiones iguales de la octava): separa la guitarra y el
-bajo, estima la altura con una saliencia armónica en una rejilla de 25 cents, usa la repetición del looper para
-estabilizar la transcripción, segmenta la canción en compases y asigna a cada compás un acorde con las calidades de
-Piston extendidas a 24-EDO, sus funciones (Riemann) y sus ejes (Lendvai). La salida principal es el \emph{tabroll}, un
-piano roll de 24 filas por octava con los acordes debajo.
+Este proyecto presenta un análisis computacional de la identidad musical de Angine de Poitrine, un dúo de Saguenay
+(Quebec) que toca con guitarra y bajo de trastes de cuarto de tono, construye sus canciones con un looper y usa compases
+poco comunes. El estudio se centra en la microtonalidad, la armonía, la melodía y la estructura rítmica del álbum
+\emph{Vol.~II}, y utiliza grabaciones de audio, transcripciones simbólicas y datos de referencia asociados a las obras
+analizadas. Las alturas se representan mediante MIDI fraccionario, cents y una rejilla de 24-EDO (veinticuatro divisiones
+iguales de la octava), con pasos equivalentes a cuartos de tono. A partir de estas representaciones se estiman
+frecuencias fundamentales, perfiles de altura, funciones armónicas, progresiones, ciclos y patrones métricos. El
+procesamiento incorpora separación de fuentes, detección de altura, autocorrelación y descriptores espectrales, y se
+reúne en una herramienta abierta cuya salida principal es el \emph{tabroll}, un piano roll de 24 filas por octava con
+los acordes de cada compás debajo.
 
-La herramienta se evaluó contra partituras corregidas de oído, con arbitrajes a ciegas y una canción reservada como
-prueba ciega. La fundamental del acorde acierta en promedio el 85\,\% en los compases confiables, mientras que la
-melodía acierta el 49\,\%; la diferencia se explica por la forma en que se decide la armonía (peso del bajo, suma
-sobre las vueltas del loop, independencia de la octava y resolución por compás). Con esa base, cada canción del álbum
-\emph{Vol.~II} se resumió en cuatro bloques de rasgos (armonía, escala, cuartos de tono y metro) y se comparó con seis
-corpus de estilos mediante la distancia de Jensen-Shannon y un percentil de tipicidad, después de aplicar a los corpus
-el error de medición de la propia herramienta, estimado con canciones de control.
+La herramienta se evaluó contra partituras corregidas de oído: la fundamental del acorde acierta en promedio el
+85\,\% en los compases confiables, y la melodía, el 49\,\%. Las características obtenidas se organizan en cuatro bloques
+(armonía, escala, cuartos de tono y metro), y cada bloque se compara con corpus de rock, práctica común, jazz y pop, y
+con dos tradiciones modales con microtonos, el radif persa y la música indostánica. La similitud entre canciones y
+corpus se cuantifica mediante distribuciones normalizadas, la divergencia de Jensen-Shannon, percentiles y vecinos
+estadísticos. Primus se emplea como control para estimar el error de medición en la identificación de cuartos de tono y
+de rasgos métricos, y ese error se aplica a los corpus antes de comparar. King Gizzard and the Lizard Wizard, Frank
+Zappa, King Crimson y Gentle Giant se incluyen como repertorios comparativos de rock microtonal y rock progresivo.
 
-Los resultados indican que la banda es un híbrido con un elemento propio. En armonía, ninguna canción es típica de
-ningún corpus (máximo 17.7 sobre 50) y el 37.5\,\% de los casos queda sin vecino, frente al 5.2\,\% en piezas reales de
-rock. En melodía, dos grados en cuarto de tono concentran entre el 48 y el 82\,\% de los cuartos de tono de cada
-canción: son grados fijos de la escala, no adornos, y forman dos familias (frigia y dórica), de las cuales la dórica no
-aparece en ningún corpus medido. En metro, los ciclos del looper muestran periodos de 20 y 28 corcheas, compatibles con
-compases de 5 y de 7 tiempos. La conclusión es que la música de la banda no corresponde a un estilo existente, sino a
-una recombinación de lenguajes conocidos con un rasgo nuevo: los cuartos de tono como grados fijos de la escala.
+Los resultados muestran que Angine de Poitrine presenta afinidades parciales con distintos corpus según la dimensión
+evaluada. En armonía, ninguna canción es típica de ningún corpus (máximo 17.7 sobre 50). En melodía, dos grados en
+cuarto de tono concentran entre el 48 y el 82\,\% de los cuartos de tono de cada canción: son grados fijos de la escala,
+no adornos, y forman dos familias, frigia y dórica, de las cuales la dórica no aparece en ningún corpus medido. En
+metro, los ciclos del looper tienen periodos de 20 y 28 corcheas, compatibles con compases de 5 y de 7 tiempos. En el
+conjunto de los cuatro bloques, el 37.5\,\% de los casos queda sin vecino, frente al 5.2\,\% de las piezas reales de
+rock. La armonía, la microtonalidad melódica, la repetición cíclica y la métrica irregular no convergen en una única
+categoría estilística. En consecuencia, el proyecto propone interpretar la identidad de la banda como una síntesis
+particular de lenguajes musicales existentes, con un rasgo propio: los cuartos de tono como grados fijos de la escala.
 
 \medskip
 \noindent\textbf{Palabras clave:} microtonalidad, 24-EDO, transcripción automática, recuperación de información musical,
@@ -33,4 +38,34 @@ armonía funcional, corpus de estilos, divergencia de Jensen-Shannon, Angine de 
 \chapter*{Abstract}
 \addcontentsline{toc}{chapter}{Abstract}
 
-\pendiente{traducir el resumen al inglés cuando el texto en español quede estable.}
+This project presents a computational analysis of the musical identity of Angine de Poitrine, a duo from Saguenay
+(Quebec) who play a guitar and a bass with quarter-tone frets, build their songs with a looper and use uncommon meters.
+The study focuses on the microtonality, harmony, melody and rhythmic structure of the album \emph{Vol.~II}, and draws on
+audio recordings, symbolic transcriptions and reference data associated with the works analysed. Pitch is represented as
+fractional MIDI, cents and a 24-EDO grid (twenty-four equal divisions of the octave), whose steps are quarter tones. From
+these representations the study estimates fundamental frequencies, pitch profiles, harmonic functions, progressions,
+cycles and metric patterns. The processing combines source separation, pitch detection, autocorrelation and spectral
+descriptors, and is gathered in an open tool whose main output is the \emph{tabroll}, a piano roll with 24 rows per
+octave and the chord of each bar underneath.
+
+The tool was evaluated against scores corrected by ear: the chord root is correct on average in 85\,\% of the reliable
+bars, and the melody in 49\,\%. The extracted features are organised into four blocks (harmony, scale, quarter tones and
+meter), and each block is compared with corpora of rock, common-practice, jazz and pop music, and with two modal
+traditions that use microtones, the Persian radif and Hindustani music. Similarity between songs and corpora is
+quantified with normalised distributions, the Jensen-Shannon divergence, percentiles and statistical neighbours. Primus
+serves as a control to estimate the measurement error in identifying quarter tones and metric features, and that error is
+applied to the corpora before comparing. King Gizzard and the Lizard Wizard, Frank Zappa, King Crimson and Gentle Giant
+are included as comparison repertoires of microtonal and progressive rock.
+
+The results show that Angine de Poitrine has partial affinities with different corpora depending on the dimension
+evaluated. In harmony, no song is typical of any corpus (at most 17.7 out of 50). In melody, two quarter-tone degrees
+account for 48 to 82\,\% of each song's quarter tones: they are fixed scale degrees, not ornaments, and they form two
+families, Phrygian and Dorian, the Dorian one appearing in none of the corpora measured. In meter, the looper cycles have
+periods of 20 and 28 eighth notes, consistent with bars of 5 and 7 beats. Across the four blocks, 37.5\,\% of the cases
+have no neighbour, against 5.2\,\% for real rock pieces. Harmony, melodic microtonality, cyclic repetition and irregular
+meter do not converge on a single stylistic category. The project therefore proposes to read the band's identity as a
+particular synthesis of existing musical languages, with a feature of its own: quarter tones as fixed scale degrees.
+
+\medskip
+\noindent\textbf{Keywords:} microtonality, 24-EDO, automatic transcription, music information retrieval, functional
+harmony, style corpora, Jensen-Shannon divergence, Angine de Poitrine.

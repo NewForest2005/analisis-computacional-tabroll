@@ -69,8 +69,11 @@ conserva la paridad.
 \end{proof}
 
 Cada órbita se llama un \emph{campo}. Alois Hába armonizaba dentro de un solo campo y pasaba de uno al otro por la
-melodía, lo que se ha llamado «desplazamiento de campos» \citep{little2019}. \pendiente{citar la fuente primaria de Hába
-(los dos estudios de \texttt{references/haba/}).} En las figuras del círculo de 24-EDO
+melodía, lo que se ha llamado «desplazamiento de campos» \citep{little2019}. En su tratado, Hába describe la gama de
+cuartos de tono como dos mitades, los doce grados convencionales y los doce en cuarto de tono, y para pasar de una a otra
+recomienda movimiento contrario en las voces extremas \citep[cap.~II]{haba1927}; \citet[cap.~3]{skinner2006} encuentra en
+su \emph{Suite für vier Posaunen}, op.~72, acordes puramente convencionales que alternan con acordes puramente en cuarto
+de tono, aunque la regla del movimiento contrario no siempre se cumple. En las figuras del círculo de 24-EDO
 (capítulo~\ref{cap:resultados}) el anillo exterior es el campo regular y el interior, el de cuarto de tono; cada grado
 «+» queda junto a su vecino regular.
 
@@ -146,26 +149,30 @@ más suena (por ejemplo «\fl2+, 3, \fl6+, \fl7»).
 
 \subsection{La microtonalidad en otras tradiciones}
 
-\paragraph{Maqam árabe.} La teoría árabe del siglo XX describe sus escalas sobre una rejilla de 24 cuartos de tono,
+\paragraph{Maqam árabe.} La teoría árabe del siglo XX describe sus escalas sobre una rejilla de 24 cuartos de tono \citep{touma1996},
 aunque la afinación real de cada intervalo varía según el maqam y la región. Varios maqamat usan segundas y terceras
 neutras (por ejemplo rast y bayati). Hijaz, el que menciona David Bennett, se caracteriza por la segunda aumentada entre
-el segundo y el tercer grado, y en doce notas se parece al frigio dominante. \pv[: fuente de teoría del maqam]
+el segundo y el tercer grado, y en doce notas se parece al frigio dominante \citep{touma1996}.
 
 \paragraph{Makam turco.} La teoría de Arel, Ezgi y Uzdilek divide el tono en nueve comas de Holder (la octava en 53
 partes), lo que da intervalos que no caen en 24-EDO. Por eso SymbTr guarda las alturas en comas \citep{karaosmanoglu2012}
 y los estudios de altura del makam usan histogramas finos \citep{bozkurt2008,gedik2010}.
 
 \paragraph{Radif persa.} El radif es el repertorio clásico de la música persa, organizado en siete \emph{dastgah} y cinco
-\emph{avaz}. La notación moderna usa dos alteraciones microtonales: el \emph{koron}, que baja una nota
-aproximadamente un cuarto de tono, y el \emph{sori}, que la sube \citep{kanani2025}. \pv[: siete dastgah y cinco avaz;
-origen de koron y sori]
+\emph{avaz} \citep{farhat1990}. La notación moderna usa dos alteraciones microtonales: el \emph{koron}, que baja una nota
+aproximadamente un cuarto de tono, y el \emph{sori}, que la sube \citep{kanani2025}.
 
-\paragraph{Alois Hába.} El compositor checo Alois Hába (1893--1973) escribió música en cuartos de tono, sextos y doceavos
-de tono, y una teoría para ellos. Su idea de armonizar dentro de un campo y desplazarse entre campos por la melodía es la
-que se pone a prueba en la sección~\ref{sec:res-haba}. \pv[: fechas y obra teórica de Hába]
+\paragraph{Alois Hába.} El compositor checo Alois Hába (1893--1973) escribió obras en cuartos, quintos y sextos de
+tono, y en 1927 publicó la \emph{Neue Harmonielehre}, una teoría de la armonía para los sistemas de tercios, cuartos,
+sextos y doceavos de tono \citep{haba1927,choroscian2018}. Su música en cuartos de tono se ha estudiado en los cuartetos
+de cuerda \citep{choroscian2018}, en las obras para violín solo \citep{jin2015} y en la suite para cuatro trombones
+\citep{skinner2006}; desde 1924 enseñó cuartos de tono en el Conservatorio de Praga y trabajó con la casa Förster en
+pianos y armonios de cuarto y sexto de tono \citep{spurny2021}. Su idea de armonizar dentro de un campo y desplazarse
+entre campos por la melodía es la que se pone a prueba en la sección~\ref{sec:res-haba}.
 
 \paragraph{King Gizzard and the Lizard Wizard.} En \emph{Flying Microtonal Banana} (2017) la banda australiana usó
-guitarras y bajos con trastes de cuarto de tono, es decir, el mismo 24-EDO que Angine de Poitrine. Es el precedente más
+guitarras y bajos con trastes de cuarto de tono, es decir, el mismo 24-EDO que Angine de Poitrine; la nota de
+lanzamiento del álbum termina con «24-TET EVERYBODY» \citep{kinggizzard2017}. Es el precedente más
 cercano en el rock y por eso entra en la comparación (sección~\ref{sec:repertorios}).
 
 \subsection{El looper}
@@ -392,6 +399,27 @@ Con logaritmos en base 2, $0 \le D_{\mathrm{JS}} \le 1$: vale 0 si las distribuc
 masa. Su raíz cuadrada es una métrica. Por ejemplo, el reparto de fundamentales de «My Name Is Mud» (Primus) queda a
 0.15 del centro del rock (figura~\ref{fig:formulas}).
 
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}{0.48\textwidth}\centering
+    \includegraphics[width=\linewidth]{formula_js.png}
+    \caption{Jensen-Shannon. Verde: fundamentales de «My Name Is Mud»; gris: centro del rock ($D_{\mathrm{JS}}=0.15$).}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\textwidth}\centering
+    \includegraphics[width=\linewidth]{formula_percentil.png}
+    \caption{Percentil. Gris: distancias de las piezas de rock a su centro; verde: las más lejanas que «My Name Is Mud» ($p=37.2$).}
+  \end{subfigure}\\[0.8em]
+  \begin{subfigure}{0.48\textwidth}\centering
+    \includegraphics[width=\linewidth]{formula_repeticion.png}
+    \caption{Repetición: $R(\ell)$ de «Jerry Was a Race Car Driver»; el pico en 8 corcheas es un compás de 4/4.}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\textwidth}\centering
+    \includegraphics[width=\linewidth]{formula_campos.png}
+    \caption{Los dos campos de quintas de 24-EDO: amarillo, el regular; azul, el de cuarto de tono.}
+  \end{subfigure}
+  \caption{Las medidas de comparación, ilustradas con canciones de Primus.}\label{fig:formulas}
+\end{figure}
+
 Las propiedades anteriores se deducen de la entropía de Shannon, $H(P) = -\sum_i P_i \log_2 P_i$ (con $0 \log 0 = 0$),
 que mide en bits qué tan repartida está una distribución.
 
@@ -547,24 +575,3 @@ encontraron. La medida F es su media armónica \citep{vanrijsbergen1979}:
 \]
 En este trabajo, una nota es correcta si su ataque cae a $\pm 75$~ms del de la referencia y su altura en la misma casilla
 de 24-EDO ($\pm 25$ cents).
-
-\begin{figure}[ht]
-  \centering
-  \begin{subfigure}{0.48\textwidth}\centering
-    \includegraphics[width=\linewidth]{formula_js.png}
-    \caption{Reparto de fundamentales de «My Name Is Mud» frente al centro del rock ($D_{\mathrm{JS}} = 0.15$).}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.48\textwidth}\centering
-    \includegraphics[width=\linewidth]{formula_percentil.png}
-    \caption{Distancias de las piezas del rock a su centro. En verde, las que quedan más lejos que «My Name Is Mud».}
-  \end{subfigure}\\[0.8em]
-  \begin{subfigure}{0.48\textwidth}\centering
-    \includegraphics[width=\linewidth]{formula_repeticion.png}
-    \caption{$R(\ell)$ de «Jerry Was a Race Car Driver», con el pico en 8 corcheas.}
-  \end{subfigure}\hfill
-  \begin{subfigure}{0.48\textwidth}\centering
-    \includegraphics[width=\linewidth]{formula_campos.png}
-    \caption{Los dos campos de quintas de 24-EDO.}
-  \end{subfigure}
-  \caption{Las medidas de comparación, ilustradas con canciones de Primus.}\label{fig:formulas}
-\end{figure}
