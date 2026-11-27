@@ -276,7 +276,7 @@ Fabienk caen donde no hay piezas de ningún corpus, por el peso de ♭VII y ♭I
 «Lo nuevo está en la melodía. Entre el 48 y el 82 % de los cuartos de tono de cada canción caen en solo dos grados, que
 vuelven en cada vuelta del loop. Son grados de la escala, no adornos. Angor, con 5 %, queda bajo el piso de ruido que
 medimos con Primus. Aparecen dos familias de escala: ♭2+ y ♭6+ sobre frigio, cercana al maqam (Mata Zyklek, Yor Zarad y
-Utzp), y 7+, 6+ y ♭3+ sobre dórico (Sarniezz y Fabienk). La frigia es el par más común del radif persa y aparece en seis
+Utzp), y 7+, 6+ y ♭3+ sobre dórico (Sarniezz y Fabienk). La frigia es el par más común del radif persa y aparece en cinco
 de las nueve canciones de King Gizzard; la dórica no aparece en ningún corpus.»
 
 - **20·1:** qué parte del tiempo de la melodía está en cuartos de tono, como grado sostenido o como adorno de paso. La

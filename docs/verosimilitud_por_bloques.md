@@ -20,7 +20,7 @@ Se contaron los dos grados en cuarto de tono más usados de cada pieza (bloque d
 |---|---:|---:|---:|
 | Radif Corpus | 190 de 229 | 43 (el par más común del corpus) | 0 |
 | Indostánico | 0 de 50 | — | — |
-| King Gizzard (medido con el cuaderno) | 9 de 9 | 6 | 0 |
+| King Gizzard (medido con el cuaderno) | 9 de 9 | 5 | 0 |
 | Banda | 6 de 6 | Mata Zyklek, Yor Zarad, Utzp | Fabienk (7+, 6+), Sarniezz (7+, ♭3+) |
 
 La familia frigia no es exclusiva de la banda: es la más común del radif y la de King Gizzard. Lo que ningún corpus medido

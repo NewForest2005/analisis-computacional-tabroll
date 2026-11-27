@@ -50,12 +50,19 @@ regulares (Do, Do\sh, Re, \dots) y las impares, los doce grados en cuarto de ton
 etc. Los grados se cuentan desde la tónica de la canción; por ejemplo, \fl2+ es el segundo grado rebajado un semitono y
 subido un cuarto de tono.
 
+Contar los grados desde la tónica $t$ equivale a aplicar la transposición $T_{-t}$, con $T_k(y) = y + k$ en
+$\mathbb{Z}_{24}$, así que los perfiles y los grados de este trabajo son los mismos en cualquier tonalidad. Las
+transposiciones y las inversiones $I_n(y) = n - y$ forman juntas el grupo diédrico $D_{24}$, de 48 elementos: las simetrías
+de un polígono de 24 lados \citep{crans2009,flynn2025}. La herramienta usa solo las transposiciones, a propósito: una
+inversión convierte una tríada mayor en una menor ($I_0$ lleva Do mayor a fa menor), y esa diferencia es una de las que
+se quieren medir.
+
 \subsection{Los dos campos de quintas}\label{sec:campos}
 
 En 24-EDO la quinta justa temperada mide 700 cents, es decir, 14 pasos de cuarto de tono. El ciclo de quintas es la
 órbita de una clase bajo la suma reiterada de 14 en $\mathbb{Z}_{24}$.
 
-\begin{proposicion}
+\begin{proposicion}\label{prop:campos}
 El subgrupo de $\mathbb{Z}_{24}$ generado por $14$ es $\langle 14 \rangle = \langle 2 \rangle = \{0, 2, 4, \dots, 22\}$,
 de orden 12. En consecuencia, el ciclo de quintas de 24-EDO se parte en dos órbitas disjuntas de doce clases: los grados
 regulares (clases pares) y los grados en cuarto de tono (clases impares).
@@ -73,9 +80,22 @@ melodía, lo que se ha llamado «desplazamiento de campos» \citep{little2019}. 
 cuartos de tono como dos mitades, los doce grados convencionales y los doce en cuarto de tono, y para pasar de una a otra
 recomienda movimiento contrario en las voces extremas \citep[cap.~II]{haba1927}; \citet[cap.~3]{skinner2006} encuentra en
 su \emph{Suite für vier Posaunen}, op.~72, acordes puramente convencionales que alternan con acordes puramente en cuarto
-de tono, aunque la regla del movimiento contrario no siempre se cumple. En las figuras del círculo de 24-EDO
+de tono, aunque la regla del movimiento contrario no siempre se cumple. El manual de Wyschnegradsky deja ver por qué
+funciona esa regla: dos escalas de cuartos de tono en movimiento contrario que parten del unísono dan, paso a paso, todos
+los intervalos tradicionales \citep[§11, p.~6]{wyschnegradsky2017}. Cada voz cambia de campo en cada paso, pero las dos lo
+hacen a la vez, así que nunca quedan en campos distintos. En las figuras del círculo de 24-EDO
 (capítulo~\ref{cap:resultados}) el anillo exterior es el campo regular y el interior, el de cuarto de tono; cada grado
 «+» queda junto a su vecino regular.
+
+La misma imagen aparece en Ivan Wyschnegradsky. En su \emph{Manuel d'harmonie à quarts de ton} (1932) describe los doce
+grados nuevos como la relación entre dos escalas cromáticas, una transportada un cuarto de tono, que se parecen a dos
+peines cuyos dientes encajan \citep[§3, p.~1]{wyschnegradsky2017}. En el mismo manual observa que el ciclo de terceras
+neutras recorre las 24 notas y se parte en dos ciclos de quintas, separados por una tercera neutra
+\citep[§10, p.~5]{wyschnegradsky2017}. Es la proposición~\ref{prop:campos} vista desde la tercera neutra: como
+$\mcd(7, 24) = 1$, sumar 7 recorre todo $\mathbb{Z}_{24}$, y sumar 7 dos veces es sumar 14, la quinta, que no sale del
+campo. Charles Ives la llevó al instrumento en sus \emph{Three Quarter-Tone Pieces}
+(1923--1924), para dos pianos afinados a un cuarto de tono de distancia \citep{ives1968}: un piano toca solo el campo
+regular y el otro, solo el de cuarto de tono \citep{flynn2025}.
 
 \begin{proposicion}\label{prop:z12}
 La aplicación $\iota : \mathbb{Z}_{12} \to \mathbb{Z}_{24}$, $\iota(r) = 2r$, es un monomorfismo de grupos cuya imagen es
@@ -107,7 +127,9 @@ menos tan cerca como el más cercano en la gruesa.
 \end{proof}
 
 La tabla~\ref{tab:razones} muestra por qué 24-EDO no es solo «12-EDO con más notas»: aproxima intervalos de la serie
-armónica que 12-EDO no tiene, como la tercera neutra $11/9$ y la segunda neutra $12/11$, presentes en el maqam árabe.
+armónica que 12-EDO no tiene, como la tercera neutra $11/9$ y la segunda neutra $12/11$, presentes en el maqam árabe. Los nombres de los
+intervalos nuevos son los de \citet[§6, pp.~2--3]{wyschnegradsky2017}: segunda, tercera, sexta y séptima neutras (3, 7,
+17 y 21 cuartos de tono), a medio camino entre la menor y la mayor.
 
 \begin{table}[ht]
   \centering
@@ -144,7 +166,8 @@ los grados 2, 3, 6 y 7, medidos en semitonos sobre la tónica:
 \end{itemize}
 
 En 24-EDO cada uno de esos grados puede aparecer además en su versión neutra, un cuarto de tono por encima de la
-rebajada. La herramienta no fuerza un nombre de doce notas: describe el modo por la versión de los grados 2, 3, 6 y 7 que
+rebajada, con el nombre que \citet[§6]{wyschnegradsky2017} da a esos intervalos: \fl2+, \fl3+, \fl6+ y \fl7+ son la
+segunda, la tercera, la sexta y la séptima neutras. La herramienta no fuerza un nombre de doce notas: describe el modo por la versión de los grados 2, 3, 6 y 7 que
 más suena (por ejemplo «\fl2+, 3, \fl6+, \fl7»).
 
 \subsection{La microtonalidad en otras tradiciones}
@@ -281,7 +304,10 @@ primer algoritmo (sección~\ref{sec:primer-algoritmo}).
 \subsection{Calidades de acorde según Piston}
 
 \citet{piston1987} clasifica los acordes por sus intervalos sobre la fundamental. En 24-EDO aparece una calidad que no
-existe en doce notas: la tríada con \emph{tercera neutra}, a 350 cents, justo entre la menor y la mayor. La
+existe en doce notas: la tríada con \emph{tercera neutra}, a 350 cents, justo entre la menor y la mayor. Wyschnegradsky
+la llama \emph{neutral fifth chord} y la describe como dos terceras neutras superpuestas, entre el acorde mayor y el
+menor, y simétrica como el aumentado y el disminuido
+\citep[§16, p.~8]{wyschnegradsky2017}. La
 tabla~\ref{tab:calidades} muestra las ocho calidades que usa la herramienta.
 
 \begin{table}[ht]
@@ -305,6 +331,47 @@ Piston distingue además grados tonales (I, IV, V), casi tonal (II) y modales (I
 en tres partes para música sin dominante, que este trabajo adapta (sección~\ref{sec:armonia-metodo}). Piston deja fuera
 las escalas microtonales \citep[p.~474]{piston1987}; por eso, en este trabajo, los grados en cuarto de tono reciben una
 función \emph{neutra}.
+
+\subsection{Tríadas, transformaciones y campos}\label{sec:triadas-campos}
+
+Con fundamental $x \in \mathbb{Z}_{24}$, las tríadas mayor, menor y neutra son $\{x, x+8, x+14\}$, $\{x, x+6, x+14\}$ y
+$\{x, x+7, x+14\}$ \citep{flynn2025}.
+
+\begin{proposicion}\label{prop:neutra}
+Las tríadas mayor y menor tienen sus tres notas en un mismo campo, el de su fundamental. La tríada neutra tiene siempre
+notas en los dos campos: la fundamental y la quinta en el campo de $x$, y la tercera neutra en el otro.
+\end{proposicion}
+
+\begin{proof}
+Los intervalos 6, 8 y 14 son pares, así que $x+6$, $x+8$ y $x+14$ tienen la paridad de $x$. El 7 es impar, así que $x+7$
+tiene la paridad contraria.
+\end{proof}
+
+Por eso un acorde con tercera neutra es, por construcción, una mezcla vertical de campos en el sentido de la
+sección~\ref{sec:res-haba}: no se puede tocar sin una nota de cada campo.
+
+En la teoría neorriemanniana, las transformaciones $P$ (paralela: Do mayor $\to$ do menor), $R$ (relativa: Do mayor $\to$
+la menor) y $L$ (intercambio de sensible: Do mayor $\to$ mi menor) cambian una sola nota de la tríada y conservan las
+otras dos. Cada una es una inversión $I_n$ cuyo eje pasa entre las dos notas que se conservan, es decir, $n$ es la suma de
+esas dos notas \citep{crans2009}. \citet{flynn2025} las llevan a 24-EDO y muestran que, sobre las tríadas mayores y
+menores, actúan por separado en cada campo, como dos copias del grupo de doce notas. La razón es de paridad.
+
+\begin{proposicion}\label{prop:plr}
+Si $X$ es una tríada mayor o menor, $P(X)$, $L(X)$ y $R(X)$ tienen su fundamental en el mismo campo que $X$, y entre
+tríadas mayores y menores solo una transposición $T_k$ con $k$ impar cambia de campo. Sobre una tríada neutra, en
+cambio, $P$ la deja igual y $L$ y $R$ siempre cambian de campo.
+\end{proposicion}
+
+\begin{proof}
+Por la proposición~\ref{prop:neutra}, las tres notas de una tríada mayor o menor tienen la misma paridad; la suma $n$ de
+dos de ellas es par, e $I_n(y) = n - y$ conserva la paridad de $y$. $T_k$ conserva la paridad si y solo si $k$ es par. En
+la tríada neutra, $P$ conserva la fundamental y la quinta: $n = 2x + 14$ las intercambia y deja fija la tercera $x + 7$,
+así que la tríada no cambia. $L$ y $R$ conservan la tercera neutra y una nota del campo de $x$, así que $n$ es impar e
+$I_n$ cambia la paridad de cada nota.
+\end{proof}
+
+Lo que hace $P$ con la tríada neutra es la simetría que señala Wyschnegradsky: la inversión que intercambia la fundamental
+y la quinta deja el acorde igual, como pasa con el aumentado y el disminuido.
 
 \subsection{Funciones de Riemann}
 
